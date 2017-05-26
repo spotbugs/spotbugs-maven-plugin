@@ -9,14 +9,14 @@
     <relativePath />
   </parent>
 
-  <groupId>org.codehaus.mojo</groupId>
-  <artifactId>findbugs-maven-plugin</artifactId>
-  <version>3.0.6-SNAPSHOT</version>
+  <groupId>com.github.spotbugs</groupId>
+  <artifactId>spotbugs-maven-plugin</artifactId>
+  <version>3.1.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
-  <name>FindBugs Maven Plugin</name>
-  <description>This Plug-In generates reports based on the FindBugs Library</description>
-  <url>https://gleclaire.github.io/findbugs-maven-plugin/</url>
+  <name>SpotBugs Maven Plugin</name>
+  <description>This Plug-In generates reports based on the SpotBugs Library</description>
+  <url>http://spotbugs.github.io/spotbugs-maven-plugin/</url>
   <inceptionYear>2005</inceptionYear>
   <licenses>
     <license>
@@ -98,19 +98,27 @@
   </prerequisites>
 
   <scm>
-    <connection>scm:git:https://github.com/gleclaire/findbugs-maven-plugin.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/gleclaire/findbugs-maven-plugin.git</developerConnection>
-    <url>https://github.com/gleclaire/findbugs-maven-plugin</url>
+    <connection>scm:git:https://github.com/spotbugs/spotbugs-maven-plugin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</developerConnection>
+    <url>https://github.com/spotbugs/spotbugs-maven-plugin</url>
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issues</system>
-    <url>http://github.com/gleclaire/findbugs-maven-plugin/issues</url>
+    <url>http://github.com/spotbugs/spotbugs-maven-plugin/issues</url>
   </issueManagement>
   <distributionManagement>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+    <snapshotRepository>
+        <id>ossrh</id>
+        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
     <site>
       <id>github-project-site</id>
-      <url>gitsite:git@github.com/gleclaire/findbugs-maven-plugin.git</url>
+      <url>gitsite:git@github.com/spotbugs/spotbugs-maven-plugin.git</url>
     </site>
   </distributionManagement>
 
@@ -118,8 +126,8 @@
     <project.build.java.target>1.7</project.build.java.target>
     <projectVersion>${project.version}</projectVersion>
 
-    <findbugsVersion>3.0.1</findbugsVersion>
     <junitVersion>4.12</junitVersion>
+    <spotbugsVersion>3.1.0-RC5</spotbugsVersion>
 
     <antVersion>1.9.9</antVersion>
     <groovyVersion>2.4.12</groovyVersion>
@@ -168,15 +176,14 @@
     <jxrPluginVersion>2.5</jxrPluginVersion>
     <mavenSurefireVersion>2.20</mavenSurefireVersion>
 
-
   </properties>
 
   <dependencies>
 
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>findbugs</artifactId>
-      <version>${findbugsVersion}</version>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs</artifactId>
+      <version>${spotbugsVersion}</version>
     </dependency>
 
     <!-- gmaven -->
@@ -460,8 +467,8 @@
     <excludeDefaults>true</excludeDefaults>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${project.version}</version>
         <configuration>
           <skip>true</skip>

@@ -1,23 +1,22 @@
-[![Build Status](https://travis-ci.org/gleclaire/findbugs-maven-plugin.svg?branch=master)](https://travis-ci.org/gleclaire/findbugs-maven-plugin)
-[![Maven central](https://maven-badges.herokuapp.com/maven-central/org.codehaus.mojo/findbugs-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.codehaus.mojo/findbugs-maven-plugin)
-[![Apache 2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+# Spotbugs Maven Plugin
 
+[![Build Status](https://travis-ci.org/spotbugs/spotbugs-maven-plugin.svg?branch=spotbugs)](https://travis-ci.org/spotbugs/spotbugs-maven-plugin)
+[![Maven central](https://maven-badges.herokuapp.com/maven-central/com.github.spotbugs/spotbugs-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.spotbugs/spotbugs-maven-plugin)
+[![Apache 2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ## Latest Snapshot ##
 
-Please download latest snapshots from [here](https://oss.sonatype.org/content/repositories/snapshots/org/codehaus/mojo/findbugs-maven-plugin/)
+Please download latest snapshots from [here](https://oss.sonatype.org/content/repositories/snapshots/com/github/spotbugs/spotbugs-maven-plugin/)
 
-Building findbugs-maven-plugin Requirements
+Building spotbugs-maven-plugin Requirements
+===========================================
+
+Java 8 is required for spotbugs analysis.
+
+spotbugs-maven-plugin
 =====================
 
-Java 7 is required.  This will allow analysis of bytecode up to Java 8
-
-
-
-findbugs-maven-plugin
-=====================
-
-Maven Mojo Plug-In to generate reports based on the FindBugs Analyzer
+Maven Mojo Plug-In to generate reports based on the SpotBugs Analyzer
 
 Run all tests
 ```
@@ -49,5 +48,5 @@ mvn -Dmaven.surefire.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspe
 
 Run gui with a specific version 
 ```
-mvn org.codehaus.mojo:findbugs-maven-plugin:3.0.6-SNAPSHOT:gui 
+mvn com.github.spotbugs:spotbugs-maven-plugin:3.1.0-SNAPSHOT:gui 
 ```
