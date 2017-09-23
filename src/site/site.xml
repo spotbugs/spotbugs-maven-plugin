@@ -19,12 +19,12 @@
       <sideBarEnabled>true</sideBarEnabled>
       <breadcrumbDivider>»</breadcrumbDivider>
       <gitHub>
-        <projectId>gleclaire/findbugs-maven-plugin</projectId>
+        <projectId>spotbugs/spotbugs-maven-plugin</projectId>
         <ribbonOrientation>right</ribbonOrientation>
         <ribbonColor>red</ribbonColor>
       </gitHub>
       <ohloh>
-        <projectId>findbugs-maven-plugin</projectId>
+        <projectId>spotbugs-maven-plugin</projectId>
         <widget>thin-badge</widget>
       </ohloh>
     </fluidoSkin>
@@ -35,7 +35,7 @@
 
   <body>
     <links>
-      <item name="FindBugs" href="http://findbugs.sourceforge.net/"/>
+      <item name="SpotBugs" href="https://github.com/spotbugs/"/>
     </links>
 
     <breadcrumbs>

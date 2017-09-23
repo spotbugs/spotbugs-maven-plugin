@@ -1,11 +1,16 @@
 <document>
   <properties>
-    <title>FindBugs Maven plugin changelog</title>
+    <title>SpotBugs Maven plugin Changelog</title>
     <author email="gleclaire@codehaus.org">
       Garvin LeClaire
     </author>
   </properties>
   <body>
+    <release version="3.1.0" date="in GitHub" description="Rebrand and upgrade using Spotbugs">
+        <action dev="jwl" type="update">
+            Rebrand and upgrade to using spotbugs
+        </action>
+    </release>
     <release version="2.2-SNAPSHOT" date="in SVN" description="Updates for Findbugs 2.2-SNAPSHOT">
       <action dev="gl" type="update">
         Update to Findbugs 1.3.9

@@ -21,10 +21,10 @@ package org.codehaus.mojo.findbugs
 
 
 /**
- * Generates a FindBugs Report when the site plugin is run.
+ * Generates a Spotbugs Report when the site plugin is run.
  * The HTML report is generated for site commands only.
- * To see more documentation about FindBugs' options, please see the
- * <a href="http://findbugs.sourceforge.net/manual/index.html">FindBugs Manual.</a>
+ * To see more documentation about Spotbugs' options, please see the
+ * <a href="http://spotbugs.readthedocs.io/en/latest/">Spotbugs Manual.</a>
  *
  *
  * @author <a href="mailto:gleclaire@codehaus.org">Garvin LeClaire</a>
@@ -45,7 +45,7 @@ interface FindBugsInfo {
 	 * The name of the property resource bundle (Filesystem).
 	 *
 	 */
-	static final String BUNDLE_NAME = "findbugs"
+	static final String BUNDLE_NAME = "spotbugs"
 
 	/**
 	 * The key to get the name of the Plug-In from the bundle.
