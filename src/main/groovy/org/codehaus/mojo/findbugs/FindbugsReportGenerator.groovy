@@ -39,127 +39,127 @@ class FindbugsReportGenerator implements FindBugsInfo {
 	 * The key to get the value if the line number is not available.
 	 *
 	 */
-	static final String NOLINE_KEY = "report.findbugs.noline"
+	static final String NOLINE_KEY = "report.spotbugs.noline"
 
 	/**
 	 * The key to get the column title for the line.
 	 *
 	 */
-	static final String COLUMN_LINE_KEY = "report.findbugs.column.line"
+	static final String COLUMN_LINE_KEY = "report.spotbugs.column.line"
 
 	/**
 	 * The key to get the column title for the bug.
 	 *
 	 */
-	static final String COLUMN_BUG_KEY = "report.findbugs.column.bug"
+	static final String COLUMN_BUG_KEY = "report.spotbugs.column.bug"
 
 	/**
 	 * The key to get the column title for the bugs.
 	 *
 	 */
-	static final String COLUMN_BUGS_KEY = "report.findbugs.column.bugs"
+	static final String COLUMN_BUGS_KEY = "report.spotbugs.column.bugs"
 
 	/**
 	 * The key to get the column title for the category.
 	 *
 	 */
-	static final String COLUMN_CATEGORY_KEY = "report.findbugs.column.category"
+	static final String COLUMN_CATEGORY_KEY = "report.spotbugs.column.category"
 
 	/**
 	 * The key to get the column title for the priority.
 	 *
 	 */
-	static final String COLUMN_PRIORITY_KEY = "report.findbugs.column.priority"
+	static final String COLUMN_PRIORITY_KEY = "report.spotbugs.column.priority"
 
 	/**
 	 * The key to get the column title for the details.
 	 *
 	 */
-	static final String COLUMN_DETAILS_KEY = "report.findbugs.column.details"
+	static final String COLUMN_DETAILS_KEY = "report.spotbugs.column.details"
 
 	/**
 	 * The key to get the report title of the Plug-In from the bundle.
 	 *
 	 */
-	static final String REPORT_TITLE_KEY = "report.findbugs.reporttitle"
+	static final String REPORT_TITLE_KEY = "report.spotbugs.reporttitle"
 
 	/**
 	 * The key to get the report link title of the Plug-In from the bundle.
 	 *
 	 */
-	static final String LINKTITLE_KEY = "report.findbugs.linktitle"
+	static final String LINKTITLE_KEY = "report.spotbugs.linktitle"
 
 	/**
 	 * The key to get the report link of the Plug-In from the bundle.
 	 *
 	 */
-	static final String LINK_KEY = "report.findbugs.link"
+	static final String LINK_KEY = "report.spotbugs.link"
 
 	/**
 	 * The key to get the files title of the Plug-In from the bundle.
 	 *
 	 */
-	static final String FILES_KEY = "report.findbugs.files"
+	static final String FILES_KEY = "report.spotbugs.files"
 
 	/**
 	 * The key to get the threshold of the report from the bundle.
 	 *
 	 */
-	static final String THRESHOLD_KEY = "report.findbugs.threshold"
+	static final String THRESHOLD_KEY = "report.spotbugs.threshold"
 
 	/**
 	 * The key to get the effort of the report from the bundle.
 	 *
 	 */
-	static final String EFFORT_KEY = "report.findbugs.effort"
+	static final String EFFORT_KEY = "report.spotbugs.effort"
 
 	/**
 	 * The key to get the link to FindBugs description page from the bundle.
 	 *
 	 */
-	static final String DETAILSLINK_KEY = "report.findbugs.detailslink"
+	static final String DETAILSLINK_KEY = "report.spotbugs.detailslink"
 
 	/**
 	 * The key to get the version title for FindBugs from the bundle.
 	 *
 	 */
-	static final String VERSIONTITLE_KEY = "report.findbugs.versiontitle"
+	static final String VERSIONTITLE_KEY = "report.spotbugs.versiontitle"
 
 	/**
 	 * The key to get the files title of the Plug-In from the bundle.
 	 *
 	 */
-	static final String SUMMARY_KEY = "report.findbugs.summary"
+	static final String SUMMARY_KEY = "report.spotbugs.summary"
 
 	/**
 	 * The key to column title for the Class.
 	 *
 	 */
-	static final String COLUMN_CLASS_KEY = "report.findbugs.column.class"
+	static final String COLUMN_CLASS_KEY = "report.spotbugs.column.class"
 
 	/**
 	 * The key to column title for the Classes.
 	 *
 	 */
-	static final String COLUMN_CLASSES_KEY = "report.findbugs.column.classes"
+	static final String COLUMN_CLASSES_KEY = "report.spotbugs.column.classes"
 
 	/**
 	 * The key to column title for the errors.
 	 *
 	 */
-	static final String COLUMN_ERRORS_KEY = "report.findbugs.column.errors"
+	static final String COLUMN_ERRORS_KEY = "report.spotbugs.column.errors"
 
 	/**
 	 * The key to column title for the files.
 	 *
 	 */
-	static final String COLUMN_FILES_KEY = "report.findbugs.column.files"
+	static final String COLUMN_FILES_KEY = "report.spotbugs.column.files"
 
 	/**
 	 * The key to column title for the files.
 	 *
 	 */
-	static final String COLUMN_MISSINGCLASSES_KEY = "report.findbugs.column.missingclasses"
+	static final String COLUMN_MISSINGCLASSES_KEY = "report.spotbugs.column.missingclasses"
 
 
 	/**

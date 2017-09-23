@@ -60,7 +60,7 @@ class FindBugsGui extends AbstractMojo {
      * turn on Findbugs debugging
      *
      */
-    @Parameter( defaultValue = "false", property="findbugs.debug" )
+    @Parameter( defaultValue = "false", property="spotbugs.debug" )
     Boolean debug
 
     /**
@@ -74,7 +74,7 @@ class FindBugsGui extends AbstractMojo {
      * Effort of the bug finders. Valid values are Min, Default and Max.
      *
      */
-    @Parameter( defaultValue = "Default", property="findbugs.effort" )
+    @Parameter( defaultValue = "Default", property="spotbugs.effort" )
     String effort
 
 
@@ -82,7 +82,7 @@ class FindBugsGui extends AbstractMojo {
      * The plugin list to include in the report. This is a FindBugsInfo.COMMA-delimited list.
      *
      */
-    @Parameter( property="findbugs.pluginList" )
+    @Parameter( property="spotbugs.pluginList" )
     String pluginList
 
     /**
@@ -121,7 +121,7 @@ class FindBugsGui extends AbstractMojo {
      *
      * @since 2.2
      */
-    @Parameter( property="findbugs.maxHeap", defaultValue = "512" )
+    @Parameter( property="spotbugs.maxHeap", defaultValue = "512" )
     int maxHeap
 
     void execute() {

@@ -26,12 +26,12 @@
 
 Usage
 <version>${projectVersion}</version>
- The following examples describe the basic usage of the FindBugs plugin.
+ The following examples describe the basic usage of the SpotBugs plugin.
 
-* Generate FindBugs Report As Part of the Project Reports
+* Generate SpotBugs Report As Part of the Project Reports
 
-  To generate the FindBugs report as part of the Project Reports, add the
-  FindBugs plugin in the <<<\<reporting\>>>> section
+  To generate the SpotBugs report as part of the Project Reports, add the
+  SpotBugs plugin in the <<<\<reporting\>>>> section
   of your <<<pom.xml>>>.
 
 +-----+
@@ -41,7 +41,7 @@ Usage
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
       </plugin>
     </plugins>
@@ -56,13 +56,13 @@ Usage
 mvn site
 +-----+
 
-* Generate FindBugs xdoc Report As Part of the Project Reports
+* Generate SpotBugs xdoc Report As Part of the Project Reports
 
-  To generate the FindBugs xdoc report as part of the Project Reports, add the
-  FindBugs plugin in the <<<\<reporting\>>>> section
-  of your <<<pom.xml>>>.  This will be the same report as that of the Maven 1 FindBugs
+  To generate the SpotBugs xdoc report as part of the Project Reports, add the
+  SpotBugs plugin in the <<<\<reporting\>>>> section
+  of your <<<pom.xml>>>.  This will be the same report as that of the Maven 1 SpotBugs
   report.   It is also the format used by Hudson.
-  The output file will be written as <<<findbugs.xml>>> to either the default output
+  The output file will be written as <<<spotbugs.xml>>> to either the default output
   directory of $\{project.build.directory\} or by that started in the
   <<<\<xmlOutputDirectory\>>>> option.
 
@@ -73,11 +73,11 @@ mvn site
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
           <xmlOutput>true</xmlOutput>
-          <!-- Optional directory to put findbugs xdoc xml report -->
+          <!-- Optional directory to put spotbugs xdoc xml report -->
           <xmlOutputDirectory>target/site</xmlOutputDirectory>
         </configuration>
       </plugin>
@@ -101,7 +101,7 @@ mvn site
   you can use filters.
   The filters allow specifying by class and method which bug categories to
   include/exclude in/from the reports. The
-  {{{http://findbugs.sourceforge.net/manual/filter.html}filter format specification}}
+  {{{http://spotbugs.sourceforge.net/manual/filter.html}filter format specification}}
   also contains useful examples.
 
 +-----+
@@ -111,11 +111,11 @@ mvn site
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
-          <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
-          <includeFilterFile>findbugs-include.xml</includeFilterFile>
+          <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
+          <includeFilterFile>spotbugs-include.xml</includeFilterFile>
         </configuration>
       </plugin>
     </plugins>
@@ -139,7 +139,7 @@ mvn site
   you can use filters.
   The filters allow specifying by class and method which bug categories to
   include/exclude in/from the reports. The
-  {{{http://findbugs.sourceforge.net/manual/filter.html}filter format specification}}
+  {{{http://spotbugs.sourceforge.net/manual/filter.html}filter format specification}}
   also contains useful examples.
 
 +-----+
@@ -149,11 +149,11 @@ mvn site
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
-          <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
-          <includeFilterFile>findbugs-include.xml</includeFilterFile>
+          <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
+          <includeFilterFile>spotbugs-include.xml</includeFilterFile>
         </configuration>
       </plugin>
     </plugins>
@@ -184,7 +184,7 @@ mvn site
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
           <visitors>FindDeadLocalStores,UnreadFields</visitors>
@@ -216,7 +216,7 @@ mvn site
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
           <omitVisitors>FindDeadLocalStores,UnreadFields</omitVisitors>
@@ -248,10 +248,10 @@ mvn site
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
-         <onlyAnalyze>org.codehaus.mojo.findbugs.*</onlyAnalyze>
+         <onlyAnalyze>org.codehaus.mojo.spotbugs.*</onlyAnalyze>
         </configuration>
       </plugin>
     </plugins>
@@ -281,7 +281,7 @@ mvn site
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
           <pluginList>myDetectors.jar, yourDetectors.jar</pluginList>
@@ -312,13 +312,13 @@ mvn site
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
           <plugins>
             <plugin>
               <groupId>com.timgroup</groupId>
-              <artifactId>findbugs4jmock</artifactId>
+              <artifactId>spotbugs4jmock</artifactId>
               <version>0.2</version>
             </plugin>
           </plugins>
@@ -338,10 +338,10 @@ mvn site
 +-----+
 
 
-* Launch the Findbugs GUI
+* Launch the Spotbugs GUI
 
-  This will launch the FindBugs GUI configured for this project and will open the
-  findbugsXml.xml file if present.  It therefore assumes a pom.xml with the minimum
+  This will launch the SpotBugs GUI configured for this project and will open the
+  spotbugsXml.xml file if present.  It therefore assumes a pom.xml with the minimum
   as follows.
 
 +-----+
@@ -351,10 +351,10 @@ mvn site
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
-          <!-- Optional directory to put findbugs xml report -->
+          <!-- Optional directory to put spotbugs xml report -->
         </configuration>
       </plugin>
     </plugins>
@@ -363,10 +363,10 @@ mvn site
 </project>
 +-----+
 
-  Then, execute the findbugs plugin with the gui option.
+  Then, execute the spotbugs plugin with the gui option.
 
 
 +-----+
-mvn findbugs:gui
+mvn spotbugs:gui
 +-----+
 
