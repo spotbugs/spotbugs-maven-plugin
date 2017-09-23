@@ -4,3 +4,22 @@ sudo: false
 jdk:
   - oraclejdk8
   - openjdk8
+
+env:
+  global:
+    # GITHUB_TOKEN value to push changes to GitHub; Currently it is ued to update gh-pages.
+    - secure: "KqPuq9TiiqdOUfGq3k+XYObNjV8FxbgJeqSWK0pcWFFs5w5c4vcGmrfUSSSqNa/JJkKOBWQ6S3tJP7CRxx0uow5BvU4ZQAZLFt6VjzcUZFKGTl5soMTF2gQdyAAcwUnRX2gQKt0doO8Fid6xzfsn1KdTIWXmeqMrcTvC+d7EhxU="
+
+script:
+  - ./mvnw test -B
+  - ./mvnw site -B
+
+deploy:
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    local_dir: $TRAVIS_BUILD_DIR/target/site
+    email: skypencil+spotbugs-bot@gmail.com
+    on:
+      branch: spotbugs
+      condition: "$JAVA_HOME = *'oracle'*"
