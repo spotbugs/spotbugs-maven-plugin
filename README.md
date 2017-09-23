@@ -26,9 +26,9 @@ Skip tests
 ```
 mvn -DskipTests=true clean install
 ```
-Run tests on findbugs test source code that is local instead of from FindBugs github repository
+Run tests on spotbugs test source code that is local instead of from SpotBugs github repository
 ```
-mvn -DtestSrc=local -DlocalTestSrc=/opt/findBugs -Prun-its clean install
+mvn -DtestSrc=local -DlocalTestSrc=/opt/spotBugs -Prun-its clean install
 ```
 
 Run selected tests

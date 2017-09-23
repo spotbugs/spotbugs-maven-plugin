@@ -36,8 +36,8 @@
         <version>@jxrPluginVersion@</version>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>@pom.version@</version>
         <configuration>
           <findbugsXmlOutput>true</findbugsXmlOutput>

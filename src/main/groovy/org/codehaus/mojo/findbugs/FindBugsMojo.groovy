@@ -47,7 +47,7 @@ import org.sonatype.plexus.build.incremental.BuildContext
 
 
 /**
- * Generates a FindBugs Report when the site plugin is run.
+ * Generates a SpotBugs Report when the site plugin is run.
  * The HTML report is generated for site commands only.
  *
  *
@@ -66,7 +66,7 @@ class FindBugsMojo extends AbstractMavenReport {
     File outputDirectory
 
     /**
-     * Turn on and off xml output of the Findbugs report.
+     * Turn on and off xml output of the Spotbugs report.
      *
      * @since 1.0.0
      */
@@ -92,7 +92,7 @@ class FindBugsMojo extends AbstractMavenReport {
     boolean findbugsXmlOutput
 
     /**
-     * Specifies the directory where the findbugs native xml output will be generated.
+     * Specifies the directory where the Spotbugs native xml output will be generated.
      *
      * @since 1.2.0
      */
@@ -106,13 +106,13 @@ class FindBugsMojo extends AbstractMavenReport {
     Renderer siteRenderer
 
     /**
-     * Directory containing the class files for FindBugs to analyze.
+     * Directory containing the class files for Spotbugs to analyze.
      */
     @Parameter(defaultValue = '${project.build.outputDirectory}', required = true)
     File classFilesDirectory
 
     /**
-     * Directory containing the test class files for FindBugs to analyze.
+     * Directory containing the test class files for Spotbugs to analyze.
      *
      */
     @Parameter(defaultValue = '${project.build.testOutputDirectory}', required = true)
@@ -148,7 +148,7 @@ class FindBugsMojo extends AbstractMavenReport {
     List testSourceRoots
 
     /**
-     * Run Findbugs on the tests.
+     * Run Spotbugs on the tests.
      *
      * @since 2.0
      */
@@ -156,7 +156,7 @@ class FindBugsMojo extends AbstractMavenReport {
     boolean includeTests
 
     /**
-     * List of artifacts this plugin depends on. Used for resolving the Findbugs coreplugin.
+     * List of artifacts this plugin depends on. Used for resolving the Spotbugs coreplugin.
      *
      */
     @Parameter(property = "plugin.artifacts", required = true, readonly = true)
@@ -248,7 +248,7 @@ class FindBugsMojo extends AbstractMavenReport {
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
-     * directory before being passed to Findbugs as a filter file.
+     * directory before being passed to Spotbugs as a filter file.
      * It supports multiple files separated by a comma
      * </p>
      *
@@ -270,7 +270,7 @@ class FindBugsMojo extends AbstractMavenReport {
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
-     * directory before being passed to Findbugs as a filter file.
+     * directory before being passed to Spotbugs as a filter file.
      * It supports multiple files separated by a comma
      * </p>
      *
@@ -292,7 +292,7 @@ class FindBugsMojo extends AbstractMavenReport {
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
-     * directory before being passed to Findbugs as a filter file.
+     * directory before being passed to Spotbugs as a filter file.
      * </p>
      *
      * This is a comma-delimited list.
@@ -311,7 +311,7 @@ class FindBugsMojo extends AbstractMavenReport {
     String effort
 
     /**
-     * turn on Findbugs debugging
+     * turn on Spotbugs debugging
      *
      */
     @Parameter(defaultValue = "false", property = "spotbugs.debug")
@@ -355,7 +355,7 @@ class FindBugsMojo extends AbstractMavenReport {
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
-     * directory before being passed to Findbugs as a plugin file.
+     * directory before being passed to Spotbugs as a plugin file.
      * </p>
      *
      * @since 1.0-beta-1
@@ -440,7 +440,7 @@ class FindBugsMojo extends AbstractMavenReport {
     boolean failOnError
 
     /**
-     * Fork a VM for FindBugs analysis.  This will allow you to set timeouts and heap size
+     * Fork a VM for Spotbugs analysis.  This will allow you to set timeouts and heap size
      *
      * @since 2.3.2
      */
@@ -457,7 +457,7 @@ class FindBugsMojo extends AbstractMavenReport {
     int maxHeap
 
     /**
-     * Specifies the amount of time, in milliseconds, that FindBugs may run before
+     * Specifies the amount of time, in milliseconds, that Spotbugs may run before
      *  it is assumed to be hung and is terminated.
      * The default is 600,000 milliseconds, which is ten minutes.
      * This only works if the <b>fork</b> parameter is set <b>true</b>.
@@ -478,7 +478,7 @@ class FindBugsMojo extends AbstractMavenReport {
     String jvmArgs
 
     /**
-     * Skip the FindBugs HTML report generation if there are no violations found. Defaults to
+     * Skip the Spotbugs HTML report generation if there are no violations found. Defaults to
      * <code>false</code>.
      *
      * @since 3.0.1
@@ -490,7 +490,7 @@ class FindBugsMojo extends AbstractMavenReport {
      * Set the path of the user preferences file to use.
      * Will try to read the path as a resource before treating it as a local path.
      *
-     * This will read in a configuration file to set up Findbugs.
+     * This will read in a configuration file to set up Spotbugs.
      *
      * The parameters in the POM file will override anything in the config file
      *
