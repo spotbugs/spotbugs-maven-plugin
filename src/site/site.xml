@@ -1,25 +1,11 @@
 
 <project xmlns="http://maven.apache.org/DECORATION/1.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.7.0 http://maven.apache.org/xsd/decoration-1.7.0.xsd"
-    name="FindBugs Maven Plugin">
+    name="SpotBugs Maven Plugin">
 
-
-<!--
   <bannerLeft>
-    <name>FindBugs Logo</name>
-    <src>/images/logos/FindBugsLogo_sm.png</src>
-    <alt>FindBugs logo</alt>
-    <href>/index.html</href>
+    <name>SpotBugs Maven Plugin</name>
   </bannerLeft>
--->
-  <bannerLeft>
-    <name>FindBugs Maven Plugin</name>
-  </bannerLeft>
-<!--
-  <bannerRight>
-    <name></name>
-  </bannerRight>
--->
 
   <skin>
     <groupId>org.apache.maven.skins</groupId>
@@ -56,7 +42,7 @@
     </links>
 
     <breadcrumbs>
-      <item name="FindBugs Maven Plugin" href="index.html"/>
+      <item name="SpotBugs Maven Plugin" href="index.html"/>
     </breadcrumbs>
 
     <menu name="Overview">

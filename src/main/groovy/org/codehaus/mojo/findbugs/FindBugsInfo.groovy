@@ -39,7 +39,7 @@ interface FindBugsInfo {
 	 * The name of the Plug-In.
 	 *
 	 */
-	static final String PLUGIN_NAME = "findbugs"
+	static final String PLUGIN_NAME = "spotbugs"
 
 	/**
 	 * The name of the property resource bundle (Filesystem).
@@ -51,31 +51,31 @@ interface FindBugsInfo {
 	 * The key to get the name of the Plug-In from the bundle.
 	 *
 	 */
-	static final String NAME_KEY = "report.findbugs.name"
+	static final String NAME_KEY = "report.spotbugs.name"
 
 	/**
 	 * The key to get the description of the Plug-In from the bundle.
 	 *
 	 */
-	static final String DESCRIPTION_KEY = "report.findbugs.description"
+	static final String DESCRIPTION_KEY = "report.spotbugs.description"
 
 	/**
 	 * The key to get the source directory message of the Plug-In from the bundle.
 	 *
 	 */
-	static final String SOURCE_ROOT_KEY = "report.findbugs.sourceRoot"
+	static final String SOURCE_ROOT_KEY = "report.spotbugs.sourceRoot"
 
 	/**
 	 * The key to get the source directory message of the Plug-In from the bundle.
 	 *
 	 */
-	static final String TEST_SOURCE_ROOT_KEY = "report.findbugs.testSourceRoot"
+	static final String TEST_SOURCE_ROOT_KEY = "report.spotbugs.testSourceRoot"
 
 	/**
 	 * The key to get the java source message of the Plug-In from the bundle.
 	 *
 	 */
-	static final String JAVA_SOURCES_KEY = "report.findbugs.javasources"
+	static final String JAVA_SOURCES_KEY = "report.spotbugs.javasources"
 
 	/**
 	 * The regex pattern to search for java class files.

@@ -6,11 +6,11 @@
 
 
 
-FindBugs Maven Plugin
+SpotBugs Maven Plugin
 
-*Please Note - This version is using Findbugs ${findbugsVersion}.
+*Please Note - This version is using Spotbugs ${spotbugsVersion}.
   
- FindBugs looks for bugs in Java programs. It is based on the concept of bug patterns. A bug pattern is a code idiom that is often an error. Bug patterns arise for a variety of reasons:
+ SpotBugs looks for bugs in Java programs. It is based on the concept of bug patterns. A bug pattern is a code idiom that is often an error. Bug patterns arise for a variety of reasons:
   
   * Difficult language features
   
@@ -20,16 +20,16 @@ FindBugs Maven Plugin
   
   * Garden variety mistakes: typos, use of the wrong boolean operator
   
- FindBugs uses static analysis to inspect Java bytecode for occurrences of bug patterns. We have found that FindBugs finds real errors in most Java software. Because its analysis is sometimes imprecise, FindBugs can report false warnings, which are warnings that do not indicate real errors. In practice, the rate of false warnings reported by FindBugs is generally less than 50%.
+ SpotBugs uses static analysis to inspect Java bytecode for occurrences of bug patterns. We have found that SpotBugs finds real errors in most Java software. Because its analysis is sometimes imprecise, SpotBugs can report false warnings, which are warnings that do not indicate real errors. In practice, the rate of false warnings reported by SpotBugs is generally less than 50%.
  
- FindBugs is free software, available under the terms of the Lesser GNU Public License. It is written in Java, and can be run with any virtual machine compatible with Java 7. It can analyze programs written for any version of Java. FindBugs was originally developed by Bill Pugh. It is maintained by Bill Pugh, David Hovemeyer, and a team of volunteers.
+ SpotBugs is free software, available under the terms of the Lesser GNU Public License. It is written in Java, and can be run with any virtual machine compatible with Java 7. It can analyze programs written for any version of Java. SpotBugs was originally developed by Bill Pugh. It is maintained by Bill Pugh, David Hovemeyer, and a team of volunteers.
  
- FindBugs uses BCEL to analyze Java bytecode.  It uses dom4j for XML manipulation.
+ SpotBugs uses BCEL to analyze Java bytecode.  It uses dom4j for XML manipulation.
  
- This introduction is an excerpt from the Facts Sheet at {{{http://findbugs.sourceforge.net/factSheet.html}FindBugs home page}}.
+ This introduction is an excerpt from the Facts Sheet at {{{http://spotbugs.sourceforge.net/factSheet.html}SpotBugs home page}}.
 
- To see more documentation about FindBugs' options, please see the {{{http://findbugs.sourceforge.net/manual/index.html}FindBugs Manual}}.
+ To see more documentation about SpotBugs' options, please see the {{{http://spotbugs.sourceforge.net/manual/index.html}SpotBugs Manual}}.
 
 *Please Note
  
- As of version 3.0.0, you will need to use JDK 7 to run this plugin.  This is a requirement imposed by Findbugs.
+ As of version 3.0.0, you will need to use JDK 7 to run this plugin.  This is a requirement imposed by Spotbugs.
