@@ -26,8 +26,8 @@
 
 Violation Checking
 
-  The <<<findbugs:check>>> goal allows you to configure your build to fail if any errors are found
-  in the FindBugs report.
+  The <<<spotbugs:check>>> goal allows you to configure your build to fail if any errors are found
+  in the SpotBugs report.
   
   The following code fragment enables the check in a build during the <<<verify>>> phase.
   The check will fail if any of the filter triggers in the include file are met.
@@ -38,8 +38,8 @@ Violation Checking
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
           <effort>Max</effort>

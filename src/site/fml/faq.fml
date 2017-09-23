@@ -21,8 +21,8 @@
      <question>How do I avoid OutOfMemory errors?</question>
        <answer>
          <p>
-         When running findbugs on a project, the default heap size might not be enough
-         to complete the build. For now there is no way to fork findbugs and run with
+         When running spotbugs on a project, the default heap size might not be enough
+         to complete the build. For now there is no way to fork spotbugs and run with
          its own memory requirements, but the following system variable will allow you
          to do so for Maven:
          <p>

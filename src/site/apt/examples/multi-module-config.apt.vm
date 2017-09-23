@@ -27,13 +27,13 @@
 
 Multimodule Configuration
 
-  <<Note:>> This implemented in version 2.0 fo the Findbugs plugin.
+  <<Note:>> This implemented in version 2.0 of the Spotbugs plugin.
 
   <<Credit:>> This is a shameless plagiarization of the Checkstyle
   plugin for consistency and due to my laziness.
 
 
-  Configuring the Findbugs plugin for use within large multimodule projects
+  Configuring the Spotbugs plugin for use within large multimodule projects
   can be done, but it requires a little setup.
 
   This example will use a mysterious project called <whizbang>. This is what
@@ -56,7 +56,7 @@ whizbang
   We'll start by adding another sub project that will house our common
   configuration. Let's call it <build-tools>. In it we put the resources that
   we want to include. In this example, we will add configuration files for the
-  Findbugs plugin. Configuration files for other plugins, like the PMD and 
+  Spotbugs plugin. Configuration files for other plugins, like the PMD and 
   Checkstyle plugin, can be included in the same subproject if you like.
   We will create another directory and call it <whiz-progs> and create a pom.xml
   file. We will move our core, gui, and jmx modules to <whiz-progs>.
@@ -106,7 +106,7 @@ whizbang
 
 * Configure the other projects to build-tools
 
-  Now we can include the Findbugs configuration in the whiz-progs <<<pom.xml>>>.
+  Now we can include the Spotbugs configuration in the whiz-progs <<<pom.xml>>>.
 
 +-----+
 <project>
@@ -132,8 +132,8 @@ whizbang
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>org.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
           <effort>Max</effort>
@@ -152,10 +152,10 @@ whizbang
 +-----+
 
   Once you are done with that, ensure that you do not include
-  findbugs-maven-plugin in your sub modules, as their definition and
+  spotbugs-maven-plugin in your sub modules, as their definition and
   configuration, will override the top level parent pom's definition.
 
-  Based on the Findbugs plugin configuration above, the values of
+  Based on the Spotbugs plugin configuration above, the values of
   <<<includeFilterFile>>> will be resolved from the
   classpath. The <build-tools> jar was included in the classpath when it was
   declared as an dependency to the plugin.
@@ -171,4 +171,4 @@ whizbang
 mvn site
 +-----+
 
-  Every sub project will now use the same Findbugs setup and configuration.
+  Every sub project will now use the same Spotbugs setup and configuration.

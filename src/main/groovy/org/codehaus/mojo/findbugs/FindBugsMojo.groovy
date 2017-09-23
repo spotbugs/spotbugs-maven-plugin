@@ -55,7 +55,7 @@ import org.sonatype.plexus.build.incremental.BuildContext
  * @version $Id: FindBugsMojo.groovy 16932 2012-06-21 01:13:14Z gleclaire $
  */
 
-@Mojo(name = "findbugs", requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true, threadSafe = true)
+@Mojo(name = "spotbugs", requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true, threadSafe = true)
 class FindBugsMojo extends AbstractMavenReport {
 
     /**
@@ -152,7 +152,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 2.0
      */
-    @Parameter(defaultValue = "false", property = "findbugs.includeTests")
+    @Parameter(defaultValue = "false", property = "spotbugs.includeTests")
     boolean includeTests
 
     /**
@@ -219,7 +219,7 @@ class FindBugsMojo extends AbstractMavenReport {
      * Threshold of minimum bug severity to report. Valid values are High, Default, Low, Ignore, and Exp (for experimental).
      *
      */
-    @Parameter(defaultValue = "Default", property = "findbugs.threshold")
+    @Parameter(defaultValue = "Default", property = "spotbugs.threshold")
     String threshold
 
     /**
@@ -254,7 +254,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "findbugs.includeFilterFile")
+    @Parameter(property = "spotbugs.includeFilterFile")
     String includeFilterFile
 
     /**
@@ -299,7 +299,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 2.4.1
      */
-    @Parameter(property = "findbugs.excludeBugsFile")
+    @Parameter(property = "spotbugs.excludeBugsFile")
     String excludeBugsFile
 
     /**
@@ -307,14 +307,14 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(defaultValue = "Default", property = "findbugs.effort")
+    @Parameter(defaultValue = "Default", property = "spotbugs.effort")
     String effort
 
     /**
      * turn on Findbugs debugging
      *
      */
-    @Parameter(defaultValue = "false", property = "findbugs.debug")
+    @Parameter(defaultValue = "false", property = "spotbugs.debug")
     Boolean debug
 
     /**
@@ -323,7 +323,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 1.1
      */
-    @Parameter(defaultValue = "false", property = "findbugs.relaxed")
+    @Parameter(defaultValue = "false", property = "spotbugs.relaxed")
     Boolean relaxed
 
     /**
@@ -331,7 +331,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "findbugs.visitors")
+    @Parameter(property = "spotbugs.visitors")
     String visitors
 
     /**
@@ -339,7 +339,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "findbugs.omitVisitors")
+    @Parameter(property = "spotbugs.omitVisitors")
     String omitVisitors
 
     /**
@@ -360,7 +360,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "findbugs.pluginList")
+    @Parameter(property = "spotbugs.pluginList")
     String pluginList
 
     /**
@@ -380,7 +380,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 1.1
      */
-    @Parameter(property = "findbugs.onlyAnalyze")
+    @Parameter(property = "spotbugs.onlyAnalyze")
     String onlyAnalyze
 
     /**
@@ -389,7 +389,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 2.3.2
      */
-    @Parameter(property = "findbugs.nested", defaultValue = "false")
+    @Parameter(property = "spotbugs.nested", defaultValue = "false")
     Boolean nested
 
     /**
@@ -398,7 +398,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 2.3.2
      */
-    @Parameter(property = "findbugs.trace", defaultValue = "false")
+    @Parameter(property = "spotbugs.trace", defaultValue = "false")
     Boolean trace
 
     /**
@@ -406,7 +406,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 2.4.1
      */
-    @Parameter(property = "findbugs.maxRank")
+    @Parameter(property = "spotbugs.maxRank")
     int maxRank
 
     /**
@@ -414,7 +414,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 1.1
      */
-    @Parameter(property = "findbugs.skip", defaultValue = "false")
+    @Parameter(property = "spotbugs.skip", defaultValue = "false")
     boolean skip
 
     /**
@@ -436,7 +436,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 2.0
      */
-    @Parameter(property = "findbugs.failOnError", defaultValue = "true")
+    @Parameter(property = "spotbugs.failOnError", defaultValue = "true")
     boolean failOnError
 
     /**
@@ -444,7 +444,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 2.3.2
      */
-    @Parameter(property = "findbugs.fork", defaultValue = "true")
+    @Parameter(property = "spotbugs.fork", defaultValue = "true")
     boolean fork
 
     /**
@@ -453,7 +453,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 2.2
      */
-    @Parameter(property = "findbugs.maxHeap", defaultValue = "512")
+    @Parameter(property = "spotbugs.maxHeap", defaultValue = "512")
     int maxHeap
 
     /**
@@ -464,7 +464,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 2.2
      */
-    @Parameter(property = "findbugs.timeout", defaultValue = "600000")
+    @Parameter(property = "spotbugs.timeout", defaultValue = "600000")
     int timeout
 
     /**
@@ -474,7 +474,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 2.4.1
      */
-    @Parameter(property = "findbugs.jvmArgs")
+    @Parameter(property = "spotbugs.jvmArgs")
     String jvmArgs
 
     /**
@@ -483,7 +483,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 3.0.1
      */
-    @Parameter(property = "findbugs.skipEmptyReport", defaultValue = "false")
+    @Parameter(property = "spotbugs.skipEmptyReport", defaultValue = "false")
     boolean skipEmptyReport
     
     /**
@@ -496,7 +496,7 @@ class FindBugsMojo extends AbstractMavenReport {
      *
      * @since 3.0.2
      */
-    @Parameter(property = "findbugs.userPrefs")
+    @Parameter(property = "spotbugs.userPrefs")
     String userPrefs
 
 
