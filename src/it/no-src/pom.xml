@@ -36,7 +36,6 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>@pom.version@</version>
         <configuration>
           <xmlOutput>true</xmlOutput>
           <includeTests>true</includeTests>

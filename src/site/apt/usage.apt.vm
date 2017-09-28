@@ -40,7 +40,7 @@ Usage
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
+        <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
       </plugin>
@@ -72,7 +72,7 @@ mvn site
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
+        <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
@@ -110,7 +110,7 @@ mvn site
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
+        <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
@@ -148,7 +148,7 @@ mvn site
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
+        <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
@@ -183,7 +183,7 @@ mvn site
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
+        <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
@@ -215,7 +215,7 @@ mvn site
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
+        <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
@@ -247,11 +247,11 @@ mvn site
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
+        <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
-         <onlyAnalyze>org.codehaus.mojo.spotbugs.*</onlyAnalyze>
+         <onlyAnalyze>com.github.spotbugs.spotbugs.*</onlyAnalyze>
         </configuration>
       </plugin>
     </plugins>
@@ -280,7 +280,7 @@ mvn site
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
+        <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
@@ -311,7 +311,7 @@ mvn site
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
+        <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
@@ -350,7 +350,7 @@ mvn site
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
+        <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>

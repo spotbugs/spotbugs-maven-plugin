@@ -1,15 +1,15 @@
 #!/usr/bin/env groovy
 
-def cli = new CliBuilder(usage:'fb2bundle -f findbugs.home -version version')
+def cli = new CliBuilder(usage:'fb2bundle -f spotbugs.home -version version')
 cli.h(longOpt: 'help', 'usage information')
-cli.v(argName: 'version',  longOpt: 'version', required: true, args: 1, type:GString, 'Findbugs version')
+cli.v(argName: 'version',  longOpt: 'version', required: true, args: 1, type:GString, 'Spotbugs version')
 
 def opt = cli.parse(args)
 if (!opt) { return }
 if (opt.h) opt.usage()
-def findbugsVersion = opt.v
+def spotbugsVersion = opt.v
 
-println "findbugsVersion is ${findbugsVersion}"
+println "spotbugsVersion is ${spotbugsVersion}"
 println "Done parsing"
 
 def cmdPrefix = """"""
@@ -18,11 +18,11 @@ println "os.name is " + System.getProperty("os.name")
 
 if (System.getProperty("os.name").toLowerCase().contains("windows")) cmdPrefix = """cmd /c """
 
-def modules = ["annotations", "bcel", "findbugs", "findbugs-ant", "jFormatString", "jsr305" ]
+def modules = ["spotbugs-annotations", "spotbugs", "spotbugs-ant", "jFormatString", "jsr305" ]
 
 modules.each(){ module ->
     println "Processing ${module}........"
-    cmd = cmdPrefix + """mvn repository:bundle-pack -B -DgroupId=com.google.code.findbugs -DartifactId=${module} -Dversion=${findbugsVersion}"""
+    cmd = cmdPrefix + """mvn repository:bundle-pack -B -DgroupId=com.github.spotbugs -DartifactId=${module} -Dversion=${spotbugsVersion}"""
     proc = cmd.execute()
     println proc.text
 }

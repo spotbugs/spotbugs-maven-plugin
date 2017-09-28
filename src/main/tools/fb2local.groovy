@@ -1,23 +1,21 @@
 #!groovy
 
-// fb2local -f /opt/findbugs/findbugs-2.0.0-rc2 -v 2.0.0-rc2
-
-def findbugsHome = System.getenv("FINDBUGS_HOME")
+def spotbugsHome = System.getenv("FINDBUGS_HOME")
 def antBuilder = new AntBuilder()
 
-def cli = new CliBuilder(usage:'fb2local -f findbugs.home -version version')
+def cli = new CliBuilder(usage:'fb2local -f spotbugs.home -version version')
 cli.h(longOpt: 'help', 'usage information')
-cli.f(argName: 'home',  longOpt: 'home', required: false, args: 1, type:GString, 'Findbugs home directory')
-cli.v(argName: 'version',  longOpt: 'version', required: true, args: 1, type:GString, 'Findbugs version')
+cli.f(argName: 'home',  longOpt: 'home', required: false, args: 1, type:GString, 'Spotbugs home directory')
+cli.v(argName: 'version',  longOpt: 'version', required: true, args: 1, type:GString, 'Spotbugs version')
 
 def opt = cli.parse(args)
 if (!opt) { return }
 if (opt.h) opt.usage()
-if (opt.f) findbugsHome = opt.f
-def findbugsVersion = opt.v
+if (opt.f) spotbugsHome = opt.f
+def spotbugsVersion = opt.v
 
-println "findbugsHome is ${findbugsHome}"
-println "findbugsVersion is ${findbugsVersion}"
+println "spotbugsHome is ${spotbugsHome}"
+println "spotbugsVersion is ${spotbugsVersion}"
 println "Done parsing"
 
 def cmdPrefix = """"""
@@ -26,16 +24,16 @@ println "os.name is " + System.getProperty("os.name")
 
 if (System.getProperty("os.name").toLowerCase().contains("windows")) cmdPrefix = """cmd /c """
 
-def modules = ["annotations", "bcel", "findbugs", "findbugs-ant", "jFormatString", "jsr305" ]
+def modules = ["spotbugs-annotations", "spotbugs", "spotbugs-ant", "jFormatString", "jsr305" ]
 
 modules.each(){ module ->
   antBuilder.copy(file: new File("${module}.pom"), toFile: new File("${module}.xml"), overwrite: true ) {
     filterset() {
-      filter(token: "findbugs.version", value: "${findbugsVersion}")
+      filter(token: "spotbugs.version", value: "${spotbugsVersion}")
     }
   }
 
-  cmd = cmdPrefix + """mvn install:install-file -DpomFile=${module}.xml -Dfile=${findbugsHome}/lib/${module}.jar -DgroupId=com.google.code.findbugs -DartifactId=${module} -Dversion=${findbugsVersion} -Dpackaging=jar"""
+  cmd = cmdPrefix + """mvn install:install-file -DpomFile=${module}.xml -Dfile=${spotbugsHome}/lib/${module}.jar -DgroupId=com.github.spotbugs -DartifactId=${module} -Dversion=${spotbugsVersion} -Dpackaging=jar"""
   proc = cmd.execute()
   println proc.text
 }

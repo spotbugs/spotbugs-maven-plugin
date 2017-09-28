@@ -1,12 +1,12 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.google.code.findbugs</groupId>
+  <groupId>com.github.spotbugs</groupId>
   <artifactId>jsr305</artifactId>
   <version>@findbugs.version@</version>
   <packaging>jar</packaging>
   <url>http://findbugs.sourceforge.net/</url>
   <name>FindBugs-jsr305</name>
-  <description>JSR305 Annotations for Findbugs</description>
+  <description>JSR305 Annotations for Spotbugs</description>
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>

@@ -1,0 +1,23 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.github.spotbugs</groupId>
+  <artifactId>spotbugs-annotations</artifactId>
+  <version>@spotbugs.version@</version>
+  <packaging>jar</packaging>
+  <url>https://spotbugs.github.io/</url>
+  <name>SpotBugs-Annotations</name>
+  <description>Annotation supports the SpotBugs tool</description>
+  <licenses>
+    <license>
+      <name>GNU Lesser Public License</name>
+      <url>http://www.gnu.org/licenses/lgpl.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git:https://github.com/spotbugs/spotbugs.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/spotbugs/spotbugs.git</developerConnection>
+    <url>https://github.com/spotbugs/spotbugs</url>
+    <tag>HEAD</tag>
+  </scm>
+</project>
