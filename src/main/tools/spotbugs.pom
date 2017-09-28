@@ -1,12 +1,12 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.google.code.findbugs</groupId>
-  <artifactId>findbugs</artifactId>
-  <version>@findbugs.version@</version>
+  <groupId>com.github.spotbugs</groupId>
+  <artifactId>spotbugs</artifactId>
+  <version>@spotbugs.version@</version>
   <packaging>jar</packaging>
-  <url>http://findbugs.sourceforge.net/</url>
-  <name>FindBugs</name>
-  <description>Findbugs: Because it's easy!</description>
+  <url>https://spotbugs.github.io/</url>
+  <name>SpotBugs</name>
+  <description>Spotbugs: Because it's easy!</description>
   <licenses>
     <license>
       <name>GNU Lesser Public License</name>
@@ -15,28 +15,29 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:http://findbugs.googlecode.com/svn/trunk/</connection>
-    <developerConnection>scm:svn:https://findbugs.googlecode.com/svn/trunk/</developerConnection>
-    <url>http://findbugs.googlecode.com/svn/trunk/</url>
+    <connection>scm:git:https://github.com/spotbugs/spotbugs.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/spotbugs/spotbugs.git</developerConnection>
+    <url>https://github.com/spotbugs/spotbugs</url>
+    <tag>HEAD</tag>
   </scm>
   <dependencies>
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
+      <groupId>com.github.spotbugs</groupId>
       <artifactId>bcel</artifactId>
       <version>@findbugs.version@</version>
     </dependency>
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
+      <groupId>com.github.spotbugs</groupId>
       <artifactId>jsr305</artifactId>
       <version>@findbugs.version@</version>
     </dependency>
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
+      <groupId>com.github.spotbugs</groupId>
       <artifactId>jFormatString</artifactId>
       <version>@findbugs.version@</version>
     </dependency>
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
+      <groupId>com.github.spotbugs</groupId>
       <artifactId>annotations</artifactId>
       <version>@findbugs.version@</version>
     </dependency>

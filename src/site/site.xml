@@ -49,9 +49,9 @@
       <item name="FAQ" href="faq.html"/>
     </menu>
     <menu name="Examples">
-      <item name="Sample Report" href="examples/findbugs.html"/>
-      <item name="Sample XML xdoc Report" href="examples/findbugs.xml"/>
-      <item name="Sample Legacy XML Report" href="examples/findbugsXml.xml"/>
+      <item name="Sample Report" href="examples/spotbugs.html"/>
+      <item name="Sample XML xdoc Report" href="examples/spotbugs.xml"/>
+      <item name="Sample Legacy XML Report" href="examples/spotbugsXml.xml"/>
       <item name="Multi-Module Configuration" href="examples/multi-module-config.html"/>
       <item name="Violation Checking Configuration" href="examples/violationChecking.html"/>
     </menu>
