@@ -19,7 +19,6 @@ package org.codehaus.mojo.findbugs
  * under the License.
  */
 
-
 /**
  * Generates a Spotbugs Report when the site plugin is run.
  * The HTML report is generated for site commands only.
@@ -30,8 +29,6 @@ package org.codehaus.mojo.findbugs
  * @author <a href="mailto:gleclaire@codehaus.org">Garvin LeClaire</a>
  * @version $Id: FindBugsInfo.groovy  $
  */
-
-
 
 interface FindBugsInfo {
 
@@ -103,9 +100,9 @@ interface FindBugsInfo {
 
 	static final String CLASS_SUFFIX = '.class'
 
-	def findbugsEfforts = [Max: "max", Min: "min", Default: "min"]
+	def spotbugsEfforts = [Max: "max", Min: "min", Default: "min"]
 
-	def findbugsThresholds = [High: "high", Exp: "experimental", Low: "low", Medium: "medium", Default: "medium"]
+	def spotbugsThresholds = [High: "high", Exp: "experimental", Low: "low", Medium: "medium", Default: "medium"]
 
-	def findbugsPriority = ["unknown", "High", "Medium", "Low"]
+	def spotbugsPriority = ["unknown", "High", "Medium", "Low"]
 }

@@ -36,7 +36,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope
  * @description Launch the Spotbugs GUI using the parameters in the POM fle.
  *
  * @author <a href="mailto:gleclaire@codehaus.org">Garvin LeClaire</a>
- * @version $Id: FindBugsGui.groovy gleclaire $
+ * @version $Id: SpotbugsGui.groovy gleclaire $
  */
 
 @Mojo( name = "gui", requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
@@ -151,12 +151,12 @@ class FindBugsGui extends AbstractMojo {
             log.info("File Encoding is " + effectiveEncoding)
 
             sysproperty(key: "file.encoding" , value: effectiveEncoding)
-            def findbugsXmlName = findbugsXmlOutputDirectory.toString() + "/findbugsXml.xml"
-            def findbugsXml = new File(findbugsXmlName)
+            def spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + "/spotbugsXml.xml"
+            def spotbugsXml = new File(spotbugsXmlName)
 
-            if ( findbugsXml.exists() ) {
-                log.debug("  Found an FindBugs XML at ->" + findbugsXml.toString())
-                arg(value: findbugsXml)
+            if ( spotbugsXml.exists() ) {
+                log.debug("  Found an FindBugs XML at ->" + spotbugsXml.toString())
+                arg(value: spotbugsXml)
             }
 
 

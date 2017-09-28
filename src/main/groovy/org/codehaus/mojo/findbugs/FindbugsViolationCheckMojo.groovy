@@ -38,18 +38,18 @@ import org.codehaus.plexus.util.FileUtils
 /**
  * Fail the build if there were any FindBugs violations in the source code.
  * An XML report is put out by default in the target directory with the errors.
- * To see more documentation about FindBugs' options, please see the <a href="http://findbugs.sourceforge.net/manual/index.html" class="externalLink">FindBugs
+ * To see more documentation about FindBugs' options, please see the <a href="http://spotbugs.readthedocs.io/en/latest/" class="externalLink">SpotBugs
 Manual.</a>.
  *
  * @since 2.0
  *
  * @author <a href="mailto:gleclaire@codehaus.org">Garvin LeClaire</a>
- * @version $Id: FindbugsViolationCheckMojo.groovy gleclaire $
+ * @version $Id: SpotbugsViolationCheckMojo.groovy gleclaire $
  */
 
 @Mojo( name = "check", defaultPhase = LifecyclePhase.VERIFY, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true, threadSafe = true )
 @Execute( goal = "spotbugs")
-class FindbugsViolationCheckMojo extends AbstractMojo {
+class SpotbugsViolationCheckMojo extends AbstractMojo {
 
     /**
      * Location where generated html will be created.
@@ -59,7 +59,7 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
     File outputDirectory
 
     /**
-     * Turn on and off xml output of the Findbugs report.
+     * Turn on and off xml output of the Spotbugs report.
      *
      * @since 1.0.0
      */
@@ -87,15 +87,15 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
      */
     @Deprecated
     @Parameter( defaultValue = "true" )
-    boolean findbugsXmlOutput
+    boolean spotbugsXmlOutput
 
     /**
-     * Specifies the directory where the findbugs native xml output will be generated.
+     * Specifies the directory where the spotbugs native xml output will be generated.
      *
      * @since 1.2.0
      */
     @Parameter( defaultValue = '${project.build.directory}', required = true )
-    File findbugsXmlOutputDirectory
+    File spotbugsXmlOutputDirectory
 
     /**
      * Doxia Site Renderer.
@@ -146,7 +146,7 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
     List testSourceRoots
 
     /**
-     * Run Findbugs on the tests.
+     * Run Spotbugs on the tests.
      *
      * @since 2.0
      */
@@ -154,7 +154,7 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
     boolean includeTests
 
     /**
-     * List of artifacts this plugin depends on. Used for resolving the Findbugs coreplugin.
+     * List of artifacts this plugin depends on. Used for resolving the Spotbugs coreplugin.
      *
      */
     @Parameter( property="plugin.artifacts", required = true, readonly = true )
@@ -232,7 +232,7 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
-     * directory before being passed to Findbugs as a filter file.
+     * directory before being passed to Spotbugs as a filter file.
      * </p>
      *
      * @since 1.0-beta-1
@@ -253,7 +253,7 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
-     * directory before being passed to Findbugs as a filter file.
+     * directory before being passed to Spotbugs as a filter file.
      * </p>
      *
      * @since 1.0-beta-1
@@ -274,7 +274,7 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
-     * directory before being passed to Findbugs as a filter file.
+     * directory before being passed to Spotbugs as a filter file.
      * </p>
      *
      * This is a comma-delimited list.
@@ -293,7 +293,7 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
     String effort
 
     /**
-     * turn on Findbugs debugging
+     * turn on Spotbugs debugging
      *
      */
     @Parameter( defaultValue = "false", property="spotbugs.debug" )
@@ -337,7 +337,7 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
-     * directory before being passed to Findbugs as a plugin file.
+     * directory before being passed to Spotbugs as a plugin file.
      * </p>
      *
      * @since 1.0-beta-1
@@ -469,14 +469,14 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
 
 			log.debug("Here goes...............Executing spotbugs:check")
 
-			if (!findbugsXmlOutputDirectory.exists()) {
-				if ( !findbugsXmlOutputDirectory.mkdirs() ) {
+			if (!spotbugsXmlOutputDirectory.exists()) {
+				if ( !spotbugsXmlOutputDirectory.mkdirs() ) {
                     throw new MojoExecutionException("Cannot create xml output directory")
 				}
 			}
 
 
-			File outputFile = new File("${findbugsXmlOutputDirectory}/findbugsXml.xml")
+			File outputFile = new File("${spotbugsXmlOutputDirectory}/spotbugsXml.xml")
 
 			if (outputFile.exists()) {
 
@@ -506,7 +506,7 @@ class FindbugsViolationCheckMojo extends AbstractMojo {
                 }
 
 
-                log.info('\n\n\nTo see bug detail using the Findbugs GUI, use the following command "mvn findbugs:gui"\n\n\n')
+                log.info('\n\n\nTo see bug detail using the Spotbugs GUI, use the following command "mvn spotbugs:gui"\n\n\n')
 
 
                 if ( (bugCount || errorCount) && failOnError ) {
