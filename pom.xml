@@ -128,6 +128,7 @@
 
     <junitVersion>4.12</junitVersion>
     <spotbugsVersion>3.1.0-RC5</spotbugsVersion>
+    <spotbugsTag>3.1.0_RC5</spotbugsTag>
 
     <antVersion>1.9.9</antVersion>
     <groovyVersion>2.4.12</groovyVersion>
@@ -158,11 +159,11 @@
 
     <wagonGitsiteExtensionVersion>0.3.1</wagonGitsiteExtensionVersion>
 
-    <findbugsTestDebug>false</findbugsTestDebug>
-    <integrationTestSrc>${project.build.directory}/it-src-findbugs</integrationTestSrc>
-    <localTestSrc>${user.dir}/FindBugs</localTestSrc>
-    <remoteTestSrc>scm:git:https://github.com/findbugsproject/findbugs/</remoteTestSrc>
-    <includesTestSrcPattern>**findbugsTestCases/src/java/A*.java, **findbugsTestCases/src/java/Use*.java, **findbugsTestCases/src/java/annotations/*.java</includesTestSrcPattern>
+    <spotbugsTestDebug>false</spotbugsTestDebug>
+    <integrationTestSrc>${project.build.directory}/it-src-spotbugs</integrationTestSrc>
+    <localTestSrc>${user.dir}/SpotBugs</localTestSrc>
+    <remoteTestSrc>scm:git:https://github.com/spotbugs/spotbugs/</remoteTestSrc>
+    <includesTestSrcPattern>**spotbugsTestCases/src/java/A*.java, **spotbugsTestCases/src/java/Use*.java, **spotbugsTestCases/src/java/annotations/*.java</includesTestSrcPattern>
     <testSrc>remote</testSrc>
 
     <pmd.skip>true</pmd.skip>
@@ -184,6 +185,12 @@
       <groupId>com.github.spotbugs</groupId>
       <artifactId>spotbugs</artifactId>
       <version>${spotbugsVersion}</version>
+      <exclusions>
+          <exclusion>
+              <groupId>xml-apis</groupId>
+              <artifactId>xml-apis</artifactId>
+          </exclusion>
+      </exclusions>
     </dependency>
 
     <!-- gmaven -->
@@ -565,7 +572,7 @@
     <profile>
       <id>run-its</id>
       <properties>
-        <findbug.debug>false</findbug.debug>
+        <spotbug.debug>false</spotbug.debug>
       </properties>
       <build>
         <plugins>
@@ -581,7 +588,7 @@
                   <goal>run</goal>
                 </goals>
                 <configuration>
-                  <projectsDirectory>${basedir}/src/it-tools</projectsDirectory>
+                  <projectsDirectory>${project.basedir}/src/it-tools</projectsDirectory>
                   <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
                   <showVersion>true</showVersion>
                   <pomIncludes>
@@ -636,7 +643,7 @@
             <version>${scmPluginVersion}</version>
             <executions>
               <execution>
-                <id>prepare-integration-test-remote-findbugs-src</id>
+                <id>prepare-integration-test-remote-spotbugs-src</id>
                 <phase>pre-integration-test</phase>
                 <goals>
                   <goal>checkout</goal>
@@ -648,8 +655,8 @@
                     <git>jgit</git>
                   </providerImplementations>
                   <includes>${includesTestSrcPattern}</includes>
-                  <scmVersion>release-${findbugsVersion}</scmVersion>
-                  <scmVersionType>branch</scmVersionType>
+                  <scmVersion>${spotbugsTag}</scmVersion>
+                  <scmVersionType>tag</scmVersionType>
                 </configuration>
               </execution>
             </executions>
@@ -681,7 +688,7 @@
             <version>${antrunPluginVersion}</version>
             <executions>
               <execution>
-                <id>prepare-integration-test-local-findbugs-src</id>
+                <id>prepare-integration-test-local-spotbugs-src</id>
                 <phase>pre-integration-test</phase>
                 <goals>
                   <goal>run</goal>
