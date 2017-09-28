@@ -30,9 +30,9 @@ import org.codehaus.plexus.util.PathTool
  * FindBugs if a bug is found.
  *
  * @author <a href="mailto:gleclaire@codehaus.org">Garvin LeClaire</a>
- * @version $Id: FindbugsReportGenerator.groovy Z gleclaire $
+ * @version $Id: SpotbugsReportGenerator.groovy Z gleclaire $
  */
-class FindbugsReportGenerator implements FindBugsInfo {
+class SpotbugsReportGenerator implements FindBugsInfo {
 
 
 	/**
@@ -273,7 +273,7 @@ class FindbugsReportGenerator implements FindBugsInfo {
 	List testSourceRoots
 
 	/**
-	 * Run Findbugs on the tests.
+	 * Run Spotbugs on the tests.
 	 *
 	 */
 	boolean includeTests
@@ -288,7 +288,7 @@ class FindbugsReportGenerator implements FindBugsInfo {
 
 	File basedir
 
-	GPathResult findbugsResults
+	GPathResult spotbugsResults
 
 
 
@@ -306,7 +306,7 @@ class FindbugsReportGenerator implements FindBugsInfo {
 	 * @param siteTool
 	 *            Doxia SiteTool Handle.
 	 */
-	FindbugsReportGenerator(Sink sink, ResourceBundle bundle, File basedir, SiteTool siteTool) {
+	SpotbugsReportGenerator(Sink sink, ResourceBundle bundle, File basedir, SiteTool siteTool) {
 
 
 		assert sink
@@ -378,21 +378,21 @@ class FindbugsReportGenerator implements FindBugsInfo {
 		sink.paragraph()
 		sink.text(bundle.getString(VERSIONTITLE_KEY) + FindBugsInfo.BLANK)
 		sink.italic()
-		sink.text(edu.umd.cs.findbugs.Version.RELEASE)
+		sink.text(edu.umd.cs.findbugs.Version.VERSION_STRING)
 		sink.italic_()
 		sink.paragraph_()
 
 		sink.paragraph()
 		sink.text(bundle.getString(THRESHOLD_KEY) + FindBugsInfo.BLANK)
 		sink.italic()
-		sink.text(FindBugsInfo.findbugsThresholds.get(threshold))
+		sink.text(FindBugsInfo.spotbugsThresholds.get(threshold))
 		sink.italic_()
 		sink.paragraph_()
 
 		sink.paragraph()
 		sink.text(bundle.getString(EFFORT_KEY) + FindBugsInfo.BLANK)
 		sink.italic()
-		sink.text(FindBugsInfo.findbugsEfforts.get(effort))
+		sink.text(FindBugsInfo.spotbugsEfforts.get(effort))
 		sink.italic_()
 		sink.paragraph_()
 		sink.section1_()
@@ -413,9 +413,9 @@ class FindbugsReportGenerator implements FindBugsInfo {
 		openClassReportSection(bugClass)
 
 
-		log.debug("printBug findbugsResults is ${findbugsResults}")
+		log.debug("printBug spotbugsResults is ${spotbugsResults}")
 
-		findbugsResults.BugInstance.each() {bugInstance ->
+		spotbugsResults.BugInstance.each() {bugInstance ->
 
 
 			log.debug("bugInstance --->  ${bugInstance}")
@@ -462,7 +462,7 @@ class FindbugsReportGenerator implements FindBugsInfo {
 
 				// priority
 				sink.tableCell()
-				sink.text(findbugsPriority[priority.toInteger()])
+				sink.text(spotbugsPriority[priority.toInteger()])
 				sink.tableCell_()
 
 				sink.tableRow_()
@@ -634,22 +634,22 @@ class FindbugsReportGenerator implements FindBugsInfo {
 
 		// files
 		sink.tableCell()
-		sink.text(findbugsResults.FindBugsSummary.@total_classes.text())
+		sink.text(spotbugsResults.FindBugsSummary.@total_classes.text())
 		sink.tableCell_()
 
 		// bug
 		sink.tableCell()
-		sink.text(findbugsResults.FindBugsSummary.@total_bugs.text())
+		sink.text(spotbugsResults.FindBugsSummary.@total_bugs.text())
 		sink.tableCell_()
 
 		// Errors
 		sink.tableCell()
-		sink.text(findbugsResults.Errors.@errors.text())
+		sink.text(spotbugsResults.Errors.@errors.text())
 		sink.tableCell_()
 
 		// Missing Classes
 		sink.tableCell()
-		sink.text(findbugsResults.Errors.@missingClasses.text())
+		sink.text(spotbugsResults.Errors.@missingClasses.text())
 		sink.tableCell_()
 
 		sink.tableRow_()
@@ -692,7 +692,7 @@ class FindbugsReportGenerator implements FindBugsInfo {
 
 		sink.tableRow_()
 
-		findbugsResults.FindBugsSummary.PackageStats.ClassStats.each() {classStats ->
+		spotbugsResults.SpotBugsSummary.PackageStats.ClassStats.each() {classStats ->
 
 			def classStatsValue = classStats.'@class'.text()
 			def classStatsBugCount = classStats.'@bugs'.text()
