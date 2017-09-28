@@ -5,11 +5,11 @@ import java.util.*;
 
 String[] paths =
 {
-    "target/site/findbugs.html",
+    "target/site/spotbugs.html",
     "target/site/xref/index.html",
 };
 
-// Findbugs and JXR reports
+// Spotbugs and JXR reports
 for ( String path : paths )
 {
     File file = new File( basedir, path );
@@ -20,9 +20,9 @@ for ( String path : paths )
     }
 }
 
-File report = new File( basedir, "target/site/findbugs.html" );
+File report = new File( basedir, "target/site/spotbugs.html" );
 String content = FileUtils.fileRead( report, "UTF-8" );
-if ( content.indexOf( "<a href=\"./xref/org/codehaus/mojo/findbugsmavenplugin/it/mfindbugs145/App.html#L17\">" ) < 0 )
+if ( content.indexOf( "<a href=\"./xref/com/github/spotbugs/spotbugs-maven-plugin/it/mfindbugs145/App.html#L17\">" ) < 0 )
 {
     throw new IOException( "XRef link not generated." );
 }

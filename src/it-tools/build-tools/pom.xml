@@ -19,7 +19,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.codehaus.mojo.findbugs-maven-plugin.it</groupId>
+  <groupId>com.github.spotbugs.spotbugs-maven-plugin.it</groupId>
   <artifactId>build-tools</artifactId>
   <name>build-tools</name>
   <packaging>jar</packaging>
@@ -47,8 +47,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <debug>false</debug>
-          <source>5</source>
-          <target>5</target>
+          <source>8</source>
+          <target>8</target>
           <excludes>
             <exclude>fakeAnnotations/**</exclude>
             <exclude>jsr305/**</exclude>

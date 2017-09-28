@@ -17,51 +17,51 @@
 def thresholdLevel = 'experimental'
 
 
-File findbugsHtml =  new File(basedir, 'target/site/findbugs.html')
-assert findbugsHtml.exists()
+File spotbugsHtml =  new File(basedir, 'target/site/spotbugs.html')
+assert spotbugsHtml.exists()
 
-File findbugXdoc = new File(basedir, 'target/findbugs.xml')
-assert findbugXdoc.exists()
+File spotbugXdoc = new File(basedir, 'target/spotbugs.xml')
+assert spotbugXdoc.exists()
 
-File findbugXml = new File(basedir, 'target/findbugsXml.xml')
-assert findbugXml.exists()
+File spotbugXml = new File(basedir, 'target/spotbugsXml.xml')
+assert spotbugXml.exists()
 
 
 println '***************************'
 println "Checking HTML file"
 println '***************************'
 
-assert findbugsHtml.text.contains( "<i>" + thresholdLevel + "</i>" )
+assert spotbugsHtml.text.contains( "<i>" + thresholdLevel + "</i>" )
 
-def path = new XmlSlurper(true, true, true).parse( findbugsHtml )
+def path = new XmlSlurper(true, true, true).parse( spotbugsHtml )
 //*[@id="contentBox"]/div[2]/table/tbody/tr[2]/td[2]
-def findbugsErrors = path.body.'**'.find {div -> div.@id == 'contentBox'}.div[1].table.tr[1].td[1].toInteger()
-println "Error Count is ${findbugsErrors}"
+def spotbugsErrors = path.body.'**'.find {div -> div.@id == 'contentBox'}.div[1].table.tr[1].td[1].toInteger()
+println "Error Count is ${spotbugsErrors}"
 
 
 println '**********************************'
-println "Checking Findbugs Native XML file"
+println "Checking Spotbugs Native XML file"
 println '**********************************'
 
-path = new XmlSlurper().parse(findbugXml)
+path = new XmlSlurper().parse(spotbugXml)
 
 allNodes = path.depthFirst().collect{ it }
-def findbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
-println "BugInstance size is ${findbugsXmlErrors}"
+def spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+println "BugInstance size is ${spotbugsXmlErrors}"
 
 
 println '***************************'
 println "Checking xDoc file"
 println '***************************'
 
-path = new XmlSlurper().parse(findbugXdoc)
+path = new XmlSlurper().parse(spotbugXdoc)
 
 allNodes = path.depthFirst().collect{ it }
 def xdocErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${xdocErrors}"
 
 
-assert xdocErrors == findbugsXmlErrors
+assert xdocErrors == spotbugsXmlErrors
 
-assert findbugsErrors == findbugsXmlErrors
+assert spotbugsErrors == spotbugsXmlErrors
 

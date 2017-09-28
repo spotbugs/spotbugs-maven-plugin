@@ -17,5 +17,5 @@
 
 
 assert (new File(basedir, 'target/site/index.html').exists())
-assert (new File(basedir, 'target/findbugs.xml').exists())
-assert (new File(basedir, 'target/findbugsXml.xml').exists())
+assert (new File(basedir, 'target/spotbugs.xml').exists())
+assert (new File(basedir, 'target/spotbugsXml.xml').exists())
