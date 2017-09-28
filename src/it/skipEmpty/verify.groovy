@@ -15,25 +15,25 @@
  */
 
 
-File findbugsHtml =  new File(basedir, 'target/site/findbugs.html')
-assert !findbugsHtml.exists()
+File spotbugsHtml =  new File(basedir, 'target/site/spotbugs.html')
+assert !spotbugsHtml.exists()
 
-File findbugXdoc = new File(basedir, 'target/findbugs.xml')
-assert !findbugXdoc.exists()
+File spotbugXdoc = new File(basedir, 'target/spotbugs.xml')
+assert !spotbugXdoc.exists()
 
-File findbugXml = new File(basedir, 'target/findbugsXml.xml')
-assert findbugXml.exists()
+File spotbugXml = new File(basedir, 'target/spotbugsXml.xml')
+assert spotbugXml.exists()
 
 
 println '**********************************'
-println "Checking Findbugs Native XML file"
+println "Checking Spotbugs Native XML file"
 println '**********************************'
 
-path = new XmlSlurper().parse(findbugXml)
+path = new XmlSlurper().parse(spotbugXml)
 
 allNodes = path.depthFirst().collect{ it }
-def findbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
-println "BugInstance size is ${findbugsXmlErrors}"
+def spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+println "BugInstance size is ${spotbugsXmlErrors}"
 
-assert findbugsXmlErrors == 0
+assert spotbugsXmlErrors == 0
 

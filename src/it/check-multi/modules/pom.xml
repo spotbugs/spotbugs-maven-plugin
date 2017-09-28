@@ -19,7 +19,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.codehaus.mojo.findbugs-maven-plugin.it</groupId>
+    <groupId>com.github.spotbugs.spotbugs-maven-plugin.it</groupId>
     <artifactId>multi</artifactId>
     <version>testing</version>
     <relativePath>../pom.xml</relativePath>
@@ -30,18 +30,18 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <configuration>
           <xmlOutput>true</xmlOutput>
-          <debug>@findbugsTestDebug@</debug>
+          <debug>@spotbugsTestDebug@</debug>
           <failOnError>false</failOnError>
         </configuration>
       </plugin>
     </plugins>
     <extensions>
       <extension>
-        <groupId>org.codehaus.mojo.findbugs-maven-plugin.it</groupId>
+        <groupId>com.github.spotbugs.spotbugs-maven-plugin.it</groupId>
         <artifactId>build-tools</artifactId>
         <version>testing</version>
       </extension>

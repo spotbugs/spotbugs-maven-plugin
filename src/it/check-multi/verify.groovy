@@ -19,36 +19,36 @@
 //  check module 1
 
 
-File findbugXml = new File(basedir, "modules/module-1/target/findbugsXml.xml")
-assert findbugXml.exists()
+File spotbugXml = new File(basedir, "modules/module-1/target/spotbugsXml.xml")
+assert spotbugXml.exists()
 
-def path = new XmlSlurper().parse(findbugXml)
+def path = new XmlSlurper().parse(spotbugXml)
 
 println '**********************************'
-println "Checking Findbugs Native XML file"
+println "Checking Spotbugs Native XML file"
 println '**********************************'
 
 
 allNodes = path.depthFirst().collect { it }
-def findbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
-println "BugInstance size is ${findbugsErrors}"
+def spotbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+println "BugInstance size is ${spotbugsErrors}"
 
-assert findbugsErrors > 0
+assert spotbugsErrors > 0
 
 
 //  check module 2
 
-findbugXml = new File(basedir, "modules/module-2/target/findbugsXml.xml")
-assert findbugXml.exists()
+spotbugXml = new File(basedir, "modules/module-2/target/spotbugsXml.xml")
+assert spotbugXml.exists()
 
-path = new XmlSlurper().parse(findbugXml)
+path = new XmlSlurper().parse(spotbugXml)
 
 println '**********************************'
-println "Checking Findbugs Native XML file"
+println "Checking Spotbugs Native XML file"
 println '**********************************'
 
 allNodes = path.depthFirst().collect { it }
-findbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
-println "BugInstance size is ${findbugsErrors}"
+spotbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+println "BugInstance size is ${spotbugsErrors}"
 
-assert findbugsErrors > 0
+assert spotbugsErrors > 0
