@@ -30,7 +30,6 @@ import org.codehaus.plexus.util.PathTool
  * FindBugs if a bug is found.
  *
  * @author <a href="mailto:gleclaire@codehaus.org">Garvin LeClaire</a>
- * @version $Id: SpotbugsReportGenerator.groovy Z gleclaire $
  */
 class SpotbugsReportGenerator implements FindBugsInfo {
 

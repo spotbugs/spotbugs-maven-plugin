@@ -36,7 +36,6 @@ import org.apache.maven.plugins.annotations.ResolutionScope
  * @description Launch the Spotbugs GUI using the parameters in the POM fle.
  *
  * @author <a href="mailto:gleclaire@codehaus.org">Garvin LeClaire</a>
- * @version $Id: SpotbugsGui.groovy gleclaire $
  */
 
 @Mojo( name = "gui", requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
