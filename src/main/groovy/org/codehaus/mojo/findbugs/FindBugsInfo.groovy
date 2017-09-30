@@ -27,7 +27,6 @@ package org.codehaus.mojo.findbugs
  *
  *
  * @author <a href="mailto:gleclaire@codehaus.org">Garvin LeClaire</a>
- * @version $Id: FindBugsInfo.groovy  $
  */
 
 interface FindBugsInfo {

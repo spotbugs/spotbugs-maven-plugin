@@ -44,7 +44,6 @@ Manual.</a>.
  * @since 2.0
  *
  * @author <a href="mailto:gleclaire@codehaus.org">Garvin LeClaire</a>
- * @version $Id: SpotbugsViolationCheckMojo.groovy gleclaire $
  */
 
 @Mojo( name = "check", defaultPhase = LifecyclePhase.VERIFY, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true, threadSafe = true )

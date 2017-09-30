@@ -52,7 +52,6 @@ import org.sonatype.plexus.build.incremental.BuildContext
  *
  *
  * @author <a href="mailto:gleclaire@codehaus.org">Garvin LeClaire</a>
- * @version $Id: FindBugsMojo.groovy 16932 2012-06-21 01:13:14Z gleclaire $
  */
 
 @Mojo(name = "spotbugs", requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true, threadSafe = true)
