@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <document>
   <properties>
-    <title>FindBugs Maven Testing</title>
+    <title>SpotBugs Maven Testing</title>
   </properties>
 
   <body>
-    <section name="Welcome to FindBugs Maven Testing">
+    <section name="Welcome to SpotBugs Maven Testing">
       <p>
 
       </p>

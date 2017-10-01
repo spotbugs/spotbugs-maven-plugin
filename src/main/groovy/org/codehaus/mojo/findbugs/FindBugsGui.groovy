@@ -154,7 +154,7 @@ class FindBugsGui extends AbstractMojo {
             def spotbugsXml = new File(spotbugsXmlName)
 
             if ( spotbugsXml.exists() ) {
-                log.debug("  Found an FindBugs XML at ->" + spotbugsXml.toString())
+                log.debug("  Found an SpotBugs XML at ->" + spotbugsXml.toString())
                 arg(value: spotbugsXml)
             }
 

@@ -16,28 +16,38 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-<modelVersion>4.0.0</modelVersion>
-<groupId>com.github.spotbugs.spotbugs-maven-plugin.it</groupId>
-<version>testing</version>
-<artifactId>skipEmpty</artifactId>
-<name>skipEmpty</name>
-<packaging>jar</packaging>
-<reporting>
-  <plugins>
-    <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-jxr-plugin</artifactId>
-      <version>@jxrPluginVersion@</version>
-    </plugin>
-    <plugin>
-      <groupId>com.github.spotbugs</groupId>
-      <artifactId>spotbugs-maven-plugin</artifactId>
-      <configuration>
-        <spotbugsXmlOutput>true</spotbugsXmlOutput>
-        <skipEmptyReport>true</skipEmptyReport>
-        <xmlOutput>true</xmlOutput>
-      </configuration>
-    </plugin>
-  </plugins>
-</reporting>
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Intentially not using parent
+  <parent>
+    <groupId>com.github.spotbugs.spotbugs-maven-plugin.it</groupId>
+    <artifactId>common</artifactId>
+    <version>testing</version>
+    <relativePath>../common.xml</relativePath>
+  </parent>
+  -->
+
+  <groupId>com.github.spotbugs.spotbugs-maven-plugin.it</groupId>
+  <version>testing</version>
+  <artifactId>skipEmpty</artifactId>
+  <name>skipEmpty</name>
+  <packaging>jar</packaging>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>@jxrPluginVersion@</version>
+      </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <configuration>
+          <spotbugsXmlOutput>true</spotbugsXmlOutput>
+          <skipEmptyReport>true</skipEmptyReport>
+          <xmlOutput>true</xmlOutput>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>

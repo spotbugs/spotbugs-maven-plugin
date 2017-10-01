@@ -36,25 +36,26 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>@sitePluginVersion@</version>
-        <configuration>
-          <reportPlugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-jxr-plugin</artifactId>
-              <version>@jxrPluginVersion@</version>
-            </plugin>
-            <plugin>
-              <groupId>com.github.spotbugs</groupId>
-              <artifactId>spotbugs-maven-plugin</artifactId>
-              <configuration>
-                <spotbugsXmlOutput>true</spotbugsXmlOutput>
-                <xmlOutput>true</xmlOutput>
-                <includeFilterFile>whizbang/lib-filter.xml</includeFilterFile>
-              </configuration>
-            </plugin>
-          </reportPlugins>
-        </configuration>
       </plugin>
     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>@jxrPluginVersion@</version>
+      </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <configuration>
+          <spotbugsXmlOutput>true</spotbugsXmlOutput>
+          <xmlOutput>true</xmlOutput>
+          <includeFilterFile>whizbang/lib-filter.xml</includeFilterFile>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>

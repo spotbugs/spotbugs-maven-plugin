@@ -26,8 +26,8 @@ import org.apache.maven.plugin.logging.Log
 import org.codehaus.plexus.util.PathTool
 
 /**
- * The reporter controls the generation of the FindBugs report. It contains call back methods which gets called by
- * FindBugs if a bug is found.
+ * The reporter controls the generation of the SpotBugs report. It contains call back methods which gets called by
+ * SpotBugs if a bug is found.
  *
  * @author <a href="mailto:gleclaire@codehaus.org">Garvin LeClaire</a>
  */
@@ -113,13 +113,13 @@ class SpotbugsReportGenerator implements FindBugsInfo {
 	static final String EFFORT_KEY = "report.spotbugs.effort"
 
 	/**
-	 * The key to get the link to FindBugs description page from the bundle.
+	 * The key to get the link to SpotBugs description page from the bundle.
 	 *
 	 */
 	static final String DETAILSLINK_KEY = "report.spotbugs.detailslink"
 
 	/**
-	 * The key to get the version title for FindBugs from the bundle.
+	 * The key to get the version title for SpotBugs from the bundle.
 	 *
 	 */
 	static final String VERSIONTITLE_KEY = "report.spotbugs.versiontitle"
@@ -193,7 +193,7 @@ class SpotbugsReportGenerator implements FindBugsInfo {
 	String effort
 
 	/**
-	 * The name of the current class which is analysed by FindBugs.
+	 * The name of the current class which is analysed by SpotBugs.
 	 *
 	 */
 	String currentClassName
@@ -366,7 +366,7 @@ class SpotbugsReportGenerator implements FindBugsInfo {
 		sink.text(getReportTitle())
 		sink.sectionTitle1_()
 
-		// information about FindBugs
+		// information about SpotBugs
 		sink.paragraph()
 		sink.text(bundle.getString(LINKTITLE_KEY) + FindBugsInfo.BLANK)
 		sink.link(bundle.getString(LINK_KEY))
@@ -746,7 +746,7 @@ class SpotbugsReportGenerator implements FindBugsInfo {
 	}
 
 	/**
-	 * Return the value to display. If FindBugs does not provide a line number, a default message is returned. The line
+	 * Return the value to display. If SpotBugs does not provide a line number, a default message is returned. The line
 	 * number otherwise.
 	 *
 	 * @param line

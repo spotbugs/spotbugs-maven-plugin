@@ -70,7 +70,7 @@ under the License.
           <snapshots>
             <enabled>true</enabled>
           </snapshots>
-        </pluginRepository>         
+        </pluginRepository>
       </pluginRepositories>
     </profile>
   </profiles>

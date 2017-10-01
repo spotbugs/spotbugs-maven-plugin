@@ -1,4 +1,4 @@
-#FindBugs User Preferences
+#SpotBugs User Preferences
 #Wed Jun 18 10:04:41 CEST 2014
 cloud_id=edu.umd.cs.findbugs.cloud.appengine.findbugs-cloud
 detectorAppendingToAnObjectOutputStream=AppendingToAnObjectOutputStream|true

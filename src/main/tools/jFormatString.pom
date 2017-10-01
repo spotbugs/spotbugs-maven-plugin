@@ -2,10 +2,10 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.spotbugs</groupId>
   <artifactId>jFormatString</artifactId>
-  <version>@findbugs.version@</version>
+  <version>@Spotbugs.version@</version>
   <packaging>jar</packaging>
-  <url>http://findbugs.sourceforge.net/</url>
-  <name>FindBugs-jFormatString</name>
+  <url>http://www.github.com/spotbugs/</url>
+  <name>SpotBugs-jFormatString</name>
   <description>jFormatString for Spotbugs</description>
   <licenses>
     <license>
@@ -15,8 +15,8 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:http://findbugs.googlecode.com/svn/trunk/</connection>
-    <developerConnection>scm:svn:https://findbugs.googlecode.com/svn/trunk/</developerConnection>
-    <url>http://findbugs.googlecode.com/svn/trunk/</url>
+    <connection>scm:git:https://github.com/spotbugs/spotbugs.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/spotbugs/spotbugs.git</developerConnection>
+    <url>https://github.com/spotbugs/spotbugs</url>
   </scm>
 </project>

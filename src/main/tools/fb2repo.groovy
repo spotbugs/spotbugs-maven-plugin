@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-def spotbugsHome = System.getenv("FINDBUGS_HOME")
+def spotbugsHome = System.getenv("SPOTBUGS_HOME")
 def antBuilder = new AntBuilder()
 
 def cli = new CliBuilder(usage:'fb2repo -f spotbugs.home -version version -u repositoryURL')

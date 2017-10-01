@@ -36,9 +36,9 @@ import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.util.FileUtils
 
 /**
- * Fail the build if there were any FindBugs violations in the source code.
+ * Fail the build if there were any SpotBugs violations in the source code.
  * An XML report is put out by default in the target directory with the errors.
- * To see more documentation about FindBugs' options, please see the <a href="http://spotbugs.readthedocs.io/en/latest/" class="externalLink">SpotBugs
+ * To see more documentation about SpotBugs' options, please see the <a href="http://spotbugs.readthedocs.io/en/latest/" class="externalLink">SpotBugs
 Manual.</a>.
  *
  * @since 2.0
@@ -103,13 +103,13 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
     Renderer siteRenderer
 
     /**
-     * Directory containing the class files for FindBugs to analyze.
+     * Directory containing the class files for SpotBugs to analyze.
      */
     @Parameter( defaultValue = '${project.build.outputDirectory}', required = true )
     File classFilesDirectory
 
     /**
-     * Directory containing the test class files for FindBugs to analyze.
+     * Directory containing the test class files for SpotBugs to analyze.
      *
      */
     @Parameter( defaultValue = '${project.build.testOutputDirectory}', required = true )
@@ -409,7 +409,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
     boolean failOnError
 
     /**
-     * Fork a VM for FindBugs analysis.  This will allow you to set timeouts and heap size
+     * Fork a VM for SpotBugs analysis.  This will allow you to set timeouts and heap size
      *
      * @since 2.3.2
      */
@@ -426,7 +426,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
     int maxHeap
 
     /**
-     * Specifies the amount of time, in milliseconds, that FindBugs may run before
+     * Specifies the amount of time, in milliseconds, that SpotBugs may run before
      *  it is assumed to be hung and is terminated.
      * The default is 600,000 milliseconds, which is ten minutes.
      * This only works if the <b>fork</b> parameter is set <b>true</b>.
@@ -514,7 +514,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
             }
 		}
 		else {
-			log.debug("Nothing for FindBugs to do here.")
+			log.debug("Nothing for SpotBugs to do here.")
 		}
 	}
 
