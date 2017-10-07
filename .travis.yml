@@ -11,7 +11,7 @@ env:
     - secure: "KqPuq9TiiqdOUfGq3k+XYObNjV8FxbgJeqSWK0pcWFFs5w5c4vcGmrfUSSSqNa/JJkKOBWQ6S3tJP7CRxx0uow5BvU4ZQAZLFt6VjzcUZFKGTl5soMTF2gQdyAAcwUnRX2gQKt0doO8Fid6xzfsn1KdTIWXmeqMrcTvC+d7EhxU="
 
 script:
-  - ./mvnw test -B
+  - ./mvnw verify -B -P run-its -DtestSrc=remote
   - ./mvnw site -B
 
 deploy:
