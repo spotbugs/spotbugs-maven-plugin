@@ -691,7 +691,7 @@ class SpotbugsReportGenerator implements FindBugsInfo {
 
 		sink.tableRow_()
 
-		spotbugsResults.SpotBugsSummary.PackageStats.ClassStats.each() {classStats ->
+		spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() {classStats ->
 
 			def classStatsValue = classStats.'@class'.text()
 			def classStatsBugCount = classStats.'@bugs'.text()
