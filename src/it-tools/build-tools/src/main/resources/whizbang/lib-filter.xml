@@ -1,6 +1,6 @@
-<SpotBugsFilter>
+<FindBugsFilter>
   <!-- A method with a dead local store false positive . -->
   <Match>
     <Bug pattern="DLS_DEAD_LOCAL_STORE"/>
   </Match>
-</SpotBugsFilter>
+</FindBugsFilter>
