@@ -1,4 +1,4 @@
-package com.github.spotbugs.spotbugs-maven-plugin.it.mfindbugs145;
+package org.codehaus.mojo.findbugsmavenplugin.it.mfindbugs145;
 
 /**
  * Hello world!
