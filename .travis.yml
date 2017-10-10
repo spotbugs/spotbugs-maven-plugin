@@ -21,5 +21,7 @@ deploy:
     local_dir: $TRAVIS_BUILD_DIR/target/site
     email: skypencil+spotbugs-bot@gmail.com
     on:
+      repo: spotbugs/spotbugs-maven-plugin
       branch: spotbugs
-      condition: "$JAVA_HOME = *'oracle'*"
+      jdk: oraclejdk8
+      condition: "!$TRAVIS_PULL_REQUEST"
