@@ -127,8 +127,8 @@
     <projectVersion>${project.version}</projectVersion>
 
     <junitVersion>4.12</junitVersion>
-    <spotbugsVersion>3.1.0-RC6</spotbugsVersion>
-    <spotbugsTag>3.1.0_RC6</spotbugsTag>
+    <spotbugsVersion>3.1.0-RC7</spotbugsVersion>
+    <spotbugsTag>3.1.0_RC7</spotbugsTag>
 
     <antVersion>1.9.9</antVersion>
     <groovyVersion>2.4.12</groovyVersion>
