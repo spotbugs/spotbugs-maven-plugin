@@ -26,7 +26,7 @@ Continue to use 'FindBugsFilter' when needed as the spotbugs project has not yet
 
 Run all tests
 ```
-mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=4"
+mvn -DtestSrc=remote -Prun-its clean install
 ```
 Skip tests
 ```
@@ -34,12 +34,12 @@ mvn -DskipTests=true clean install
 ```
 Run tests on spotbugs test source code that is local instead of from SpotBugs github repository
 ```
-mvn -DtestSrc=local -DlocalTestSrc=/opt/spotBugs -Prun-its clean install -D"invoker.parallelThreads=4"
+mvn -DtestSrc=local -DlocalTestSrc=/opt/spotBugs -Prun-its clean install
 ```
 
 Run selected tests
 ```
-mvn -DtestSrc=remote -Prun-its -Dinvoker.test=build-*,basic-1,check-nofail clean install -D"invoker.parallelThreads=4"
+mvn -DtestSrc=remote -Prun-its -Dinvoker.test=build-*,basic-1,check-nofail clean install
 ```
 
 Run tests in debugger

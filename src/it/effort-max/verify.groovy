@@ -16,7 +16,6 @@
 
 def effortLevel = 'max'
 
-
 File spotbugsHtml =  new File(basedir, 'target/site/spotbugs.html')
 assert spotbugsHtml.exists()
 
@@ -31,8 +30,11 @@ println '***************************'
 println "Checking HTML file"
 println '***************************'
 
-def path = new XmlSlurper(true, true, true).parse( spotbugsHtml )
-//*[@id="contentBox"]/div[2]/table/tbody/tr[2]/td[2]
+def xhtmlParser = new XmlSlurper()
+xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false);
+xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+def path = xhtmlParser.parse( spotbugsHtml )
+// *[@id="contentBox"]/div[2]/table/tbody/tr[2]/td[2]
 def spotbugsErrors = path.body.'**'.find {div -> div.@id == 'contentBox'}.div[1].table.tr[1].td[1].toInteger()
 println "Error Count is ${spotbugsErrors}"
 
