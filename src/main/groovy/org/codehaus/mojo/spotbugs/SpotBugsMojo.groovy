@@ -926,7 +926,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             auxClasspathElements = project.testClasspathElements
         }
 
-
         def auxClasspath = ""
 
         if (auxClasspathElements) {
@@ -945,7 +944,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                     log.debug("  Adding to AuxClasspath ->" + auxClasspathElement.toString())
 
-                    auxClasspath += auxClasspathElement.toString() + ((auxClasspathElement == auxClasspathList[auxClasspathList.size() - 1]) ? "" : File.pathSeparator)
+                    auxClasspath += auxClasspathElement.toString() +  File.pathSeparator
                 }
             }
         }
