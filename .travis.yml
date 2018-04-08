@@ -18,7 +18,7 @@ addons:
       secure: "OlaFl2jtFaE6zIAziEGqpy1Hipi8PHkJcgj1Oym+XD7okoVivDldeM70RJ1tRHeH56V+DyI7/jPPu0znMYVZakbmqNR5Jb1NWnFd4XH3biTtkObUk9D7wk0AQULRCnnKK36x/m2q015bgusNdp0B/w+ZwfmD5Gfx6TwExH9r2Fk="
 
 script:
-  - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -P run-its -DtestSrc=remote -Dinvoker.parallelThreads=4
+  - ./mvnw org.jacoco:jacoco-maven-plugin:0.8.1:prepare-agent verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.4.0.905:sonar -B -P run-its -DtestSrc=remote -Dinvoker.parallelThreads=4
   - ./mvnw site -B
 
 deploy:
