@@ -8,7 +8,7 @@ jdk:
 
 env:
   global:
-    # GITHUB_TOKEN value to push changes to GitHub; Currently it is ued to update gh-pages.
+    # GITHUB_TOKEN value to push changes to GitHub; Currently it is used to update gh-pages.
     - secure: "KqPuq9TiiqdOUfGq3k+XYObNjV8FxbgJeqSWK0pcWFFs5w5c4vcGmrfUSSSqNa/JJkKOBWQ6S3tJP7CRxx0uow5BvU4ZQAZLFt6VjzcUZFKGTl5soMTF2gQdyAAcwUnRX2gQKt0doO8Fid6xzfsn1KdTIWXmeqMrcTvC+d7EhxU="
 
 addons:
