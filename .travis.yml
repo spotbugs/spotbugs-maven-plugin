@@ -8,12 +8,19 @@ jdk:
 
 env:
   global:
-    # GITHUB_TOKEN value to push changes to GitHub; Currently it is ued to update gh-pages.
+    # GITHUB_TOKEN value to push changes to GitHub; Currently it is used to update gh-pages.
     - secure: "KqPuq9TiiqdOUfGq3k+XYObNjV8FxbgJeqSWK0pcWFFs5w5c4vcGmrfUSSSqNa/JJkKOBWQ6S3tJP7CRxx0uow5BvU4ZQAZLFt6VjzcUZFKGTl5soMTF2gQdyAAcwUnRX2gQKt0doO8Fid6xzfsn1KdTIWXmeqMrcTvC+d7EhxU="
 
+addons:
+  sonarcloud:
+    organization: "spotbugs"
+    token:
+      secure: "OlaFl2jtFaE6zIAziEGqpy1Hipi8PHkJcgj1Oym+XD7okoVivDldeM70RJ1tRHeH56V+DyI7/jPPu0znMYVZakbmqNR5Jb1NWnFd4XH3biTtkObUk9D7wk0AQULRCnnKK36x/m2q015bgusNdp0B/w+ZwfmD5Gfx6TwExH9r2Fk="
+
 script:
-  - ./mvnw verify -B -P run-its -DtestSrc=remote -Dinvoker.parallelThreads=4
+  - ./mvnw org.jacoco:jacoco-maven-plugin:0.8.1:prepare-agent verify -B -P run-its -DtestSrc=remote -Dinvoker.parallelThreads=4
   - ./mvnw site -B
+  - if [[ $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then ./mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:3.4.0.905:sonar -B; fi
 
 deploy:
   - provider: pages
