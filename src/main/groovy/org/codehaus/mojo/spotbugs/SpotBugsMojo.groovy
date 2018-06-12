@@ -28,6 +28,8 @@ import org.apache.maven.artifact.resolver.ArtifactResolver
 import org.apache.maven.doxia.siterenderer.Renderer
 import org.apache.maven.doxia.tools.SiteTool
 
+import org.apache.maven.execution.MavenSession
+
 import org.apache.maven.plugin.MojoExecutionException
 
 import org.apache.maven.plugins.annotations.Component;
@@ -41,6 +43,8 @@ import org.apache.maven.project.MavenProject
 import org.apache.maven.reporting.AbstractMavenReport
 
 import org.apache.maven.repository.RepositorySystem
+
+import org.apache.maven.toolchain.ToolchainManager
 
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceCreationException
@@ -233,6 +237,18 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Component(role = RepositorySystem.class)
     RepositorySystem factory
+		
+		/**
+		 * Used to locate the desired toolchain (JDK). Ignored if fork is set to false.
+		 */
+		@Component
+		ToolchainManager toolchainManager;
+		
+		/**
+		 * The current Maven session. Will be used to locate toolchains.
+		 */
+		@Parameter(defaultValue = '${session}', readonly = true)
+		MavenSession session;
 
     /**
      * <p>
@@ -998,8 +1014,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         def ant = new AntBuilder()
 
-        log.info("Fork Value is ${fork}")
-
         if (log.isDebugEnabled()) {
             startTime = System.nanoTime()
         }
@@ -1011,8 +1025,23 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             if (sourceEncoding) {
                 effectiveEncoding = sourceEncoding
             }
+				
+				def jvmExecutable = "java";
+				if (toolchainManager != null && fork) {
+					def tc = toolchainManager.getToolchainFromBuildContext("jdk", session);
+					  if (tc != null) {
+					    String foundExecutable = tc.findTool("java");
+					    if (foundExecutable != null) {
+								log.info("Toolchain in spotbugs-maven-plugin: " + tc);
+					      jvmExecutable = foundExecutable
+					    }
+					  }
+				}
+				
+				log.info("Fork Value is ${fork}")
+				log.info("Executable in spotbugs-maven-plugin: " + jvmExecutable);
 
-        ant.java(classname: "edu.umd.cs.findbugs.FindBugs2", inputstring: getSpotbugsAuxClasspath(), fork: "${fork}", failonerror: "true", clonevm: "false", timeout: "${timeout}", maxmemory: "${maxHeap}m") {
+        ant.java(classname: "edu.umd.cs.findbugs.FindBugs2", inputstring: getSpotbugsAuxClasspath(), fork: "${fork}", jvm: "${jvmExecutable}", failonerror: "true", clonevm: "false", timeout: "${timeout}", maxmemory: "${maxHeap}m") {
 
             log.debug("File Encoding is " + effectiveEncoding)
 
@@ -1020,9 +1049,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             if (jvmArgs && fork) {
                 log.debug("Adding JVM Args => ${jvmArgs}")
-
                 String[] args = jvmArgs.split(SpotBugsInfo.BLANK)
-
                 args.each() { jvmArg ->
                     log.debug("Adding JVM Arg => ${jvmArg}")
                     jvmarg(value: jvmArg)
@@ -1034,10 +1061,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
 
             classpath() {
-
                 pluginArtifacts.each() { pluginArtifact ->
                     log.debug("  Adding to pluginArtifact ->" + pluginArtifact.file.toString())
-
                     pathelement(location: pluginArtifact.file)
                 }
             }
@@ -1046,7 +1071,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 log.debug("Spotbugs arg is ${spotbugsArg}")
                 arg(value: spotbugsArg)
             }
-
         }
 
         if (log.isDebugEnabled()) {
