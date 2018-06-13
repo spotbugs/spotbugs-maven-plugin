@@ -1032,7 +1032,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
               if (tc != null) {
                 String foundExecutable = tc.findTool("java");
                 if (foundExecutable != null) {
-                        log.info("Toolchain in spotbugs-maven-plugin: " + tc);
+                  log.info("Toolchain in spotbugs-maven-plugin: " + tc);
                   jvmExecutable = foundExecutable
                 }
               }
