@@ -1026,7 +1026,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             effectiveEncoding = sourceEncoding
         }
             
-        def jvmExecutable = "java";
+        def jvmExecutable = null;
         if (toolchainManager != null && fork) {
             def tc = toolchainManager.getToolchainFromBuildContext("jdk", session);
               if (tc != null) {
