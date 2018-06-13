@@ -1039,9 +1039,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 				}
 				
 				log.info("Fork Value is ${fork}")
-				log.info("Executable in spotbugs-maven-plugin: " + jvmExecutable);
 
-        ant.java(classname: "edu.umd.cs.findbugs.FindBugs2", inputstring: getSpotbugsAuxClasspath(), fork: "${fork}", jvm: "${jvmExecutable}", failonerror: "true", clonevm: "false", timeout: "${timeout}", maxmemory: "${maxHeap}m") {
+        ant.java([
+						classname: "edu.umd.cs.findbugs.FindBugs2", inputstring: getSpotbugsAuxClasspath(), fork: "${fork}",
+						jvm: jvmExecutable, failonerror: "true", clonevm: "false", timeout: "${timeout}", maxmemory: "${maxHeap}m",
+					 ].findAll{it.value != null}) {
 
             log.debug("File Encoding is " + effectiveEncoding)
 
