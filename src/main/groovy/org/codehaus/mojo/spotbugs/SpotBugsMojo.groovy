@@ -238,17 +238,17 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Component(role = RepositorySystem.class)
     RepositorySystem factory
         
-        /**
-         * Used to locate the desired toolchain (JDK). Ignored if fork is set to false.
-         */
-        @Component
-        ToolchainManager toolchainManager;
-        
-        /**
-         * The current Maven session. Will be used to locate toolchains.
-         */
-        @Parameter(defaultValue = '${session}', readonly = true)
-        MavenSession session;
+    /**
+     * Used to locate the desired toolchain (JDK). Ignored if fork is set to false.
+     */
+    @Component
+    ToolchainManager toolchainManager;
+    
+    /**
+     * The current Maven session. Will be used to locate toolchains.
+     */
+    @Parameter(defaultValue = '${session}', readonly = true)
+    MavenSession session;
 
     /**
      * <p>
@@ -1020,30 +1020,29 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         def spotbugsArgs = getSpotbugsArgs(tempFile)
 
-            def effectiveEncoding = System.getProperty("file.encoding", "UTF-8")
+        def effectiveEncoding = System.getProperty("file.encoding", "UTF-8")
 
-            if (sourceEncoding) {
-                effectiveEncoding = sourceEncoding
-            }
-                
-                def jvmExecutable = "java";
-                if (toolchainManager != null && fork) {
-                    def tc = toolchainManager.getToolchainFromBuildContext("jdk", session);
-                      if (tc != null) {
-                        String foundExecutable = tc.findTool("java");
-                        if (foundExecutable != null) {
-                                log.info("Toolchain in spotbugs-maven-plugin: " + tc);
-                          jvmExecutable = foundExecutable
-                        }
-                      }
+        if (sourceEncoding) {
+            effectiveEncoding = sourceEncoding
+        }
+            
+        def jvmExecutable = "java";
+        if (toolchainManager != null && fork) {
+            def tc = toolchainManager.getToolchainFromBuildContext("jdk", session);
+              if (tc != null) {
+                String foundExecutable = tc.findTool("java");
+                if (foundExecutable != null) {
+                        log.info("Toolchain in spotbugs-maven-plugin: " + tc);
+                  jvmExecutable = foundExecutable
                 }
-                
-                log.info("Fork Value is ${fork}")
+              }
+        }
+            
+        log.info("Fork Value is ${fork}")
 
-        ant.java([
-                        classname: "edu.umd.cs.findbugs.FindBugs2", inputstring: getSpotbugsAuxClasspath(), fork: "${fork}",
-                        jvm: jvmExecutable, failonerror: "true", clonevm: "false", timeout: "${timeout}", maxmemory: "${maxHeap}m",
-                     ].findAll{it.value != null}) {
+        ant.java([classname: "edu.umd.cs.findbugs.FindBugs2", inputstring: getSpotbugsAuxClasspath(), fork: "${fork}",
+            	jvm: jvmExecutable, failonerror: "true", clonevm: "false", timeout: "${timeout}", maxmemory: "${maxHeap}m",
+            ].findAll{it.value != null}) {
 
             log.debug("File Encoding is " + effectiveEncoding)
 
