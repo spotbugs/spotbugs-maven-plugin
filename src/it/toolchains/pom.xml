@@ -27,8 +27,7 @@
 				<configuration>
 					<xmlOutput>true</xmlOutput>
 					<failOnError>false</failOnError>
-					<debug>@spotbugsTestDebug@</debug>
-					<threshold>High</threshold>
+					<threshold>Low</threshold>
 					<spotbugsXmlOutput>true</spotbugsXmlOutput>
 				</configuration>
 			</plugin>
