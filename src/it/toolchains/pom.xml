@@ -16,8 +16,8 @@
 		<version>testing</version>
 		<relativePath>../common.xml</relativePath>
 	</parent>
-	<artifactId>skip-test</artifactId>
-	<name>skip-test</name>
+	<artifactId>toolchains</artifactId>
+	<name>toolchains</name>
 	<packaging>jar</packaging>
 	<build>
 		<plugins>
@@ -29,6 +29,7 @@
 					<failOnError>false</failOnError>
 					<debug>@spotbugsTestDebug@</debug>
 					<threshold>High</threshold>
+					<spotbugsXmlOutput>true</spotbugsXmlOutput>
 				</configuration>
 			</plugin>
 			<plugin>
