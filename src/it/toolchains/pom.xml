@@ -19,28 +19,18 @@
 	<artifactId>skip-test</artifactId>
 	<name>skip-test</name>
 	<packaging>jar</packaging>
-	<reporting>
-		<excludeDefaults>true</excludeDefaults>
+	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jxr-plugin</artifactId>
-				<version>@jxrPluginVersion@</version>
-			</plugin>
 			<plugin>
 				<groupId>com.github.spotbugs</groupId>
 				<artifactId>spotbugs-maven-plugin</artifactId>
 				<configuration>
-					<skip>true</skip>
-					<spotbugsXmlOutput>true</spotbugsXmlOutput>
 					<xmlOutput>true</xmlOutput>
-					<includeTests>true</includeTests>
+					<failOnError>false</failOnError>
+					<debug>@spotbugsTestDebug@</debug>
+					<threshold>High</threshold>
 				</configuration>
 			</plugin>
-		</plugins>
-	</reporting>
-	<build>
-		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-toolchains-plugin</artifactId>
