@@ -36,7 +36,7 @@ before_install:
 install: true
 
 script:
-  - ./mvnw verify -B -P run-its -DtestSrc=remote -Dinvoker.parallelThreads=8
+  - ./mvnw verify -B -P -X run-its -DtestSrc=remote -Dinvoker.parallelThreads=8
 
 after_success:
   - chmod -R 777 ./travis/after_success.sh
