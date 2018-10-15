@@ -454,6 +454,17 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
 
 	int errorCount
 
+
+    /**
+     * <p>
+     * specified max number of violations which can be ignored by the findbugs.
+     * </p>
+     *
+     * @since 2.4.1
+     */
+    @Parameter( property="spotbugs.maxAllowedViolations" , defaultValue = "0")
+    int maxAllowedViolations
+
 	void execute() {
 		Locale locale = Locale.getDefault()
 		List sourceFiles
@@ -497,6 +508,10 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
                 if (total <= 0) {
                     log.info('No errors/warnings found')
                     return
+                }else if( maxAllowedViolations > 0 && total <= maxAllowedViolations){
+                    log.info("total ${total} violations are found which is set to be acceptable using configured property maxAllowedViolations :"+maxAllowedViolations +".\nBelow are list of bugs ignored :\n")
+                    printBugs(total, bugs)
+                    return;
                 }
 
                 log.info('Total bugs: ' + total)
@@ -514,6 +529,14 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
         }
         else {
             log.debug("Nothing for SpotBugs to do here.")
+        }
+    }
+
+    private void printBugs(total, bugs) {
+        for (i in 0..total - 1) {
+            def bug = bugs[i]
+            log.error( bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK + bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
+
         }
     }
 
