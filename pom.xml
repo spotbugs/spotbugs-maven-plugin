@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.github.hazendaz</groupId>
     <artifactId>base-parent</artifactId>
-    <version>18</version>
+    <version>20</version>
     <relativePath />
   </parent>
 
@@ -120,7 +120,7 @@
     <spotbugsTag>3.1.7</spotbugsTag>
 
     <antVersion>1.10.5</antVersion>
-    <groovyVersion>2.5.2</groovyVersion>
+    <groovyVersion>2.5.3</groovyVersion>
 
     <doxiaVersion>1.8</doxiaVersion>
     <doxiaSiteToolsVersion>1.8.1</doxiaSiteToolsVersion>
@@ -128,7 +128,7 @@
     <mavenCoreVersion>3.1.1</mavenCoreVersion>
     <mavenReportingApiVersion>3.0</mavenReportingApiVersion>
     <mavenReportingVersion>3.0.0</mavenReportingVersion>
-    <mavenVersion>3.5.0</mavenVersion> <!-- Version 3.5.3 introduces widespread issues reported across many plugins that upgraded, stay at 3.5.0 until fixed -->
+    <mavenVersion>3.5.4</mavenVersion>
 
     <plexusContainerVersion>1.7.1</plexusContainerVersion>
     <plexusResourcesVersion>1.1.0</plexusResourcesVersion>
@@ -137,7 +137,7 @@
     <antrunPluginVersion>1.8</antrunPluginVersion>
     <l10nPluginVersion>1.8</l10nPluginVersion>
     <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
-    <gmavenPluginVersion>1.6.1</gmavenPluginVersion>
+    <gmavenPluginVersion>1.6.2</gmavenPluginVersion>
     <infoReportsPluginVersion>3.0.0</infoReportsPluginVersion>
     <invokerPluginVersion>3.1.0</invokerPluginVersion>
     <javadocPluginVersion>3.0.1</javadocPluginVersion>
