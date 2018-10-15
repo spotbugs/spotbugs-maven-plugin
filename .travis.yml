@@ -31,11 +31,12 @@ env:
 
 before_install:
   - wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh
-  - ./mvnw install -q -X -DskipTests=true
   - wget https://www.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.zip
   - unzip -qq apache-maven-3.5.4-bin.zip
   - export M2_HOME=$PWD/apache-maven-3.5.4
   - export PATH=$M2_HOME/bin:$PATH
+  - ./mvnw install -q -X -DskipTests=true
+  
 
 install: true
 
