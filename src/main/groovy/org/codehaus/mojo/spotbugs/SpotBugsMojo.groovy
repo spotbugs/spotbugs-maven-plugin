@@ -44,7 +44,7 @@ import org.apache.maven.reporting.AbstractMavenReport
 import org.apache.maven.repository.RepositorySystem
 
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
-
+import org.codehaus.mojo.spotbugs.SpotBugsPluginsTrait
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceCreationException
 import org.codehaus.plexus.resource.loader.FileResourceLoader
@@ -516,6 +516,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Parameter(property = "spotbugs.userPrefs")
     String userPrefs
 
+    @Parameter(property = "spotbugs.outputXmlFileName", defaultValue = "spotbugsXml.xml")
+    String xmlOutputFilename
+
     int bugCount
 
     int errorCount
@@ -556,7 +559,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (canGenerate && outputSpotbugsFile == null) {
-            outputSpotbugsFile = new File("${spotbugsXmlOutputDirectory}/spotbugsXml.xml")
+            outputSpotbugsFile = new File("${spotbugsXmlOutputDirectory}/${xmlOutputFilename}")
 
             ClassLoader tccl = Thread.currentThread().getContextClassLoader();
             try {

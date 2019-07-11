@@ -472,6 +472,9 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
     @Parameter( property="spotbugs.maxAllowedViolations" , defaultValue = "0")
     int maxAllowedViolations
 
+    @Parameter(property = "spotbugs.outputXmlFileName", defaultValue = "spotbugsXml.xml")
+    String xmlOutputFilename
+
     void execute() {
         Locale locale = Locale.getDefault()
         List sourceFiles
@@ -494,7 +497,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
                 }
             }
 
-            File outputFile = new File("${spotbugsXmlOutputDirectory}/spotbugsXml.xml")
+            File outputFile = new File("${spotbugsXmlOutputDirectory}/${xmlOutputFilename}")
 
             if (outputFile.exists()) {
 

@@ -180,6 +180,9 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 	@Component(role = ResourceManager.class)
 	ResourceManager resourceManager
 
+    @Parameter(property = "spotbugs.outputXmlFileName", defaultValue = "spotbugsXml.xml")
+    String xmlOutputFilename
+
     void execute() {
 
         def ant = new AntBuilder()
@@ -221,7 +224,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
                 arg(value: spotbugsArg)
             }
 
-            def spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + "/spotbugsXml.xml"
+            def spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + "/${xmlOutputFilename}"
             def spotbugsXml = new File(spotbugsXmlName)
 
             if ( spotbugsXml.exists() ) {
