@@ -44,7 +44,6 @@ import org.apache.maven.reporting.AbstractMavenReport
 import org.apache.maven.repository.RepositorySystem
 
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
-import org.codehaus.mojo.spotbugs.SpotBugsPluginsTrait
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceCreationException
 import org.codehaus.plexus.resource.loader.FileResourceLoader
