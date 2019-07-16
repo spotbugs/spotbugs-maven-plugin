@@ -145,6 +145,7 @@
     <mavenReportingApiVersion>3.0</mavenReportingApiVersion>
     <mavenReportingVersion>3.0.0</mavenReportingVersion>
     <mavenVersion>3.5.0</mavenVersion> <!-- Version 3.5.3+ introduces issues for many users of spotbugs that cannot upgrade maven to latest -->
+    <maven.min-version>3.5.0</maven.min-version>
 
     <plexusContainerVersion>2.0.0</plexusContainerVersion>
     <plexusResourcesVersion>1.1.0</plexusResourcesVersion>
