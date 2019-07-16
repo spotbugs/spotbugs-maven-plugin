@@ -180,6 +180,11 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 	@Component(role = ResourceManager.class)
 	ResourceManager resourceManager
 
+    /**
+     * Set the name of the output file produced
+     *
+     * @since 3.1.13
+     */
     @Parameter(property = "spotbugs.outputXmlFileName", defaultValue = "spotbugsXml.xml")
     String xmlOutputFilename
 
