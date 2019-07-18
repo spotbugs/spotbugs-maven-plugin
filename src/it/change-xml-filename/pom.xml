@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright (C) 2006-2017 the original author or authors.
+    Copyright (C) 2006-2019 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -33,12 +33,11 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>3.1.13-SNAPSHOT</version>
         <configuration>
           <spotbugsXmlOutput>true</spotbugsXmlOutput>
           <xmlOutput>true</xmlOutput>
           <relaxed>true</relaxed>
-          <xmlOutputFilename>findbugsXml.xml</xmlOutputFilename>
+          <spotbugsXmlOutputFilename>findbugsXml.xml</spotbugsXmlOutputFilename>
         </configuration>
       </plugin>
     </plugins>

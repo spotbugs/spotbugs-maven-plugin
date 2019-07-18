@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2006-2017 the original author or authors.
+ * Copyright (C) 2006-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,8 @@
  * limitations under the License.
  */
 
-File spotbugsHtml =  new File(basedir, 'target/site/spotbugs.html')
-assert spotbugsHtml.exists()
-
-File spotbugXdoc = new File(basedir, 'target/spotbugs.xml')
-assert spotbugXdoc.exists()
-
 File spotbugXml = new File(basedir, 'target/findbugsXml.xml')
 assert spotbugXml.exists()
-
-
-println '***************************'
-println "Checking HTML file"
-println '***************************'
-
-def xhtmlParser = new XmlSlurper();
-xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
-xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
-def path = xhtmlParser.parse( spotbugsHtml )
-//*[@id="contentBox"]/div[2]/table/tbody/tr[2]/td[2]
-def spotbugsErrors = path.body.'**'.find {div -> div.@id == 'contentBox'}.div[1].table.tr[1].td[1].toInteger()
-println "Error Count is ${spotbugsErrors}"
 
 
 println '**********************************'
@@ -48,18 +29,5 @@ def spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${spotbugsXmlErrors}"
 
 
-println '***************************'
-println "Checking xDoc file"
-println '***************************'
-
-path = new XmlSlurper().parse(spotbugXdoc)
-
-allNodes = path.depthFirst().collect{ it }
-def xdocErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
-println "BugInstance size is ${xdocErrors}"
-
-
-assert xdocErrors == spotbugsXmlErrors
-
-assert spotbugsErrors == spotbugsXmlErrors
+assert spotbugsXmlErrors > 0
 

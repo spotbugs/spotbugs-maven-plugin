@@ -99,6 +99,14 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
     File spotbugsXmlOutputDirectory
 
     /**
+     * Set the name of the output XML file produced
+     *
+     * @since 3.1.13
+     */
+    @Parameter(property = "spotbugs.outputXmlFilename", defaultValue = "spotbugsXml.xml")
+    String spotbugsXmlOutputFilename
+
+    /**
      * Doxia Site Renderer.
      */
     @Component( role = Renderer.class)
@@ -472,13 +480,6 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
     @Parameter( property="spotbugs.maxAllowedViolations" , defaultValue = "0")
     int maxAllowedViolations
 
-    /**
-     * Set the name of the output XML file produced
-     *
-     * @since 3.1.13
-     */
-    @Parameter(property = "spotbugs.outputXmlFileName", defaultValue = "spotbugsXml.xml")
-    String xmlOutputFilename
 
     void execute() {
         Locale locale = Locale.getDefault()
@@ -502,7 +503,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
                 }
             }
 
-            File outputFile = new File("${spotbugsXmlOutputDirectory}/${xmlOutputFilename}")
+            File outputFile = new File("${spotbugsXmlOutputDirectory}/${spotbugsXmlOutputFilename}")
 
             if (outputFile.exists()) {
 

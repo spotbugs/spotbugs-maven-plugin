@@ -155,6 +155,14 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     File spotbugsXmlOutputDirectory
 
     /**
+     * Set the name of the output XML file produced
+     *
+     * @since 3.1.13
+     */
+    @Parameter(property = "spotbugs.outputXmlFilename", defaultValue = "spotbugsXml.xml")
+    String spotbugsXmlOutputFilename
+
+    /**
      * The file encoding to use when reading the source files. If the property <code>project.build.sourceEncoding</code>
      * is not set, the platform default encoding is used. <strong>Note:</strong> This parameter always overrides the
      * property <code>charset</code> from Checkstyle's <code>TreeWalker</code> module.
@@ -180,13 +188,6 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 	@Component(role = ResourceManager.class)
 	ResourceManager resourceManager
 
-    /**
-     * Set the name of the output XML file produced
-     *
-     * @since 3.1.13
-     */
-    @Parameter(property = "spotbugs.outputXmlFileName", defaultValue = "spotbugsXml.xml")
-    String xmlOutputFilename
 
     void execute() {
 
@@ -229,7 +230,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
                 arg(value: spotbugsArg)
             }
 
-            def spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + "/${xmlOutputFilename}"
+            def spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + spotbugsXmlOutputFilename.toString()
             def spotbugsXml = new File(spotbugsXmlName)
 
             if ( spotbugsXml.exists() ) {

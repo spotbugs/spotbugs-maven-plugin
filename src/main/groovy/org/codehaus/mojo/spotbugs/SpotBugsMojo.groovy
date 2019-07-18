@@ -101,6 +101,14 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     File spotbugsXmlOutputDirectory
 
     /**
+     * Set the name of the output XML file produced
+     *
+     * @since 3.1.13
+     */
+    @Parameter(property = "spotbugs.outputXmlFilename", defaultValue = "spotbugsXml.xml")
+    String spotbugsXmlOutputFilename
+
+    /**
      * Doxia Site Renderer.
      */
     @Component(role = Renderer.class)
@@ -515,14 +523,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Parameter(property = "spotbugs.userPrefs")
     String userPrefs
 
-    /**
-     * Set the name of the output XML file produced
-     *
-     * @since 3.1.13
-     */
-    @Parameter(property = "spotbugs.outputXmlFileName", defaultValue = "spotbugsXml.xml")
-    String xmlOutputFilename
-
     int bugCount
 
     int errorCount
@@ -563,7 +563,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (canGenerate && outputSpotbugsFile == null) {
-            outputSpotbugsFile = new File("${spotbugsXmlOutputDirectory}/${xmlOutputFilename}")
+            outputSpotbugsFile = new File("${spotbugsXmlOutputDirectory}/${spotbugsXmlOutputFilename}")
 
             ClassLoader tccl = Thread.currentThread().getContextClassLoader();
             try {
