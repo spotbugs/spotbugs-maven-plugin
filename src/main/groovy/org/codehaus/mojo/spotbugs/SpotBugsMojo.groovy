@@ -520,8 +520,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 3.1.13
      */
-    @Parameter(property = "spotbugs.outputXmlFileName", defaultValue = "spotbugsXml.xml")
-    String xmlOutputFilename
+    @Parameter(property = "spotbugs.reportFileName", defaultValue = "spotbugsXml.xml")
+    String xmlReportFilename
 
     int bugCount
 
@@ -563,7 +563,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (canGenerate && outputSpotbugsFile == null) {
-            outputSpotbugsFile = new File("${spotbugsXmlOutputDirectory}/${xmlOutputFilename}")
+            outputSpotbugsFile = new File("${spotbugsXmlOutputDirectory}/${xmlReportFilename}")
 
             ClassLoader tccl = Thread.currentThread().getContextClassLoader();
             try {

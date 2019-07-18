@@ -185,8 +185,8 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      *
      * @since 3.1.13
      */
-    @Parameter(property = "spotbugs.outputXmlFileName", defaultValue = "spotbugsXml.xml")
-    String xmlOutputFilename
+    @Parameter(property = "spotbugs.reportFileName", defaultValue = "spotbugsXml.xml")
+    String xmlReportFilename
 
     void execute() {
 
@@ -229,7 +229,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
                 arg(value: spotbugsArg)
             }
 
-            def spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + "/${xmlOutputFilename}"
+            def spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + "/${xmlReportFilename}"
             def spotbugsXml = new File(spotbugsXmlName)
 
             if ( spotbugsXml.exists() ) {
