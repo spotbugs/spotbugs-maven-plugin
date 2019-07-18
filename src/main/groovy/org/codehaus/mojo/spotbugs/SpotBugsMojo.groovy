@@ -740,7 +740,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 }
 
                 XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
-                xDocsReporter.setOutputWriter(new OutputStreamWriter(new FileOutputStream(new File("${xmlOutputDirectory}/findbugs.xml")), outputEncoding))
+                xDocsReporter.setOutputWriter(new OutputStreamWriter(new FileOutputStream(new File("${xmlOutputDirectory}/spotbugs.xml")), outputEncoding))
                 xDocsReporter.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
                 xDocsReporter.setCompileSourceRoots(this.compileSourceRoots)
                 xDocsReporter.setTestSourceRoots(this.testSourceRoots)
