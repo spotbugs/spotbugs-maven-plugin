@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-def effortLevel = 'default'
-
-
 File spotbugsHtml =  new File(basedir, 'target/site/spotbugs.html')
 assert spotbugsHtml.exists()
 
@@ -30,8 +27,6 @@ assert spotbugXml.exists()
 println '***************************'
 println "Checking HTML file"
 println '***************************'
-
-assert spotbugsHtml.text.contains( "<i>" + effortLevel + "</i>" )
 
 def xhtmlParser = new XmlSlurper();
 xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)

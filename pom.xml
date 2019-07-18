@@ -9,9 +9,9 @@
     <relativePath />
   </parent>
 
-  <groupId>com.hotels.bdp</groupId>
+  <groupId>com.github.spotbugs</groupId>
   <artifactId>spotbugs-maven-plugin</artifactId>
-  <version>3.1.14-hcom1-SNAPSHOT</version>
+  <version>3.1.13-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>SpotBugs Maven Plugin</name>
@@ -102,32 +102,21 @@
   </issueManagement>
   <distributionManagement>
     <repository>
-      <id>hcomdata-maven-release-local</id>
-      <name>HCom Data Internal Releases</name>
-      <url>${maven.distribution.repo.release.url}</url>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
     <snapshotRepository>
-      <id>hcomdata-maven-snapshot-local</id>
-      <name>HCom Data Internal Snapshots</name>
-      <url>${maven.distribution.repo.snapshot.url}</url>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
+    <site>
+      <id>gh-pages</id>
+      <url>github:ssh://spotbugs.github.io/spotbugs-maven-plugin/</url>
+    </site>
   </distributionManagement>
 
   <properties>
     <projectVersion>${project.version}</projectVersion>
-
-    <!-- default artifact distribution repositories -->
-    <artifactory.base>artylab.expedia.biz</artifactory.base>
-    <artifactory.base.url>https://${artifactory.base}</artifactory.base.url>
-    <artifactory.maven.release.repository.id>hcomdata-maven-release-local</artifactory.maven.release.repository.id>
-    <artifactory.maven.snapshot.repository.id>hcomdata-maven-snapshot-local</artifactory.maven.snapshot.repository.id>
-    <artifactory.rpm.release.repository.id>hcomdata-rpm-release-local</artifactory.rpm.release.repository.id>
-    <artifactory.rpm.snapshot.repository.id>hcomdata-rpm-snapshot-local</artifactory.rpm.snapshot.repository.id>
-    <artifactory.docker.release.repository.id>hcomdata-docker-release-local</artifactory.docker.release.repository.id>
-    <artifactory.docker.snapshot.repository.id>hcomdata-docker-snapshot-local</artifactory.docker.snapshot.repository.id>
-    <!-- by default we release to the maven repo but these could be overridden in child projects to release elsewhere -->
-    <maven.distribution.repo.release.url>${artifactory.base.url}/${artifactory.maven.release.repository.id}</maven.distribution.repo.release.url>
-    <maven.distribution.repo.snapshot.url>${artifactory.base.url}/${artifactory.maven.snapshot.repository.id}</maven.distribution.repo.snapshot.url>
 
     <junitVersion>5.4.2</junitVersion>
     <spotbugsVersion>3.1.12</spotbugsVersion>
@@ -145,7 +134,6 @@
     <mavenReportingApiVersion>3.0</mavenReportingApiVersion>
     <mavenReportingVersion>3.0.0</mavenReportingVersion>
     <mavenVersion>3.5.0</mavenVersion> <!-- Version 3.5.3+ introduces issues for many users of spotbugs that cannot upgrade maven to latest -->
-    <maven.min-version>3.5.0</maven.min-version>
 
     <plexusContainerVersion>2.0.0</plexusContainerVersion>
     <plexusResourcesVersion>1.1.0</plexusResourcesVersion>

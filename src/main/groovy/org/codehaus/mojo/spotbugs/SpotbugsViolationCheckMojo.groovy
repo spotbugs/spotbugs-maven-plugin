@@ -473,7 +473,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
     int maxAllowedViolations
 
     /**
-     * Set the name of the output file produced
+     * Set the name of the output XML file produced
      *
      * @since 3.1.13
      */
