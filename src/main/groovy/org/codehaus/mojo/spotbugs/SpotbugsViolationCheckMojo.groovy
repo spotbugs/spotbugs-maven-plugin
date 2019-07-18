@@ -477,8 +477,8 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 3.1.13
      */
-    @Parameter(property = "spotbugs.reportFileName", defaultValue = "spotbugsXml.xml")
-    String xmlReportFilename
+    @Parameter(property = "spotbugs.outputXmlFileName", defaultValue = "spotbugsXml.xml")
+    String xmlOutputFilename
 
     void execute() {
         Locale locale = Locale.getDefault()
@@ -502,7 +502,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
                 }
             }
 
-            File outputFile = new File("${spotbugsXmlOutputDirectory}/${xmlReportFilename}")
+            File outputFile = new File("${spotbugsXmlOutputDirectory}/${xmlOutputFilename}")
 
             if (outputFile.exists()) {
 
