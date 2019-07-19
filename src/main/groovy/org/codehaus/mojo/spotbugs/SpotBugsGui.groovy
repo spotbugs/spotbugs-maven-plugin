@@ -230,7 +230,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
                 arg(value: spotbugsArg)
             }
 
-            def spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + spotbugsXmlOutputFilename.toString()
+            def spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + "/${spotbugsXmlOutputFilename}"
             def spotbugsXml = new File(spotbugsXmlName)
 
             if ( spotbugsXml.exists() ) {
