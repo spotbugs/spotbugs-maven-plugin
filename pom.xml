@@ -173,7 +173,7 @@
     <servletApiVersion>4.0.2</servletApiVersion>
     <sb-contribVersion>7.4.6</sb-contribVersion>
 
-    <jgit.version>5.4.0.201906121030-r</jgit.version>
+    <jgit.version>5.4.3.201909031940-r</jgit.version>
 
     <!-- Targeted patches -->
     <asm.version>7.2-beta</asm.version>
