@@ -148,7 +148,7 @@
     <javadocPluginVersion>3.1.1</javadocPluginVersion>
     <pluginPluginVersion>3.6.0</pluginPluginVersion>
     <scmPluginVersion>1.11.2</scmPluginVersion>
-    <sitePluginVersion>3.7.1</sitePluginVersion>
+    <sitePluginVersion>3.8.2</sitePluginVersion>
     <sitePlugin36Version>3.6</sitePlugin36Version> <!-- For MFINDBUGS-145 (breaks on newer jdks) -->
     <versionsPluginVersion>2.7</versionsPluginVersion>
 
