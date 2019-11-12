@@ -72,6 +72,14 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     boolean xmlOutput
 
     /**
+     * Turn on and off HTML output of the Spotbugs report.
+     *
+     * @since 1.0.0
+     */
+    @Parameter(defaultValue = "false", property = "spotbugs.htmlOutput", required = true)
+    boolean htmlOutput
+
+    /**
      * Specifies the directory where the xml output will be generated.
      *
      * @since 1.0.0
@@ -849,6 +857,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             args << "-progress"
         }
 
+        if (htmlOutput) {
+            log.debug("HTML output ")
+            args << "-html"
+        }
+
         if (pluginList || plugins) {
             args << "-pluginList"
             args << getSpotbugsPlugins()
@@ -1001,7 +1014,14 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         log.debug("****** SpotBugsMojo executeSpotbugs *******")
         long startTime, duration
 
-        File tempFile = new File("${project.build.directory}/spotbugsTemp.xml")
+        def fileName
+        if (!htmlOutput) {
+            fileName = "spotbugsTemp.xml"
+        } else {
+            fileName = "spotbugsTemp.htm"
+        }
+
+        File tempFile = new File("${project.build.directory}/${fileName}")
 
         if (tempFile.exists()) {
             tempFile.delete()
@@ -1087,7 +1107,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         log.info("Done SpotBugs Analysis....")
 
-        if (tempFile.exists()) {
+        if (tempFile.exists() && !htmlOutput) {
 
             if (tempFile.size() > 0) {
                 def path = new XmlSlurper().parse(tempFile)
@@ -1128,13 +1148,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 outputFile.createNewFile()
 
                 def writer = outputFile.newWriter(effectiveEncoding)
-
-                if (effectiveEncoding.equalsIgnoreCase("Cp1252")) {
+if (effectiveEncoding.equalsIgnoreCase("Cp1252")) {
                     writer.write "<?xml version=\"1.0\" encoding=\"windows-1252\"?>"
                 } else {
                     writer.write "<?xml version=\"1.0\" encoding=\"" + effectiveEncoding.toLowerCase(Locale.ENGLISH) + "\"?>"
                 }
-
                 writer.write "\n"
 
                 writer << xmlBuilder.bind { mkp.yield path }
