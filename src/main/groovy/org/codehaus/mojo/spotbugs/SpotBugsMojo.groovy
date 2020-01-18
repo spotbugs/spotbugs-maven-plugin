@@ -21,6 +21,7 @@ package org.codehaus.mojo.spotbugs
 
 import groovy.xml.XmlSlurper
 import groovy.xml.StreamingMarkupBuilder
+import org.codehaus.groovy.reflection.ReflectionUtils
 
 import org.apache.maven.artifact.Artifact
 import org.apache.maven.artifact.repository.ArtifactRepository
@@ -620,6 +621,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         return SpotBugsInfo.PLUGIN_NAME
     }
 
+    private void addOpensForReflectionUtils() {
+        if (!ReflectionUtils.class.getModule().isNamed()) {
+            Collections.class.getModule().addOpens(Collections.class.getPackageName(), ReflectionUtils.class.getModule());
+        }
+    }
+
     /**
      * Executes the generation of the report.
      *
@@ -701,6 +708,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         Locale locale = Locale.getDefault()
         if (!skip) {
+            addOpensForReflectionUtils()
             executeCheck(locale)
             if (canGenerateReport()) {
                 generateXDoc(locale)
