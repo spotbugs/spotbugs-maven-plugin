@@ -60,7 +60,7 @@
         <plugin>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-maven-plugin</artifactId>
-          <version>@project.version@</version>
+          <version>@pom.version@</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
