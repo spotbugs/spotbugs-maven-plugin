@@ -1288,7 +1288,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     /**
      *  Set report output directory, allowed to be not read only as defined in AbstractMavenParent.
-     * 
+     *
      * @see AbstractMavenReport#setReportOutputDirectory(File)
      */
     @Override
