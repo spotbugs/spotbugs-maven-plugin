@@ -146,7 +146,7 @@
     <pluginPluginVersion>3.5</pluginPluginVersion>
     <scmPluginVersion>1.9.5</scmPluginVersion>
     <sitePluginVersion>3.6</sitePluginVersion>
-    <versionsPluginVersion>2.4</versionsPluginVersion>
+    <versionsPluginVersion>2.8.1</versionsPluginVersion>
 
     <wagonGitsiteExtensionVersion>0.3.1</wagonGitsiteExtensionVersion>
 
