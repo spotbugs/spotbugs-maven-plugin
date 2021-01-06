@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3.org/1999/xhtml https://www.w3.org/202/08/xhtml/xhtml1-transitional.xsd">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>AppendingToAnObjectOutputStream xref</title>
+<link type="text/css" rel="stylesheet" href="../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../apidocs//AppendingToAnObjectOutputStream.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" id="L1" href="#L1">1</a>   <strong class="jxr_keyword">import</strong> java.io.BufferedOutputStream;
+<a class="jxr_linenumber" id="L2" href="#L2">2</a>   <strong class="jxr_keyword">import</strong> java.io.File;
+<a class="jxr_linenumber" id="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.io.FileNotFoundException;
+<a class="jxr_linenumber" id="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.io.FileOutputStream;
+<a class="jxr_linenumber" id="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" id="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> java.io.ObjectOutputStream;
+<a class="jxr_linenumber" id="L7" href="#L7">7</a>   
+<a class="jxr_linenumber" id="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> edu.umd.cs.findbugs.annotations.ExpectWarning;
+<a class="jxr_linenumber" id="L9" href="#L9">9</a>   
+<a class="jxr_linenumber" id="L10" href="#L10">10</a>  
+<a class="jxr_linenumber" id="L11" href="#L11">11</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="..//AppendingToAnObjectOutputStream.html">AppendingToAnObjectOutputStream</a> {
+<a class="jxr_linenumber" id="L12" href="#L12">12</a>  	
+<a class="jxr_linenumber" id="L13" href="#L13">13</a>  	@ExpectWarning(<span class="jxr_string">"IO"</span>)
+<a class="jxr_linenumber" id="L14" href="#L14">14</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> appendObject1(File f, Object o) <strong class="jxr_keyword">throws</strong> FileNotFoundException, IOException {
+<a class="jxr_linenumber" id="L15" href="#L15">15</a>  		ObjectOutputStream out = <strong class="jxr_keyword">new</strong> ObjectOutputStream (<strong class="jxr_keyword">new</strong> FileOutputStream(f, <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" id="L16" href="#L16">16</a>  		out.writeObject(o);
+<a class="jxr_linenumber" id="L17" href="#L17">17</a>  		out.close();
+<a class="jxr_linenumber" id="L18" href="#L18">18</a>  	}
+<a class="jxr_linenumber" id="L19" href="#L19">19</a>  	@ExpectWarning(<span class="jxr_string">"IO"</span>)
+<a class="jxr_linenumber" id="L20" href="#L20">20</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> appendObject2(File f, Object o) <strong class="jxr_keyword">throws</strong> FileNotFoundException, IOException {
+<a class="jxr_linenumber" id="L21" href="#L21">21</a>  		ObjectOutputStream out = <strong class="jxr_keyword">new</strong> ObjectOutputStream (<strong class="jxr_keyword">new</strong> BufferedOutputStream(<strong class="jxr_keyword">new</strong> FileOutputStream(f, <strong class="jxr_keyword">true</strong>)));
+<a class="jxr_linenumber" id="L22" href="#L22">22</a>  		out.writeObject(o);
+<a class="jxr_linenumber" id="L23" href="#L23">23</a>  		out.close();
+<a class="jxr_linenumber" id="L24" href="#L24">24</a>  	}
+<a class="jxr_linenumber" id="L25" href="#L25">25</a>  	@ExpectWarning(<span class="jxr_string">"IO"</span>)
+<a class="jxr_linenumber" id="L26" href="#L26">26</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> appendObject3(String f, Object o) <strong class="jxr_keyword">throws</strong> FileNotFoundException, IOException {
+<a class="jxr_linenumber" id="L27" href="#L27">27</a>  		ObjectOutputStream out = <strong class="jxr_keyword">new</strong> ObjectOutputStream (<strong class="jxr_keyword">new</strong> FileOutputStream(f, <strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" id="L28" href="#L28">28</a>  		out.writeObject(o);
+<a class="jxr_linenumber" id="L29" href="#L29">29</a>  		out.close();
+<a class="jxr_linenumber" id="L30" href="#L30">30</a>  	}
+<a class="jxr_linenumber" id="L31" href="#L31">31</a>  	@ExpectWarning(<span class="jxr_string">"IO"</span>)
+<a class="jxr_linenumber" id="L32" href="#L32">32</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> appendObject4(String f, Object o) <strong class="jxr_keyword">throws</strong> FileNotFoundException, IOException {
+<a class="jxr_linenumber" id="L33" href="#L33">33</a>  		ObjectOutputStream out = <strong class="jxr_keyword">new</strong> ObjectOutputStream (<strong class="jxr_keyword">new</strong> BufferedOutputStream(<strong class="jxr_keyword">new</strong> FileOutputStream(f, <strong class="jxr_keyword">true</strong>)));
+<a class="jxr_linenumber" id="L34" href="#L34">34</a>  		out.writeObject(o);
+<a class="jxr_linenumber" id="L35" href="#L35">35</a>  		out.close();
+<a class="jxr_linenumber" id="L36" href="#L36">36</a>  	}
+<a class="jxr_linenumber" id="L37" href="#L37">37</a>  }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2020. All rights reserved.</div>
+</body>
+</html>
