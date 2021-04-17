@@ -21,7 +21,7 @@ on: [push, pull_request]
 jobs:
   build:
     if: github.repository_owner == 'spotbugs-OFF'
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK
