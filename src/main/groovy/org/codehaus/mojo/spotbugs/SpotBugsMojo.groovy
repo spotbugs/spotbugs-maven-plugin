@@ -520,6 +520,16 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Parameter(property = "spotbugs.userPrefs")
     String userPrefs
 
+    /**
+     * <p>
+     * System properties to set in the VM (or the forked VM if fork is enabled).
+     * <p>
+     *
+     * @since 4.2.4
+     */
+    @Parameter(property = "spotbugs.systemPropertyVariables")
+    Map<String, String> systemPropertyVariables
+
     int bugCount
 
     int errorCount
@@ -1077,6 +1087,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             spotbugsArgs.each { spotbugsArg ->
                 log.debug("Spotbugs arg is ${spotbugsArg}")
                 arg(value: spotbugsArg)
+            }
+
+            systemPropertyVariables.each { sysProp ->
+                log.debug("System property ${sysProp.key} is ${sysProp.value}")
+                sysproperty(key: sysProp.key, value: sysProp.value)
             }
 
         }
