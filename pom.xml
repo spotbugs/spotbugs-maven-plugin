@@ -175,7 +175,7 @@
     <servletApiVersion>4.0.4</servletApiVersion>
     <sb-contribVersion>7.4.7</sb-contribVersion>
 
-    <jgit.version>5.11.0.202103091610-r</jgit.version>
+    <jgit.version>5.11.1.202105131744-r</jgit.version>
 
     <!-- Targeted patches -->
     <asm.version>9.1</asm.version>
