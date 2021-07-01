@@ -129,7 +129,7 @@
     <groovyVersion>3.0.8</groovyVersion>
 
     <doxiaVersion>1.10</doxiaVersion>
-    <doxiaSiteToolsVersion>1.9.2</doxiaSiteToolsVersion>
+    <doxiaSiteToolsVersion>1.10</doxiaSiteToolsVersion>
 
     <mavenCoreVersion>3.2.5</mavenCoreVersion>
     <mavenTransferVersion>0.13.1</mavenTransferVersion>
