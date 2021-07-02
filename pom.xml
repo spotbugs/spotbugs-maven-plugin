@@ -123,7 +123,7 @@
     <junitVersion>5.7.1</junitVersion>
     <spotbugsVersion>4.2.3</spotbugsVersion>
     <spotbugsTag>4.2.3</spotbugsTag>
-    <slf4jVersion>2.0.0-alpha1</slf4jVersion>
+    <slf4jVersion>2.0.0-alpha2</slf4jVersion>
 
     <antVersion>1.10.10</antVersion>
     <groovyVersion>3.0.8</groovyVersion>
