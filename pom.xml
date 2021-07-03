@@ -135,7 +135,7 @@
     <mavenTransferVersion>0.13.1</mavenTransferVersion>
     <mavenReportingApiVersion>3.0</mavenReportingApiVersion>
     <mavenReportingVersion>3.0.0</mavenReportingVersion>
-    <mavenVersion>3.5.2</mavenVersion> <!-- Version 3.5.3+ introduces issues for many users of spotbugs that cannot upgrade maven to latest (revisit this when upgrading spotbugs to 4.3.x as that will have provied extremely long legacy support) -->
+    <mavenVersion>3.8.1</mavenVersion> <!-- Version 3.5.3+ introduces issues for many users of spotbugs that cannot upgrade maven to latest (revisit this when upgrading spotbugs to 4.3.x as that will have provied extremely long legacy support) -->
 
     <plexusContainerVersion>2.1.0</plexusContainerVersion>
     <plexusResourcesVersion>1.1.0</plexusResourcesVersion>
