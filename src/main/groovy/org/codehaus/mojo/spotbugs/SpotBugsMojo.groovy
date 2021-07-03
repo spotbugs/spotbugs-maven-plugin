@@ -525,7 +525,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * System properties to set in the VM (or the forked VM if fork is enabled).
      * <p>
      *
-     * @since 4.2.4
+     * @since 4.3.0
      */
     @Parameter(property = "spotbugs.systemPropertyVariables")
     Map<String, String> systemPropertyVariables
