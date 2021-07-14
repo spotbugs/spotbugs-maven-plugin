@@ -184,7 +184,7 @@
     <codec.version>1.15</codec.version>
     <collections.version>3.2.2</collections.version>
     <digester.version>2.1</digester.version>
-    <io.version>2.10.0</io.version>
+    <io.version>2.11.0</io.version>
     <lang3.version>3.12.0</lang3.version>
   </properties>
 
