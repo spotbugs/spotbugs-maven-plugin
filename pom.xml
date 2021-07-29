@@ -139,7 +139,7 @@
 
     <plexusContainerVersion>2.1.0</plexusContainerVersion>
     <plexusResourcesVersion>1.1.0</plexusResourcesVersion>
-    <plexusUtilsVersion>3.3.0</plexusUtilsVersion>
+    <plexusUtilsVersion>3.4.0</plexusUtilsVersion>
 
     <antrunPluginVersion>3.0.0</antrunPluginVersion>
     <l10nPluginVersion>1.8</l10nPluginVersion>
