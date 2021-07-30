@@ -1060,11 +1060,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         resourceManager.setOutputDirectory(new File(project.getBuild().getDirectory()))
 
         if (log.isDebugEnabled()) {
-            log.debug("resourceManager outputDirectory is ${resourceManager.outputDirectory}")
-            log.debug("  Plugin Artifacts to be added -> ${pluginArtifacts.toString()}")
-            log.debug("outputFile is " + outputFile.getCanonicalPath())
-            log.debug("output Directory is " + spotbugsXmlOutputDirectory.getAbsolutePath())
-            log.debug("Temp File is " + xmlTempFile.getCanonicalPath())
+            log.debug("resourceManager.outputDirectory is ${resourceManager.outputDirectory}")
+            log.debug("Plugin Artifacts to be added -> ${pluginArtifacts.toString()}")
+            log.debug("outputFile is ${outputFile.getCanonicalPath()}")
+            log.debug("output Directory is ${spotbugsXmlOutputDirectory.getAbsolutePath()}")
+            log.debug("TempFile is ${(sarifOutput ? sarifTempFile : xmlTempFile).getCanonicalPath()}");
         }
 
         def ant = new AntBuilder()
