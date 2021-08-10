@@ -3,6 +3,7 @@
 .project
 .settings
 target/
+.idea/
 *.ipr
 *.iws
 *.iml
