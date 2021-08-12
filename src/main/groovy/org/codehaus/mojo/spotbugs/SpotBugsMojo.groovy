@@ -19,10 +19,9 @@ package org.codehaus.mojo.spotbugs
  * under the License.
  */
 
+import groovy.json.JsonSlurper
 import groovy.xml.XmlSlurper
 import groovy.xml.StreamingMarkupBuilder
-
-import org.apache.maven.artifact.Artifact
 import org.apache.maven.artifact.repository.ArtifactRepository
 
 import org.apache.maven.doxia.siterenderer.Renderer
@@ -32,8 +31,7 @@ import org.apache.maven.execution.MavenSession
 
 import org.apache.maven.plugin.MojoExecutionException
 
-import org.apache.maven.plugins.annotations.Component;
-import org.apache.maven.plugins.annotations.LifecyclePhase
+import org.apache.maven.plugins.annotations.Component
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
@@ -46,7 +44,6 @@ import org.apache.maven.repository.RepositorySystem
 
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 import org.codehaus.plexus.resource.ResourceManager
-import org.codehaus.plexus.resource.loader.FileResourceCreationException
 import org.codehaus.plexus.resource.loader.FileResourceLoader
 
 /**
@@ -70,6 +67,16 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Parameter(defaultValue = "false", property = "spotbugs.xmlOutput", required = true)
     boolean xmlOutput
+
+    /**
+     * Turn on and off SARIF output of the Spotbugs report.
+     * SARIF is a JSON format standardize for all code scanning tools.
+     * https://docs.github.com/en/code-security/secure-coding/integrating-with-code-scanning/sarif-support-for-code-scanning
+     *
+     * @since 4.3.1
+     */
+    @Parameter(defaultValue = "false", property = "spotbugs.sarifOutput", required = true)
+    boolean sarifOutput
 
     /**
      * Specifies the directory where the xml output will be generated.
@@ -845,7 +852,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             args << resourceHelper.getResourceFile(userPrefs.trim())
         }
 
-        args << "-xml:withMessages"
+        if(!sarifOutput) {
+            args << "-xml:withMessages"
+        }
+        else {
+            args << "-sarif"
+        }
 
         args << "-auxclasspathFromInput"
 
@@ -1001,6 +1013,21 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     }
 
     /**
+     * For the file creation by creating the file AND folder if needed.
+     * The file created will be empty.
+     *
+     * @param file Destination file to create.
+     */
+    private void forceFileCreation(File file) {
+        if (file.exists()) {
+            file.delete()
+        }
+
+        file.getParentFile().mkdirs()
+        file.createNewFile()
+    }
+
+    /**
      * Set up and run the Spotbugs engine.
      *
      * @param locale
@@ -1012,14 +1039,16 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         log.debug("****** SpotBugsMojo executeSpotbugs *******")
         long startTime, duration
 
-        File tempFile = new File("${project.build.directory}/spotbugsTemp.xml")
+        File xmlTempFile = new File("${project.build.directory}/spotbugsTemp.xml")
+        File sarifFile = new File("${project.build.directory}/spotbugsSarif.json")
 
-        if (tempFile.exists()) {
-            tempFile.delete()
+        if (xmlOutput || !sarifOutput) {
+            forceFileCreation(xmlTempFile)
+        }
+        else {
+            forceFileCreation(sarifFile)
         }
 
-        tempFile.getParentFile().mkdirs()
-        tempFile.createNewFile()
 
         outputEncoding = outputEncoding ?: 'UTF-8'
 
@@ -1031,11 +1060,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         resourceManager.setOutputDirectory(new File(project.getBuild().getDirectory()))
 
         if (log.isDebugEnabled()) {
-            log.debug("resourceManager outputDirectory is ${resourceManager.outputDirectory}")
-            log.debug("  Plugin Artifacts to be added -> ${pluginArtifacts.toString()}")
-            log.debug("outputFile is " + outputFile.getCanonicalPath())
-            log.debug("output Directory is " + spotbugsXmlOutputDirectory.getAbsolutePath())
-            log.debug("Temp File is " + tempFile.getCanonicalPath())
+            log.debug("resourceManager.outputDirectory is ${resourceManager.outputDirectory}")
+            log.debug("Plugin Artifacts to be added -> ${pluginArtifacts.toString()}")
+            log.debug("outputFile is ${outputFile.getCanonicalPath()}")
+            log.debug("output Directory is ${spotbugsXmlOutputDirectory.getAbsolutePath()}")
+            log.debug("TempFile is ${(sarifOutput ? sarifFile : xmlTempFile).getCanonicalPath()}");
         }
 
         def ant = new AntBuilder()
@@ -1046,7 +1075,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             startTime = System.nanoTime()
         }
 
-        def spotbugsArgs = getSpotbugsArgs(tempFile)
+        def spotbugsArgs = !sarifOutput ? getSpotbugsArgs(xmlTempFile) : getSpotbugsArgs(sarifFile)
 
         def effectiveEncoding = System.getProperty("file.encoding", "UTF-8")
 
@@ -1103,10 +1132,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         log.info("Done SpotBugs Analysis....")
 
-        if (tempFile.exists()) {
+        if (xmlTempFile.exists() && !sarifOutput) {
 
-            if (tempFile.size() > 0) {
-                def path = new XmlSlurper().parse(tempFile)
+            if (xmlTempFile.size() > 0) {
+                def path = new XmlSlurper().parse(xmlTempFile)
 
                 def allNodes = path.depthFirst().collect { it }
 
@@ -1159,9 +1188,24 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
 
             if (!log.isDebugEnabled()) {
-                tempFile.delete()
+                xmlTempFile.delete()
             }
 
+        }
+
+        if(sarifFile && sarifOutput) {
+            if (sarifFile.size() > 0) {
+                def path = new JsonSlurper().parse(sarifFile)
+
+                try {
+
+                    def results = path.runs.results[0]
+                    log.debug("BugInstance size is ${results.size()}")
+                }
+                catch (Exception e) {
+                    log.error("Unexpected format for the file $sarifFile",e)
+                }
+            }
         }
 
     }
