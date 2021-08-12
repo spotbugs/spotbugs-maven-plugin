@@ -1040,13 +1040,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         long startTime, duration
 
         File xmlTempFile = new File("${project.build.directory}/spotbugsTemp.xml")
-        File sarifTempFile = new File("${project.build.directory}/spotbugsSarif.json")
+        File sarifFile = new File("${project.build.directory}/spotbugsSarif.json")
 
         if (xmlOutput || !sarifOutput) {
             forceFileCreation(xmlTempFile)
         }
         else {
-            forceFileCreation(sarifTempFile)
+            forceFileCreation(sarifFile)
         }
 
 
@@ -1064,7 +1064,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug("Plugin Artifacts to be added -> ${pluginArtifacts.toString()}")
             log.debug("outputFile is ${outputFile.getCanonicalPath()}")
             log.debug("output Directory is ${spotbugsXmlOutputDirectory.getAbsolutePath()}")
-            log.debug("TempFile is ${(sarifOutput ? sarifTempFile : xmlTempFile).getCanonicalPath()}");
+            log.debug("TempFile is ${(sarifOutput ? sarifFile : xmlTempFile).getCanonicalPath()}");
         }
 
         def ant = new AntBuilder()
@@ -1075,7 +1075,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             startTime = System.nanoTime()
         }
 
-        def spotbugsArgs = !sarifOutput ? getSpotbugsArgs(xmlTempFile) : getSpotbugsArgs(sarifTempFile)
+        def spotbugsArgs = !sarifOutput ? getSpotbugsArgs(xmlTempFile) : getSpotbugsArgs(sarifFile)
 
         def effectiveEncoding = System.getProperty("file.encoding", "UTF-8")
 
@@ -1193,9 +1193,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         }
 
-        if(sarifTempFile && sarifOutput) {
-            if (sarifTempFile.size() > 0) {
-                def path = new JsonSlurper().parse(sarifTempFile)
+        if(sarifFile && sarifOutput) {
+            if (sarifFile.size() > 0) {
+                def path = new JsonSlurper().parse(sarifFile)
 
                 try {
 
@@ -1203,7 +1203,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                     log.debug("BugInstance size is ${results.size()}")
                 }
                 catch (Exception e) {
-                    log.error("Unexpected format for the file $sarifTempFile",e)
+                    log.error("Unexpected format for the file $sarifFile",e)
                 }
             }
         }
