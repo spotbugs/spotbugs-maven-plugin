@@ -131,7 +131,7 @@
     <doxiaVersion>1.10</doxiaVersion>
     <doxiaSiteToolsVersion>1.10</doxiaSiteToolsVersion>
 
-    <mavenCoreVersion>3.8.1</mavenCoreVersion>
+    <mavenCoreVersion>3.8.2</mavenCoreVersion>
     <mavenTransferVersion>0.13.1</mavenTransferVersion>
     <mavenReportingApiVersion>3.0</mavenReportingApiVersion>
     <mavenReportingVersion>3.0.0</mavenReportingVersion>
