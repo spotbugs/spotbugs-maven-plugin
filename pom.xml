@@ -121,9 +121,9 @@
     <projectVersion>${project.version}</projectVersion>
 
     <junitVersion>5.7.2</junitVersion>
-    <spotbugsVersion>4.3.0</spotbugsVersion>
+    <spotbugsVersion>4.4.0</spotbugsVersion>
     <spotbugsTag>4.3.0</spotbugsTag>
-    <slf4jVersion>2.0.0-alpha2</slf4jVersion>
+    <slf4jVersion>2.0.0-alpha4</slf4jVersion>
 
     <antVersion>1.10.11</antVersion>
     <groovyVersion>3.0.8</groovyVersion>
@@ -131,15 +131,15 @@
     <doxiaVersion>1.10</doxiaVersion>
     <doxiaSiteToolsVersion>1.10</doxiaSiteToolsVersion>
 
-    <mavenCoreVersion>3.8.1</mavenCoreVersion>
+    <mavenCoreVersion>3.8.2</mavenCoreVersion>
     <mavenTransferVersion>0.13.1</mavenTransferVersion>
     <mavenReportingApiVersion>3.0</mavenReportingApiVersion>
     <mavenReportingVersion>3.0.0</mavenReportingVersion>
-    <mavenVersion>3.8.1</mavenVersion>
+    <mavenVersion>3.8.2</mavenVersion>
 
     <plexusContainerVersion>2.1.0</plexusContainerVersion>
     <plexusResourcesVersion>1.1.0</plexusResourcesVersion>
-    <plexusUtilsVersion>3.3.0</plexusUtilsVersion>
+    <plexusUtilsVersion>3.4.0</plexusUtilsVersion>
 
     <antrunPluginVersion>3.0.0</antrunPluginVersion>
     <l10nPluginVersion>1.8</l10nPluginVersion>
@@ -149,7 +149,7 @@
     <invokerPluginVersion>3.2.2</invokerPluginVersion>
     <javadocPluginVersion>3.3.0</javadocPluginVersion>
     <pluginPluginVersion>3.6.1</pluginPluginVersion>
-    <scmPluginVersion>1.11.2</scmPluginVersion>
+    <scmPluginVersion>1.11.3</scmPluginVersion>
     <sitePluginVersion>3.9.1</sitePluginVersion>
     <sitePlugin36Version>3.6</sitePlugin36Version> <!-- For MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 4.3.x and simply drop the old support) -->
     <versionsPluginVersion>2.8.1</versionsPluginVersion>
