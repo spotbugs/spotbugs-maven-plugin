@@ -45,7 +45,7 @@ class SourceFileIndexer {
     protected void buildListSourceFiles(MavenProject project, MavenSession session) {
 
         //String basePath = project.basedir.absolutePath
-        String basePath = session.getExecutionRootDirectory()
+        String basePath = normalizePath(session.getExecutionRootDirectory())
 
         def allSourceFiles = new ArrayList<>()
         //Resource
@@ -92,16 +92,20 @@ class SourceFileIndexer {
                     scanDirectory(child,files,baseDirectory);
                 }
                 else {
-                    if(child.canonicalPath.startsWith(baseDirectory)) {
+                    String newSourceFile = normalizePath(child.canonicalPath)
+                    if(newSourceFile.startsWith(baseDirectory)) {
                         //The project will not be at the root of our file system.
                         //It will most likely be stored in a work directory.
                         // /work/project-code-to-scan/src/main/java/File.java => src/main/java/File.java
                         // (Here baseDirectory is /work/project-code-to-scan/)
-                        String relativePath = Paths.get(baseDirectory).relativize(Paths.get(child.path))
+                        String relativePath = Paths.get(baseDirectory).relativize(Paths.get(newSourceFile))
                         files.add(normalizePath(relativePath))
                     }
                     else {
-                        files.add(normalizePath(child.path))
+                        //Use the full path instead:
+                        //This will occurs in many cases including when the pom.xml is
+                        // not in the same directory tree as the sources.
+                        files.add(newSourceFile)
                     }
                 }
             }
