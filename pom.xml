@@ -123,10 +123,10 @@
     <junitVersion>5.7.2</junitVersion>
     <spotbugsVersion>4.4.0</spotbugsVersion>
     <spotbugsTag>4.3.0</spotbugsTag>
-    <slf4jVersion>2.0.0-alpha4</slf4jVersion>
+    <slf4jVersion>2.0.0-alpha5</slf4jVersion>
 
     <antVersion>1.10.11</antVersion>
-    <groovyVersion>3.0.8</groovyVersion>
+    <groovyVersion>3.0.9</groovyVersion>
 
     <doxiaVersion>1.10</doxiaVersion>
     <doxiaSiteToolsVersion>1.10</doxiaSiteToolsVersion>
@@ -139,7 +139,7 @@
 
     <plexusContainerVersion>2.1.0</plexusContainerVersion>
     <plexusResourcesVersion>1.1.0</plexusResourcesVersion>
-    <plexusUtilsVersion>3.4.0</plexusUtilsVersion>
+    <plexusUtilsVersion>3.4.1</plexusUtilsVersion>
 
     <antrunPluginVersion>3.0.0</antrunPluginVersion>
     <l10nPluginVersion>1.8</l10nPluginVersion>
