@@ -19,6 +19,8 @@ package org.codehaus.mojo.spotbugs
  * under the License.
  */
 
+import groovy.json.JsonBuilder
+
 import groovy.json.JsonSlurper
 import groovy.xml.XmlSlurper
 import groovy.xml.StreamingMarkupBuilder
@@ -28,7 +30,6 @@ import org.apache.maven.doxia.siterenderer.Renderer
 import org.apache.maven.doxia.tools.SiteTool
 
 import org.apache.maven.execution.MavenSession
-
 import org.apache.maven.plugin.MojoExecutionException
 
 import org.apache.maven.plugins.annotations.Component
@@ -77,6 +78,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Parameter(defaultValue = "false", property = "spotbugs.sarifOutput", required = true)
     boolean sarifOutput
+
+    @Parameter(defaultValue = "false", property = "spotbugs.sarifFullPath", required = true)
+    boolean sarifFullPath
 
     /**
      * Specifies the directory where the xml output will be generated.
@@ -1040,13 +1044,14 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         long startTime, duration
 
         File xmlTempFile = new File("${project.build.directory}/spotbugsTemp.xml")
-        File sarifFile = new File("${project.build.directory}/spotbugsSarif.json")
+        File sarifTempFile = new File("${project.build.directory}/spotbugsTempSarif.json")
+        File sarifFinalFile = new File("${project.build.directory}/spotbugsSarif.json")
 
         if (xmlOutput || !sarifOutput) {
             forceFileCreation(xmlTempFile)
         }
         else {
-            forceFileCreation(sarifFile)
+            forceFileCreation(sarifTempFile)
         }
 
 
@@ -1064,7 +1069,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug("Plugin Artifacts to be added -> ${pluginArtifacts.toString()}")
             log.debug("outputFile is ${outputFile.getCanonicalPath()}")
             log.debug("output Directory is ${spotbugsXmlOutputDirectory.getAbsolutePath()}")
-            log.debug("TempFile is ${(sarifOutput ? sarifFile : xmlTempFile).getCanonicalPath()}");
+            log.debug("TempFile is ${(sarifOutput ? sarifTempFile : xmlTempFile).getCanonicalPath()}");
         }
 
         def ant = new AntBuilder()
@@ -1075,7 +1080,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             startTime = System.nanoTime()
         }
 
-        def spotbugsArgs = !sarifOutput ? getSpotbugsArgs(xmlTempFile) : getSpotbugsArgs(sarifFile)
+        def spotbugsArgs = !sarifOutput ? getSpotbugsArgs(xmlTempFile) : getSpotbugsArgs(sarifTempFile)
 
         def effectiveEncoding = System.getProperty("file.encoding", "UTF-8")
 
@@ -1193,18 +1198,49 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         }
 
-        if(sarifFile && sarifOutput) {
-            if (sarifFile.size() > 0) {
-                def path = new JsonSlurper().parse(sarifFile)
+        if(sarifTempFile && sarifOutput && sarifTempFile.size() > 0) {
 
-                try {
+            def slurpedResult = new JsonSlurper().parse(sarifTempFile)
+            def builder = new JsonBuilder(slurpedResult)
 
-                    def results = path.runs.results[0]
-                    log.debug("BugInstance size is ${results.size()}")
+            // With -Dspotbugs.sarifFullPath=true
+            // The location uri will be replace by path relative to the root of project
+            // SomeFile.java => src/main/java/SomeFile.java
+            //This change is required for some tool including Github code scanning API
+            if (sarifFullPath) {
+
+                def indexer = new SourceFileIndexer()
+
+                indexer.buildListSourceFiles(getProject(),getSession())
+
+                for (result in slurpedResult.runs.results[0]) {
+
+                    for (loc in result.locations) {
+                        def originalFullPath = loc.physicalLocation.artifactLocation.uri
+
+                        //We replace relative path to the complete path
+                        String newFileName = indexer.searchActualFilesLocation(originalFullPath)
+
+                        if (newFileName != null) {
+                            if(getLog().isDebugEnabled()) {
+                                getLog().info("$originalFullPath modified to $newFileName")
+                            }
+                            loc.physicalLocation.artifactLocation.uri = newFileName
+                        } else {
+                            getLog().warn("No source file found for $originalFullPath. " +
+                                    "The path include in the SARIF report could be incomplete.")
+                        }
+                    }
+
                 }
-                catch (Exception e) {
-                    log.error("Unexpected format for the file $sarifFile",e)
-                }
+            }
+
+            sarifFinalFile.withWriter {
+                builder.writeTo(it)
+            }
+
+            if (!log.isDebugEnabled()) {
+                sarifTempFile.delete()
             }
         }
 
