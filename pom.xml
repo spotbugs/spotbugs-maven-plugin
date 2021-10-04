@@ -138,7 +138,7 @@
     <mavenVersion>3.8.2</mavenVersion>
 
     <plexusContainerVersion>2.1.0</plexusContainerVersion>
-    <plexusResourcesVersion>1.1.0</plexusResourcesVersion>
+    <plexusResourcesVersion>1.2.0</plexusResourcesVersion>
     <plexusUtilsVersion>3.4.1</plexusUtilsVersion>
 
     <antrunPluginVersion>3.0.0</antrunPluginVersion>
