@@ -458,8 +458,8 @@
           <artifactId>struts-core</artifactId>
         </exclusion>
         <exclusion>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
+          <groupId>dom4j</groupId>
+          <artifactId>dom4j</artifactId>
         </exclusion>
         <exclusion>
           <groupId>commons-logging</groupId>
