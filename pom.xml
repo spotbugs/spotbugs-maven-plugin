@@ -11,7 +11,7 @@
 
   <groupId>com.github.spotbugs</groupId>
   <artifactId>spotbugs-maven-plugin</artifactId>
-  <version>4.4.3-SNAPSHOT</version>
+  <version>4.4.2.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>SpotBugs Maven Plugin</name>
@@ -87,7 +87,7 @@
   </contributors>
 
   <prerequisites>
-    <maven>3.2.5</maven>
+    <maven>3.3.9</maven>
   </prerequisites>
 
   <scm>
@@ -132,7 +132,9 @@
     <doxiaSiteToolsVersion>1.10</doxiaSiteToolsVersion>
 
     <mavenCoreVersion>3.8.3</mavenCoreVersion>
+    <mavenSharedUtilsVersion>3.3.4</mavenSharedUtilsVersion>
     <mavenTransferVersion>0.13.1</mavenTransferVersion>
+    <mavenCommonArtifactFilters>3.2.0</mavenCommonArtifactFilters>
     <mavenReportingApiVersion>3.0</mavenReportingApiVersion>
     <mavenReportingVersion>3.0.0</mavenReportingVersion>
     <mavenVersion>3.8.3</mavenVersion>
@@ -151,7 +153,7 @@
     <pluginPluginVersion>3.6.1</pluginPluginVersion>
     <scmPluginVersion>1.12.0</scmPluginVersion>
     <sitePluginVersion>3.9.1</sitePluginVersion>
-    <sitePlugin36Version>3.6</sitePlugin36Version> <!-- For MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 4.3.x and simply drop the old support) -->
+    <sitePlugin36Version>3.6</sitePlugin36Version> <!-- For MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 4.5.x and simply drop the old support) -->
     <versionsPluginVersion>2.8.1</versionsPluginVersion>
 
     <spotbugsTestDebug>false</spotbugsTestDebug>
@@ -185,6 +187,7 @@
     <collections.version>3.2.2</collections.version>
     <digester.version>2.1</digester.version>
     <io.version>2.11.0</io.version>
+    <lang2.version>2.6</lang2.version>
     <lang3.version>3.12.0</lang3.version>
   </properties>
 
@@ -384,17 +387,27 @@
       <artifactId>maven-artifact-transfer</artifactId>
       <version>${mavenTransferVersion}</version>
       <exclusions>
-           <exclusion>
-                <groupId>org.sonatype.sisu</groupId>
-                <artifactId>sisu-guice</artifactId>
-           </exclusion>
+        <exclusion>
+          <groupId>org.sonatype.sisu</groupId>
+          <artifactId>sisu-guice</artifactId>
+        </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-common-artifact-filters</artifactId>
+      <version>${mavenCommonArtifactFilters}</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
       <version>${mavenCoreVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-shared-utils</artifactId>
+      <version>${mavenSharedUtilsVersion}</version>
     </dependency>
 
     <!-- doxia -->
@@ -445,8 +458,8 @@
           <artifactId>struts-core</artifactId>
         </exclusion>
         <exclusion>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
+          <groupId>dom4j</groupId>
+          <artifactId>dom4j</artifactId>
         </exclusion>
         <exclusion>
           <groupId>commons-logging</groupId>
@@ -502,6 +515,11 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>${io.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>${lang2.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
