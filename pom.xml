@@ -133,6 +133,7 @@
 
     <mavenCoreVersion>3.8.3</mavenCoreVersion>
     <mavenTransferVersion>0.13.1</mavenTransferVersion>
+    <mavenCommonArtifactFilters>3.2.0</mavenCommonArtifactFilters>
     <mavenReportingApiVersion>3.0</mavenReportingApiVersion>
     <mavenReportingVersion>3.0.0</mavenReportingVersion>
     <mavenVersion>3.8.3</mavenVersion>
@@ -151,7 +152,7 @@
     <pluginPluginVersion>3.6.1</pluginPluginVersion>
     <scmPluginVersion>1.12.0</scmPluginVersion>
     <sitePluginVersion>3.9.1</sitePluginVersion>
-    <sitePlugin36Version>3.6</sitePlugin36Version> <!-- For MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 4.3.x and simply drop the old support) -->
+    <sitePlugin36Version>3.6</sitePlugin36Version> <!-- For MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 4.5.x and simply drop the old support) -->
     <versionsPluginVersion>2.8.1</versionsPluginVersion>
 
     <spotbugsTestDebug>false</spotbugsTestDebug>
@@ -389,6 +390,11 @@
                 <artifactId>sisu-guice</artifactId>
            </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-common-artifact-filters</artifactId>
+      <version>${mavenCommonArtifactFilters}</version>
     </dependency>
 
     <dependency>
