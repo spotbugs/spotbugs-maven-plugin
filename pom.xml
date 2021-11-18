@@ -122,8 +122,8 @@
 
     <junitVersion>5.8.1</junitVersion>
     <spotbugsVersion>4.5.0</spotbugsVersion>
-    <slf4jVersion>2.0.0-alpha5</slf4jVersion>
     <spotbugsTag>4.5.0</spotbugsTag>
+    <slf4jVersion>1.7.32</slf4jVersion>
 
     <antVersion>1.10.12</antVersion>
     <groovyVersion>3.0.9</groovyVersion>
