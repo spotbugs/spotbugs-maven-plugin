@@ -137,7 +137,7 @@
     <mavenCommonArtifactFilters>3.2.0</mavenCommonArtifactFilters>
     <mavenReportingApiVersion>3.0</mavenReportingApiVersion>
     <mavenReportingVersion>3.0.0</mavenReportingVersion>
-    <mavenVersion>3.8.3</mavenVersion>
+    <mavenVersion>3.8.4</mavenVersion>
 
     <plexusContainerVersion>2.1.0</plexusContainerVersion>
     <plexusResourcesVersion>1.2.0</plexusResourcesVersion>
