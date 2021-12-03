@@ -128,7 +128,7 @@
     <antVersion>1.10.12</antVersion>
     <groovyVersion>3.0.9</groovyVersion>
 
-    <doxiaVersion>1.10</doxiaVersion>
+    <doxiaVersion>1.11.1</doxiaVersion>
     <doxiaSiteToolsVersion>1.10</doxiaSiteToolsVersion>
 
     <mavenCoreVersion>3.8.4</mavenCoreVersion>
