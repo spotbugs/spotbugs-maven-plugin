@@ -120,7 +120,7 @@
 
     <projectVersion>${project.version}</projectVersion>
 
-    <junitVersion>5.8.1</junitVersion>
+    <junitVersion>5.8.2</junitVersion>
     <spotbugsVersion>4.5.2</spotbugsVersion>
     <spotbugsTag>4.5.2</spotbugsTag>
     <slf4jVersion>1.7.32</slf4jVersion>
