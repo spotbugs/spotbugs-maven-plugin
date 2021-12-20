@@ -857,10 +857,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if(!sarifOutput) {
-            args << "-xml:withMessages"
+            args << "-xml:withMessages=" + tempFile.getAbsolutePath()
         }
         else {
-            args << "-sarif"
+            args << "-sarif=" + tempFile.getAbsolutePath()
         }
 
         args << "-auxclasspathFromInput"
@@ -955,10 +955,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             args << "-maxRank"
             args << maxRank
         }
-
-        args << "-output"
-        args << tempFile.getAbsolutePath()
-
 
         if (classFilesDirectory.exists() && classFilesDirectory.isDirectory()) {
             log.debug("  Adding to Source Directory ->" + classFilesDirectory.absolutePath)
