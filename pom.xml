@@ -120,6 +120,12 @@
 
     <projectVersion>${project.version}</projectVersion>
 
+    <!-- Override spotbugs to this version from base-parent -->
+    <spotbugs.version>4.5.3</spotbugs.version>
+
+    <!-- TODO: Temp override pdf plugin (remove this on next base-parent update -->
+    <pdf.plugin>1.5.1</pdf.plugin>
+
     <junitVersion>5.8.2</junitVersion>
     <spotbugsVersion>4.5.3</spotbugsVersion>
     <spotbugsTag>4.5.3</spotbugsTag>
