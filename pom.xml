@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.github.hazendaz</groupId>
     <artifactId>base-parent</artifactId>
-    <version>30</version>
+    <version>31</version>
     <relativePath />
   </parent>
 
@@ -122,9 +122,6 @@
 
     <!-- Override spotbugs to this version from base-parent -->
     <spotbugs.version>4.5.3</spotbugs.version>
-
-    <!-- TODO: Temp override pdf plugin (remove this on next base-parent update -->
-    <pdf.plugin>1.5.1</pdf.plugin>
 
     <junitVersion>5.8.2</junitVersion>
     <spotbugsVersion>4.5.3</spotbugsVersion>
