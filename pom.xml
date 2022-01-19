@@ -119,6 +119,9 @@
     <!-- Override spotbugs to this version from base-parent -->
     <spotbugs.version>4.5.3</spotbugs.version>
 
+    <!-- Groovy doesn't like simple '8' for java 8 -->
+    <java.version>1.8</java.version>
+
     <junitVersion>5.8.2</junitVersion>
     <spotbugsVersion>4.5.3</spotbugsVersion>
     <spotbugsTag>4.5.3</spotbugsTag>
