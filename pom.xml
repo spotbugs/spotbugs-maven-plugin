@@ -103,7 +103,7 @@
   <ciManagement>
     <system>Github</system>
     <url>https://github.com/spotbugs/spotbugs-maven-plugin/actions</url>
-  </issueManagement>
+  </ciManagement>
   <distributionManagement>
     <site>
       <id>gh-pages-scm</id>
