@@ -97,8 +97,12 @@
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
-    <system>GitHub Issues</system>
+    <system>Github</system>
     <url>https://github.com/spotbugs/spotbugs-maven-plugin/issues</url>
+  </issueManagement>
+  <ciManagement>
+    <system>Github</system>
+    <url>https://github.com/spotbugs/spotbugs-maven-plugin/actions</url>
   </issueManagement>
   <distributionManagement>
     <repository>
