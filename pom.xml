@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.github.hazendaz</groupId>
     <artifactId>base-parent</artifactId>
-    <version>30</version>
+    <version>31</version>
     <relativePath />
   </parent>
 
@@ -26,8 +26,8 @@
     </license>
   </licenses>
   <organization>
-    <name>Garvin Leclaire</name>
-    <url>https://github.com/gleclaire</url>
+    <name>Spotbugs</name>
+    <url>https://spotbugs.github.io/</url>
   </organization>
   <developers>
     <developer>
@@ -97,18 +97,14 @@
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
-    <system>GitHub Issues</system>
+    <system>Github</system>
     <url>https://github.com/spotbugs/spotbugs-maven-plugin/issues</url>
   </issueManagement>
+  <ciManagement>
+    <system>Github</system>
+    <url>https://github.com/spotbugs/spotbugs-maven-plugin/actions</url>
+  </ciManagement>
   <distributionManagement>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
     <site>
       <id>gh-pages-scm</id>
       <url>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</url>
@@ -123,8 +119,8 @@
     <!-- Override spotbugs to this version from base-parent -->
     <spotbugs.version>4.5.3</spotbugs.version>
 
-    <!-- TODO: Temp override pdf plugin (remove this on next base-parent update -->
-    <pdf.plugin>1.5.1</pdf.plugin>
+    <!-- Groovy doesn't like simple '8' for java 8 -->
+    <java.version>1.8</java.version>
 
     <junitVersion>5.8.2</junitVersion>
     <spotbugsVersion>4.5.3</spotbugsVersion>
@@ -175,7 +171,7 @@
     <skipSurefireReport>true</skipSurefireReport>
 
     <!-- Used by Integration tests -->
-    <compilerPluginVersion>3.8.1</compilerPluginVersion>
+    <compilerPluginVersion>3.9.0</compilerPluginVersion>
     <findsecbugsVersion>1.10.1</findsecbugsVersion>
     <jxrPluginVersion>3.0.0</jxrPluginVersion>
     <mavenSurefireVersion>3.0.0-M5</mavenSurefireVersion>
