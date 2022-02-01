@@ -238,14 +238,6 @@
           <groupId>org.apache.ant</groupId>
           <artifactId>ant-antlr</artifactId>
         </exclusion>
-        <exclusion>
-          <groupId>org.apache.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.groovy</groupId>
-          <artifactId>groovy-groovydoc</artifactId>
-        </exclusion>
       </exclusions>
     </dependency>
 
@@ -253,12 +245,6 @@
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-dateutil</artifactId>
       <version>${groovyVersion}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
@@ -266,36 +252,12 @@
       <artifactId>groovy-docgenerator</artifactId>
       <version>${groovyVersion}</version>
       <scope>runtime</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.groovy</groupId>
-          <artifactId>groovy-templates</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-groovydoc</artifactId>
       <version>${groovyVersion}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.groovy</groupId>
-          <artifactId>groovy-docgenerator</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.groovy</groupId>
-          <artifactId>groovy-templates</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
@@ -303,40 +265,18 @@
       <artifactId>groovy-templates</artifactId>
       <version>${groovyVersion}</version>
       <scope>runtime</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.groovy</groupId>
-          <artifactId>groovy-xml</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-xml</artifactId>
       <version>${groovyVersion}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-json</artifactId>
       <version>${groovyVersion}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
