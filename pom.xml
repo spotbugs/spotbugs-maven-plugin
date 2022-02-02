@@ -195,15 +195,22 @@
 
   <dependencies>
 
+    <!-- Spotbugs -->
     <dependency>
       <groupId>com.github.spotbugs</groupId>
       <artifactId>spotbugs</artifactId>
       <version>${spotbugsVersion}</version>
     </dependency>
 
+    <!-- Logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
+      <version>${slf4jVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
       <version>${slf4jVersion}</version>
     </dependency>
     <dependency>
@@ -219,6 +226,7 @@
       <version>${antVersion}</version>
     </dependency>
 
+    <!-- Groovy -->
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy</artifactId>
@@ -273,6 +281,7 @@
       <version>${groovyVersion}</version>
     </dependency>
 
+    <!-- Maven -->
     <dependency>
       <groupId>org.apache.maven.reporting</groupId>
       <artifactId>maven-reporting-impl</artifactId>
@@ -491,13 +500,6 @@
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
       <version>${plexusUtilsVersion}</version>
-    </dependency>
-
-    <!-- slf4j override on maven transfer artifact -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4jVersion}</version>
     </dependency>
 
     <!-- Better jdk support -->
