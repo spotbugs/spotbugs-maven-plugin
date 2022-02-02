@@ -128,7 +128,7 @@
     <slf4jVersion>1.7.35</slf4jVersion>
 
     <antVersion>1.10.12</antVersion>
-    <groovyVersion>3.0.9</groovyVersion>
+    <groovyVersion>4.0.0</groovyVersion>
 
     <doxiaVersion>1.11.1</doxiaVersion>
     <doxiaSiteToolsVersion>1.11.1</doxiaSiteToolsVersion>
@@ -195,15 +195,22 @@
 
   <dependencies>
 
+    <!-- Spotbugs -->
     <dependency>
       <groupId>com.github.spotbugs</groupId>
       <artifactId>spotbugs</artifactId>
       <version>${spotbugsVersion}</version>
     </dependency>
 
+    <!-- Logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
+      <version>${slf4jVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
       <version>${slf4jVersion}</version>
     </dependency>
     <dependency>
@@ -219,18 +226,17 @@
       <version>${antVersion}</version>
     </dependency>
 
+    <!-- Groovy -->
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
+      <groupId>org.apache.groovy</groupId>
       <artifactId>groovy</artifactId>
       <version>${groovyVersion}</version>
-      <classifier>indy</classifier>
     </dependency>
 
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
+      <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-ant</artifactId>
       <version>${groovyVersion}</version>
-      <classifier>indy</classifier>
       <exclusions>
         <exclusion>
           <groupId>org.apache.ant</groupId>
@@ -240,113 +246,42 @@
           <groupId>org.apache.ant</groupId>
           <artifactId>ant-antlr</artifactId>
         </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy-groovydoc</artifactId>
-        </exclusion>
       </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
+      <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-dateutil</artifactId>
       <version>${groovyVersion}</version>
-      <classifier>indy</classifier>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
+      <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-docgenerator</artifactId>
       <version>${groovyVersion}</version>
       <scope>runtime</scope>
-      <classifier>indy</classifier>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy-templates</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
-      <artifactId>groovy-groovydoc</artifactId>
+      <groupId>org.apache.groovy</groupId>
+      <artifactId>groovy-json</artifactId>
       <version>${groovyVersion}</version>
-      <classifier>indy</classifier>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy-docgenerator</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy-templates</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
+      <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-templates</artifactId>
       <version>${groovyVersion}</version>
       <scope>runtime</scope>
-      <classifier>indy</classifier>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy-xml</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
+      <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-xml</artifactId>
       <version>${groovyVersion}</version>
-      <classifier>indy</classifier>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
-    <dependency>
-      <groupId>org.codehaus.groovy</groupId>
-      <artifactId>groovy-json</artifactId>
-      <version>${groovyVersion}</version>
-      <classifier>indy</classifier>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.groovy</groupId>
-          <artifactId>groovy</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
+    <!-- Maven -->
     <dependency>
       <groupId>org.apache.maven.reporting</groupId>
       <artifactId>maven-reporting-impl</artifactId>
@@ -567,13 +502,6 @@
       <version>${plexusUtilsVersion}</version>
     </dependency>
 
-    <!-- slf4j override on maven transfer artifact -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4jVersion}</version>
-    </dependency>
-
     <!-- Better jdk support -->
     <dependency>
       <groupId>org.ow2.asm</groupId>
@@ -673,7 +601,7 @@
         </configuration>
         <dependencies>
           <dependency>
-            <groupId>org.codehaus.groovy</groupId>
+            <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
             <version>${groovyVersion}</version>
           </dependency>
@@ -872,14 +800,14 @@
             </executions>
             <dependencies>
               <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy-all</artifactId>
                 <version>${groovyVersion}</version>
                 <type>pom</type>
                 <exclusions>
                     <!-- See 'addendum for 3.0.4 https://groovy-lang.org/releasenotes/groovy-3.0.html -->
                     <exclusion>
-                        <groupId>org.codehaus.groovy</groupId>
+                        <groupId>org.apache.groovy</groupId>
                         <artifactId>groovy-testng</artifactId>
                     </exclusion>
                 </exclusions>
