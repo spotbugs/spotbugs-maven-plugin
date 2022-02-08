@@ -137,7 +137,7 @@
     <mavenSharedUtilsVersion>3.3.4</mavenSharedUtilsVersion>
     <mavenTransferVersion>0.13.1</mavenTransferVersion>
     <mavenCommonArtifactFilters>3.2.0</mavenCommonArtifactFilters>
-    <mavenReportingApiVersion>3.0</mavenReportingApiVersion>
+    <mavenReportingApiVersion>3.1.0</mavenReportingApiVersion>
     <mavenReportingVersion>3.0.0</mavenReportingVersion>
     <mavenVersion>3.8.4</mavenVersion>
 
