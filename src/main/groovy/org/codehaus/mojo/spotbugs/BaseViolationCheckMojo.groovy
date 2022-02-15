@@ -46,16 +46,7 @@ import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.util.FileUtils
 
-/**
- * Fail the build if there were any SpotBugs violations in the source code.
- * An XML report is put out by default in the target directory with the errors.
- * To see more documentation about SpotBugs' options, please see the <a href="https://spotbugs.readthedocs.io/en/latest/" class="externalLink">SpotBugs Manual.</a>.
- *
- * @since 2.0
- */
-@Mojo( name = "check", defaultPhase = LifecyclePhase.VERIFY, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true, threadSafe = true)
-@Execute( goal = "spotbugs")
-class SpotbugsViolationCheckMojo extends AbstractMojo {
+abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     /**
      * Location where generated html will be created.

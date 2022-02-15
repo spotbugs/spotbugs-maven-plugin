@@ -63,3 +63,10 @@ Run gui with a specific version
 ```
 mvn com.github.spotbugs:spotbugs-maven-plugin:4.0.0:gui 
 ```
+
+## Contributing ##
+
+Run integration tests
+```
+mvn clean install -P run-its -DtestSrc=remote
+```
