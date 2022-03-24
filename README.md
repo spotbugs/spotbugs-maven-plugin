@@ -63,3 +63,5 @@ Run gui with a specific version
 ```
 mvn com.github.spotbugs:spotbugs-maven-plugin:4.0.0:gui 
 ```
+
+Note on Groovy: If using groovy with same group id (org.codehaus.groovy 3.x or before or org.apache.groovy 4.x or above), an error may occur if not on same version. To alleviate that, make sure groovy artifacts are defined in dependency management in order to force the loaded version correctly on your usage.
