@@ -91,7 +91,6 @@ mvn site
 
   Then, execute the site plugin to generate the report.  
 
-
 +-----+
 mvn site
 +-----+
@@ -128,11 +127,9 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
 
 * Specifying which bug detectors to run
 
@@ -163,11 +160,9 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
 
 * Specifying which bug detectors to skip
 
@@ -196,11 +191,9 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
 
 * Specifying which classes to analyze
 
@@ -229,12 +222,9 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
-
 
 * Using Third party or your own detectors
 
@@ -263,11 +253,9 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
 
 * Using Detectors from a Repository
 
@@ -301,7 +289,6 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
@@ -334,7 +321,6 @@ mvn site
 +-----+
 
   Then, execute the spotbugs plugin with the gui option.
-
 
 +-----+
 mvn spotbugs:gui
