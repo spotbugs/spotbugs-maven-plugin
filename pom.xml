@@ -552,6 +552,11 @@
               <artifactId>doxia-sink-api</artifactId>
               <version>${doxiaVersion}</version>
             </dependency>
+            <dependency>
+              <groupId>com.github.javaparser</groupId>
+              <artifactId>javaparser-core</artifactId>
+              <version>${javaparserVersion}</version>
+            </dependency>
           </dependencies>
         </plugin>
         <plugin>
@@ -605,11 +610,6 @@
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
             <version>${groovyVersion}</version>
-          </dependency>
-          <dependency>
-            <groupId>com.github.javaparser</groupId>
-            <artifactId>javaparser-core</artifactId>
-            <version>${javaparserVersion}</version>
           </dependency>
         </dependencies>
         <executions>
