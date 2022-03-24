@@ -89,7 +89,7 @@ mvn site
 </project>
 +-----+
 
-  Then, execute the site plugin to generate the report.  
+  Then, execute the site plugin to generate the report.
 
 +-----+
 mvn site
