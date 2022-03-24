@@ -4,7 +4,7 @@
   id="FAQ" title="Frequently Asked Questions">
  <part id="General">
    <faq id="Aggregate Reporting">
-     <question>Is there an easy way to generate the aggregate report ?</question>
+     <question>Is there an easy way to generate the aggregate report?</question>
      <answer>
        <p>
        Unfortunately Maven's internal support for report aggregation
@@ -32,6 +32,16 @@
          <p>
          You can also use the <bold>fork</bold> option which will fork a new JVM.  You then use the <bold>maxHeap</bold> option to control the heap size.    <p>
          </p>
+         </p>
+       </answer>
+    </faq>
+    <faq id="Groovy Conflicts">
+      <question>How do I avoid groovy module conflicts when using groovy along with this plugin?</question>
+        <answer>
+         <p>
+         If using groovy with same group id (org.codehaus.groovy 3.x or before or org.apache.groovy 4.x or above),
+         an error may occur if not on same version. To alleviate that, make sure groovy artifacts are defined in
+         dependency management in order to force the loaded version correctly on your usage.
          </p>
        </answer>
      </faq>
