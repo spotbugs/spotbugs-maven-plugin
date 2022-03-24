@@ -96,46 +96,6 @@ mvn site
 mvn site
 +-----+
 
-
-* Filter bugs to report
-
-  To filter the classes and methods which are analyzed or omitted from analysis
-  you can use filters.
-  The filters allow specifying by class and method which bug categories to
-  include/exclude in/from the reports. The
-  {{{https://spotbugs.readthedocs.io/en/latest/filter.html}filter format specification}}
-  also contains useful examples.
-
-+-----+
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  ...
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${projectVersion}</version>
-        <configuration>
-          <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
-          <includeFilterFile>spotbugs-include.xml</includeFilterFile>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
-  ...
-</project>
-+-----+
-
-  Then, execute the site plugin to generate the report.
-
-
-+-----+
-mvn site
-+-----+
-
-
-
 * Specifying which bug filters to run
 
   To filter the classes and methods which are analyzed or omitted from analysis
