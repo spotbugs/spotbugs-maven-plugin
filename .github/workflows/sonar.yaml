@@ -17,7 +17,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: 11
+          java-version: 17
           distribution: 'zulu'
       - name: Analyze with SonarCloud
         run: ./mvnw verify sonar:sonar -B -D"sonar.projectKey=spotbugs_spotbugs-maven-plugin" -D"sonar.organization=spotbugs" -D"sonar.host.url=https://sonarcloud.io" -D"sonar.login=$SONAR_TOKEN"
