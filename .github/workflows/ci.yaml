@@ -21,4 +21,4 @@ jobs:
           java-version: ${{ matrix.java }}
           distribution: 'zulu'
       - name: Test with Maven
-        run: ./mvnw test -B
+        run: ./mvnw test -B --no-transfer-progress
