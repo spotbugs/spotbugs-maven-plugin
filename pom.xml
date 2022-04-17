@@ -5,13 +5,13 @@
   <parent>
     <groupId>com.github.hazendaz</groupId>
     <artifactId>base-parent</artifactId>
-    <version>31</version>
+    <version>35</version>
     <relativePath />
   </parent>
 
   <groupId>com.github.spotbugs</groupId>
   <artifactId>spotbugs-maven-plugin</artifactId>
-  <version>4.5.3.1-SNAPSHOT</version>
+  <version>4.6.0.3-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>SpotBugs Maven Plugin</name>
@@ -117,29 +117,30 @@
     <projectVersion>${project.version}</projectVersion>
 
     <!-- Override spotbugs to this version from base-parent -->
-    <spotbugs.version>4.5.3</spotbugs.version>
+    <spotbugs.version>4.6.0</spotbugs.version>
 
     <!-- Groovy doesn't like simple '8' for java 8 -->
     <java.version>1.8</java.version>
 
     <junitVersion>5.8.2</junitVersion>
-    <spotbugsVersion>4.5.3</spotbugsVersion>
-    <spotbugsTag>4.5.3</spotbugsTag>
+    <spotbugsVersion>4.6.0</spotbugsVersion>
+    <spotbugsTag>4.6.0</spotbugsTag>
     <slf4jVersion>1.7.36</slf4jVersion>
 
     <antVersion>1.10.12</antVersion>
-    <groovyVersion>4.0.0</groovyVersion>
+    <groovyVersion>4.0.1</groovyVersion>
+    <javaparserVersion>3.24.2</javaparserVersion>
 
     <doxiaVersion>1.11.1</doxiaVersion>
     <doxiaSiteToolsVersion>1.11.1</doxiaSiteToolsVersion>
 
-    <mavenCoreVersion>3.8.4</mavenCoreVersion>
+    <mavenCoreVersion>3.8.5</mavenCoreVersion>
     <mavenSharedUtilsVersion>3.3.4</mavenSharedUtilsVersion>
     <mavenTransferVersion>0.13.1</mavenTransferVersion>
     <mavenCommonArtifactFilters>3.2.0</mavenCommonArtifactFilters>
     <mavenReportingApiVersion>3.1.0</mavenReportingApiVersion>
     <mavenReportingVersion>3.1.0</mavenReportingVersion>
-    <mavenVersion>3.8.4</mavenVersion>
+    <mavenVersion>3.8.5</mavenVersion>
 
     <plexusContainerVersion>2.1.1</plexusContainerVersion>
     <plexusResourcesVersion>1.2.0</plexusResourcesVersion>
@@ -149,14 +150,14 @@
     <l10nPluginVersion>1.8</l10nPluginVersion>
     <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
     <gmavenPluginVersion>1.13.1</gmavenPluginVersion>
-    <infoReportsPluginVersion>3.2.1</infoReportsPluginVersion>
+    <infoReportsPluginVersion>3.2.2</infoReportsPluginVersion>
     <invokerPluginVersion>3.2.2</invokerPluginVersion>
     <javadocPluginVersion>3.3.2</javadocPluginVersion>
     <pluginPluginVersion>3.6.4</pluginPluginVersion>
     <scmPluginVersion>1.12.2</scmPluginVersion>
-    <sitePluginVersion>3.10.0</sitePluginVersion>
+    <sitePluginVersion>3.11.0</sitePluginVersion>
     <sitePlugin36Version>3.6</sitePlugin36Version> <!-- For MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 4.5.x and simply drop the old support) -->
-    <versionsPluginVersion>2.9.0</versionsPluginVersion>
+    <versionsPluginVersion>2.10.0</versionsPluginVersion>
 
     <spotbugsTestDebug>false</spotbugsTestDebug>
     <integrationTestSrc>${project.build.directory}/it-src-spotbugs</integrationTestSrc>
@@ -182,7 +183,7 @@
     <jgit.version>5.13.0.202109080827-r</jgit.version>
 
     <!-- Targeted patches -->
-    <asm.version>9.2</asm.version>
+    <asm.version>9.3</asm.version>
     <beanutils.version>1.9.4</beanutils.version>
     <chain.version>1.2</chain.version>
     <codec.version>1.15</codec.version>
@@ -550,6 +551,11 @@
               <groupId>org.apache.maven.doxia</groupId>
               <artifactId>doxia-sink-api</artifactId>
               <version>${doxiaVersion}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.github.javaparser</groupId>
+              <artifactId>javaparser-core</artifactId>
+              <version>${javaparserVersion}</version>
             </dependency>
           </dependencies>
         </plugin>
