@@ -146,7 +146,7 @@
     <plexusResourcesVersion>1.2.0</plexusResourcesVersion>
     <plexusUtilsVersion>3.4.1</plexusUtilsVersion>
 
-    <antrunPluginVersion>3.0.0</antrunPluginVersion>
+    <antrunPluginVersion>3.1.0</antrunPluginVersion>
     <l10nPluginVersion>1.8</l10nPluginVersion>
     <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
     <gmavenPluginVersion>1.13.1</gmavenPluginVersion>
