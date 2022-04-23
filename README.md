@@ -77,6 +77,6 @@ This plugin is written entirey in groovy.  It does have limitations when it come
 
 Known issues
 
-The security manager is turned off by default in jdk 18/19 and scheduled from removal in a future java release, therefore to use this plugin with jdk 18/19, the security manager may need turned back on using JAVA_OPTS to -Djava.security.manager=allow.  See [groovy](https://groovy-lang.org/releasenotes/groovy-4.0.html) for more details.
+The security manager is turned off by default in jdk 18/19 and scheduled from removal in a future java release, therefore to use this plugin with jdk 18/19, the security manager may need turned back on using ```JAVA_OPTS``` to ```-Djava.security.manager=allow```.  See [groovy](https://groovy-lang.org/releasenotes/groovy-4.0.html) for more details.
 
 If using groovy with same group id (org.codehaus.groovy 3.x or before or org.apache.groovy 4.x or above), an error may occur if not on same version. To alleviate that, make sure groovy artifacts are defined in dependency management in order to force the loaded version correctly on your usage.
