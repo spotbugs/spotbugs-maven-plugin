@@ -11,7 +11,7 @@
 
   <groupId>com.github.spotbugs</groupId>
   <artifactId>spotbugs-maven-plugin</artifactId>
-  <version>4.6.0.3-SNAPSHOT</version>
+  <version>4.7.0.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>SpotBugs Maven Plugin</name>
@@ -117,14 +117,14 @@
     <projectVersion>${project.version}</projectVersion>
 
     <!-- Override spotbugs to this version from base-parent -->
-    <spotbugs.version>4.6.0</spotbugs.version>
+    <spotbugs.version>4.7.0</spotbugs.version>
 
     <!-- Groovy doesn't like simple '8' for java 8 -->
     <java.version>1.8</java.version>
 
     <junitVersion>5.8.2</junitVersion>
     <spotbugsVersion>4.7.0</spotbugsVersion>
-    <spotbugsTag>4.6.0</spotbugsTag>
+    <spotbugsTag>4.7.0</spotbugsTag>
     <slf4jVersion>1.7.36</slf4jVersion>
 
     <antVersion>1.10.12</antVersion>
