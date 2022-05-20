@@ -172,9 +172,9 @@
     <skipSurefireReport>true</skipSurefireReport>
 
     <!-- Used by Integration tests -->
-    <compilerPluginVersion>3.9.0</compilerPluginVersion>
     <findsecbugsVersion>1.10.1</findsecbugsVersion>
     <jxrPluginVersion>3.0.0</jxrPluginVersion>
+    <compilerPluginVersion>3.10.1</compilerPluginVersion>
     <mavenSurefireVersion>3.0.0-M6</mavenSurefireVersion>
     <jakartaeeApiVersion>8.0.0</jakartaeeApiVersion>
     <servletApiVersion>4.0.4</servletApiVersion>
