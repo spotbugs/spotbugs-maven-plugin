@@ -284,6 +284,32 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     /**
      * <p>
+     * File name for include filter files. Only bugs in matching the filters are reported.
+     * </p>
+     *
+     * <p>
+     * Potential values are a filesystem path, a URL, or a classpath resource.
+     * </p>
+     *
+     * <p>
+     * This is an alternative to <code>&lt;includeFilterFile&gt;</code> which allows multiple
+     * files to be specified as separate elements in a pom.
+     * </p>
+     *
+     * <p>
+     * This parameter is resolved as resource, URL, then file. If successfully
+     * resolved, the contents of the configuration is copied into the
+     * <code>${project.build.directory}</code>
+     * directory before being passed to Spotbugs as a filter file.
+     * </p>
+     *
+     * @since 4.7.0.1-SNAPSHOT
+     */
+    @Parameter(property = "spotbugs.includeFilterFiles")
+    List includeFilterFiles
+
+    /**
+     * <p>
      * File name of the exclude filter. Bugs matching the filters are not reported.
      * </p>
      *
@@ -908,6 +934,16 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             String[] includefilters = includeFilterFile.split(SpotBugsInfo.COMMA)
 
             includefilters.each { includefilter ->
+                args << "-include"
+                args << resourceHelper.getResourceFile(includefilter.trim())
+            }
+
+        }
+
+        if (includeFilterFiles) {
+            log.debug("  Adding Include Filter Files ")
+
+            includeFilterFiles.each { includefilter ->
                 args << "-include"
                 args << resourceHelper.getResourceFile(includefilter.trim())
             }
