@@ -332,6 +332,28 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     /**
      * <p>
+     * File name for exclude filter files. Bugs matching the filters are not reported.
+     * </p>
+     *
+     * <p>
+     * This is an alternative to <code>&lt;excludeFilterFile&gt;</code> which allows multiple
+     * files to be specified as separate elements in a pom.
+     * </p>
+     *
+     * <p>
+     * This parameter is resolved as resource, URL, then file. If successfully
+     * resolved, the contents of the configuration is copied into the
+     * <code>${project.build.directory}</code>
+     * directory before being passed to Spotbugs as a filter file.
+     * </p>
+     *
+     * @since 4.7.0.1-SNAPSHOT
+     */
+    @Parameter(property = "spotbugs.excludeFilterFiles")
+    List excludeFilterFiles
+
+    /**
+     * <p>
      * File names of the baseline files. Bugs found in the baseline files won't be reported.
      * </p>
      *
@@ -955,6 +977,16 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             String[] excludefilters = excludeFilterFile.split(SpotBugsInfo.COMMA)
 
             excludefilters.each { excludeFilter ->
+                args << "-exclude"
+                args << resourceHelper.getResourceFile(excludeFilter.trim())
+            }
+
+        }
+
+        if (excludeFilterFiles) {
+            log.debug("  Adding Exclude Filter Files ")
+
+            excludeFilterFiles.each { excludeFilter ->
                 args << "-exclude"
                 args << resourceHelper.getResourceFile(excludeFilter.trim())
             }
