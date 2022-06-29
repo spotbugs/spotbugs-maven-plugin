@@ -129,6 +129,7 @@
 
     <antVersion>1.10.12</antVersion>
     <groovyVersion>4.0.3</groovyVersion>
+    <groovy3Version>3.0.11</groovy3Version>
     <javaparserVersion>3.24.2</javaparserVersion>
 
     <doxiaVersion>1.11.1</doxiaVersion>
@@ -822,17 +823,24 @@
             </executions>
             <dependencies>
               <dependency>
-                <groupId>org.apache.groovy</groupId>
-                <artifactId>groovy-all</artifactId>
-                <version>${groovyVersion}</version>
-                <type>pom</type>
-                <exclusions>
-                    <!-- See 'addendum for 3.0.4 https://groovy-lang.org/releasenotes/groovy-3.0.html -->
-                    <exclusion>
-                        <groupId>org.apache.groovy</groupId>
-                        <artifactId>groovy-testng</artifactId>
-                    </exclusion>
-                </exclusions>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy</artifactId>
+                <version>${groovy3.version}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-json</artifactId>
+                <version>${groovy3.version}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-nio</artifactId>
+                <version>${groovy3.version}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-xml</artifactId>
+                <version>${groovy3.version}</version>
               </dependency>
             </dependencies>
           </plugin>
