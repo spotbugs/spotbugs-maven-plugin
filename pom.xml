@@ -194,6 +194,18 @@
     <lang3.version>3.12.0</lang3.version>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.groovy</groupId>
+        <artifactId>groovy-bom</artifactId>
+        <version>${groovyVersion}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
 
     <!-- Spotbugs -->
@@ -231,13 +243,11 @@
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy</artifactId>
-      <version>${groovyVersion}</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-ant</artifactId>
-      <version>${groovyVersion}</version>
       <exclusions>
         <exclusion>
           <groupId>org.apache.ant</groupId>
@@ -253,33 +263,28 @@
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-dateutil</artifactId>
-      <version>${groovyVersion}</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-docgenerator</artifactId>
-      <version>${groovyVersion}</version>
       <scope>runtime</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-json</artifactId>
-      <version>${groovyVersion}</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-templates</artifactId>
-      <version>${groovyVersion}</version>
       <scope>runtime</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-xml</artifactId>
-      <version>${groovyVersion}</version>
     </dependency>
 
     <!-- Maven -->
