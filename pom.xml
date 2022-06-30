@@ -822,6 +822,7 @@
               </execution>
             </executions>
             <dependencies>
+              <!-- Invoker is still using groovy 3 -->
               <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy</artifactId>
