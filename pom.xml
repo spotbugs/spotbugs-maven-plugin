@@ -117,18 +117,19 @@
     <projectVersion>${project.version}</projectVersion>
 
     <!-- Override spotbugs to this version from base-parent -->
-    <spotbugs.version>4.7.0</spotbugs.version>
+    <spotbugs.version>4.7.1</spotbugs.version>
 
     <!-- Groovy doesn't like simple '8' for java 8 -->
     <java.version>1.8</java.version>
 
     <junitVersion>5.8.2</junitVersion>
-    <spotbugsVersion>4.7.0</spotbugsVersion>
-    <spotbugsTag>4.7.0</spotbugsTag>
+    <spotbugsVersion>4.7.1</spotbugsVersion>
+    <spotbugsTag>4.7.1</spotbugsTag>
     <slf4jVersion>1.7.36</slf4jVersion>
 
     <antVersion>1.10.12</antVersion>
     <groovyVersion>4.0.3</groovyVersion>
+    <groovy3Version>3.0.11</groovy3Version>
     <javaparserVersion>3.24.2</javaparserVersion>
 
     <doxiaVersion>1.11.1</doxiaVersion>
@@ -151,7 +152,7 @@
     <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
     <gmavenPluginVersion>1.13.1</gmavenPluginVersion>
     <infoReportsPluginVersion>3.3.0</infoReportsPluginVersion>
-    <invokerPluginVersion>3.2.2</invokerPluginVersion>
+    <invokerPluginVersion>3.3.0</invokerPluginVersion>
     <javadocPluginVersion>3.4.0</javadocPluginVersion>
     <pluginPluginVersion>3.6.4</pluginPluginVersion>
     <scmPluginVersion>1.13.0</scmPluginVersion>
@@ -194,6 +195,18 @@
     <lang3.version>3.12.0</lang3.version>
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.groovy</groupId>
+        <artifactId>groovy-bom</artifactId>
+        <version>${groovyVersion}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
 
     <!-- Spotbugs -->
@@ -231,13 +244,11 @@
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy</artifactId>
-      <version>${groovyVersion}</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-ant</artifactId>
-      <version>${groovyVersion}</version>
       <exclusions>
         <exclusion>
           <groupId>org.apache.ant</groupId>
@@ -253,33 +264,28 @@
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-dateutil</artifactId>
-      <version>${groovyVersion}</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-docgenerator</artifactId>
-      <version>${groovyVersion}</version>
       <scope>runtime</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-json</artifactId>
-      <version>${groovyVersion}</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-templates</artifactId>
-      <version>${groovyVersion}</version>
       <scope>runtime</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-xml</artifactId>
-      <version>${groovyVersion}</version>
     </dependency>
 
     <!-- Maven -->
@@ -793,6 +799,7 @@
                     <goal>install</goal>
                   </goals>
                   <settingsFile>${project.basedir}/src/it/settings.xml</settingsFile>
+                  <streamLogsOnFailures>true</streamLogsOnFailures>
                 </configuration>
               </execution>
               <execution>
@@ -810,22 +817,31 @@
                   <postBuildHookScript>verify</postBuildHookScript>
                   <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
                   <settingsFile>${project.basedir}/src/it/settings.xml</settingsFile>
+                  <streamLogsOnFailures>true</streamLogsOnFailures>
                 </configuration>
               </execution>
             </executions>
             <dependencies>
+              <!-- Invoker is still using groovy 3 -->
               <dependency>
-                <groupId>org.apache.groovy</groupId>
-                <artifactId>groovy-all</artifactId>
-                <version>${groovyVersion}</version>
-                <type>pom</type>
-                <exclusions>
-                    <!-- See 'addendum for 3.0.4 https://groovy-lang.org/releasenotes/groovy-3.0.html -->
-                    <exclusion>
-                        <groupId>org.apache.groovy</groupId>
-                        <artifactId>groovy-testng</artifactId>
-                    </exclusion>
-                </exclusions>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy</artifactId>
+                <version>${groovy3Version}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-json</artifactId>
+                <version>${groovy3Version}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-nio</artifactId>
+                <version>${groovy3Version}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-xml</artifactId>
+                <version>${groovy3Version}</version>
               </dependency>
             </dependencies>
           </plugin>
