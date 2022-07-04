@@ -34,8 +34,7 @@
         <artifactId>spotbugs-maven-plugin</artifactId>
         <configuration>
           <systemPropertyVariables>
-            <findsecbugs.taint.taintedsystemvariables>true
-            </findsecbugs.taint.taintedsystemvariables>
+            <findsecbugs.taint.taintedsystemvariables>true</findsecbugs.taint.taintedsystemvariables>
           </systemPropertyVariables>
           <spotbugsXmlOutput>true</spotbugsXmlOutput>
           <xmlOutput>true</xmlOutput>
