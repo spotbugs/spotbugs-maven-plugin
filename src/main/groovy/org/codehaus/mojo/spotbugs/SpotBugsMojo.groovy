@@ -303,7 +303,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * directory before being passed to Spotbugs as a filter file.
      * </p>
      *
-     * @since 4.7.0.1-SNAPSHOT
+     * @since 4.7.1.0
      */
     @Parameter(property = "spotbugs.includeFilterFiles")
     List includeFilterFiles
@@ -347,7 +347,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * directory before being passed to Spotbugs as a filter file.
      * </p>
      *
-     * @since 4.7.0.1-SNAPSHOT
+     * @since 4.7.1.0
      */
     @Parameter(property = "spotbugs.excludeFilterFiles")
     List excludeFilterFiles
@@ -396,7 +396,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * directory before being passed to Spotbugs as a filter file.
      * </p>
      *
-     * @since 4.7.0.1-SNAPSHOT
+     * @since 4.7.1.0
      */
     @Parameter(property = "spotbugs.excludeBugsFiles")
     List excludeBugsFiles
