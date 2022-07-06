@@ -11,7 +11,7 @@
 
   <groupId>com.github.spotbugs</groupId>
   <artifactId>spotbugs-maven-plugin</artifactId>
-  <version>4.7.1.0-SNAPSHOT</version>
+  <version>4.7.1.0</version>
   <packaging>maven-plugin</packaging>
 
   <name>SpotBugs Maven Plugin</name>
@@ -94,7 +94,7 @@
     <connection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</developerConnection>
     <url>https://github.com/spotbugs/spotbugs-maven-plugin</url>
-    <tag>HEAD</tag>
+    <tag>spotbugs-maven-plugin-4.7.1.0</tag>
   </scm>
   <issueManagement>
     <system>Github</system>
