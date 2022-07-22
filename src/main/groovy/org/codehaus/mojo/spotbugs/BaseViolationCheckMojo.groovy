@@ -479,15 +479,10 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     @Override
     void execute() {
         Locale locale = Locale.getDefault()
-        List sourceFiles
 
         log.debug("Executing spotbugs:check")
 
-        if (this.classFilesDirectory.exists() && this.classFilesDirectory.isDirectory()) {
-            sourceFiles = FileUtils.getFiles(classFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null)
-        }
-
-        if (!skip && sourceFiles) {
+        if (!skip && doSourceFilesExist()) {
 
             // this goes
 
@@ -553,6 +548,20 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         else {
             log.debug("Nothing for SpotBugs to do here.")
         }
+    }
+
+    private boolean doSourceFilesExist() {
+        List sourceFiles = new ArrayList()
+
+        if (this.classFilesDirectory.exists() && this.classFilesDirectory.isDirectory()) {
+            sourceFiles.addAll(FileUtils.getFiles(classFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null))
+        }
+
+        if (this.includeTests && this.testClassFilesDirectory.exists() && this.testClassFilesDirectory.isDirectory()) {
+            sourceFiles.addAll(FileUtils.getFiles(testClassFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null))
+        }
+
+        !sourceFiles.isEmpty()
     }
 
     private void printBugs(total, bugs) {
