@@ -711,7 +711,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * Callback from Maven Site Plugin.
      *
-     * @param locale he wanted locale to generate the report, could be null.
+     * @param locale the wanted locale to generate the report, could be null.
      *
      * @see org.apache.maven.reporting.MavenReport #executeReport(java.util.Locale)
      */
@@ -719,66 +719,57 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     void executeReport(Locale locale) {
 
         log.debug("****** SpotBugsMojo executeReport *******")
-        executeCheck(locale)
+        executeCheck()
 
-        if (!skip && canGenerateReport()) {
+        if (skip || !canGenerateReport()) {
+            log.info("cannot generate report")
+            return
+        }
 
-            if (log.isDebugEnabled()) {
-                log.debug("Locale is ${locale.getLanguage()}")
-                log.debug("****** SpotBugsMojo executeReport *******")
-                log.debug("report Output Directory is " + getReportOutputDirectory())
-                log.debug("Output Directory is " + outputDirectory)
-                log.debug("Classes Directory is " + classFilesDirectory)
-                log.debug("  Plugin Artifacts to be added ->" + pluginArtifacts.toString())
-            }
+        if (log.isDebugEnabled()) {
+            log.debug("Locale is ${locale.getLanguage()}")
+            log.debug("****** SpotBugsMojo executeReport *******")
+            log.debug("report Output Directory is " + getReportOutputDirectory())
+            log.debug("Output Directory is " + outputDirectory)
+            log.debug("Classes Directory is " + classFilesDirectory)
+            log.debug("  Plugin Artifacts to be added ->" + pluginArtifacts.toString())
+        }
 
-            generateXDoc(locale)
+        generateXDoc(locale)
 
-            if (!outputDirectory.exists()) {
-                if (!outputDirectory.mkdirs()) {
-                    throw new MojoExecutionException("Cannot create html output directory")
+        if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
+            throw new MojoExecutionException("Cannot create html output directory")
+        }
+
+        if (outputSpotbugsFile != null && outputSpotbugsFile.exists()) {
+
+            if (skipEmptyReport && bugCount == 0) {
+                log.info("Skipping Generation Spotbugs HTML since there are not any bugs")
+            } else {
+                log.debug("Generating Spotbugs HTML")
+
+                SpotbugsReportGenerator generator = new SpotbugsReportGenerator(getSink(), getBundle(locale), this.project.getBasedir(), siteTool)
+
+                boolean isJxrPluginEnabled = isJxrPluginEnabled()
+
+                generator.setIsJXRReportEnabled(isJxrPluginEnabled)
+
+                if (isJxrPluginEnabled) {
+                    generator.setCompileSourceRoots(this.compileSourceRoots)
+                    generator.setTestSourceRoots(this.testSourceRoots)
+                    generator.setXrefLocation(this.xrefLocation)
+                    generator.setXrefTestLocation(this.xrefTestLocation)
+                    generator.setIncludeTests(this.includeTests)
                 }
+
+                generator.setLog(log)
+                generator.threshold = threshold
+                generator.effort = effort
+                generator.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
+                generator.setOutputDirectory(new File(outputDirectory.getAbsolutePath()))
+                generator.generateReport()
+                log.debug("xmlOutput is ${xmlOutput}")
             }
-
-            if (outputSpotbugsFile != null && outputSpotbugsFile.exists()) {
-
-                if (skipEmptyReport && bugCount == 0) {
-                    log.info("Skipping Generation Spotbugs HTML since there are not any bugs")
-                } else {
-                    log.debug("Generating Spotbugs HTML")
-
-                    SpotbugsReportGenerator generator = new SpotbugsReportGenerator(getSink(), getBundle(locale), this.project.getBasedir(), siteTool)
-
-                    boolean isJxrPluginEnabled = isJxrPluginEnabled()
-
-                    generator.setIsJXRReportEnabled(isJxrPluginEnabled)
-
-                    if (isJxrPluginEnabled) {
-                        generator.setCompileSourceRoots(this.compileSourceRoots)
-                        generator.setTestSourceRoots(this.testSourceRoots)
-                        generator.setXrefLocation(this.xrefLocation)
-                        generator.setXrefTestLocation(this.xrefTestLocation)
-                        generator.setIncludeTests(this.includeTests)
-                    }
-
-                    generator.setLog(log)
-
-                    generator.threshold = threshold
-
-                    generator.effort = effort
-
-                    generator.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
-
-                    generator.setOutputDirectory(new File(outputDirectory.getAbsolutePath()))
-
-                    generator.generateReport()
-
-                    log.debug("xmlOutput is ${xmlOutput}")
-
-                }
-            }
-        } else {
-            log.info("cannot generate report");
         }
     }
 
@@ -787,23 +778,21 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         log.debug("****** SpotBugsMojo execute *******")
 
         if (!skip) {
-            Locale locale = Locale.getDefault()
-            executeCheck(locale)
+            executeCheck()
             if (canGenerateReport()) {
+                Locale locale = Locale.getDefault()
                 generateXDoc(locale)
             }
         }
     }
 
-    private void executeCheck(Locale locale) {
+    private void executeCheck() {
         log.debug("****** SpotBugsMojo executeCheck *******")
 
         log.debug("Generating Spotbugs XML")
 
-        if (!spotbugsXmlOutputDirectory.exists()) {
-            if (!spotbugsXmlOutputDirectory.mkdirs()) {
-                throw new MojoExecutionException("Cannot create xml output directory")
-            }
+        if (!spotbugsXmlOutputDirectory.exists() && !spotbugsXmlOutputDirectory.mkdirs()) {
+            throw new MojoExecutionException("Cannot create xml output directory")
         }
     }
 
@@ -817,10 +806,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             if (xmlOutput) {
                 log.debug("  Using the xdoc format")
 
-                if (!xmlOutputDirectory.exists()) {
-                    if (!xmlOutputDirectory.mkdirs()) {
-                        throw new MojoExecutionException("Cannot create xdoc output directory")
-                    }
+                if (!xmlOutputDirectory.exists() && !xmlOutputDirectory.mkdirs()) {
+                    throw new MojoExecutionException("Cannot create xdoc output directory")
                 }
 
                 XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
@@ -1128,8 +1115,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /**
      * Set up and run the Spotbugs engine.
      *
-     * @param locale
-     *            the locale the report should be generated for
+     * @param outputFile
+     *            the outputFile
      *
      */
     private void executeSpotbugs(File outputFile) {
@@ -1381,28 +1368,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     public void setReportOutputDirectory(File reportOutputDirectory) {
         super.setReportOutputDirectory(reportOutputDirectory)
         this.outputDirectory = reportOutputDirectory
-    }
-
-    /**
-     * Collects the java sources from the source roots.
-     *
-     * @return A list containing the java sources or an empty list if no java sources are found.
-     *
-     */
-    protected List getJavaSources(Locale locale) {
-        List sourceFiles = new ArrayList()
-
-        if (classFilesDirectory.exists() && classFilesDirectory.isDirectory()) {
-            List files = FileUtils.getFiles(classFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null)
-            sourceFiles.addAll(files)
-        }
-
-        if (testClassFilesDirectory.exists() && testClassFilesDirectory.isDirectory() && includeTests) {
-            List files = FileUtils.getFiles(testClassFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null)
-            sourceFiles.addAll(files)
-        }
-
-        return sourceFiles
     }
 
 }

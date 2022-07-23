@@ -478,8 +478,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     @Override
     void execute() {
-        Locale locale = Locale.getDefault()
-
         log.debug("Executing spotbugs:check")
 
         if (!skip && doSourceFilesExist()) {
