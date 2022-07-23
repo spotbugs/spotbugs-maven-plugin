@@ -544,8 +544,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
                     throw new MojoExecutionException("failed with ${bugCountAboveThreshold} bugs and ${errorCount} errors ")
                 }
             }
-        }
-        else {
+        } else {
             log.debug("Nothing for SpotBugs to do here.")
         }
     }
