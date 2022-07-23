@@ -721,64 +721,57 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         log.debug("****** SpotBugsMojo executeReport *******")
         executeCheck(locale)
 
-        if (!skip && canGenerateReport()) {
+        if (skip || !canGenerateReport()) {
+            log.info("cannot generate report")
+            return
+        }
 
-            if (log.isDebugEnabled()) {
-                log.debug("Locale is ${locale.getLanguage()}")
-                log.debug("****** SpotBugsMojo executeReport *******")
-                log.debug("report Output Directory is " + getReportOutputDirectory())
-                log.debug("Output Directory is " + outputDirectory)
-                log.debug("Classes Directory is " + classFilesDirectory)
-                log.debug("  Plugin Artifacts to be added ->" + pluginArtifacts.toString())
+        if (log.isDebugEnabled()) {
+            log.debug("Locale is ${locale.getLanguage()}")
+            log.debug("****** SpotBugsMojo executeReport *******")
+            log.debug("report Output Directory is " + getReportOutputDirectory())
+            log.debug("Output Directory is " + outputDirectory)
+            log.debug("Classes Directory is " + classFilesDirectory)
+            log.debug("  Plugin Artifacts to be added ->" + pluginArtifacts.toString())
+        }
+
+        generateXDoc(locale)
+
+        if (!outputDirectory.exists()) {
+            if (!outputDirectory.mkdirs()) {
+                throw new MojoExecutionException("Cannot create html output directory")
             }
+        }
 
-            generateXDoc(locale)
+        if (outputSpotbugsFile != null && outputSpotbugsFile.exists()) {
 
-            if (!outputDirectory.exists()) {
-                if (!outputDirectory.mkdirs()) {
-                    throw new MojoExecutionException("Cannot create html output directory")
+            if (skipEmptyReport && bugCount == 0) {
+                log.info("Skipping Generation Spotbugs HTML since there are not any bugs")
+            } else {
+                log.debug("Generating Spotbugs HTML")
+
+                SpotbugsReportGenerator generator = new SpotbugsReportGenerator(getSink(), getBundle(locale), this.project.getBasedir(), siteTool)
+
+                boolean isJxrPluginEnabled = isJxrPluginEnabled()
+
+                generator.setIsJXRReportEnabled(isJxrPluginEnabled)
+
+                if (isJxrPluginEnabled) {
+                    generator.setCompileSourceRoots(this.compileSourceRoots)
+                    generator.setTestSourceRoots(this.testSourceRoots)
+                    generator.setXrefLocation(this.xrefLocation)
+                    generator.setXrefTestLocation(this.xrefTestLocation)
+                    generator.setIncludeTests(this.includeTests)
                 }
+
+                generator.setLog(log)
+                generator.threshold = threshold
+                generator.effort = effort
+                generator.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
+                generator.setOutputDirectory(new File(outputDirectory.getAbsolutePath()))
+                generator.generateReport()
+                log.debug("xmlOutput is ${xmlOutput}")
             }
-
-            if (outputSpotbugsFile != null && outputSpotbugsFile.exists()) {
-
-                if (skipEmptyReport && bugCount == 0) {
-                    log.info("Skipping Generation Spotbugs HTML since there are not any bugs")
-                } else {
-                    log.debug("Generating Spotbugs HTML")
-
-                    SpotbugsReportGenerator generator = new SpotbugsReportGenerator(getSink(), getBundle(locale), this.project.getBasedir(), siteTool)
-
-                    boolean isJxrPluginEnabled = isJxrPluginEnabled()
-
-                    generator.setIsJXRReportEnabled(isJxrPluginEnabled)
-
-                    if (isJxrPluginEnabled) {
-                        generator.setCompileSourceRoots(this.compileSourceRoots)
-                        generator.setTestSourceRoots(this.testSourceRoots)
-                        generator.setXrefLocation(this.xrefLocation)
-                        generator.setXrefTestLocation(this.xrefTestLocation)
-                        generator.setIncludeTests(this.includeTests)
-                    }
-
-                    generator.setLog(log)
-
-                    generator.threshold = threshold
-
-                    generator.effort = effort
-
-                    generator.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
-
-                    generator.setOutputDirectory(new File(outputDirectory.getAbsolutePath()))
-
-                    generator.generateReport()
-
-                    log.debug("xmlOutput is ${xmlOutput}")
-
-                }
-            }
-        } else {
-            log.info("cannot generate report");
         }
     }
 
