@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Disabled;
  *
  * @author user@example.com (John Doe)
  */
-public class FooTest {
+class FooTest {
 
     @Test
     void thisAlwaysPasses() {
@@ -18,7 +18,7 @@ public class FooTest {
 
     @Disabled
     @Test
-    public void thisIsIgnored() {
+    void thisIsIgnored() {
         // Do nothing
     }
 }
