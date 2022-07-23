@@ -175,7 +175,7 @@ class XDocsReporter {
                     log.debug("classStatsValue is ${classStatsValue}")
                     log.debug("classStatsBugCount is ${classStatsBugCount}")
 
-                    if ( Integer.parseInt(classStatsBugCount) > 0 ) {
+                    if (Integer.parseInt(classStatsBugCount) > 0) {
                         bugClasses << classStatsValue
                     }
                 }
@@ -185,7 +185,7 @@ class XDocsReporter {
                     file(classname: bugClass) {
                         spotbugsResults.BugInstance.each() {bugInstance ->
 
-                            if ( bugInstance.Class.find{ it.@primary == "true" }.@classname.text() == bugClass ) {
+                            if (bugInstance.Class.find{ it.@primary == "true" }.@classname.text() == bugClass) {
 
                                 def type = bugInstance.@type.text()
                                 def category = bugInstance.@category.text()
@@ -218,14 +218,14 @@ class XDocsReporter {
                     log.debug("Printing Source Roots")
 
                     if ( !compileSourceRoots.isEmpty() ) {
-                        compileSourceRoots.each() {srcDir ->
+                        compileSourceRoots.each() { srcDir ->
                             log.debug("SrcDir is ${srcDir}")
                             SrcDir(srcDir)
                         }
                     }
 
                     if (!testSourceRoots.isEmpty()) {
-                        testSourceRoots.each() {srcDir ->
+                        testSourceRoots.each() { srcDir ->
                             log.debug("SrcDir is ${srcDir}")
                             SrcDir(srcDir)
                         }
