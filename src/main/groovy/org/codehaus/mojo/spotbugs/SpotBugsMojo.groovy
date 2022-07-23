@@ -1376,26 +1376,4 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         this.outputDirectory = reportOutputDirectory
     }
 
-    /**
-     * Collects the java sources from the source roots.
-     *
-     * @return A list containing the java sources or an empty list if no java sources are found.
-     *
-     */
-    protected List getJavaSources(Locale locale) {
-        List sourceFiles = new ArrayList()
-
-        if (classFilesDirectory.exists() && classFilesDirectory.isDirectory()) {
-            List files = FileUtils.getFiles(classFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null)
-            sourceFiles.addAll(files)
-        }
-
-        if (testClassFilesDirectory.exists() && testClassFilesDirectory.isDirectory() && includeTests) {
-            List files = FileUtils.getFiles(testClassFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null)
-            sourceFiles.addAll(files)
-        }
-
-        return sourceFiles
-    }
-
 }
