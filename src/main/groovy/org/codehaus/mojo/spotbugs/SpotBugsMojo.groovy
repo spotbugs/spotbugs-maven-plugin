@@ -786,8 +786,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     public void execute() {
         log.debug("****** SpotBugsMojo execute *******")
 
-        Locale locale = Locale.getDefault()
         if (!skip) {
+            Locale locale = Locale.getDefault()
             executeCheck(locale)
             if (canGenerateReport()) {
                 generateXDoc(locale)
@@ -1300,7 +1300,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             // With -Dspotbugs.sarifFullPath=true
             // The location uri will be replace by path relative to the root of project
             // SomeFile.java => src/main/java/SomeFile.java
-            //This change is required for some tool including Github code scanning API
+            // This change is required for some tool including Github code scanning API
             if (sarifFullPath) {
 
                 def indexer = new SourceFileIndexer()
