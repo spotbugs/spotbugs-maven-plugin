@@ -627,7 +627,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Override
     boolean canGenerateReport() {
 
-        def canGenerate = false
+        boolean canGenerate
         log.debug("****** SpotBugsMojo canGenerateReport *******")
 
         if (!skip && classFilesDirectory.exists()) {
@@ -876,7 +876,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      */
     protected boolean isJxrPluginEnabled() {
-        boolean isEnabled = false
+        boolean isEnabled
 
         if (xrefLocation.exists()) {
             isEnabled = true
