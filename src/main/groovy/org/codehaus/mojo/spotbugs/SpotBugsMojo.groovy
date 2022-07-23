@@ -1135,7 +1135,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     private void executeSpotbugs(File outputFile) {
 
         log.debug("****** SpotBugsMojo executeSpotbugs *******")
-        long startTime, duration
+        long startTime
+        long duration
 
         File xmlTempFile = new File("${project.build.directory}/spotbugsTemp.xml")
         File sarifTempFile = new File("${project.build.directory}/spotbugsTempSarif.json")
@@ -1143,8 +1144,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (xmlOutput || !sarifOutput) {
             forceFileCreation(xmlTempFile)
-        }
-        else {
+        } else {
             forceFileCreation(sarifTempFile)
         }
 
