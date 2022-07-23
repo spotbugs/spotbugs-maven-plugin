@@ -737,10 +737,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         generateXDoc(locale)
 
-        if (!outputDirectory.exists()) {
-            if (!outputDirectory.mkdirs()) {
-                throw new MojoExecutionException("Cannot create html output directory")
-            }
+        if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
+            throw new MojoExecutionException("Cannot create html output directory")
         }
 
         if (outputSpotbugsFile != null && outputSpotbugsFile.exists()) {
@@ -793,10 +791,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         log.debug("Generating Spotbugs XML")
 
-        if (!spotbugsXmlOutputDirectory.exists()) {
-            if (!spotbugsXmlOutputDirectory.mkdirs()) {
-                throw new MojoExecutionException("Cannot create xml output directory")
-            }
+        if (!spotbugsXmlOutputDirectory.exists() && !spotbugsXmlOutputDirectory.mkdirs()) {
+            throw new MojoExecutionException("Cannot create xml output directory")
         }
     }
 
@@ -810,10 +806,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             if (xmlOutput) {
                 log.debug("  Using the xdoc format")
 
-                if (!xmlOutputDirectory.exists()) {
-                    if (!xmlOutputDirectory.mkdirs()) {
-                        throw new MojoExecutionException("Cannot create xdoc output directory")
-                    }
+                if (!xmlOutputDirectory.exists() && !xmlOutputDirectory.mkdirs()) {
+                    throw new MojoExecutionException("Cannot create xdoc output directory")
                 }
 
                 XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
