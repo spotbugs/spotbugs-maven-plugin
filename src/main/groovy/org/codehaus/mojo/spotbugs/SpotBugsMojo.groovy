@@ -1115,8 +1115,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /**
      * Set up and run the Spotbugs engine.
      *
-     * @param locale
-     *            the locale the report should be generated for
+     * @param outputFile
+     *            the outputFile
      *
      */
     private void executeSpotbugs(File outputFile) {
