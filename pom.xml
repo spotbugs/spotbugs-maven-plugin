@@ -31,6 +31,22 @@
   </organization>
   <developers>
     <developer>
+      <id>jlandis</id>
+      <name>Jeremy Landis</name>
+      <email>jeremylandis@hotmail.com</email>
+      <url>https://www.linkedin.com/in/jeremy-landis-548b2719</url>
+      <organization>hazendaz</organization>
+      <organizationUrl>https://github.com/hazendaz</organizationUrl>
+      <roles>
+        <role>Architect</role>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+      <properties>
+        <picUrl>https://avatars0.githubusercontent.com/u/975267</picUrl>
+      </properties>
+    </developer>
+    <developer>
       <id>cr</id>
       <name>Cyrill Ruettimann</name>
       <email>mypublicaddress@mac.com</email>
@@ -53,6 +69,20 @@
     </developer>
   </developers>
   <contributors>
+    <contributor>
+      <name>Jeremy Landis</name>
+      <email>jeremylandis@hotmail.com</email>
+      <url>https://www.linkedin.com/in/jeremy-landis-548b2719</url>
+      <organization>hazendaz</organization>
+      <organizationUrl>https://github.com/hazendaz</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+      <properties>
+        <picUrl>https://avatars0.githubusercontent.com/u/975267</picUrl>
+      </properties>
+    </contributor>
     <contributor>
       <name>Olivier Lamy</name>
       <email>olamy@apache.org</email>
