@@ -48,22 +48,25 @@ class SourceFileIndexer {
         String basePath = normalizePath(session.getExecutionRootDirectory())
 
         def allSourceFiles = new ArrayList<>()
-        //Resource
-        for(Resource r in project.getResources()) {
+
+        // Resource
+        for (Resource r in project.getResources()) {
             scanDirectory(new File(r.directory), allSourceFiles, basePath)
         }
-        for(Resource r in project.getTestResources()) {
+
+        for (Resource r in project.getTestResources()) {
             scanDirectory(new File(r.directory), allSourceFiles, basePath)
         }
-        //Source files
-        for(String sourceRoot in project.getCompileSourceRoots()) {
+
+        // Source files
+        for (String sourceRoot in project.getCompileSourceRoots()) {
             scanDirectory(new File(sourceRoot), allSourceFiles, basePath)
         }
-        for(String sourceRoot in project.getTestCompileSourceRoots()) {
+        for (String sourceRoot in project.getTestCompileSourceRoots()) {
             scanDirectory(new File(sourceRoot), allSourceFiles, basePath)
         }
 
-        for(String sourceRoot in project.getScriptSourceRoots()) {
+        for (String sourceRoot in project.getScriptSourceRoots()) {
             scanDirectory(new File(sourceRoot), allSourceFiles, basePath)
         }
 
