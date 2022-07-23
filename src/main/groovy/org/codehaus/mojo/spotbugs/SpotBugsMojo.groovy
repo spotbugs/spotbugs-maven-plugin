@@ -711,7 +711,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * Callback from Maven Site Plugin.
      *
-     * @param locale he wanted locale to generate the report, could be null.
+     * @param locale the wanted locale to generate the report, could be null.
      *
      * @see org.apache.maven.reporting.MavenReport #executeReport(java.util.Locale)
      */
@@ -719,7 +719,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     void executeReport(Locale locale) {
 
         log.debug("****** SpotBugsMojo executeReport *******")
-        executeCheck(locale)
+        executeCheck()
 
         if (skip || !canGenerateReport()) {
             log.info("cannot generate report")
