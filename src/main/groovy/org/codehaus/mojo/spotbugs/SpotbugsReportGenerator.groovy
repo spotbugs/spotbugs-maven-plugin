@@ -645,25 +645,27 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             def classStatsValue = classStats.'@class'.text()
             def classStatsBugCount = classStats.'@bugs'.text()
 
-            if (Integer.parseInt(classStatsBugCount) > 0) {
-                sink.tableRow()
-
-                // class name
-                sink.tableCell()
-                sink.link("#" + classStatsValue)
-                sink.text(classStatsValue)
-                sink.link_()
-                sink.tableCell_()
-
-                // class bug total count
-                sink.tableCell()
-                sink.text(classStatsBugCount)
-                sink.tableCell_()
-
-                sink.tableRow_()
-
-                bugClasses << classStatsValue
+            if (Integer.parseInt(classStatsBugCount) == 0) {
+                return
             }
+
+            sink.tableRow()
+
+            // class name
+            sink.tableCell()
+            sink.link("#" + classStatsValue)
+            sink.text(classStatsValue)
+            sink.link_()
+            sink.tableCell_()
+
+            // class bug total count
+            sink.tableCell()
+            sink.text(classStatsBugCount)
+            sink.tableCell_()
+
+            sink.tableRow_()
+
+            bugClasses << classStatsValue
         }
 
         sink.table_()
