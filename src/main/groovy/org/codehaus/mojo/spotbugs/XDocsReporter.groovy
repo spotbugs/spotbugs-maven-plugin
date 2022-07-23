@@ -31,58 +31,64 @@ class XDocsReporter {
 
     /**
      * The key to get the value if the line number is not available.
-     *
      */
     static final String NOLINE_KEY = "report.spotbugs.noline"
 
     /**
      * The bundle to get the messages from.
-     *
      */
     ResourceBundle bundle
 
     /**
      * The logger to write logs to.
-     *
      */
     Log log
 
     /**
      * The threshold of bugs severity.
-     *
      */
     String threshold
 
     /**
      * The used effort for searching bugs.
-     *
      */
     String effort
 
     /**
      * The output Writer stream.
-     *
      */
     Writer outputWriter
 
+    /**
+     * Spotbugs Results.
+     */
     GPathResult spotbugsResults
 
+    /**
+     * Bug Classes.
+     */
     List bugClasses
 
     /**
      * The directories containing the sources to be compiled.
-     *
      */
     List compileSourceRoots
 
+    /**
+     * The directories containing the test sources to be compiled.
+     */
     List testSourceRoots
 
+    /**
+     * The output encoding.
+     */
     String outputEncoding
 
     /**
      * Default constructor.
      *
-     * @param bundle - The Resource Bundle to use
+     * @param bundle
+     *            The Resource Bundle to use
      */
     XDocsReporter(ResourceBundle bundle, Log log, String threshold, String effort, String outputEncoding) {
         assert bundle
@@ -111,7 +117,6 @@ class XDocsReporter {
      * @param thresholdValue
      *            The ThresholdValue integer to evaluate.
      * @return The string valueof the Threshold object.
-     *
      */
     protected String evaluateThresholdParameter(String thresholdValue) {
         String thresholdName
@@ -143,7 +148,6 @@ class XDocsReporter {
      * Gets the Spotbugs Version of the report.
      *
      * @return The Spotbugs Version used on the report.
-     *
      */
     protected String getSpotBugsVersion() {
         return edu.umd.cs.findbugs.Version.VERSION_STRING
@@ -234,4 +238,5 @@ class XDocsReporter {
         outputWriter.flush()
         outputWriter.close()
     }
+
 }
