@@ -448,22 +448,20 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         log.debug("xrefTestLocation is " + xrefTestLocation.getAbsolutePath())
 
         compileSourceRoots.each { compileSourceRoot ->
-            if (new File(compileSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
-                prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefLocation.getAbsolutePath())
-
-                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+            if (!new File(compileSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
                 return
             }
+            prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefLocation.getAbsolutePath())
+            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
         }
 
         if (includeTests && !prefix) {
             testSourceRoots.each { testSourceRoot ->
-                if (new File(testSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
-                    prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefTestLocation.getAbsolutePath())
-
-                    prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefTestLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+                if (!new File(testSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
                     return
                 }
+                prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefTestLocation.getAbsolutePath())
+                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefTestLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
             }
         }
 
