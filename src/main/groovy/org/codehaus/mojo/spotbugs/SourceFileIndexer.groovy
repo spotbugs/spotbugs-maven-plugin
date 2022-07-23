@@ -143,7 +143,8 @@ class SourceFileIndexer {
 
         }
 
-        return null // Not found
+        // Not found
+        return null
     }
 
 }

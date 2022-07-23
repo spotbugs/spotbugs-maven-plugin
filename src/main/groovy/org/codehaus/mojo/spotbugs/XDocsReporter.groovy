@@ -180,10 +180,10 @@ class XDocsReporter {
                     }
                 }
 
-                bugClasses.each() {bugClass ->
+                bugClasses.each() { bugClass ->
                     log.debug("finish bugClass is ${bugClass}")
                     file(classname: bugClass) {
-                        spotbugsResults.BugInstance.each() {bugInstance ->
+                        spotbugsResults.BugInstance.each() { bugInstance ->
 
                             if (bugInstance.Class.find{ it.@primary == "true" }.@classname.text() == bugClass) {
 
