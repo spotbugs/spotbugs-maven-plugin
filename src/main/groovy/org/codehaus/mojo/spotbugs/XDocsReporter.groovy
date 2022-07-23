@@ -233,6 +233,5 @@ class XDocsReporter {
         outputWriter << xmlBuilder.bind(xdoc)
         outputWriter.flush()
         outputWriter.close()
-
     }
 }

@@ -627,7 +627,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Override
     boolean canGenerateReport() {
 
-        def canGenerate = false
+        boolean canGenerate
         log.debug("****** SpotBugsMojo canGenerateReport *******")
 
         if (!skip && classFilesDirectory.exists()) {
@@ -786,8 +786,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     public void execute() {
         log.debug("****** SpotBugsMojo execute *******")
 
-        Locale locale = Locale.getDefault()
         if (!skip) {
+            Locale locale = Locale.getDefault()
             executeCheck(locale)
             if (canGenerateReport()) {
                 generateXDoc(locale)
@@ -876,7 +876,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      */
     protected boolean isJxrPluginEnabled() {
-        boolean isEnabled = false
+        boolean isEnabled
 
         if (xrefLocation.exists()) {
             isEnabled = true
@@ -1135,7 +1135,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     private void executeSpotbugs(File outputFile) {
 
         log.debug("****** SpotBugsMojo executeSpotbugs *******")
-        long startTime, duration
+        long startTime
+        long duration
 
         File xmlTempFile = new File("${project.build.directory}/spotbugsTemp.xml")
         File sarifTempFile = new File("${project.build.directory}/spotbugsTempSarif.json")
@@ -1143,8 +1144,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (xmlOutput || !sarifOutput) {
             forceFileCreation(xmlTempFile)
-        }
-        else {
+        } else {
             forceFileCreation(sarifTempFile)
         }
 
@@ -1300,7 +1300,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             // With -Dspotbugs.sarifFullPath=true
             // The location uri will be replace by path relative to the root of project
             // SomeFile.java => src/main/java/SomeFile.java
-            //This change is required for some tool including Github code scanning API
+            // This change is required for some tool including Github code scanning API
             if (sarifFullPath) {
 
                 def indexer = new SourceFileIndexer()
