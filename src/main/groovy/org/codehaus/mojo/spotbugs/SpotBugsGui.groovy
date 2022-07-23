@@ -201,12 +201,13 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
         ant.project.setProperty('basedir', spotbugsXmlOutputDirectory.getAbsolutePath())
         ant.project.setProperty('verbose', "true")
 
-        ant.java(classname: "edu.umd.cs.findbugs.LaunchAppropriateUI", fork: "true", failonerror: "true", clonevm: "true", maxmemory: "${maxHeap}m")
-        {
+        ant.java(classname: "edu.umd.cs.findbugs.LaunchAppropriateUI", fork: "true", failonerror: "true", clonevm: "true", maxmemory: "${maxHeap}m") {
 
             def effectiveEncoding = System.getProperty( "file.encoding", "UTF-8" )
 
-            if ( encoding ) { effectiveEncoding = encoding }
+            if ( encoding ) {
+                effectiveEncoding = encoding
+            }
 
             log.info("File Encoding is " + effectiveEncoding)
 
@@ -237,10 +238,9 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
                 arg(value: spotbugsXml)
             }
 
-            classpath()
-            {
+            classpath() {
 
-                pluginArtifacts.each() {pluginArtifact ->
+                pluginArtifacts.each() { pluginArtifact ->
                     if ( debug ) {
                         log.debug("  Trying to Add to pluginArtifact ->" + pluginArtifact.file.toString())
                     }

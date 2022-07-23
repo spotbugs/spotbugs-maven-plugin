@@ -80,8 +80,8 @@ trait SpotBugsPluginsTrait {
                     log.debug("  Processing Plugin: " + pluginFileName.toString())
 
                     urlPlugins += resourceHelper.getResourceFile(pluginFileName.toString()).absolutePath + ((pluginJar == pluginJars[pluginJars.size() - 1]) ? "" : File.pathSeparator)
-                } catch (MalformedURLException exception) {
-                    throw new MojoExecutionException("The addin plugin has an invalid URL")
+                } catch (MalformedURLException e) {
+                    throw new MojoExecutionException("The addin plugin has an invalid URL", e)
                 }
             }
         }

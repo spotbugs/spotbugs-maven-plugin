@@ -292,7 +292,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         log.debug("Finished searching for bugs!...")
         log.debug("sink is " + sink)
 
-        bugClasses.each() {bugClass ->
+        bugClasses.each() { bugClass ->
             log.debug("finish bugClass is ${bugClass}")
 
             printBug(bugClass)
@@ -367,12 +367,11 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         log.debug("printBug spotbugsResults is ${spotbugsResults}")
 
-        spotbugsResults.BugInstance.each() {bugInstance ->
-
+        spotbugsResults.BugInstance.each() { bugInstance ->
 
             log.debug("bugInstance --->  ${bugInstance}")
 
-            if ( bugInstance.Class[0].@classname.text() == bugClass ) {
+            if (bugInstance.Class[0].@classname.text() == bugClass) {
 
                 def type = bugInstance.@type.text()
                 def category = bugInstance.@category.text()
@@ -403,7 +402,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
                 // line
                 sink.tableCell()
 
-                if ( isJXRReportEnabled ) {
+                if (isJXRReportEnabled) {
                     log.debug("isJXRReportEnabled is enabled")
                     sink.rawText(assembleJxrHyperlink(line))
                 } else {
@@ -447,8 +446,8 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         log.debug("xrefLocation is " + xrefLocation.getAbsolutePath())
         log.debug("xrefTestLocation is " + xrefTestLocation.getAbsolutePath())
 
-        compileSourceRoots.each {compileSourceRoot ->
-            if ( new File(compileSourceRoot + File.separator + line.@sourcepath.text()).exists() ) {
+        compileSourceRoots.each { compileSourceRoot ->
+            if (new File(compileSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
                 prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefLocation.getAbsolutePath())
 
                 prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
@@ -456,9 +455,9 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             }
         }
 
-        if ( includeTests && !prefix ) {
-            testSourceRoots.each {testSourceRoot ->
-                if ( new File(testSourceRoot + File.separator + line.@sourcepath.text()).exists() ) {
+        if (includeTests && !prefix) {
+            testSourceRoots.each { testSourceRoot ->
+                if (new File(testSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
                     prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefTestLocation.getAbsolutePath())
 
                     prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefTestLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
@@ -470,7 +469,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         def path = prefix + line.@classname.text().replaceAll("[.]", "/").replaceAll("[\$].*", "")
         String lineNumber = valueForLine(line)
 
-        if ( lineNumber != bundle.getString(NOLINE_KEY) ) {
+        if (lineNumber != bundle.getString(NOLINE_KEY)) {
             hyperlink = "<a href=\"" + path + ".html#L" + line.@start.text() + "\">" + lineNumber + "</a>"
         } else {
             hyperlink = lineNumber
@@ -626,7 +625,6 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         /**
          * Class Summary
          */
-
         sink.table()
         sink.tableRow()
 
@@ -642,12 +640,12 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         sink.tableRow_()
 
-        spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() {classStats ->
+        spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() { classStats ->
 
             def classStatsValue = classStats.'@class'.text()
             def classStatsBugCount = classStats.'@bugs'.text()
 
-            if ( Integer.parseInt(classStatsBugCount) > 0 ) {
+            if (Integer.parseInt(classStatsBugCount) > 0) {
                 sink.tableRow()
 
                 // class name
@@ -702,16 +700,15 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      * @return The line number the bug appears or a statement that there is no source line available.
      *
      */
-    protected String valueForLine(GPathResult line)
-    {
+    protected String valueForLine(GPathResult line) {
         String value
 
-        if ( line ) {
+        if (line) {
             def startLine = line.@start.text()
             def endLine = line.@end.text()
 
-            if ( startLine == endLine ) {
-                if ( startLine ) {
+            if (startLine == endLine) {
+                if (startLine) {
                     value = startLine
                 } else {
                     value = bundle.getString(NOLINE_KEY)

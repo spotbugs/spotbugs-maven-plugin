@@ -863,14 +863,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      */
     protected boolean isJxrPluginEnabled() {
-        boolean isEnabled
-
         if (xrefLocation.exists()) {
-            isEnabled = true
-            return isEnabled
+            return true
         }
 
         List reportPlugins = getProject().getReportPlugins()
+
+        boolean isEnabled
 
         reportPlugins.each() { reportPlugin ->
 
@@ -1072,11 +1071,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         def auxClasspath = ""
 
         if (auxClasspathElements) {
-
             log.debug("  AuxClasspath Elements ->" + auxClasspathElements)
 
             def auxClasspathList = auxClasspathElements.findAll { project.build.outputDirectory != it.toString() }
-
             if (auxClasspathList.size() > 0) {
 
                 auxClasspath += File.pathSeparator
@@ -1084,9 +1081,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 log.debug("  Last AuxClasspath is ->" + auxClasspathList[auxClasspathList.size() - 1])
 
                 auxClasspathList.each() { auxClasspathElement ->
-
                     log.debug("  Adding to AuxClasspath ->" + auxClasspathElement.toString())
-
                     auxClasspath += auxClasspathElement.toString() +  File.pathSeparator
                 }
             }
@@ -1243,7 +1238,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                     }
                 }
 
-                path.SpotbugsResults.FindBugsSummary.'total_bugs' = bugCount   // Fixes visitor problem
+                // Fixes visitor problem
+                path.SpotbugsResults.FindBugsSummary.'total_bugs' = bugCount
 
                 xmlProject.appendNode {
                     WrkDir(project.build.directory)
