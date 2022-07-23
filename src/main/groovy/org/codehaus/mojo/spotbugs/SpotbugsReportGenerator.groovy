@@ -371,53 +371,54 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
             log.debug("bugInstance --->  ${bugInstance}")
 
-            if (bugInstance.Class[0].@classname.text() == bugClass) {
-
-                def type = bugInstance.@type.text()
-                def category = bugInstance.@category.text()
-                def message = bugInstance.LongMessage.text()
-                def priority = bugInstance.@priority.text()
-                def line = bugInstance.SourceLine[0]
-                log.debug("BugInstance message is ${message}")
-
-                sink.tableRow()
-
-                // bug
-                sink.tableCell()
-                sink.text(message)
-                sink.tableCell_()
-
-                // category
-                sink.tableCell()
-                sink.text(category)
-                sink.tableCell_()
-
-                // description link
-                sink.tableCell()
-                sink.link(bundle.getString(DETAILSLINK_KEY) + "#" + type)
-                sink.text(type)
-                sink.link_()
-                sink.tableCell_()
-
-                // line
-                sink.tableCell()
-
-                if (isJXRReportEnabled) {
-                    log.debug("isJXRReportEnabled is enabled")
-                    sink.rawText(assembleJxrHyperlink(line))
-                } else {
-                    sink.text(line.@start.text())
-                }
-
-                sink.tableCell_()
-
-                // priority
-                sink.tableCell()
-                sink.text(spotbugsPriority[priority as Integer])
-                sink.tableCell_()
-
-                sink.tableRow_()
+            if (bugInstance.Class[0].@classname.text() != bugClass) {
+                return
             }
+
+            def type = bugInstance.@type.text()
+            def category = bugInstance.@category.text()
+            def message = bugInstance.LongMessage.text()
+            def priority = bugInstance.@priority.text()
+            def line = bugInstance.SourceLine[0]
+            log.debug("BugInstance message is ${message}")
+
+            sink.tableRow()
+
+            // bug
+            sink.tableCell()
+            sink.text(message)
+            sink.tableCell_()
+
+            // category
+            sink.tableCell()
+            sink.text(category)
+            sink.tableCell_()
+
+            // description link
+            sink.tableCell()
+            sink.link(bundle.getString(DETAILSLINK_KEY) + "#" + type)
+            sink.text(type)
+            sink.link_()
+            sink.tableCell_()
+
+            // line
+            sink.tableCell()
+
+            if (isJXRReportEnabled) {
+                log.debug("isJXRReportEnabled is enabled")
+                sink.rawText(assembleJxrHyperlink(line))
+            } else {
+                sink.text(line.@start.text())
+            }
+
+            sink.tableCell_()
+
+            // priority
+            sink.tableCell()
+            sink.text(spotbugsPriority[priority as Integer])
+            sink.tableCell_()
+
+            sink.tableRow_()
         }
 
         sink.table_()
