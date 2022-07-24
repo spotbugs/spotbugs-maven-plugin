@@ -185,17 +185,18 @@ class XDocsReporter {
                     file(classname: bugClass) {
                         spotbugsResults.BugInstance.each() { bugInstance ->
 
-                            if (bugInstance.Class.find{ it.@primary == "true" }.@classname.text() == bugClass) {
-
-                                def type = bugInstance.@type.text()
-                                def category = bugInstance.@category.text()
-                                def message = bugInstance.LongMessage.text()
-                                def priority = evaluateThresholdParameter(bugInstance.@priority.text())
-                                def line = bugInstance.SourceLine.@start[0].text()
-                                log.debug("BugInstance message is ${message}")
-
-                                BugInstance(type: type, priority: priority, category: category, message: message, lineNumber: ((line) ? line: "-1"))
+                            if (bugInstance.Class.find{ it.@primary == "true" }.@classname.text() != bugClass) {
+                               return
                             }
+
+                            def type = bugInstance.@type.text()
+                            def category = bugInstance.@category.text()
+                            def message = bugInstance.LongMessage.text()
+                            def priority = evaluateThresholdParameter(bugInstance.@priority.text())
+                            def line = bugInstance.SourceLine.@start[0].text()
+                            log.debug("BugInstance message is ${message}")
+
+                            BugInstance(type: type, priority: priority, category: category, message: message, lineNumber: ((line) ? line: "-1"))
                         }
                     }
                 }

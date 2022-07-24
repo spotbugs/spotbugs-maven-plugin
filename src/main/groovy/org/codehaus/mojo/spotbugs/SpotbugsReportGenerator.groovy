@@ -371,53 +371,54 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
             log.debug("bugInstance --->  ${bugInstance}")
 
-            if (bugInstance.Class[0].@classname.text() == bugClass) {
-
-                def type = bugInstance.@type.text()
-                def category = bugInstance.@category.text()
-                def message = bugInstance.LongMessage.text()
-                def priority = bugInstance.@priority.text()
-                def line = bugInstance.SourceLine[0]
-                log.debug("BugInstance message is ${message}")
-
-                sink.tableRow()
-
-                // bug
-                sink.tableCell()
-                sink.text(message)
-                sink.tableCell_()
-
-                // category
-                sink.tableCell()
-                sink.text(category)
-                sink.tableCell_()
-
-                // description link
-                sink.tableCell()
-                sink.link(bundle.getString(DETAILSLINK_KEY) + "#" + type)
-                sink.text(type)
-                sink.link_()
-                sink.tableCell_()
-
-                // line
-                sink.tableCell()
-
-                if (isJXRReportEnabled) {
-                    log.debug("isJXRReportEnabled is enabled")
-                    sink.rawText(assembleJxrHyperlink(line))
-                } else {
-                    sink.text(line.@start.text())
-                }
-
-                sink.tableCell_()
-
-                // priority
-                sink.tableCell()
-                sink.text(spotbugsPriority[priority as Integer])
-                sink.tableCell_()
-
-                sink.tableRow_()
+            if (bugInstance.Class[0].@classname.text() != bugClass) {
+                return
             }
+
+            def type = bugInstance.@type.text()
+            def category = bugInstance.@category.text()
+            def message = bugInstance.LongMessage.text()
+            def priority = bugInstance.@priority.text()
+            def line = bugInstance.SourceLine[0]
+            log.debug("BugInstance message is ${message}")
+
+            sink.tableRow()
+
+            // bug
+            sink.tableCell()
+            sink.text(message)
+            sink.tableCell_()
+
+            // category
+            sink.tableCell()
+            sink.text(category)
+            sink.tableCell_()
+
+            // description link
+            sink.tableCell()
+            sink.link(bundle.getString(DETAILSLINK_KEY) + "#" + type)
+            sink.text(type)
+            sink.link_()
+            sink.tableCell_()
+
+            // line
+            sink.tableCell()
+
+            if (isJXRReportEnabled) {
+                log.debug("isJXRReportEnabled is enabled")
+                sink.rawText(assembleJxrHyperlink(line))
+            } else {
+                sink.text(line.@start.text())
+            }
+
+            sink.tableCell_()
+
+            // priority
+            sink.tableCell()
+            sink.text(spotbugsPriority[priority as Integer])
+            sink.tableCell_()
+
+            sink.tableRow_()
         }
 
         sink.table_()
@@ -447,22 +448,20 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         log.debug("xrefTestLocation is " + xrefTestLocation.getAbsolutePath())
 
         compileSourceRoots.each { compileSourceRoot ->
-            if (new File(compileSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
-                prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefLocation.getAbsolutePath())
-
-                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+            if (!new File(compileSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
                 return
             }
+            prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefLocation.getAbsolutePath())
+            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
         }
 
         if (includeTests && !prefix) {
             testSourceRoots.each { testSourceRoot ->
-                if (new File(testSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
-                    prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefTestLocation.getAbsolutePath())
-
-                    prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefTestLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+                if (!new File(testSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
                     return
                 }
+                prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefTestLocation.getAbsolutePath())
+                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefTestLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
             }
         }
 
@@ -645,25 +644,27 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             def classStatsValue = classStats.'@class'.text()
             def classStatsBugCount = classStats.'@bugs'.text()
 
-            if (Integer.parseInt(classStatsBugCount) > 0) {
-                sink.tableRow()
-
-                // class name
-                sink.tableCell()
-                sink.link("#" + classStatsValue)
-                sink.text(classStatsValue)
-                sink.link_()
-                sink.tableCell_()
-
-                // class bug total count
-                sink.tableCell()
-                sink.text(classStatsBugCount)
-                sink.tableCell_()
-
-                sink.tableRow_()
-
-                bugClasses << classStatsValue
+            if (Integer.parseInt(classStatsBugCount) == 0) {
+                return
             }
+
+            sink.tableRow()
+
+            // class name
+            sink.tableCell()
+            sink.link("#" + classStatsValue)
+            sink.text(classStatsValue)
+            sink.link_()
+            sink.tableCell_()
+
+            // class bug total count
+            sink.tableCell()
+            sink.text(classStatsBugCount)
+            sink.tableCell_()
+
+            sink.tableRow_()
+
+            bugClasses << classStatsValue
         }
 
         sink.table_()
