@@ -16,4 +16,9 @@
         <Source name="~.*\.groovy" />
         <Bug pattern="SE_NO_SERIALVERSIONID" />
     </Match>
+    <!-- Excluding xxe as from maven help mojo and we are otherwise all groovy -->
+    <Match>
+        <Source name="~.*\.java" />
+        <Bug pattern="  XXE_DOCUMENT" />
+    </Match>
 </FindBugsFilter>
