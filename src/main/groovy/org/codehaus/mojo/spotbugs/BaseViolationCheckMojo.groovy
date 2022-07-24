@@ -537,7 +537,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
             log.info('\n\n\nTo see bug detail using the Spotbugs GUI, use the following command "mvn spotbugs:gui"\n\n\n')
 
-            if ( (bugCountAboveThreshold || errorCount) && failOnError ) {
+            if ((bugCountAboveThreshold || errorCount) && failOnError) {
                 throw new MojoExecutionException("failed with ${bugCountAboveThreshold} bugs and ${errorCount} errors ")
             }
         }
