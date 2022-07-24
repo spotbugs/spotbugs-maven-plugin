@@ -527,7 +527,8 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
                 def logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
                         bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type'
 
-                if (priorityNum <= priorityThresholdNum) {  // lower is more severe
+                // lower is more severe
+                if (priorityNum <= priorityThresholdNum) {
                     bugCountAboveThreshold += 1
                     log.error(logMsg)
                 } else {
