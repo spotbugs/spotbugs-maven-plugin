@@ -527,7 +527,8 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
                 def logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
                         bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type'
 
-                if (priorityNum <= priorityThresholdNum) {  // lower is more severe
+                // lower is more severe
+                if (priorityNum <= priorityThresholdNum) {
                     bugCountAboveThreshold += 1
                     log.error(logMsg)
                 } else {
@@ -537,7 +538,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
             log.info('\n\n\nTo see bug detail using the Spotbugs GUI, use the following command "mvn spotbugs:gui"\n\n\n')
 
-            if ( (bugCountAboveThreshold || errorCount) && failOnError ) {
+            if ((bugCountAboveThreshold || errorCount) && failOnError) {
                 throw new MojoExecutionException("failed with ${bugCountAboveThreshold} bugs and ${errorCount} errors ")
             }
         }
