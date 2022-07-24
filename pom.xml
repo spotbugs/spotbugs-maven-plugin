@@ -613,7 +613,7 @@
           </configuration>
         </plugin>
 
-        <!-- TODO: pdf fails on site so skip it at this time -->
+        <!-- TODO: pdf fails on site if reports included so skip reports at this time -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-pdf-plugin</artifactId>
@@ -636,7 +636,7 @@
               <goal>descriptor</goal>
             </goals>
           </execution>
-          <!-- if you want to generate help goal -->
+          <!-- Generate help goal -->
           <execution>
             <id>help-goal</id>
             <goals>
