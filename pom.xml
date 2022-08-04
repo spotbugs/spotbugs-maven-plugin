@@ -186,7 +186,7 @@
     <javadocPluginVersion>3.4.0</javadocPluginVersion>
     <pluginPluginVersion>3.6.4</pluginPluginVersion>
     <scmPluginVersion>1.13.0</scmPluginVersion>
-    <sitePluginVersion>3.12.0</sitePluginVersion>
+    <sitePluginVersion>3.12.1</sitePluginVersion>
     <sitePlugin36Version>3.6</sitePlugin36Version> <!-- For MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 4.8.x and simply drop the old support) -->
     <versionsPluginVersion>2.11.0</versionsPluginVersion>
 
