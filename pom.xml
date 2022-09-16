@@ -146,6 +146,9 @@
 
     <projectVersion>${project.version}</projectVersion>
 
+    <!-- Reproducible Builds: override timestamp value from parent -->
+    <project.build.outputTimestamp>1657151022</project.build.outputTimestamp>
+
     <!-- Override spotbugs to this version from base-parent -->
     <spotbugs.version>4.7.2</spotbugs.version>
 
