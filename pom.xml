@@ -155,7 +155,7 @@
     <!-- Groovymavenplus doesn't like simple '8' for java 8 until next release -->
     <java.version>1.8</java.version>
 
-    <junitVersion>5.9.0</junitVersion>
+    <junitVersion>5.9.1</junitVersion>
     <spotbugsVersion>4.7.2</spotbugsVersion>
     <spotbugsTag>4.7.2</spotbugsTag>
     <slf4jVersion>2.0.3</slf4jVersion>
