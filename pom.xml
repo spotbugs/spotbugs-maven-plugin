@@ -161,7 +161,7 @@
     <slf4jVersion>2.0.3</slf4jVersion>
 
     <antVersion>1.10.12</antVersion>
-    <groovyVersion>4.0.5</groovyVersion>
+    <groovyVersion>4.0.6</groovyVersion>
     <groovy3Version>3.0.13</groovy3Version>
     <javaparserVersion>3.24.4</javaparserVersion>
 
