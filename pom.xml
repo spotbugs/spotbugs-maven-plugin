@@ -156,7 +156,7 @@
     <java.version>1.8</java.version>
 
     <junitVersion>5.9.1</junitVersion>
-    <spotbugsVersion>4.7.2</spotbugsVersion>
+    <spotbugsVersion>4.7.3</spotbugsVersion>
     <spotbugsTag>4.7.2</spotbugsTag>
     <slf4jVersion>2.0.3</slf4jVersion>
 
