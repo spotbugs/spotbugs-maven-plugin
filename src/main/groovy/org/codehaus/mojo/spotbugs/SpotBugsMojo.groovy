@@ -78,6 +78,23 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     boolean sarifFullPath
 
     /**
+     * Specifies the directory where the sarif output will be generated.
+     *
+     * @since 4.7.2.2
+     */
+    @Parameter(defaultValue = '${project.build.directory}', property = "spotbugs.sarifOutputDirectory", required = true)
+    File sarifOutputDirectory
+
+
+    /**
+     * Set the name of the output SARIF file produced
+     *
+     * @since 4.7.2.2
+     */
+    @Parameter(property = "spotbugs.sarifOutputFilename", defaultValue = "spotbugsSarif.json", required = true)
+    String sarifOutputFilename
+
+    /**
      * Specifies the directory where the xml output will be generated.
      *
      * @since 1.0.0
@@ -1122,7 +1139,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         File xmlTempFile = new File("${project.build.directory}/spotbugsTemp.xml")
         File sarifTempFile = new File("${project.build.directory}/spotbugsTempSarif.json")
-        File sarifFinalFile = new File("${project.build.directory}/spotbugsSarif.json")
+        File sarifFinalFile = new File(sarifOutputDirectory, sarifOutputFilename)
 
         if (xmlOutput || !sarifOutput) {
             forceFileCreation(xmlTempFile)
@@ -1311,6 +1328,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                 }
             }
+
+            forceFileCreation(sarifFinalFile)
 
             sarifFinalFile.withWriter {
                 builder.writeTo(it)
