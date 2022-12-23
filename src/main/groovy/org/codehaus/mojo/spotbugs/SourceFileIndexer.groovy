@@ -48,22 +48,25 @@ class SourceFileIndexer {
         String basePath = normalizePath(session.getExecutionRootDirectory())
 
         def allSourceFiles = new ArrayList<>()
-        //Resource
-        for(Resource r in project.getResources()) {
+
+        // Resource
+        for (Resource r in project.getResources()) {
             scanDirectory(new File(r.directory), allSourceFiles, basePath)
         }
-        for(Resource r in project.getTestResources()) {
+
+        for (Resource r in project.getTestResources()) {
             scanDirectory(new File(r.directory), allSourceFiles, basePath)
         }
-        //Source files
-        for(String sourceRoot in project.getCompileSourceRoots()) {
+
+        // Source files
+        for (String sourceRoot in project.getCompileSourceRoots()) {
             scanDirectory(new File(sourceRoot), allSourceFiles, basePath)
         }
-        for(String sourceRoot in project.getTestCompileSourceRoots()) {
+        for (String sourceRoot in project.getTestCompileSourceRoots()) {
             scanDirectory(new File(sourceRoot), allSourceFiles, basePath)
         }
 
-        for(String sourceRoot in project.getScriptSourceRoots()) {
+        for (String sourceRoot in project.getScriptSourceRoots()) {
             scanDirectory(new File(sourceRoot), allSourceFiles, basePath)
         }
 
@@ -82,28 +85,25 @@ class SourceFileIndexer {
      * @param directory Directory to scan
      * @param files ArrayList where files found will be stored
      * @param baseDirectory This part will be truncated from path stored
-     * @throws IOException
      */
-    private void scanDirectory(File directory,List<String> files,String baseDirectory) throws IOException {
+    private void scanDirectory(File directory,List<String> files,String baseDirectory) {
 
-        if(directory.exists()) {
-            for(File child : directory.listFiles()) {
-                if(child.isDirectory()) {
-                    scanDirectory(child,files,baseDirectory);
-                }
-                else {
+        if (directory.exists()) {
+            for (File child : directory.listFiles()) {
+                if (child.isDirectory()) {
+                    scanDirectory(child, files, baseDirectory);
+                } else {
                     String newSourceFile = normalizePath(child.canonicalPath)
-                    if(newSourceFile.startsWith(baseDirectory)) {
-                        //The project will not be at the root of our file system.
-                        //It will most likely be stored in a work directory.
-                        // /work/project-code-to-scan/src/main/java/File.java => src/main/java/File.java
-                        // (Here baseDirectory is /work/project-code-to-scan/)
+                    if (newSourceFile.startsWith(baseDirectory)) {
+                        // The project will not be at the root of our file system.
+                        // It will most likely be stored in a work directory.
+                        // Example: /work/project-code-to-scan/src/main/java/File.java => src/main/java/File.java
+                        //   (Here baseDirectory is /work/project-code-to-scan/)
                         String relativePath = Paths.get(baseDirectory).relativize(Paths.get(newSourceFile))
                         files.add(normalizePath(relativePath))
-                    }
-                    else {
-                        //Use the full path instead:
-                        //This will occurs in many cases including when the pom.xml is
+                    } else {
+                        // Use the full path instead:
+                        // This will occurs in many cases including when the pom.xml is
                         // not in the same directory tree as the sources.
                         files.add(newSourceFile)
                     }
@@ -131,18 +131,20 @@ class SourceFileIndexer {
      */
     protected String searchActualFilesLocation(String filename) {
 
-        if(allSourceFiles == null) {
+        if (allSourceFiles == null) {
             throw new RuntimeException("Source files cache must be built prior to searches.")
         }
 
-        for(String fileFound in allSourceFiles) {
+        for (String fileFound in allSourceFiles) {
 
-            if(fileFound.endsWith(filename)) {
+            if (fileFound.endsWith(filename)) {
                 return fileFound
             }
 
         }
 
-        return null //Not found
+        // Not found
+        return null
     }
+
 }

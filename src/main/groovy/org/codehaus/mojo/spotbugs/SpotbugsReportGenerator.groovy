@@ -35,85 +35,71 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
     /**
      * The key to get the value if the line number is not available.
-     *
      */
     static final String NOLINE_KEY = "report.spotbugs.noline"
 
     /**
      * The key to get the column title for the line.
-     *
      */
     static final String COLUMN_LINE_KEY = "report.spotbugs.column.line"
 
     /**
      * The key to get the column title for the bug.
-     *
      */
     static final String COLUMN_BUG_KEY = "report.spotbugs.column.bug"
 
     /**
      * The key to get the column title for the bugs.
-     *
      */
     static final String COLUMN_BUGS_KEY = "report.spotbugs.column.bugs"
 
     /**
      * The key to get the column title for the category.
-     *
      */
     static final String COLUMN_CATEGORY_KEY = "report.spotbugs.column.category"
 
     /**
      * The key to get the column title for the priority.
-     *
      */
     static final String COLUMN_PRIORITY_KEY = "report.spotbugs.column.priority"
 
     /**
      * The key to get the column title for the details.
-     *
      */
     static final String COLUMN_DETAILS_KEY = "report.spotbugs.column.details"
 
     /**
      * The key to get the report title of the Plug-In from the bundle.
-     *
      */
     static final String REPORT_TITLE_KEY = "report.spotbugs.reporttitle"
 
     /**
      * The key to get the report link title of the Plug-In from the bundle.
-     *
      */
     static final String LINKTITLE_KEY = "report.spotbugs.linktitle"
 
     /**
      * The key to get the report link of the Plug-In from the bundle.
-     *
      */
     static final String LINK_KEY = "report.spotbugs.link"
 
     /**
      * The key to get the files title of the Plug-In from the bundle.
-     *
      */
     static final String FILES_KEY = "report.spotbugs.files"
 
     /**
      * The key to get the threshold of the report from the bundle.
-     *
      */
     static final String THRESHOLD_KEY = "report.spotbugs.threshold"
 
     /**
      * The key to get the effort of the report from the bundle.
-     *
      */
     static final String EFFORT_KEY = "report.spotbugs.effort"
 
     /**
      * The key to get the link to SpotBugs description page from the bundle.
-     *
      */
     static final String DETAILSLINK_KEY = "report.spotbugs.detailslink"
 
@@ -125,164 +111,144 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
     /**
      * The key to get the files title of the Plug-In from the bundle.
-     *
      */
     static final String SUMMARY_KEY = "report.spotbugs.summary"
 
     /**
      * The key to column title for the Class.
-     *
      */
     static final String COLUMN_CLASS_KEY = "report.spotbugs.column.class"
 
     /**
      * The key to column title for the Classes.
-     *
      */
     static final String COLUMN_CLASSES_KEY = "report.spotbugs.column.classes"
 
     /**
      * The key to column title for the errors.
-     *
      */
     static final String COLUMN_ERRORS_KEY = "report.spotbugs.column.errors"
 
     /**
      * The key to column title for the files.
      *
+     * note: not used but throughout properties
      */
     static final String COLUMN_FILES_KEY = "report.spotbugs.column.files"
 
     /**
      * The key to column title for the files.
-     *
      */
     static final String COLUMN_MISSINGCLASSES_KEY = "report.spotbugs.column.missingclasses"
 
     /**
      * The sink to write the report to.
-     *
      */
     Sink sink
 
     /**
      * The bundle to get the messages from.
-     *
      */
     ResourceBundle bundle
 
     /**
      * The logger to write logs to.
-     *
      */
     Log log
 
     /**
      * The threshold of bugs severity.
-     *
      */
     String threshold
 
     /**
      * The used effort for searching bugs.
-     *
      */
     String effort
 
     /**
      * The name of the current class which is analysed by SpotBugs.
-     *
      */
     String currentClassName
 
     /**
-     * Signals if the report for the current class is opened.
-     *
-     */
-    boolean mIsCurrentClassReportOpened = false
-
-    /**
      * Signals if the jxr report plugin is enabled.
-     *
      */
-    boolean isJXRReportEnabled = false
+    boolean isJXRReportEnabled
 
     /**
      * The running total of bugs reported.
-     *
      */
     int bugCount
 
     /**
      * The running total of missing classes reported.
-     *
      */
     int missingClassCount
 
     /**
      * The running total of files analyzed.
-     *
      */
     int fileCount
 
     /**
      * The Set of missing classes names reported.
-     *
      */
     Set missingClassSet = new HashSet()
 
     /**
      * The running total of errors reported.
-     *
      */
     int errorCount
 
     /**
      * Location where generated html will be created.
-     *
      */
     File outputDirectory
 
     /**
      * Location of the Xrefs to link to.
-     *
      */
     File xrefLocation
 
     /**
      * Location of the Test Xrefs to link to.
-     *
      */
     File xrefTestLocation
 
     /**
      * The directories containing the sources to be compiled.
-     *
      */
     List compileSourceRoots
 
     /**
      * The directories containing the test-sources to be compiled.
-     *
      */
     List testSourceRoots
 
     /**
      * Run Spotbugs on the tests.
-     *
      */
     boolean includeTests
 
     /**
-     * "org.apache.maven.doxia.tools.SiteTool"
-     *
+     * Doxia site tool.
      */
     SiteTool siteTool
 
+    /**
+     * Base directory.
+     */
     File basedir
 
+    /**
+     * Spotbugs results.
+     */
     GPathResult spotbugsResults
 
+    /**
+     * Bug classes.
+     */
     List bugClasses
 
     /**
@@ -326,7 +292,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         log.debug("Finished searching for bugs!...")
         log.debug("sink is " + sink)
 
-        bugClasses.each() {bugClass ->
+        bugClasses.each() { bugClass ->
             log.debug("finish bugClass is ${bugClass}")
 
             printBug(bugClass)
@@ -401,58 +367,58 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         log.debug("printBug spotbugsResults is ${spotbugsResults}")
 
-        spotbugsResults.BugInstance.each() {bugInstance ->
-
+        spotbugsResults.BugInstance.each() { bugInstance ->
 
             log.debug("bugInstance --->  ${bugInstance}")
 
-            if ( bugInstance.Class[0].@classname.text() == bugClass ) {
-
-                def type = bugInstance.@type.text()
-                def category = bugInstance.@category.text()
-                def message = bugInstance.LongMessage.text()
-                def priority = bugInstance.@priority.text()
-                def line = bugInstance.SourceLine[0]
-                log.debug("BugInstance message is ${message}")
-
-                sink.tableRow()
-
-                // bug
-                sink.tableCell()
-                sink.text(message)
-                sink.tableCell_()
-
-                // category
-                sink.tableCell()
-                sink.text(category)
-                sink.tableCell_()
-
-                // description link
-                sink.tableCell()
-                sink.link(bundle.getString(DETAILSLINK_KEY) + "#" + type)
-                sink.text(type)
-                sink.link_()
-                sink.tableCell_()
-
-                // line
-                sink.tableCell()
-
-                if ( isJXRReportEnabled ) {
-                    log.debug("isJXRReportEnabled is enabled")
-                    sink.rawText(assembleJxrHyperlink(line))
-                } else {
-                    sink.text(line.@start.text())
-                }
-
-                sink.tableCell_()
-
-                // priority
-                sink.tableCell()
-                sink.text(spotbugsPriority[priority as Integer])
-                sink.tableCell_()
-
-                sink.tableRow_()
+            if (bugInstance.Class[0].@classname.text() != bugClass) {
+                return
             }
+
+            def type = bugInstance.@type.text()
+            def category = bugInstance.@category.text()
+            def message = bugInstance.LongMessage.text()
+            def priority = bugInstance.@priority.text()
+            def line = bugInstance.SourceLine[0]
+            log.debug("BugInstance message is ${message}")
+
+            sink.tableRow()
+
+            // bug
+            sink.tableCell()
+            sink.text(message)
+            sink.tableCell_()
+
+            // category
+            sink.tableCell()
+            sink.text(category)
+            sink.tableCell_()
+
+            // description link
+            sink.tableCell()
+            sink.link(bundle.getString(DETAILSLINK_KEY) + "#" + type)
+            sink.text(type)
+            sink.link_()
+            sink.tableCell_()
+
+            // line
+            sink.tableCell()
+
+            if (isJXRReportEnabled) {
+                log.debug("isJXRReportEnabled is enabled")
+                sink.rawText(assembleJxrHyperlink(line))
+            } else {
+                sink.text(line.@start.text())
+            }
+
+            sink.tableCell_()
+
+            // priority
+            sink.tableCell()
+            sink.text(spotbugsPriority[priority as Integer])
+            sink.tableCell_()
+
+            sink.tableRow_()
         }
 
         sink.table_()
@@ -481,30 +447,28 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         log.debug("xrefLocation is " + xrefLocation.getAbsolutePath())
         log.debug("xrefTestLocation is " + xrefTestLocation.getAbsolutePath())
 
-        compileSourceRoots.each {compileSourceRoot ->
-            if ( new File(compileSourceRoot + File.separator + line.@sourcepath.text()).exists() ) {
-                prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefLocation.getAbsolutePath())
-
-                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+        compileSourceRoots.each { compileSourceRoot ->
+            if (!new File(compileSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
                 return
             }
+            prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefLocation.getAbsolutePath())
+            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
         }
 
-        if ( includeTests && !prefix ) {
-            testSourceRoots.each {testSourceRoot ->
-                if ( new File(testSourceRoot + File.separator + line.@sourcepath.text()).exists() ) {
-                    prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefTestLocation.getAbsolutePath())
-
-                    prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefTestLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+        if (includeTests && !prefix) {
+            testSourceRoots.each { testSourceRoot ->
+                if (!new File(testSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
                     return
                 }
+                prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefTestLocation.getAbsolutePath())
+                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefTestLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
             }
         }
 
         def path = prefix + line.@classname.text().replaceAll("[.]", "/").replaceAll("[\$].*", "")
         String lineNumber = valueForLine(line)
 
-        if ( lineNumber != bundle.getString(NOLINE_KEY) ) {
+        if (lineNumber != bundle.getString(NOLINE_KEY)) {
             hyperlink = "<a href=\"" + path + ".html#L" + line.@start.text() + "\">" + lineNumber + "</a>"
         } else {
             hyperlink = lineNumber
@@ -660,7 +624,6 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         /**
          * Class Summary
          */
-
         sink.table()
         sink.tableRow()
 
@@ -676,30 +639,32 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         sink.tableRow_()
 
-        spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() {classStats ->
+        spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() { classStats ->
 
             def classStatsValue = classStats.'@class'.text()
             def classStatsBugCount = classStats.'@bugs'.text()
 
-            if ( Integer.parseInt(classStatsBugCount) > 0 ) {
-                sink.tableRow()
-
-                // class name
-                sink.tableCell()
-                sink.link("#" + classStatsValue)
-                sink.text(classStatsValue)
-                sink.link_()
-                sink.tableCell_()
-
-                // class bug total count
-                sink.tableCell()
-                sink.text(classStatsBugCount)
-                sink.tableCell_()
-
-                sink.tableRow_()
-
-                bugClasses << classStatsValue
+            if (Integer.parseInt(classStatsBugCount) == 0) {
+                return
             }
+
+            sink.tableRow()
+
+            // class name
+            sink.tableCell()
+            sink.link("#" + classStatsValue)
+            sink.text(classStatsValue)
+            sink.link_()
+            sink.tableCell_()
+
+            // class bug total count
+            sink.tableCell()
+            sink.text(classStatsBugCount)
+            sink.tableCell_()
+
+            sink.tableRow_()
+
+            bugClasses << classStatsValue
         }
 
         sink.table_()
@@ -736,16 +701,15 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      * @return The line number the bug appears or a statement that there is no source line available.
      *
      */
-    protected String valueForLine(GPathResult line)
-    {
+    protected String valueForLine(GPathResult line) {
         String value
 
-        if ( line ) {
+        if (line) {
             def startLine = line.@start.text()
             def endLine = line.@end.text()
 
-            if ( startLine == endLine ) {
-                if ( startLine ) {
+            if (startLine == endLine) {
+                if (startLine) {
                     value = startLine
                 } else {
                     value = bundle.getString(NOLINE_KEY)

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Not a concerning issue here -->
+    <Match>
+        <Source name="~.*\.groovy" />
+        <Bug pattern="EI_EXPOSE_REP" />
+    </Match>
+    <!-- Not a concerning issue here -->
+    <Match>
+        <Source name="~.*\.groovy" />
+        <Bug pattern="EI_EXPOSE_REP2" />
+    </Match>
+    <!-- Two of these were resolved but fb-contrib thinks not (bug in fb-contrib?) -->
+    <Match>
+        <Source name="~.*\.groovy" />
+        <Bug pattern="LEST_LOST_EXCEPTION_STACK_TRACE" />
+    </Match>
+    <!-- Not a concerning issue here -->
+    <Match>
+        <Source name="~.*\.groovy" />
+        <Bug pattern="PCOA_PARTIALLY_CONSTRUCTED_OBJECT_ACCESS" />
+    </Match>
+    <!-- Caused by groovy closures, suggested way to ignore -->
+    <Match>
+        <Source name="~.*\.groovy" />
+        <Bug pattern="SE_NO_SERIALVERSIONID" />
+    </Match>
+    <!-- Excluding xxe as from maven help mojo and we are otherwise all groovy -->
+    <Match>
+        <Source name="~.*\.java" />
+        <Bug pattern="  XXE_DOCUMENT" />
+    </Match>
+</FindBugsFilter>

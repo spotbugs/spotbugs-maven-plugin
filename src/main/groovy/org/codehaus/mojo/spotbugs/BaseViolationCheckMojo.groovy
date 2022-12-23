@@ -478,88 +478,90 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     @Override
     void execute() {
-        Locale locale = Locale.getDefault()
-        List sourceFiles
-
         log.debug("Executing spotbugs:check")
 
-        if (this.classFilesDirectory.exists() && this.classFilesDirectory.isDirectory()) {
-            sourceFiles = FileUtils.getFiles(classFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null)
-        }
-
-        if (!skip && sourceFiles) {
-
-            // this goes
-
-            log.debug("Here goes...............Executing spotbugs:check")
-
-            if (!spotbugsXmlOutputDirectory.exists()) {
-                if (!spotbugsXmlOutputDirectory.mkdirs()) {
-                    throw new MojoExecutionException("Cannot create xml output directory")
-                }
-            }
-
-            File outputFile = new File("${spotbugsXmlOutputDirectory}/${spotbugsXmlOutputFilename}")
-
-            if (outputFile.exists()) {
-
-                def xml = new XmlParser().parse(outputFile)
-
-                def bugs = xml.BugInstance
-                def bugCount = bugs.size()
-                log.info("BugInstance size is ${bugCount}")
-
-                def errorCount = xml.Error.size()
-                log.info("Error size is ${errorCount}")
-
-                if (bugCount <= 0) {
-                    log.info('No errors/warnings found')
-                    return
-                } else if (maxAllowedViolations > 0 && bugCount <= maxAllowedViolations) {
-                    log.info("total ${bugCount} violations are found which is set to be acceptable using configured property maxAllowedViolations :"+maxAllowedViolations +".\nBelow are list of bugs ignored :\n")
-                    printBugs(bugCount, bugs)
-                    return;
-                }
-
-                log.info('Total bugs: ' + bugCount)
-                def bugCountAboveThreshold = 0
-                def priorityThresholdNum = failThreshold ? SpotBugsInfo.spotbugsPriority.indexOf(failThreshold) : Integer.MAX_VALUE
-                if (priorityThresholdNum == -1) {
-                    throw new MojoExecutionException("Invalid value for failThreshold: ${failThreshold}")
-                }
-
-                for (i in 0..bugCount-1) {
-                    def bug = bugs[i]
-                    def priorityNum = bug.'@priority' as int
-                    def priorityName = SpotBugsInfo.spotbugsPriority[priorityNum]
-                    def logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
-                            bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type'
-
-                    if (priorityNum <= priorityThresholdNum) {  // lower is more severe
-                        bugCountAboveThreshold += 1
-                        log.error(logMsg)
-                    } else {
-                        log.info(logMsg)
-                    }
-                }
-
-                log.info('\n\n\nTo see bug detail using the Spotbugs GUI, use the following command "mvn spotbugs:gui"\n\n\n')
-
-                if ( (bugCountAboveThreshold || errorCount) && failOnError ) {
-                    throw new MojoExecutionException("failed with ${bugCountAboveThreshold} bugs and ${errorCount} errors ")
-                }
-            }
-        }
-        else {
+        if (skip || !doSourceFilesExist()) {
             log.debug("Nothing for SpotBugs to do here.")
+            return
         }
+
+        log.debug("Here goes...............Executing spotbugs:check")
+
+        if (!spotbugsXmlOutputDirectory.exists() && !spotbugsXmlOutputDirectory.mkdirs()) {
+            throw new MojoExecutionException("Cannot create xml output directory")
+        }
+
+        File outputFile = new File("${spotbugsXmlOutputDirectory}/${spotbugsXmlOutputFilename}")
+
+        if (outputFile.exists()) {
+
+            def xml = new XmlParser().parse(outputFile)
+
+            def bugs = xml.BugInstance
+            def bugCount = bugs.size()
+            log.info("BugInstance size is ${bugCount}")
+
+            def errorCount = xml.Error.size()
+            log.info("Error size is ${errorCount}")
+
+            if (bugCount <= 0) {
+                log.info('No errors/warnings found')
+                return
+            } else if (maxAllowedViolations > 0 && bugCount <= maxAllowedViolations) {
+                log.info("total ${bugCount} violations are found which is set to be acceptable using configured property maxAllowedViolations :"+maxAllowedViolations +".\nBelow are list of bugs ignored :\n")
+                printBugs(bugCount, bugs)
+                return;
+            }
+
+            log.info('Total bugs: ' + bugCount)
+            def bugCountAboveThreshold = 0
+            def priorityThresholdNum = failThreshold ? SpotBugsInfo.spotbugsPriority.indexOf(failThreshold) : Integer.MAX_VALUE
+            if (priorityThresholdNum == -1) {
+                throw new MojoExecutionException("Invalid value for failThreshold: ${failThreshold}")
+            }
+
+            for (i in 0..bugCount-1) {
+                def bug = bugs[i]
+                def priorityNum = bug.'@priority' as Integer
+                def priorityName = SpotBugsInfo.spotbugsPriority[priorityNum]
+                def logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
+                        bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type'
+
+                // lower is more severe
+                if (priorityNum <= priorityThresholdNum) {
+                    bugCountAboveThreshold += 1
+                    log.error(logMsg)
+                } else {
+                    log.info(logMsg)
+                }
+            }
+
+            log.info('\n\n\nTo see bug detail using the Spotbugs GUI, use the following command "mvn spotbugs:gui"\n\n\n')
+
+            if ((bugCountAboveThreshold || errorCount) && failOnError) {
+                throw new MojoExecutionException("failed with ${bugCountAboveThreshold} bugs and ${errorCount} errors ")
+            }
+        }
+    }
+
+    private boolean doSourceFilesExist() {
+        List sourceFiles = new ArrayList()
+
+        if (this.classFilesDirectory.exists() && this.classFilesDirectory.isDirectory()) {
+            sourceFiles.addAll(FileUtils.getFiles(classFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null))
+        }
+
+        if (this.includeTests && this.testClassFilesDirectory.exists() && this.testClassFilesDirectory.isDirectory()) {
+            sourceFiles.addAll(FileUtils.getFiles(testClassFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null))
+        }
+
+        !sourceFiles.isEmpty()
     }
 
     private void printBugs(total, bugs) {
         for (i in 0..total - 1) {
             def bug = bugs[i]
             log.error( bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK + bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
-
         }
     }
 

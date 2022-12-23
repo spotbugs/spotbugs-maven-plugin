@@ -31,58 +31,64 @@ class XDocsReporter {
 
     /**
      * The key to get the value if the line number is not available.
-     *
      */
     static final String NOLINE_KEY = "report.spotbugs.noline"
 
     /**
      * The bundle to get the messages from.
-     *
      */
     ResourceBundle bundle
 
     /**
      * The logger to write logs to.
-     *
      */
     Log log
 
     /**
      * The threshold of bugs severity.
-     *
      */
     String threshold
 
     /**
      * The used effort for searching bugs.
-     *
      */
     String effort
 
     /**
      * The output Writer stream.
-     *
      */
     Writer outputWriter
 
+    /**
+     * Spotbugs Results.
+     */
     GPathResult spotbugsResults
 
+    /**
+     * Bug Classes.
+     */
     List bugClasses
 
     /**
      * The directories containing the sources to be compiled.
-     *
      */
     List compileSourceRoots
 
+    /**
+     * The directories containing the test sources to be compiled.
+     */
     List testSourceRoots
 
+    /**
+     * The output encoding.
+     */
     String outputEncoding
 
     /**
      * Default constructor.
      *
-     * @param bundle - The Resource Bundle to use
+     * @param bundle
+     *            The Resource Bundle to use
      */
     XDocsReporter(ResourceBundle bundle, Log log, String threshold, String effort, String outputEncoding) {
         assert bundle
@@ -111,7 +117,6 @@ class XDocsReporter {
      * @param thresholdValue
      *            The ThresholdValue integer to evaluate.
      * @return The string valueof the Threshold object.
-     *
      */
     protected String evaluateThresholdParameter(String thresholdValue) {
         String thresholdName
@@ -143,7 +148,6 @@ class XDocsReporter {
      * Gets the Spotbugs Version of the report.
      *
      * @return The Spotbugs Version used on the report.
-     *
      */
     protected String getSpotBugsVersion() {
         return edu.umd.cs.findbugs.Version.VERSION_STRING
@@ -171,27 +175,28 @@ class XDocsReporter {
                     log.debug("classStatsValue is ${classStatsValue}")
                     log.debug("classStatsBugCount is ${classStatsBugCount}")
 
-                    if ( Integer.parseInt(classStatsBugCount) > 0 ) {
+                    if (Integer.parseInt(classStatsBugCount) > 0) {
                         bugClasses << classStatsValue
                     }
                 }
 
-                bugClasses.each() {bugClass ->
+                bugClasses.each() { bugClass ->
                     log.debug("finish bugClass is ${bugClass}")
                     file(classname: bugClass) {
-                        spotbugsResults.BugInstance.each() {bugInstance ->
+                        spotbugsResults.BugInstance.each() { bugInstance ->
 
-                            if ( bugInstance.Class.find{ it.@primary == "true" }.@classname.text() == bugClass ) {
-
-                                def type = bugInstance.@type.text()
-                                def category = bugInstance.@category.text()
-                                def message = bugInstance.LongMessage.text()
-                                def priority = evaluateThresholdParameter(bugInstance.@priority.text())
-                                def line = bugInstance.SourceLine.@start[0].text()
-                                log.debug("BugInstance message is ${message}")
-
-                                BugInstance(type: type, priority: priority, category: category, message: message, lineNumber: ((line) ? line: "-1"))
+                            if (bugInstance.Class.find{ it.@primary == "true" }.@classname.text() != bugClass) {
+                               return
                             }
+
+                            def type = bugInstance.@type.text()
+                            def category = bugInstance.@category.text()
+                            def message = bugInstance.LongMessage.text()
+                            def priority = evaluateThresholdParameter(bugInstance.@priority.text())
+                            def line = bugInstance.SourceLine.@start[0].text()
+                            log.debug("BugInstance message is ${message}")
+
+                            BugInstance(type: type, priority: priority, category: category, message: message, lineNumber: ((line) ? line: "-1"))
                         }
                     }
                 }
@@ -214,14 +219,14 @@ class XDocsReporter {
                     log.debug("Printing Source Roots")
 
                     if ( !compileSourceRoots.isEmpty() ) {
-                        compileSourceRoots.each() {srcDir ->
+                        compileSourceRoots.each() { srcDir ->
                             log.debug("SrcDir is ${srcDir}")
                             SrcDir(srcDir)
                         }
                     }
 
                     if (!testSourceRoots.isEmpty()) {
-                        testSourceRoots.each() {srcDir ->
+                        testSourceRoots.each() { srcDir ->
                             log.debug("SrcDir is ${srcDir}")
                             SrcDir(srcDir)
                         }
@@ -233,6 +238,6 @@ class XDocsReporter {
         outputWriter << xmlBuilder.bind(xdoc)
         outputWriter.flush()
         outputWriter.close()
-
     }
+
 }

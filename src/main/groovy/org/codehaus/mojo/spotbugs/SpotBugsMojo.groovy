@@ -78,6 +78,23 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     boolean sarifFullPath
 
     /**
+     * Specifies the directory where the sarif output will be generated.
+     *
+     * @since 4.7.2.2
+     */
+    @Parameter(defaultValue = '${project.build.directory}', property = "spotbugs.sarifOutputDirectory", required = true)
+    File sarifOutputDirectory
+
+
+    /**
+     * Set the name of the output SARIF file produced
+     *
+     * @since 4.7.2.2
+     */
+    @Parameter(property = "spotbugs.sarifOutputFilename", defaultValue = "spotbugsSarif.json", required = true)
+    String sarifOutputFilename
+
+    /**
      * Specifies the directory where the xml output will be generated.
      *
      * @since 1.0.0
@@ -284,6 +301,32 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     /**
      * <p>
+     * File name for include filter files. Only bugs in matching the filters are reported.
+     * </p>
+     *
+     * <p>
+     * Potential values are a filesystem path, a URL, or a classpath resource.
+     * </p>
+     *
+     * <p>
+     * This is an alternative to <code>&lt;includeFilterFile&gt;</code> which allows multiple
+     * files to be specified as separate elements in a pom.
+     * </p>
+     *
+     * <p>
+     * This parameter is resolved as resource, URL, then file. If successfully
+     * resolved, the contents of the configuration is copied into the
+     * <code>${project.build.directory}</code>
+     * directory before being passed to Spotbugs as a filter file.
+     * </p>
+     *
+     * @since 4.7.1.0
+     */
+    @Parameter(property = "spotbugs.includeFilterFiles")
+    List includeFilterFiles
+
+    /**
+     * <p>
      * File name of the exclude filter. Bugs matching the filters are not reported.
      * </p>
      *
@@ -303,6 +346,28 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Parameter(property = "spotbugs.excludeFilterFile")
     String excludeFilterFile
+
+    /**
+     * <p>
+     * File name for exclude filter files. Bugs matching the filters are not reported.
+     * </p>
+     *
+     * <p>
+     * This is an alternative to <code>&lt;excludeFilterFile&gt;</code> which allows multiple
+     * files to be specified as separate elements in a pom.
+     * </p>
+     *
+     * <p>
+     * This parameter is resolved as resource, URL, then file. If successfully
+     * resolved, the contents of the configuration is copied into the
+     * <code>${project.build.directory}</code>
+     * directory before being passed to Spotbugs as a filter file.
+     * </p>
+     *
+     * @since 4.7.1.0
+     */
+    @Parameter(property = "spotbugs.excludeFilterFiles")
+    List excludeFilterFiles
 
     /**
      * <p>
@@ -326,6 +391,32 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Parameter(property = "spotbugs.excludeBugsFile")
     String excludeBugsFile
+
+    /**
+     * <p>
+     * File names of the baseline files. Bugs found in the baseline files won't be reported.
+     * </p>
+     *
+     * <p>
+     * Potential values are a filesystem path, a URL, or a classpath resource.
+     * </p>
+     *
+     * <p>
+     * This is an alternative to <code>&lt;excludeBugsFile&gt;</code> which allows multiple
+     * files to be specified as separate elements in a pom.
+     * </p>
+     *
+     * <p>
+     * This parameter is resolved as resource, URL, then file. If successfully
+     * resolved, the contents of the configuration is copied into the
+     * <code>${project.build.directory}</code>
+     * directory before being passed to Spotbugs as a filter file.
+     * </p>
+     *
+     * @since 4.7.1.0
+     */
+    @Parameter(property = "spotbugs.excludeBugsFiles")
+    List excludeBugsFiles
 
     /**
      * Effort of the bug finders. Valid values are Min, Default and Max.
@@ -553,7 +644,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Override
     boolean canGenerateReport() {
 
-        def canGenerate = false
+        boolean canGenerate
         log.debug("****** SpotBugsMojo canGenerateReport *******")
 
         if (!skip && classFilesDirectory.exists()) {
@@ -637,7 +728,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * Callback from Maven Site Plugin.
      *
-     * @param locale he wanted locale to generate the report, could be null.
+     * @param locale the wanted locale to generate the report, could be null.
      *
      * @see org.apache.maven.reporting.MavenReport #executeReport(java.util.Locale)
      */
@@ -645,66 +736,57 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     void executeReport(Locale locale) {
 
         log.debug("****** SpotBugsMojo executeReport *******")
-        executeCheck(locale)
+        executeCheck()
 
-        if (!skip && canGenerateReport()) {
+        if (skip || !canGenerateReport()) {
+            log.info("cannot generate report")
+            return
+        }
 
-            if (log.isDebugEnabled()) {
-                log.debug("Locale is ${locale.getLanguage()}")
-                log.debug("****** SpotBugsMojo executeReport *******")
-                log.debug("report Output Directory is " + getReportOutputDirectory())
-                log.debug("Output Directory is " + outputDirectory)
-                log.debug("Classes Directory is " + classFilesDirectory)
-                log.debug("  Plugin Artifacts to be added ->" + pluginArtifacts.toString())
-            }
+        if (log.isDebugEnabled()) {
+            log.debug("Locale is ${locale.getLanguage()}")
+            log.debug("****** SpotBugsMojo executeReport *******")
+            log.debug("report Output Directory is " + getReportOutputDirectory())
+            log.debug("Output Directory is " + outputDirectory)
+            log.debug("Classes Directory is " + classFilesDirectory)
+            log.debug("  Plugin Artifacts to be added ->" + pluginArtifacts.toString())
+        }
 
-            generateXDoc(locale)
+        generateXDoc(locale)
 
-            if (!outputDirectory.exists()) {
-                if (!outputDirectory.mkdirs()) {
-                    throw new MojoExecutionException("Cannot create html output directory")
+        if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
+            throw new MojoExecutionException("Cannot create html output directory")
+        }
+
+        if (outputSpotbugsFile != null && outputSpotbugsFile.exists()) {
+
+            if (skipEmptyReport && bugCount == 0) {
+                log.info("Skipping Generation Spotbugs HTML since there are not any bugs")
+            } else {
+                log.debug("Generating Spotbugs HTML")
+
+                SpotbugsReportGenerator generator = new SpotbugsReportGenerator(getSink(), getBundle(locale), this.project.getBasedir(), siteTool)
+
+                boolean isJxrPluginEnabled = isJxrPluginEnabled()
+
+                generator.setIsJXRReportEnabled(isJxrPluginEnabled)
+
+                if (isJxrPluginEnabled) {
+                    generator.setCompileSourceRoots(this.compileSourceRoots)
+                    generator.setTestSourceRoots(this.testSourceRoots)
+                    generator.setXrefLocation(this.xrefLocation)
+                    generator.setXrefTestLocation(this.xrefTestLocation)
+                    generator.setIncludeTests(this.includeTests)
                 }
+
+                generator.setLog(log)
+                generator.threshold = threshold
+                generator.effort = effort
+                generator.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
+                generator.setOutputDirectory(new File(outputDirectory.getAbsolutePath()))
+                generator.generateReport()
+                log.debug("xmlOutput is ${xmlOutput}")
             }
-
-            if (outputSpotbugsFile != null && outputSpotbugsFile.exists()) {
-
-                if (skipEmptyReport && bugCount == 0) {
-                    log.info("Skipping Generation Spotbugs HTML since there are not any bugs")
-                } else {
-                    log.debug("Generating Spotbugs HTML")
-
-                    SpotbugsReportGenerator generator = new SpotbugsReportGenerator(getSink(), getBundle(locale), this.project.getBasedir(), siteTool)
-
-                    boolean isJxrPluginEnabled = isJxrPluginEnabled()
-
-                    generator.setIsJXRReportEnabled(isJxrPluginEnabled)
-
-                    if (isJxrPluginEnabled) {
-                        generator.setCompileSourceRoots(this.compileSourceRoots)
-                        generator.setTestSourceRoots(this.testSourceRoots)
-                        generator.setXrefLocation(this.xrefLocation)
-                        generator.setXrefTestLocation(this.xrefTestLocation)
-                        generator.setIncludeTests(this.includeTests)
-                    }
-
-                    generator.setLog(log)
-
-                    generator.threshold = threshold
-
-                    generator.effort = effort
-
-                    generator.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
-
-                    generator.setOutputDirectory(new File(outputDirectory.getAbsolutePath()))
-
-                    generator.generateReport()
-
-                    log.debug("xmlOutput is ${xmlOutput}")
-
-                }
-            }
-        } else {
-            log.info("cannot generate report");
         }
     }
 
@@ -712,24 +794,22 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     public void execute() {
         log.debug("****** SpotBugsMojo execute *******")
 
-        Locale locale = Locale.getDefault()
         if (!skip) {
-            executeCheck(locale)
+            executeCheck()
             if (canGenerateReport()) {
+                Locale locale = Locale.getDefault()
                 generateXDoc(locale)
             }
         }
     }
 
-    private void executeCheck(Locale locale) {
+    private void executeCheck() {
         log.debug("****** SpotBugsMojo executeCheck *******")
 
         log.debug("Generating Spotbugs XML")
 
-        if (!spotbugsXmlOutputDirectory.exists()) {
-            if (!spotbugsXmlOutputDirectory.mkdirs()) {
-                throw new MojoExecutionException("Cannot create xml output directory")
-            }
+        if (!spotbugsXmlOutputDirectory.exists() && !spotbugsXmlOutputDirectory.mkdirs()) {
+            throw new MojoExecutionException("Cannot create xml output directory")
         }
     }
 
@@ -743,10 +823,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             if (xmlOutput) {
                 log.debug("  Using the xdoc format")
 
-                if (!xmlOutputDirectory.exists()) {
-                    if (!xmlOutputDirectory.mkdirs()) {
-                        throw new MojoExecutionException("Cannot create xdoc output directory")
-                    }
+                if (!xmlOutputDirectory.exists() && !xmlOutputDirectory.mkdirs()) {
+                    throw new MojoExecutionException("Cannot create xdoc output directory")
                 }
 
                 XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
@@ -802,14 +880,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      */
     protected boolean isJxrPluginEnabled() {
-        boolean isEnabled = false
-
         if (xrefLocation.exists()) {
-            isEnabled = true
-            return isEnabled
+            return true
         }
 
         List reportPlugins = getProject().getReportPlugins()
+
+        boolean isEnabled
 
         reportPlugins.each() { reportPlugin ->
 
@@ -914,6 +991,16 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         }
 
+        if (includeFilterFiles) {
+            log.debug("  Adding Include Filter Files ")
+
+            includeFilterFiles.each { includefilter ->
+                args << "-include"
+                args << resourceHelper.getResourceFile(includefilter.trim())
+            }
+
+        }
+
         if (excludeFilterFile) {
             log.debug("  Adding Exclude Filter File ")
             String[] excludefilters = excludeFilterFile.split(SpotBugsInfo.COMMA)
@@ -925,11 +1012,30 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         }
 
+        if (excludeFilterFiles) {
+            log.debug("  Adding Exclude Filter Files ")
+
+            excludeFilterFiles.each { excludeFilter ->
+                args << "-exclude"
+                args << resourceHelper.getResourceFile(excludeFilter.trim())
+            }
+
+        }
+
         if (excludeBugsFile) {
-            log.debug("  Adding Exclude Bug Files (Baselines)")
+            log.debug("  Adding Exclude Bug File (Baselines)")
             String[] excludeFiles = excludeBugsFile.split(SpotBugsInfo.COMMA)
 
             excludeFiles.each() { excludeFile ->
+                args << "-excludeBugs"
+                args << resourceHelper.getResourceFile(excludeFile.trim())
+            }
+        }
+
+        if (excludeBugsFiles) {
+            log.debug("  Adding Exclude Bug Files (Baselines)")
+
+            excludeBugsFiles.each() { excludeFile ->
                 args << "-excludeBugs"
                 args << resourceHelper.getResourceFile(excludeFile.trim())
             }
@@ -982,11 +1088,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         def auxClasspath = ""
 
         if (auxClasspathElements) {
-
             log.debug("  AuxClasspath Elements ->" + auxClasspathElements)
 
             def auxClasspathList = auxClasspathElements.findAll { project.build.outputDirectory != it.toString() }
-
             if (auxClasspathList.size() > 0) {
 
                 auxClasspath += File.pathSeparator
@@ -994,9 +1098,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 log.debug("  Last AuxClasspath is ->" + auxClasspathList[auxClasspathList.size() - 1])
 
                 auxClasspathList.each() { auxClasspathElement ->
-
                     log.debug("  Adding to AuxClasspath ->" + auxClasspathElement.toString())
-
                     auxClasspath += auxClasspathElement.toString() +  File.pathSeparator
                 }
             }
@@ -1025,23 +1127,23 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /**
      * Set up and run the Spotbugs engine.
      *
-     * @param locale
-     *            the locale the report should be generated for
+     * @param outputFile
+     *            the outputFile
      *
      */
     private void executeSpotbugs(File outputFile) {
 
         log.debug("****** SpotBugsMojo executeSpotbugs *******")
-        long startTime, duration
+        long startTime
+        long duration
 
         File xmlTempFile = new File("${project.build.directory}/spotbugsTemp.xml")
         File sarifTempFile = new File("${project.build.directory}/spotbugsTempSarif.json")
-        File sarifFinalFile = new File("${project.build.directory}/spotbugsSarif.json")
+        File sarifFinalFile = new File(sarifOutputDirectory, sarifOutputFilename)
 
         if (xmlOutput || !sarifOutput) {
             forceFileCreation(xmlTempFile)
-        }
-        else {
+        } else {
             forceFileCreation(sarifTempFile)
         }
 
@@ -1097,7 +1199,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
 
             if (debug || trace) {
-                sysproperty(key: "findbugs.debug", value: true)
+                sysproperty(key: "findbugs.debug", value: Boolean.TRUE)
             }
 
             classpath() {
@@ -1153,7 +1255,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                     }
                 }
 
-                path.SpotbugsResults.FindBugsSummary.'total_bugs' = bugCount   // Fixes visitor problem
+                // Fixes visitor problem
+                path.SpotbugsResults.FindBugsSummary.'total_bugs' = bugCount
 
                 xmlProject.appendNode {
                     WrkDir(project.build.directory)
@@ -1197,7 +1300,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             // With -Dspotbugs.sarifFullPath=true
             // The location uri will be replace by path relative to the root of project
             // SomeFile.java => src/main/java/SomeFile.java
-            //This change is required for some tool including Github code scanning API
+            // This change is required for some tool including Github code scanning API
             if (sarifFullPath) {
 
                 def indexer = new SourceFileIndexer()
@@ -1225,6 +1328,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                 }
             }
+
+            forceFileCreation(sarifFinalFile)
 
             sarifFinalFile.withWriter {
                 builder.writeTo(it)
@@ -1278,28 +1383,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     public void setReportOutputDirectory(File reportOutputDirectory) {
         super.setReportOutputDirectory(reportOutputDirectory)
         this.outputDirectory = reportOutputDirectory
-    }
-
-    /**
-     * Collects the java sources from the source roots.
-     *
-     * @return A list containing the java sources or an empty list if no java sources are found.
-     *
-     */
-    protected List getJavaSources(Locale locale) {
-        List sourceFiles = new ArrayList()
-
-        if (classFilesDirectory.exists() && classFilesDirectory.isDirectory()) {
-            List files = FileUtils.getFiles(classFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null)
-            sourceFiles.addAll(files)
-        }
-
-        if (testClassFilesDirectory.exists() && testClassFilesDirectory.isDirectory() && includeTests) {
-            List files = FileUtils.getFiles(testClassFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null)
-            sourceFiles.addAll(files)
-        }
-
-        return sourceFiles
     }
 
 }

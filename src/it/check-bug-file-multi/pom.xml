@@ -14,57 +14,39 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
 
-  <!-- Parent is disabled on purpose
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>spotbugs-maven-plugin.it</groupId>
     <artifactId>common</artifactId>
     <version>testing</version>
     <relativePath>../common.xml</relativePath>
   </parent>
-  -->
-
-  <groupId>spotbugs-maven-plugin.it</groupId>
-  <version>testing</version>
-  <artifactId>skipEmpty</artifactId>
-  <name>skipEmpty</name>
+  <artifactId>check-bug-file-multi</artifactId>
+  <name>check-bug-file-multi</name>
   <packaging>jar</packaging>
-
-  <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-  </properties>
-
   <build>
+    <extensions>
+      <extension>
+        <groupId>spotbugs-maven-plugin.it</groupId>
+        <artifactId>build-tools</artifactId>
+        <version>testing</version>
+      </extension>
+    </extensions>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>@sitePluginVersion@</version>
-      </plugin>
-    </plugins>
-  </build>
-
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jxr-plugin</artifactId>
-        <version>@jxrPluginVersion@</version>
-      </plugin>
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>@pom.version@</version>
         <configuration>
-          <spotbugsXmlOutput>true</spotbugsXmlOutput>
-          <skipEmptyReport>true</skipEmptyReport>
           <xmlOutput>true</xmlOutput>
+          <failOnError>true</failOnError>
+          <debug>@spotbugsTestDebug@</debug>
+          <threshold>High</threshold>
+          <excludeBugsFile>baseline/spotbugs-baseline-outputstream.xml,baseline/spotbugs-baseline-other.xml</excludeBugsFile>
         </configuration>
       </plugin>
     </plugins>
-  </reporting>
+  </build>
 </project>

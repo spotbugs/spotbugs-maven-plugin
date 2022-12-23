@@ -1,7 +1,8 @@
 package org.codehaus.mojo.spotbugs
 
 class PluginArtifact {
-    String groupId, artifactId, version
-
+    String groupId;
+    String artifactId
+    String version
     String type = "jar"
 }

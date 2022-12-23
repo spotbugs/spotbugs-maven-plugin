@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<BugCollection sequence="0" release="" analysisTimestamp="1653586688929" version="4.7.0" timestamp="1653586685292">
+  <BugInstance instanceOccurrenceNum="0" instanceHash="a7786a4e4e4b9291a71529139eda42d1" rank="5" abbrev="IO" category="CORRECTNESS" priority="1" type="IO_APPENDING_TO_OBJECT_OUTPUT_STREAM" instanceOccurrenceMax="0">
+    <ShortMessage>Doomed attempt to append to an object output stream</ShortMessage>
+    <LongMessage>Doomed attempt to append to an object output stream in AppendingToAnObjectOutputStream.appendObject1(File, Object)</LongMessage>
+    <Class classname="AppendingToAnObjectOutputStream" primary="true">
+      <SourceLine classname="AppendingToAnObjectOutputStream" start="10" end="38" sourcepath="AppendingToAnObjectOutputStream.java" sourcefile="AppendingToAnObjectOutputStream.java">
+        <Message>At AppendingToAnObjectOutputStream.java:[lines 10-38]</Message>
+      </SourceLine>
+      <Message>In class AppendingToAnObjectOutputStream</Message>
+    </Class>
+    <Method isStatic="true" classname="AppendingToAnObjectOutputStream" signature="(Ljava/io/File;Ljava/lang/Object;)V" name="appendObject1" primary="true">
+      <SourceLine endBytecode="62" classname="AppendingToAnObjectOutputStream" start="14" end="17" sourcepath="AppendingToAnObjectOutputStream.java" sourcefile="AppendingToAnObjectOutputStream.java" startBytecode="0"/>
+      <Message>In method AppendingToAnObjectOutputStream.appendObject1(File, Object)</Message>
+    </Method>
+    <SourceLine endBytecode="13" classname="AppendingToAnObjectOutputStream" start="14" end="14" sourcepath="AppendingToAnObjectOutputStream.java" sourcefile="AppendingToAnObjectOutputStream.java" startBytecode="13" primary="true">
+      <Message>At AppendingToAnObjectOutputStream.java:[line 14]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum="0" instanceHash="291247b70690f65de576af5f247deda2" rank="5" abbrev="IO" category="CORRECTNESS" priority="1" type="IO_APPENDING_TO_OBJECT_OUTPUT_STREAM" instanceOccurrenceMax="0">
+    <ShortMessage>Doomed attempt to append to an object output stream</ShortMessage>
+    <LongMessage>Doomed attempt to append to an object output stream in AppendingToAnObjectOutputStream.appendObject2(File, Object)</LongMessage>
+    <Class classname="AppendingToAnObjectOutputStream" primary="true">
+      <SourceLine classname="AppendingToAnObjectOutputStream" start="10" end="38" sourcepath="AppendingToAnObjectOutputStream.java" sourcefile="AppendingToAnObjectOutputStream.java">
+        <Message>At AppendingToAnObjectOutputStream.java:[lines 10-38]</Message>
+      </SourceLine>
+      <Message>In class AppendingToAnObjectOutputStream</Message>
+    </Class>
+    <Method isStatic="true" classname="AppendingToAnObjectOutputStream" signature="(Ljava/io/File;Ljava/lang/Object;)V" name="appendObject2" primary="true">
+      <SourceLine endBytecode="69" classname="AppendingToAnObjectOutputStream" start="21" end="24" sourcepath="AppendingToAnObjectOutputStream.java" sourcefile="AppendingToAnObjectOutputStream.java" startBytecode="0"/>
+      <Message>In method AppendingToAnObjectOutputStream.appendObject2(File, Object)</Message>
+    </Method>
+    <SourceLine endBytecode="20" classname="AppendingToAnObjectOutputStream" start="21" end="21" sourcepath="AppendingToAnObjectOutputStream.java" sourcefile="AppendingToAnObjectOutputStream.java" startBytecode="20" primary="true">
+      <Message>At AppendingToAnObjectOutputStream.java:[line 21]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum="0" instanceHash="cff3b96e366dd11c97ec3fe55ef625d3" rank="5" abbrev="IO" category="CORRECTNESS" priority="1" type="IO_APPENDING_TO_OBJECT_OUTPUT_STREAM" instanceOccurrenceMax="0">
+    <ShortMessage>Doomed attempt to append to an object output stream</ShortMessage>
+    <LongMessage>Doomed attempt to append to an object output stream in AppendingToAnObjectOutputStream.appendObject3(String, Object)</LongMessage>
+    <Class classname="AppendingToAnObjectOutputStream" primary="true">
+      <SourceLine classname="AppendingToAnObjectOutputStream" start="10" end="38" sourcepath="AppendingToAnObjectOutputStream.java" sourcefile="AppendingToAnObjectOutputStream.java">
+        <Message>At AppendingToAnObjectOutputStream.java:[lines 10-38]</Message>
+      </SourceLine>
+      <Message>In class AppendingToAnObjectOutputStream</Message>
+    </Class>
+    <Method isStatic="true" classname="AppendingToAnObjectOutputStream" signature="(Ljava/lang/String;Ljava/lang/Object;)V" name="appendObject3" primary="true">
+      <SourceLine endBytecode="62" classname="AppendingToAnObjectOutputStream" start="28" end="31" sourcepath="AppendingToAnObjectOutputStream.java" sourcefile="AppendingToAnObjectOutputStream.java" startBytecode="0"/>
+      <Message>In method AppendingToAnObjectOutputStream.appendObject3(String, Object)</Message>
+    </Method>
+    <SourceLine endBytecode="13" classname="AppendingToAnObjectOutputStream" start="28" end="28" sourcepath="AppendingToAnObjectOutputStream.java" sourcefile="AppendingToAnObjectOutputStream.java" startBytecode="13" primary="true">
+      <Message>At AppendingToAnObjectOutputStream.java:[line 28]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum="0" instanceHash="9348141520cc8532ae7a66b94539b443" rank="5" abbrev="IO" category="CORRECTNESS" priority="1" type="IO_APPENDING_TO_OBJECT_OUTPUT_STREAM" instanceOccurrenceMax="0">
+    <ShortMessage>Doomed attempt to append to an object output stream</ShortMessage>
+    <LongMessage>Doomed attempt to append to an object output stream in AppendingToAnObjectOutputStream.appendObject4(String, Object)</LongMessage>
+    <Class classname="AppendingToAnObjectOutputStream" primary="true">
+      <SourceLine classname="AppendingToAnObjectOutputStream" start="10" end="38" sourcepath="AppendingToAnObjectOutputStream.java" sourcefile="AppendingToAnObjectOutputStream.java">
+        <Message>At AppendingToAnObjectOutputStream.java:[lines 10-38]</Message>
+      </SourceLine>
+      <Message>In class AppendingToAnObjectOutputStream</Message>
+    </Class>
+    <Method isStatic="true" classname="AppendingToAnObjectOutputStream" signature="(Ljava/lang/String;Ljava/lang/Object;)V" name="appendObject4" primary="true">
+      <SourceLine endBytecode="69" classname="AppendingToAnObjectOutputStream" start="35" end="38" sourcepath="AppendingToAnObjectOutputStream.java" sourcefile="AppendingToAnObjectOutputStream.java" startBytecode="0"/>
+      <Message>In method AppendingToAnObjectOutputStream.appendObject4(String, Object)</Message>
+    </Method>
+    <SourceLine endBytecode="20" classname="AppendingToAnObjectOutputStream" start="35" end="35" sourcepath="AppendingToAnObjectOutputStream.java" sourcefile="AppendingToAnObjectOutputStream.java" startBytecode="20" primary="true">
+      <Message>At AppendingToAnObjectOutputStream.java:[line 35]</Message>
+    </SourceLine>
+  </BugInstance>
+</BugCollection>
