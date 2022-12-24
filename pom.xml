@@ -162,7 +162,6 @@
 
     <antVersion>1.10.12</antVersion>
     <groovyVersion>4.0.6</groovyVersion>
-    <groovy3Version>3.0.13</groovy3Version>
     <javaparserVersion>3.24.9</javaparserVersion>
 
     <doxiaVersion>1.11.1</doxiaVersion>
@@ -185,7 +184,7 @@
     <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
     <gmavenPluginVersion>2.1.0</gmavenPluginVersion>
     <infoReportsPluginVersion>3.4.1</infoReportsPluginVersion>
-    <invokerPluginVersion>3.3.0</invokerPluginVersion>
+    <invokerPluginVersion>3.4.0</invokerPluginVersion>
     <javadocPluginVersion>3.4.1</javadocPluginVersion>
     <pluginPluginVersion>3.7.0</pluginPluginVersion>
     <scmPluginVersion>1.13.0</scmPluginVersion>
@@ -856,26 +855,26 @@
               </execution>
             </executions>
             <dependencies>
-              <!-- Invoker is still using groovy 3 -->
+              <!-- Keep groovy at same version we are using -->
               <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy</artifactId>
-                <version>${groovy3Version}</version>
+                <version>${groovyVersion}</version>
               </dependency>
               <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy-json</artifactId>
-                <version>${groovy3Version}</version>
+                <version>${groovyVersion}</version>
               </dependency>
               <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy-nio</artifactId>
-                <version>${groovy3Version}</version>
+                <version>${groovyVersion}</version>
               </dependency>
               <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy-xml</artifactId>
-                <version>${groovy3Version}</version>
+                <version>${groovyVersion}</version>
               </dependency>
             </dependencies>
           </plugin>
