@@ -164,7 +164,7 @@
     <groovyVersion>4.0.7</groovyVersion>
     <javaparserVersion>3.24.10</javaparserVersion>
 
-    <doxiaVersion>1.11.1</doxiaVersion>
+    <doxiaVersion>1.12.0</doxiaVersion>
     <doxiaSiteToolsVersion>1.11.1</doxiaSiteToolsVersion>
 
     <mavenCoreVersion>3.8.7</mavenCoreVersion>
