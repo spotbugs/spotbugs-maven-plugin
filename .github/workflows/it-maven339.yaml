@@ -30,7 +30,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: 11
+          java-version: 17
           distribution: 'zulu'
       - name: Load Maven 3.3.9
         run: ./mvnw org.apache.maven.plugins:maven-wrapper-plugin:3.1.0:wrapper -DmavenVersion=3.3.9
