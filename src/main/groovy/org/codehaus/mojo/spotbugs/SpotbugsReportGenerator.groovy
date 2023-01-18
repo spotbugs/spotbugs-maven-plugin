@@ -421,6 +421,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             sink.tableRow_()
         }
 
+        sink.tableRows_();
         sink.table_()
 
         sink.section2_()
@@ -509,6 +510,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         sink.text(bugClass)
         sink.sectionTitle2_()
         sink.table()
+        sink.tableRows(null, false)
         sink.tableRow()
 
         // bug
@@ -554,6 +556,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         sink.sectionTitle1_()
 
         sink.table()
+        sink.tableRows(null, false)
         sink.tableRow()
 
         // classes
@@ -601,6 +604,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         sink.tableCell_()
 
         sink.tableRow_()
+        sink.tableRows_();
         sink.table_()
 
         sink.section1_()
@@ -625,6 +629,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
          * Class Summary
          */
         sink.table()
+        sink.tableRows(null, false)
         sink.tableRow()
 
         // files
@@ -667,6 +672,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             bugClasses << classStatsValue
         }
 
+        sink.tableRows_();
         sink.table_()
 
         sink.section1_()
