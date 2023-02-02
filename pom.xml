@@ -162,7 +162,7 @@
 
     <antVersion>1.10.13</antVersion>
     <groovyVersion>4.0.7</groovyVersion>
-    <javaparserVersion>3.24.10</javaparserVersion>
+    <javaparserVersion>3.25.0</javaparserVersion>
 
     <doxiaVersion>1.12.0</doxiaVersion>
     <doxiaSiteToolsVersion>1.11.1</doxiaSiteToolsVersion>
