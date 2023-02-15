@@ -185,7 +185,7 @@
     <gmavenPluginVersion>2.1.0</gmavenPluginVersion>
     <infoReportsPluginVersion>3.4.2</infoReportsPluginVersion>
     <invokerPluginVersion>3.4.0</invokerPluginVersion>
-    <javadocPluginVersion>3.4.1</javadocPluginVersion>
+    <javadocPluginVersion>3.5.0</javadocPluginVersion>
     <pluginPluginVersion>3.7.1</pluginPluginVersion>
     <scmPluginVersion>1.13.0</scmPluginVersion>
     <sitePluginVersion>3.12.1</sitePluginVersion>
