@@ -33,6 +33,6 @@ jobs:
           java-version: 17
           distribution: 'zulu'
       - name: Build Setup
-        run: ./mvnw clean install
+        run: ./mvnw -B -V clean install --no-transfer-progress
       - name: Integration Test with Maven
-        run: ./mvnw -DtestSrc=remote -Prun-its clean install -Dinvoker.parallelThreads=4
+        run: ./mvnw -B -V -DtestSrc=remote -Prun-its clean install -Dinvoker.parallelThreads=4 --no-transfer-progress

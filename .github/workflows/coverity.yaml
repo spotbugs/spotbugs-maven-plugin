@@ -20,7 +20,7 @@ jobs:
         run: |
           wget -q https://scan.coverity.com/download/linux64 --post-data "token=$COVERITY_TOKEN&project=spotbugs%2Fspotbugs-maven-plugin" -O coverity_tool.tgz
           tar -xf coverity_tool.tgz
-          ./cov-analysis-linux64-*/bin/cov-build --dir cov-int ./mvnw -B -DskipTests=true verify
+          ./cov-analysis-linux64-*/bin/cov-build --dir cov-int ./mvnw -B -V -DskipTests=true verify --no-transfer-progress
           tar czvf spotbugs-maven-plugin.tgz cov-int
           curl --form token=$COVERITY_TOKEN \
             --form email=$EMAIL \
