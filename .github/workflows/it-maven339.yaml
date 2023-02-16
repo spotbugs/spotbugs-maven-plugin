@@ -33,8 +33,8 @@ jobs:
           java-version: 17
           distribution: 'zulu'
       - name: Load Maven 3.3.9
-        run: ./mvnw org.apache.maven.plugins:maven-wrapper-plugin:3.1.1:wrapper -DmavenVersion=3.3.9
+        run: ./mvnw -B org.apache.maven.plugins:maven-wrapper-plugin:3.1.1:wrapper -DmavenVersion=3.3.9 --no-transfer-progress
       - name: Build Setup
-        run: ./mvnw clean install -Dmaven.min-version=3.3.9
+        run: ./mvnw -B clean install -Dmaven.min-version=3.3.9 --no-transfer-progress
       - name: Integration Test with Maven
-        run: ./mvnw -DtestSrc=remote -Prun-its clean install -Dinvoker.parallelThreads=4
+        run: ./mvnw -B -DtestSrc=remote -Prun-its clean install -Dinvoker.parallelThreads=4 --no-transfer-progress
