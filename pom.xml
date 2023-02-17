@@ -155,25 +155,25 @@
     <!-- Groovymavenplus doesn't like simple '8' for java 8 until next release -->
     <java.version>1.8</java.version>
 
-    <junitVersion>5.9.1</junitVersion>
+    <junitVersion>5.9.2</junitVersion>
     <spotbugsVersion>4.7.3</spotbugsVersion>
     <spotbugsTag>4.7.3</spotbugsTag>
     <slf4jVersion>2.0.6</slf4jVersion>
 
     <antVersion>1.10.13</antVersion>
     <groovyVersion>4.0.7</groovyVersion>
-    <javaparserVersion>3.24.10</javaparserVersion>
+    <javaparserVersion>3.25.0</javaparserVersion>
 
     <doxiaVersion>1.12.0</doxiaVersion>
     <doxiaSiteToolsVersion>1.11.1</doxiaSiteToolsVersion>
 
-    <mavenCoreVersion>3.8.7</mavenCoreVersion>
+    <mavenCoreVersion>3.9.0</mavenCoreVersion>
     <mavenSharedUtilsVersion>3.3.4</mavenSharedUtilsVersion>
     <mavenTransferVersion>0.13.1</mavenTransferVersion>
     <mavenCommonArtifactFilters>3.3.2</mavenCommonArtifactFilters>
     <mavenReportingApiVersion>3.1.1</mavenReportingApiVersion>
     <mavenReportingVersion>3.2.0</mavenReportingVersion>
-    <mavenVersion>3.8.7</mavenVersion>
+    <mavenVersion>3.9.0</mavenVersion>
 
     <plexusContainerVersion>2.1.1</plexusContainerVersion>
     <plexusResourcesVersion>1.2.0</plexusResourcesVersion>
@@ -184,8 +184,8 @@
     <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
     <gmavenPluginVersion>2.1.0</gmavenPluginVersion>
     <infoReportsPluginVersion>3.4.2</infoReportsPluginVersion>
-    <invokerPluginVersion>3.4.0</invokerPluginVersion>
-    <javadocPluginVersion>3.4.1</javadocPluginVersion>
+    <invokerPluginVersion>3.5.0</invokerPluginVersion>
+    <javadocPluginVersion>3.5.0</javadocPluginVersion>
     <pluginPluginVersion>3.7.1</pluginPluginVersion>
     <scmPluginVersion>1.13.0</scmPluginVersion>
     <sitePluginVersion>3.12.1</sitePluginVersion>
@@ -208,7 +208,7 @@
     <compilerPluginVersion>3.10.1</compilerPluginVersion>
     <findsecbugsVersion>1.12.0</findsecbugsVersion>
     <jxrPluginVersion>3.2.0</jxrPluginVersion>
-    <mavenSurefireVersion>3.0.0-M7</mavenSurefireVersion>
+    <mavenSurefireVersion>3.0.0-M9</mavenSurefireVersion>
     <jakartaeeApiVersion>8.0.0</jakartaeeApiVersion>
     <servletApiVersion>4.0.4</servletApiVersion>
     <sb-contribVersion>7.4.7</sb-contribVersion>
