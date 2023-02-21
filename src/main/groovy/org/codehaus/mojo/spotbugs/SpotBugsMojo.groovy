@@ -1291,11 +1291,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 outputFile.createNewFile()
 
                 def writer = outputFile.newWriter(effectiveEncoding)
+
                 if (effectiveEncoding.equalsIgnoreCase("Cp1252")) {
                     writer.write "<?xml version=\"1.0\" encoding=\"windows-1252\"?>"
                 } else {
                     writer.write "<?xml version=\"1.0\" encoding=\"" + effectiveEncoding.toLowerCase(Locale.ENGLISH) + "\"?>"
                 }
+
                 writer.write "\n"
 
                 writer << xmlBuilder.bind { mkp.yield path }
