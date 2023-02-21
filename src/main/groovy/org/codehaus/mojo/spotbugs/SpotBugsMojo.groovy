@@ -861,7 +861,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)
         def args = new ArrayList<String>()
 
-        if(userPrefs) {
+        if (userPrefs) {
             log.debug(" Adding User Preferences File -> ${userPrefs}" )
 
             args << "-userPrefs"
@@ -1230,7 +1230,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         }
 
-        if(sarifTempFile && sarifOutput && sarifTempFile.size() > 0) {
+        if (sarifTempFile && sarifOutput && sarifTempFile.size() > 0) {
 
             def slurpedResult = new JsonSlurper().parse(sarifTempFile)
             def builder = new JsonBuilder(slurpedResult)
@@ -1254,7 +1254,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                         String newFileName = indexer.searchActualFilesLocation(originalFullPath)
 
                         if (newFileName != null) {
-                            if(getLog().isDebugEnabled()) {
+                            if (getLog().isDebugEnabled()) {
                                 getLog().info("$originalFullPath modified to $newFileName")
                             }
                             loc.physicalLocation.artifactLocation.uri = newFileName
