@@ -72,6 +72,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Parameter(defaultValue = "false", property = "spotbugs.htmlOutput", required = true)
     boolean htmlOutput
 
+    /**
      * Turn on and off SARIF output of the Spotbugs report.
      * SARIF is a JSON format standardize for all code scanning tools.
      * https://docs.github.com/en/code-security/secure-coding/integrating-with-code-scanning/sarif-support-for-code-scanning
