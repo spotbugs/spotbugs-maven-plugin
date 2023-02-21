@@ -9,7 +9,7 @@ package org.codehaus.mojo.spotbugs
  * "License") you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *  https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -29,209 +29,215 @@ import org.apache.maven.plugin.logging.Log
  */
 class XDocsReporter {
 
-	/**
-	 * The key to get the value if the line number is not available.
-	 *
-	 */
-	static final String NOLINE_KEY = "report.spotbugs.noline"
+    /**
+     * The key to get the value if the line number is not available.
+     */
+    static final String NOLINE_KEY = "report.spotbugs.noline"
 
-	/**
-	 * The bundle to get the messages from.
-	 *
-	 */
-	ResourceBundle bundle
+    /**
+     * The bundle to get the messages from.
+     */
+    ResourceBundle bundle
 
-	/**
-	 * The logger to write logs to.
-	 *
-	 */
-	Log log
+    /**
+     * The logger to write logs to.
+     */
+    Log log
 
-	/**
-	 * The threshold of bugs severity.
-	 *
-	 */
-	String threshold
+    /**
+     * The threshold of bugs severity.
+     */
+    String threshold
 
-	/**
-	 * The used effort for searching bugs.
-	 *
-	 */
-	String effort
+    /**
+     * The used effort for searching bugs.
+     */
+    String effort
 
-	/**
-	 * The output Writer stream.
-	 *
-	 */
-	Writer outputWriter
+    /**
+     * The output Writer stream.
+     */
+    Writer outputWriter
 
-	GPathResult spotbugsResults
+    /**
+     * Spotbugs Results.
+     */
+    GPathResult spotbugsResults
 
-	List bugClasses
+    /**
+     * Bug Classes.
+     */
+    List bugClasses
 
-	/**
-	 * The directories containing the sources to be compiled.
-	 *
-	 */
-	List compileSourceRoots
+    /**
+     * The directories containing the sources to be compiled.
+     */
+    List compileSourceRoots
 
-	List testSourceRoots
+    /**
+     * The directories containing the test sources to be compiled.
+     */
+    List testSourceRoots
 
-	String outputEncoding
+    /**
+     * The output encoding.
+     */
+    String outputEncoding
 
-	/**
-	 * Default constructor.
-	 *
-	 * @param bundle - The Resource Bundle to use
-	 */
-	XDocsReporter(ResourceBundle bundle, Log log, String threshold, String effort, String outputEncoding) {
-		assert bundle
-		assert log
-		assert threshold
-		assert effort
-		assert outputEncoding
+    /**
+     * Default constructor.
+     *
+     * @param bundle
+     *            The Resource Bundle to use
+     */
+    XDocsReporter(ResourceBundle bundle, Log log, String threshold, String effort, String outputEncoding) {
+        assert bundle
+        assert log
+        assert threshold
+        assert effort
+        assert outputEncoding
 
-		this.bundle = bundle
-		this.log = log
-		this.threshold = threshold
-		this.effort = effort
-		this.outputEncoding = outputEncoding
+        this.bundle = bundle
+        this.log = log
+        this.threshold = threshold
+        this.effort = effort
+        this.outputEncoding = outputEncoding
 
-		this.outputWriter = null
-		this.spotbugsResults = null
+        this.outputWriter = null
+        this.spotbugsResults = null
 
-		this.compileSourceRoots = []
-		this.testSourceRoots = []
-		this.bugClasses = []
-	}
+        this.compileSourceRoots = []
+        this.testSourceRoots = []
+        this.bugClasses = []
+    }
 
-	/**
-	 * Returns the threshold string value for the integer input.
-	 *
-	 * @param thresholdValue
-	 *            The ThresholdValue integer to evaluate.
-	 * @return The string valueof the Threshold object.
-	 *
-	 */
-	protected String evaluateThresholdParameter(String thresholdValue) {
-		String thresholdName
+    /**
+     * Returns the threshold string value for the integer input.
+     *
+     * @param thresholdValue
+     *            The ThresholdValue integer to evaluate.
+     * @return The string valueof the Threshold object.
+     */
+    protected String evaluateThresholdParameter(String thresholdValue) {
+        String thresholdName
 
-		switch ( thresholdValue ) {
-			case "1":
-				thresholdName = "High"
-				break
-			case "2":
-				thresholdName = "Normal"
-				break
-			case "3":
-				thresholdName = "Low"
-				break
-			case "4":
-				thresholdName = "Exp"
-				break
-			case "5":
-				thresholdName = "Ignore"
-				break
-			default:
-				thresholdName = "Invalid Priority"
-		}
+        switch ( thresholdValue ) {
+            case "1":
+                thresholdName = "High"
+                break
+            case "2":
+                thresholdName = "Normal"
+                break
+            case "3":
+                thresholdName = "Low"
+                break
+            case "4":
+                thresholdName = "Exp"
+                break
+            case "5":
+                thresholdName = "Ignore"
+                break
+            default:
+                thresholdName = "Invalid Priority"
+        }
 
-		return thresholdName
-	}
+        return thresholdName
+    }
 
-	/**
-	 * Gets the Spotbugs Version of the report.
-	 *
-	 * @return The Spotbugs Version used on the report.
-	 *
-	 */
-	protected String getSpotBugsVersion() {
-		return edu.umd.cs.findbugs.Version.VERSION_STRING
-	}
+    /**
+     * Gets the Spotbugs Version of the report.
+     *
+     * @return The Spotbugs Version used on the report.
+     */
+    protected String getSpotBugsVersion() {
+        return edu.umd.cs.findbugs.Version.VERSION_STRING
+    }
 
-	public void generateReport() {
+    public void generateReport() {
 
-		def xmlBuilder = new StreamingMarkupBuilder()
-		xmlBuilder.encoding = "UTF-8"
+        def xmlBuilder = new StreamingMarkupBuilder()
+        xmlBuilder.encoding = "UTF-8"
 
-		def xdoc = {
-			mkp.xmlDeclaration()
-			log.debug("generateReport spotbugsResults is ${spotbugsResults}")
+        def xdoc = {
+            mkp.xmlDeclaration()
+            log.debug("generateReport spotbugsResults is ${spotbugsResults}")
 
-			BugCollection(version: getSpotBugsVersion(), threshold: SpotBugsInfo.spotbugsThresholds.get(threshold), effort: SpotBugsInfo.spotbugsEfforts.get(effort)) {
+            BugCollection(version: getSpotBugsVersion(), threshold: SpotBugsInfo.spotbugsThresholds.get(threshold), effort: SpotBugsInfo.spotbugsEfforts.get(effort)) {
 
-				log.debug("spotbugsResults.FindBugsSummary total_bugs is ${spotbugsResults.FindBugsSummary.@total_bugs.text()}")
+                log.debug("spotbugsResults.FindBugsSummary total_bugs is ${spotbugsResults.FindBugsSummary.@total_bugs.text()}")
 
-				spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() {classStats ->
+                spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() {classStats ->
 
-					def classStatsValue = classStats.'@class'.text()
-					def classStatsBugCount = classStats.'@bugs'.text()
+                    def classStatsValue = classStats.'@class'.text()
+                    def classStatsBugCount = classStats.'@bugs'.text()
 
-					log.debug("classStats...")
-					log.debug("classStatsValue is ${classStatsValue}")
-					log.debug("classStatsBugCount is ${classStatsBugCount}")
+                    log.debug("classStats...")
+                    log.debug("classStatsValue is ${classStatsValue}")
+                    log.debug("classStatsBugCount is ${classStatsBugCount}")
 
-					if ( Integer.parseInt(classStatsBugCount) > 0 ) {
-						bugClasses << classStatsValue
-					}
-				}
+                    if (Integer.parseInt(classStatsBugCount) > 0) {
+                        bugClasses << classStatsValue
+                    }
+                }
 
-				bugClasses.each() {bugClass ->
-					log.debug("finish bugClass is ${bugClass}")
-					file(classname: bugClass) {
-						spotbugsResults.BugInstance.each() {bugInstance ->
+                bugClasses.each() { bugClass ->
+                    log.debug("finish bugClass is ${bugClass}")
+                    file(classname: bugClass) {
+                        spotbugsResults.BugInstance.each() { bugInstance ->
 
-							if ( bugInstance.Class.find{ it.@primary == "true" }.@classname.text() == bugClass ) {
+                            if (bugInstance.Class.find{ it.@primary == "true" }.@classname.text() != bugClass) {
+                               return
+                            }
 
-								def type = bugInstance.@type.text()
-								def category = bugInstance.@category.text()
-								def message = bugInstance.LongMessage.text()
-								def priority = evaluateThresholdParameter(bugInstance.@priority.text())
-								def line = bugInstance.SourceLine.@start[0].text()
-								log.debug("BugInstance message is ${message}")
+                            def type = bugInstance.@type.text()
+                            def category = bugInstance.@category.text()
+                            def message = bugInstance.LongMessage.text()
+                            def priority = evaluateThresholdParameter(bugInstance.@priority.text())
+                            def line = bugInstance.SourceLine.@start[0].text()
+                            log.debug("BugInstance message is ${message}")
 
-								BugInstance(type: type, priority: priority, category: category, message: message, lineNumber: ((line) ? line: "-1"))
-							}
-						}
-					}
-				}
+                            BugInstance(type: type, priority: priority, category: category, message: message, lineNumber: ((line) ? line: "-1"))
+                        }
+                    }
+                }
 
-				log.debug("Printing Errors")
-				Error() {
-					spotbugsResults.Error.analysisError.each() {analysisError ->
-						AnalysisError(analysisError.message.text())
-					}
+                log.debug("Printing Errors")
 
-					log.debug("Printing Missing classes")
+                Error() {
+                    spotbugsResults.Error.analysisError.each() {analysisError ->
+                        AnalysisError(analysisError.message.text())
+                    }
 
-					spotbugsResults.Error.MissingClass.each() {missingClass ->
-						MissingClass(missingClass.text)
-					}
-				}
+                    log.debug("Printing Missing classes")
 
-				Project() {
-					log.debug("Printing Source Roots")
+                    spotbugsResults.Error.MissingClass.each() {missingClass ->
+                        MissingClass(missingClass.text)
+                    }
+                }
 
-					if ( !compileSourceRoots.isEmpty() ) {
-						compileSourceRoots.each() {srcDir ->
-							log.debug("SrcDir is ${srcDir}")
-							SrcDir(srcDir)
-						}
-					}
+                Project() {
+                    log.debug("Printing Source Roots")
 
-					if ( !testSourceRoots.isEmpty() ) {
-						testSourceRoots.each() {srcDir ->
-							log.debug("SrcDir is ${srcDir}")
-							SrcDir(srcDir)
-						}
-					}
-				}
-			}
-		}
+                    if ( !compileSourceRoots.isEmpty() ) {
+                        compileSourceRoots.each() { srcDir ->
+                            log.debug("SrcDir is ${srcDir}")
+                            SrcDir(srcDir)
+                        }
+                    }
 
-		outputWriter << xmlBuilder.bind(xdoc)
-		outputWriter.flush()
-		outputWriter.close()
+                    if (!testSourceRoots.isEmpty()) {
+                        testSourceRoots.each() { srcDir ->
+                            log.debug("SrcDir is ${srcDir}")
+                            SrcDir(srcDir)
+                        }
+                    }
+                }
+            }
+        }
 
-	}
+        outputWriter << xmlBuilder.bind(xdoc)
+        outputWriter.flush()
+        outputWriter.close()
+    }
+
 }

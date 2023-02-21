@@ -3,7 +3,9 @@
         <pluginExecution>
             <pluginExecutionFilter>
                 <goals>
-                    <goal>compile</goal>
+                    <goal>check</goal>
+                    <goal>spotbugs</goal>
+                    <goal>verify</goal>
                 </goals>
             </pluginExecutionFilter>
             <action>

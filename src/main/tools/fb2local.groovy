@@ -39,5 +39,3 @@ modules.each(){ module ->
 }
 
 antBuilder.delete(file: "pom.xml")
-
-

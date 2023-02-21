@@ -3,7 +3,7 @@
   <publishDate position="left" format="MM-dd-yyyy HH:MM"/>
   <body>
     <links>
-      <item name="Maven" href="http://maven.apache.org/"/>
+      <item name="Maven" href="https://maven.apache.org/"/>
     </links>
     ${reports}
   </body>

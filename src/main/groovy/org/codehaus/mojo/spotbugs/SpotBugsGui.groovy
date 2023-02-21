@@ -9,7 +9,7 @@ package org.codehaus.mojo.spotbugs
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *  https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -179,15 +179,15 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     @Parameter( property="spotbugs.maxHeap", defaultValue = "512" )
     int maxHeap
 
-	/**
-	 * Resource Manager.
-	 *
-	 * @since 2.0
-	 */
-	@Component(role = ResourceManager.class)
-	ResourceManager resourceManager
+    /**
+     * Resource Manager.
+     *
+     * @since 2.0
+     */
+    @Component(role = ResourceManager.class)
+    ResourceManager resourceManager
 
-
+    @Override
     void execute() {
 
         def ant = new AntBuilder()
@@ -201,12 +201,13 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
         ant.project.setProperty('basedir', spotbugsXmlOutputDirectory.getAbsolutePath())
         ant.project.setProperty('verbose', "true")
 
-        ant.java(classname: "edu.umd.cs.findbugs.LaunchAppropriateUI", fork: "true", failonerror: "true", clonevm: "true", maxmemory: "${maxHeap}m")
-        {
+        ant.java(classname: "edu.umd.cs.findbugs.LaunchAppropriateUI", fork: "true", failonerror: "true", clonevm: "true", maxmemory: "${maxHeap}m") {
 
             def effectiveEncoding = System.getProperty( "file.encoding", "UTF-8" )
 
-            if ( encoding ) { effectiveEncoding = encoding }
+            if ( encoding ) {
+                effectiveEncoding = encoding
+            }
 
             log.info("File Encoding is " + effectiveEncoding)
 
@@ -237,10 +238,9 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
                 arg(value: spotbugsXml)
             }
 
-            classpath()
-            {
+            classpath() {
 
-                pluginArtifacts.each() {pluginArtifact ->
+                pluginArtifacts.each() { pluginArtifact ->
                     if ( debug ) {
                         log.debug("  Trying to Add to pluginArtifact ->" + pluginArtifact.file.toString())
                     }

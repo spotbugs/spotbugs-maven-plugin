@@ -12,7 +12,7 @@
 ~~ "License"); you may not use this file except in compliance
 ~~ with the License.  You may obtain a copy of the License at
 ~~
-~~   http://www.apache.org/licenses/LICENSE-2.0
+~~   https://www.apache.org/licenses/LICENSE-2.0
 ~~
 ~~ Unless required by applicable law or agreed to in writing,
 ~~ software distributed under the License is distributed on an
@@ -22,7 +22,7 @@
 ~~ under the License.
 
 ~~ NOTE: For help with the syntax of this file, see:
-~~ http://maven.apache.org/doxia/references/apt-format.html
+~~ https://maven.apache.org/doxia/references/apt-format.html
 
 Usage
 <version>${projectVersion}</version>
@@ -89,52 +89,11 @@ mvn site
 </project>
 +-----+
 
-  Then, execute the site plugin to generate the report.  
-
-
-+-----+
-mvn site
-+-----+
-
-
-* Filter bugs to report
-
-  To filter the classes and methods which are analyzed or omitted from analysis
-  you can use filters.
-  The filters allow specifying by class and method which bug categories to
-  include/exclude in/from the reports. The
-  {{{https://spotbugs.readthedocs.io/en/latest/filter.html}filter format specification}}
-  also contains useful examples.
-
-+-----+
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  ...
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${projectVersion}</version>
-        <configuration>
-          <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
-          <includeFilterFile>spotbugs-include.xml</includeFilterFile>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
-  ...
-</project>
-+-----+
-
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
-
 
 * Specifying which bug filters to run
 
@@ -168,11 +127,9 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
 
 * Specifying which bug detectors to run
 
@@ -203,11 +160,9 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
 
 * Specifying which bug detectors to skip
 
@@ -236,11 +191,9 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
 
 * Specifying which classes to analyze
 
@@ -269,12 +222,9 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
-
 
 * Using Third party or your own detectors
 
@@ -303,11 +253,9 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
 
 * Using Detectors from a Repository
 
@@ -341,7 +289,6 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
@@ -374,7 +321,6 @@ mvn site
 +-----+
 
   Then, execute the spotbugs plugin with the gui option.
-
 
 +-----+
 mvn spotbugs:gui

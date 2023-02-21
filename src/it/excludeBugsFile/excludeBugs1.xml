@@ -62,16 +62,16 @@ disagree as to whether this value is allowed to be null. Either the check is red
 or the previous dereference is erroneous.&lt;/p&gt;
 
     </Details></BugPattern><BugPattern category='CORRECTNESS' abbrev='NP' type='NP_NONNULL_PARAM_VIOLATION'><ShortDescription>Method call passes null to a nonnull parameter </ShortDescription><Details>
-      
+
       &lt;p&gt;
       This method passes a null value as the parameter of a method which
     must be nonnull. Either this parameter has been explicitly marked
     as @Nonnull, or analysis has determined that this parameter is
     always dereferenced.
       &lt;/p&gt;
-      
+
    </Details></BugPattern><BugPattern category='CORRECTNESS' abbrev='GC' type='GC_UNRELATED_TYPES'><ShortDescription>No relationship between generic parameter and method argument</ShortDescription><Details>
-     
+
      &lt;p&gt; This call to a generic collection method contains an argument
      with an incompatible class from that of the collection's parameter
     (i.e., the type of the argument is neither a supertype nor a subtype
@@ -95,9 +95,9 @@ or the previous dereference is erroneous.&lt;/p&gt;
     a &lt;code&gt;Foo&lt;/code&gt;, the equals method of argument (e.g., the equals method of the
     &lt;code&gt;Foo&lt;/code&gt; class) used to perform the equality checks.
     &lt;/p&gt;
-     
+
     </Details></BugPattern><BugPattern category='CORRECTNESS' abbrev='IO' type='IO_APPENDING_TO_OBJECT_OUTPUT_STREAM'><ShortDescription>Doomed attempt to append to an object output stream</ShortDescription><Details>
-      
+
       &lt;p&gt;
      This code opens a file in append mode and then wraps the result in an object output stream.
      This won't allow you to append to an existing object output stream stored in a file. If you want to be
@@ -111,7 +111,7 @@ or the previous dereference is erroneous.&lt;/p&gt;
       &lt;p&gt;
       TODO: example.
       &lt;/p&gt;
-      
+
     </Details></BugPattern><BugPattern category='CORRECTNESS' abbrev='INT' type='INT_BAD_COMPARISON_WITH_SIGNED_BYTE'><ShortDescription>Bad comparison of signed byte</ShortDescription><Details>
 
 &lt;p&gt; Signed bytes can only have a value in the range -128 to 127. Comparing

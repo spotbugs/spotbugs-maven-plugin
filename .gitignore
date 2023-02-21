@@ -1,7 +1,9 @@
 .classpath
+.github/keys
 .project
 .settings
 target/
+.idea/
 *.ipr
 *.iws
 *.iml

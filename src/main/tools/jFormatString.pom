@@ -6,13 +6,13 @@
   <artifactId>jFormatString</artifactId>
   <version>@Spotbugs.version@</version>
   <packaging>jar</packaging>
-  <url>http://www.github.com/spotbugs/</url>
+  <url>https://www.github.com/spotbugs/</url>
   <name>SpotBugs-jFormatString</name>
   <description>jFormatString for Spotbugs</description>
   <licenses>
     <license>
       <name>GNU Lesser Public License</name>
-      <url>http://www.gnu.org/licenses/lgpl.html</url>
+      <url>https://www.gnu.org/licenses/lgpl.html</url>
       <distribution>repo</distribution>
     </license>
   </licenses>

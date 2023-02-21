@@ -9,7 +9,7 @@ package org.codehaus.mojo.spotbugs
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *  https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -46,22 +46,13 @@ import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.util.FileUtils
 
-/**
- * Fail the build if there were any SpotBugs violations in the source code.
- * An XML report is put out by default in the target directory with the errors.
- * To see more documentation about SpotBugs' options, please see the <a href="http://spotbugs.readthedocs.io/en/latest/" class="externalLink">SpotBugs Manual.</a>.
- *
- * @since 2.0
- */
-@Mojo( name = "check", defaultPhase = LifecyclePhase.VERIFY, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true, threadSafe = true)
-@Execute( goal = "spotbugs")
-class SpotbugsViolationCheckMojo extends AbstractMojo {
+abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     /**
      * Location where generated html will be created.
      *
      */
-    @Parameter( defaultValue = '${project.reporting.outputDirectory}', required = true )
+    @Parameter(defaultValue = '${project.reporting.outputDirectory}', required = true)
     File outputDirectory
 
     /**
@@ -69,7 +60,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0.0
      */
-    @Parameter( defaultValue = "false", property="spotbugs.xmlOutput", required = true )
+    @Parameter(defaultValue = "false", property = "spotbugs.xmlOutput", required = true)
     boolean xmlOutput
 
     /**
@@ -77,7 +68,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0.0
      */
-    @Parameter( defaultValue = '${project.build.directory}', required = true )
+    @Parameter(defaultValue = '${project.build.directory}', required = true)
     File xmlOutputDirectory
 
     /**
@@ -87,7 +78,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      */
     @Deprecated
-    @Parameter( defaultValue = "true" )
+    @Parameter(defaultValue = "true")
     boolean spotbugsXmlOutput
 
     /**
@@ -95,7 +86,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.2.0
      */
-    @Parameter( defaultValue = '${project.build.directory}', required = true )
+    @Parameter(defaultValue = '${project.build.directory}', required = true)
     File spotbugsXmlOutputDirectory
 
     /**
@@ -109,41 +100,41 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
     /**
      * Doxia Site Renderer.
      */
-    @Component( role = Renderer.class)
+    @Component(role = Renderer.class)
     Renderer siteRenderer
 
     /**
      * Directory containing the class files for Spotbugs to analyze.
      */
-    @Parameter( defaultValue = '${project.build.outputDirectory}', required = true )
+    @Parameter(defaultValue = '${project.build.outputDirectory}', required = true)
     File classFilesDirectory
 
     /**
      * Directory containing the test class files for Spotbugs to analyze.
      *
      */
-    @Parameter( defaultValue = '${project.build.testOutputDirectory}', required = true )
+    @Parameter(defaultValue = '${project.build.testOutputDirectory}', required = true)
     File testClassFilesDirectory
 
     /**
      * Location of the Xrefs to link to.
      *
      */
-    @Parameter( defaultValue = '${project.reporting.outputDirectory}/xref' )
+    @Parameter(defaultValue = '${project.reporting.outputDirectory}/xref')
     File xrefLocation
 
     /**
      * Location of the Test Xrefs to link to.
      *
      */
-    @Parameter( defaultValue = '${project.reporting.outputDirectory}/xref-test' )
+    @Parameter(defaultValue = '${project.reporting.outputDirectory}/xref-test')
     File xrefTestLocation
 
     /**
      * The directories containing the sources to be compiled.
      *
      */
-    @Parameter( defaultValue = '${project.compileSourceRoots}', required = true, readonly = true )
+    @Parameter(defaultValue = '${project.compileSourceRoots}', required = true, readonly = true)
     List compileSourceRoots
 
     /**
@@ -151,7 +142,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.0
      */
-    @Parameter( defaultValue = '${project.testCompileSourceRoots}', required = true, readonly = true )
+    @Parameter(defaultValue = '${project.testCompileSourceRoots}', required = true, readonly = true)
     List testSourceRoots
 
     /**
@@ -159,28 +150,28 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.0
      */
-    @Parameter( defaultValue = "false", property="spotbugs.includeTests" )
+    @Parameter(defaultValue = "false", property = "spotbugs.includeTests")
     boolean includeTests
 
     /**
      * List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin.
      *
      */
-    @Parameter( property="plugin.artifacts", required = true, readonly = true )
+    @Parameter(property = "plugin.artifacts", required = true, readonly = true)
     List pluginArtifacts
 
     /**
      * The local repository, needed to download the coreplugin jar.
      *
      */
-    @Parameter( property="localRepository", required = true, readonly = true )
+    @Parameter(property = "localRepository", required = true, readonly = true)
     ArtifactRepository localRepository
 
     /**
      * Remote repositories which will be searched for the coreplugin jar.
      *
      */
-    @Parameter( property="project.remoteArtifactRepositories", required = true, readonly = true )
+    @Parameter(property = "project.remoteArtifactRepositories", required = true, readonly = true)
     List remoteArtifactRepositories
 
     /**
@@ -193,14 +184,14 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      * Maven Project.
      *
      */
-    @Parameter( property="project", required = true, readonly = true )
+    @Parameter(property = "project", required = true, readonly = true)
     MavenProject project
 
     /**
      * Encoding used for xml files. Default value is UTF-8.
      *
      */
-    @Parameter( defaultValue = "UTF-8", readonly = true )
+    @Parameter(defaultValue = "UTF-8", readonly = true)
     String xmlEncoding
 
     /**
@@ -209,7 +200,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.2
      */
-    @Parameter( defaultValue = '${project.build.sourceEncoding}', property="encoding" )
+    @Parameter(defaultValue = '${project.build.sourceEncoding}', property = "encoding")
     String sourceEncoding
 
     /**
@@ -218,20 +209,20 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.2
      */
-    @Parameter( defaultValue = '${project.reporting.outputEncoding}', property="outputEncoding" )
+    @Parameter(defaultValue = '${project.reporting.outputEncoding}', property = "outputEncoding")
     String outputEncoding
 
     /**
      * Threshold of minimum bug severity to report. Valid values are High, Default, Low, Ignore, and Exp (for experimental).
      *
      */
-    @Parameter( defaultValue = "Default", property="spotbugs.threshold" )
+    @Parameter(defaultValue = "Default", property = "spotbugs.threshold")
     String threshold
 
     /**
      * Artifact resolver, needed to download the coreplugin jar.
      */
-    @Component( role = ArtifactResolver.class )
+    @Component(role = ArtifactResolver.class)
     ArtifactResolver artifactResolver
 
     /**
@@ -253,7 +244,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0-beta-1
      */
-    @Parameter( property="spotbugs.includeFilterFile" )
+    @Parameter(property = "spotbugs.includeFilterFile")
     String includeFilterFile
 
     /**
@@ -275,7 +266,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0-beta-1
      */
-    @Parameter( property="spotbugs.excludeFilterFile" )
+    @Parameter(property = "spotbugs.excludeFilterFile")
     String excludeFilterFile
 
     /**
@@ -298,7 +289,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.4.1
      */
-    @Parameter( property="spotbugs.excludeBugsFile" )
+    @Parameter(property = "spotbugs.excludeBugsFile")
     String excludeBugsFile
 
     /**
@@ -306,14 +297,14 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0-beta-1
      */
-    @Parameter( defaultValue = "Default", property="spotbugs.effort" )
+    @Parameter(defaultValue = "Default", property = "spotbugs.effort")
     String effort
 
     /**
      * Turn on Spotbugs debugging.
      *
      */
-    @Parameter( defaultValue = "false", property="spotbugs.debug" )
+    @Parameter(defaultValue = "false", property = "spotbugs.debug")
     Boolean debug
 
     /**
@@ -322,7 +313,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.1
      */
-    @Parameter( defaultValue = "false", property="spotbugs.relaxed" )
+    @Parameter(defaultValue = "false", property = "spotbugs.relaxed")
     Boolean relaxed
 
     /**
@@ -330,7 +321,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0-beta-1
      */
-    @Parameter( property="spotbugs.visitors" )
+    @Parameter(property = "spotbugs.visitors")
     String visitors
 
     /**
@@ -338,7 +329,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0-beta-1
      */
-    @Parameter( property="spotbugs.omitVisitors" )
+    @Parameter(property = "spotbugs.omitVisitors")
     String omitVisitors
 
     /**
@@ -367,7 +358,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.1
      */
-    @Parameter( property="spotbugs.onlyAnalyze" )
+    @Parameter(property = "spotbugs.onlyAnalyze")
     String onlyAnalyze
 
     /**
@@ -376,7 +367,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.3.2
      */
-    @Parameter( property="spotbugs.nested", defaultValue = "false" )
+    @Parameter(property = "spotbugs.nested", defaultValue = "false")
     Boolean nested
 
     /**
@@ -385,7 +376,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.3.2
      */
-    @Parameter( property="spotbugs.trace", defaultValue = "false" )
+    @Parameter(property = "spotbugs.trace", defaultValue = "false")
     Boolean trace
 
     /**
@@ -393,7 +384,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.4.1
      */
-    @Parameter( property="spotbugs.maxRank" )
+    @Parameter(property = "spotbugs.maxRank")
     int maxRank
 
     /**
@@ -401,7 +392,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.1
      */
-    @Parameter( property="spotbugs.skip", defaultValue = "false" )
+    @Parameter(property = "spotbugs.skip", defaultValue = "false")
     boolean skip
 
     /**
@@ -409,7 +400,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.0
      */
-    @Component( role = ResourceManager.class)
+    @Component(role = ResourceManager.class)
     ResourceManager resourceManager
 
     /**
@@ -417,7 +408,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.1-SNAPSHOT
      */
-    @Component( role = SiteTool.class)
+    @Component(role = SiteTool.class)
     SiteTool siteTool
 
     /**
@@ -425,15 +416,24 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.0
      */
-    @Parameter( property="spotbugs.failOnError", defaultValue = "true" )
+    @Parameter(property = "spotbugs.failOnError", defaultValue = "true")
     boolean failOnError
+
+    /**
+     * Prioritiy threshold which bugs have to reach to cause a failure. Valid values are High, Medium or Low.
+     * Bugs below this threshold will just issue a warning log entry.
+     *
+     * @since 4.0.1
+     */
+    @Parameter(property = "spotbugs.failThreshold")
+    String failThreshold
 
     /**
      * Fork a VM for Spotbugs analysis.  This will allow you to set timeouts and heap size.
      *
      * @since 2.3.2
      */
-    @Parameter( property="spotbugs.fork", defaultValue = "true" )
+    @Parameter(property = "spotbugs.fork", defaultValue = "true")
     boolean fork
 
     /**
@@ -442,7 +442,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.2
      */
-    @Parameter( property="spotbugs.maxHeap", defaultValue = "512" )
+    @Parameter(property = "spotbugs.maxHeap", defaultValue = "512")
     int maxHeap
 
     /**
@@ -453,7 +453,7 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.2
      */
-    @Parameter( property="spotbugs.timeout", defaultValue = "600000" )
+    @Parameter(property = "spotbugs.timeout", defaultValue = "600000")
     int timeout
 
     /**
@@ -463,12 +463,8 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.4.1
      */
-    @Parameter( property="spotbugs.jvmArgs" )
+    @Parameter(property = "spotbugs.jvmArgs")
     String jvmArgs
-
-    int bugCount
-
-    int errorCount
 
     /**
      * <p>
@@ -477,82 +473,95 @@ class SpotbugsViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.4.1
      */
-    @Parameter( property="spotbugs.maxAllowedViolations" , defaultValue = "0")
+    @Parameter(property = "spotbugs.maxAllowedViolations", defaultValue = "0")
     int maxAllowedViolations
 
-
+    @Override
     void execute() {
-        Locale locale = Locale.getDefault()
-        List sourceFiles
-
         log.debug("Executing spotbugs:check")
 
-        if (this.classFilesDirectory.exists() && this.classFilesDirectory.isDirectory()) {
-            sourceFiles = FileUtils.getFiles(classFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null)
-        }
-
-        if (!skip && sourceFiles) {
-
-            // this goes
-
-            log.debug("Here goes...............Executing spotbugs:check")
-
-            if (!spotbugsXmlOutputDirectory.exists()) {
-                if ( !spotbugsXmlOutputDirectory.mkdirs() ) {
-                    throw new MojoExecutionException("Cannot create xml output directory")
-                }
-            }
-
-            File outputFile = new File("${spotbugsXmlOutputDirectory}/${spotbugsXmlOutputFilename}")
-
-            if (outputFile.exists()) {
-
-                def path = new XmlSlurper().parse(outputFile)
-
-                def allNodes = path.depthFirst().collect { it }
-
-                bugCount = allNodes.findAll {it.name() == 'BugInstance'}.size()
-                log.info("BugInstance size is ${bugCount}")
-
-                errorCount = allNodes.findAll {it.name() == 'Error'}.size()
-                log.info("Error size is ${errorCount}")
-
-                def xml = new XmlParser().parse(outputFile)
-                def bugs = xml.BugInstance
-                def total = bugs.size()
-
-                if (total <= 0) {
-                    log.info('No errors/warnings found')
-                    return
-                }else if( maxAllowedViolations > 0 && total <= maxAllowedViolations){
-                    log.info("total ${total} violations are found which is set to be acceptable using configured property maxAllowedViolations :"+maxAllowedViolations +".\nBelow are list of bugs ignored :\n")
-                    printBugs(total, bugs)
-                    return;
-                }
-
-                log.info('Total bugs: ' + total)
-                for (i in 0..total-1) {
-                    def bug = bugs[i]
-                    log.error( bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK + bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
-                }
-
-                log.info('\n\n\nTo see bug detail using the Spotbugs GUI, use the following command "mvn spotbugs:gui"\n\n\n')
-
-                if ( (bugCount || errorCount) && failOnError ) {
-                    throw new MojoExecutionException("failed with ${bugCount} bugs and ${errorCount} errors ")
-                }
-            }
-        }
-        else {
+        if (skip || !doSourceFilesExist()) {
             log.debug("Nothing for SpotBugs to do here.")
+            return
         }
+
+        log.debug("Here goes...............Executing spotbugs:check")
+
+        if (!spotbugsXmlOutputDirectory.exists() && !spotbugsXmlOutputDirectory.mkdirs()) {
+            throw new MojoExecutionException("Cannot create xml output directory")
+        }
+
+        File outputFile = new File("${spotbugsXmlOutputDirectory}/${spotbugsXmlOutputFilename}")
+
+        if (outputFile.exists()) {
+
+            def xml = new XmlParser().parse(outputFile)
+
+            def bugs = xml.BugInstance
+            def bugCount = bugs.size()
+            log.info("BugInstance size is ${bugCount}")
+
+            def errorCount = xml.Error.size()
+            log.info("Error size is ${errorCount}")
+
+            if (bugCount <= 0) {
+                log.info('No errors/warnings found')
+                return
+            } else if (maxAllowedViolations > 0 && bugCount <= maxAllowedViolations) {
+                log.info("total ${bugCount} violations are found which is set to be acceptable using configured property maxAllowedViolations :"+maxAllowedViolations +".\nBelow are list of bugs ignored :\n")
+                printBugs(bugCount, bugs)
+                return;
+            }
+
+            log.info('Total bugs: ' + bugCount)
+            def bugCountAboveThreshold = 0
+            def priorityThresholdNum = failThreshold ? SpotBugsInfo.spotbugsPriority.indexOf(failThreshold) : Integer.MAX_VALUE
+            if (priorityThresholdNum == -1) {
+                throw new MojoExecutionException("Invalid value for failThreshold: ${failThreshold}")
+            }
+
+            for (i in 0..bugCount-1) {
+                def bug = bugs[i]
+                def priorityNum = bug.'@priority' as Integer
+                def priorityName = SpotBugsInfo.spotbugsPriority[priorityNum]
+                def logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
+                        bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type'
+
+                // lower is more severe
+                if (priorityNum <= priorityThresholdNum) {
+                    bugCountAboveThreshold += 1
+                    log.error(logMsg)
+                } else {
+                    log.info(logMsg)
+                }
+            }
+
+            log.info('\n\n\nTo see bug detail using the Spotbugs GUI, use the following command "mvn spotbugs:gui"\n\n\n')
+
+            if ((bugCountAboveThreshold || errorCount) && failOnError) {
+                throw new MojoExecutionException("failed with ${bugCountAboveThreshold} bugs and ${errorCount} errors ")
+            }
+        }
+    }
+
+    private boolean doSourceFilesExist() {
+        List sourceFiles = new ArrayList()
+
+        if (this.classFilesDirectory.exists() && this.classFilesDirectory.isDirectory()) {
+            sourceFiles.addAll(FileUtils.getFiles(classFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null))
+        }
+
+        if (this.includeTests && this.testClassFilesDirectory.exists() && this.testClassFilesDirectory.isDirectory()) {
+            sourceFiles.addAll(FileUtils.getFiles(testClassFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null))
+        }
+
+        !sourceFiles.isEmpty()
     }
 
     private void printBugs(total, bugs) {
         for (i in 0..total - 1) {
             def bug = bugs[i]
             log.error( bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK + bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
-
         }
     }
 

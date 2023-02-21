@@ -9,7 +9,7 @@ package org.codehaus.mojo.spotbugs
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *  https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -35,7 +35,6 @@ import org.codehaus.plexus.resource.ResourceManager
 /**
  * SpotBugs plugin support for Mojos.
  */
-
 trait SpotBugsPluginsTrait {
 
     // the trait needs certain objects to work, this need is expressed as abstract getters
@@ -45,9 +44,10 @@ trait SpotBugsPluginsTrait {
     abstract List getRemoteRepositories()
     abstract ArtifactRepository getLocalRepository()
     abstract File getSpotbugsXmlOutputDirectory()
-	abstract Log getLog()
-	abstract ResourceManager getResourceManager()
+    abstract Log getLog()
+    abstract ResourceManager getResourceManager()
 
+    // TODO This has been fixed for 2 years now, apply as noted...
     // properties in traits should be supported but don't compile currently:
     // https://issues.apache.org/jira/browse/GROOVY-7536
     // when fixed, should move pluginList and plugins properties here
@@ -80,8 +80,8 @@ trait SpotBugsPluginsTrait {
                     log.debug("  Processing Plugin: " + pluginFileName.toString())
 
                     urlPlugins += resourceHelper.getResourceFile(pluginFileName.toString()).absolutePath + ((pluginJar == pluginJars[pluginJars.size() - 1]) ? "" : File.pathSeparator)
-                } catch (MalformedURLException exception) {
-                    throw new MojoExecutionException("The addin plugin has an invalid URL")
+                } catch (MalformedURLException e) {
+                    throw new MojoExecutionException("The addin plugin has an invalid URL", e)
                 }
             }
         }
@@ -112,7 +112,6 @@ trait SpotBugsPluginsTrait {
                 urlPlugins += resourceHelper.getResourceFile(pomArtifact.file.absolutePath).absolutePath + ((plugin == plugins[plugins.size() - 1]) ? "" : File.pathSeparator)
             }
         }
-
 
         log.debug("  Plugin list is: ${urlPlugins}")
 
@@ -145,6 +144,5 @@ trait SpotBugsPluginsTrait {
 
         return "-effort:" + effortParameter
     }
-
 
 }

@@ -6,6 +6,11 @@
     </author>
   </properties>
   <body>
+    <release version="4.0.0" date="in Github" description="Released support for spotbugs 4.0">
+        <action dev="jwl" type="update">
+            Releasing support for spot bugs 4.0
+        </action>
+    </release>
     <release version="3.1.0" date="in GitHub" description="Rebrand and upgrade using Spotbugs">
         <action dev="jwl" type="update">
             Rebrand and upgrade to using spotbugs

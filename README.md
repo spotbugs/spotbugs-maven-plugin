@@ -1,6 +1,7 @@
 # Spotbugs Maven Plugin
 
-[![Build Status](https://travis-ci.org/spotbugs/spotbugs-maven-plugin.svg?branch=spotbugs)](https://travis-ci.org/spotbugs/spotbugs-maven-plugin)
+[![Java CI](https://github.com/spotbugs/spotbugs-maven-plugin/workflows/Java%20CI/badge.svg)](https://github.com/spotbugs/spotbugs-maven-plugin/actions?query=workflow%3A%22Java+CI%22)
+[![Java Integration Tests](https://github.com/spotbugs/spotbugs-maven-plugin/workflows/Java%20Integration%20Tests/badge.svg)](https://github.com/spotbugs/spotbugs-maven-plugin/actions?query=workflow%3A%22Java+Integration+Tests%22)
 [![Maven central](https://maven-badges.herokuapp.com/maven-central/com.github.spotbugs/spotbugs-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.spotbugs/spotbugs-maven-plugin)
 [![Apache 2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
@@ -62,3 +63,25 @@ Run gui with a specific version
 ```
 mvn com.github.spotbugs:spotbugs-maven-plugin:4.0.0:gui 
 ```
+
+## Contributing ##
+
+Run integration tests
+```
+mvn clean install -P run-its -DtestSrc=remote
+```
+
+## Groovy ##
+
+This plugin is written entirey in groovy.  It does have limitations when it comes to groovy in relation to java releases.  Every attempt is made to ensure fast releases to pick up groovy changes related to java.
+
+Known issues
+
+The security manager is turned off by default in jdk 18/19 and scheduled from removal in a future java release, therefore to use this plugin with jdk 18/19, the security manager may need turned back on using ```JAVA_OPTS``` to ```-Djava.security.manager=allow```.  See [groovy](https://groovy-lang.org/releasenotes/groovy-4.0.html) for more details.
+
+If using groovy with same group id (```org.codehaus.groovy 3.x``` or before or ```org.apache.groovy 4.x or above```), an error may occur if not on same version. To alleviate that, make sure groovy artifacts are defined in ```dependency management``` in order to force the loaded version correctly on your usage.
+
+
+## Eclipse m2e Integration ##
+
+The plugin cycles controlled by Eclipse require compilation phase for m2e without further help.  This plugin runs verify and during site generation.  Therefore Eclipse m2e will show up but not do anything with this plugin alone.  In order to have proper execution within Ecipse m2e, use [m2e-code-quality](https://github.com/m2e-code-quality/m2e-code-quality) plugin for spotbugs.
