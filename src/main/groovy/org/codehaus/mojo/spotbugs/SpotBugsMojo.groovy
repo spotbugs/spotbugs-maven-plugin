@@ -935,8 +935,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             args << "-sarif=" + tempFile.getAbsolutePath()
         }
 
-        args << "-auxclasspathFromInput"
-
         args << "-projectName"
         args << "${project.name}"
 
