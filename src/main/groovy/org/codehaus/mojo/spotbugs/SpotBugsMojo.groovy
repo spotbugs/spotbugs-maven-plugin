@@ -925,22 +925,25 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @return Spotbugs command line arguments.
      *
      */
-    private ArrayList<String> getSpotbugsArgs(File tempFile) {
+    private ArrayList<String> getSpotbugsArgs(File htmlTempFile, File xmlTempFile, File sarifTempFile) {
         ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)
         def args = new ArrayList<String>()
 
-        if(userPrefs) {
+        if (userPrefs) {
             log.debug(" Adding User Preferences File -> ${userPrefs}" )
 
             args << "-userPrefs"
             args << resourceHelper.getResourceFile(userPrefs.trim())
         }
 
-        if(!sarifOutput) {
-            args << "-xml:withMessages=" + tempFile.getAbsolutePath()
+        if (htmlOutput) {
+             args << "-html=" + htmlTempFile.getAbsolutePath()
         }
-        else {
-            args << "-sarif=" + tempFile.getAbsolutePath()
+
+        args << "-xml:withMessages=" + xmlTempFile.getAbsolutePath()
+
+        if (sarifOutput) {
+            args << "-sarif=" + sarifTempFile.getAbsolutePath()
         }
 
         args << "-projectName"
@@ -952,11 +955,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (debug) {
             log.debug("progress on")
             args << "-progress"
-        }
-
-        if (htmlOutput) {
-            log.debug("HTML output ")
-            args << "-html"
         }
 
         if (pluginList || plugins) {
@@ -1148,23 +1146,20 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         long startTime
         long duration
 
-        def fileName
-        if (!htmlOutput) {
-            fileName = "spotbugsTemp.xml"
-        } else {
-            fileName = "spotbugsTemp.htm"
-        }
-
-        File xmlTempFile = new File("${project.build.directory}/${fileName}")
+        File htmlTempFile = new File("${project.build.directory}/spotbugs.html")
+        File xmlTempFile = new File("${project.build.directory}/spotbugsTemp.xml")
         File sarifTempFile = new File("${project.build.directory}/spotbugsTempSarif.json")
         File sarifFinalFile = new File(sarifOutputDirectory, sarifOutputFilename)
 
-        if (xmlOutput || !sarifOutput) {
-            forceFileCreation(xmlTempFile)
-        } else {
-            forceFileCreation(sarifTempFile)
+        if (htmlOutput) {
+            forceFileCreation(htmlTempFile)
         }
 
+        forceFileCreation(xmlTempFile)
+
+        if (sarifOutput) {
+            forceFileCreation(sarifTempFile)
+        }
 
         outputEncoding = outputEncoding ?: 'UTF-8'
 
@@ -1180,7 +1175,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug("Plugin Artifacts to be added -> ${pluginArtifacts.toString()}")
             log.debug("outputFile is ${outputFile.getCanonicalPath()}")
             log.debug("output Directory is ${spotbugsXmlOutputDirectory.getAbsolutePath()}")
-            log.debug("TempFile is ${(sarifOutput ? sarifTempFile : xmlTempFile).getCanonicalPath()}");
+            if (htmlOutput) {
+                log.debug("HtmlTempFile is ${htmlTempFile.getCanonicalPath()}");
+            }
+            log.debug("XmlTempFile is ${xmlTempFile.getCanonicalPath()}");
+            if (sarifOutput) {
+                log.debug("SarifTempFile is ${sarifTempFile.getCanonicalPath()}");
+            }
         }
 
         def ant = new AntBuilder()
@@ -1191,7 +1192,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             startTime = System.nanoTime()
         }
 
-        def spotbugsArgs = !sarifOutput ? getSpotbugsArgs(xmlTempFile) : getSpotbugsArgs(sarifTempFile)
+        def spotbugsArgs = getSpotbugsArgs(htmlTempFile, xmlTempFile, sarifTempFile)
 
         def effectiveEncoding = System.getProperty("file.encoding", "UTF-8")
 
@@ -1248,8 +1249,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         log.info("Done SpotBugs Analysis....")
 
-        if (xmlTempFile.exists() && !sarifOutput && !htmlOutput) {
+        if (htmlTempFile.exists() && htmlOutput && htmlTempFile.size() > 0) {
+            // Do nothing more at this time
+        }
 
+        if (xmlTempFile.exists()) {
             if (xmlTempFile.size() > 0) {
                 def path = new XmlSlurper().parse(xmlTempFile)
 
