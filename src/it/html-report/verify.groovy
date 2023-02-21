@@ -14,38 +14,5 @@
  * limitations under the License.
  */
 
-//import groovy.xml.XmlSlurper
-
 File spotbugsHtml =  new File(basedir, 'target/spotbugs.html')
 assert spotbugsHtml.exists()
-
-//File spotbugXdoc = new File(basedir, 'target/spotbugs.xml')
-//assert spotbugXdoc.exists()
-//
-//File spotbugXml = new File(basedir, 'target/spotbugsXml.xml')
-//assert spotbugXml.exists()
-//
-//println '**********************************'
-//println "Checking Spotbugs Native XML file"
-//println '**********************************'
-//
-//path = new XmlSlurper().parse(spotbugXml)
-//
-//allNodes = path.depthFirst().collect{ it }
-//def spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
-//println "BugInstance size is ${spotbugsXmlErrors}"
-//
-//
-//
-//println '***************************'
-//println "Checking xDoc file"
-//println '***************************'
-//
-//def path = new XmlSlurper().parse(spotbugXdoc)
-//
-//xNodes = path.depthFirst().collect{ it }
-//def xdocErrors = xNodes.findAll {it.name() == 'BugInstance'}.size()
-//println "BugInstance size is ${xdocErrors}"
-//
-//assert xdocErrors == spotbugsXmlErrors
-
