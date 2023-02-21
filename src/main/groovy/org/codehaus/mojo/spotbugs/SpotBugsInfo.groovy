@@ -84,7 +84,7 @@ interface SpotBugsInfo {
 
     static final EOL = "\n"
 
-    public static final String URL = "url"
+    static final String URL = "url"
 
     static final String CLASS_SUFFIX = '.class'
 
