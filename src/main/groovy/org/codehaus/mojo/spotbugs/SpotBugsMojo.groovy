@@ -74,6 +74,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Parameter(defaultValue = "false", property = "spotbugs.sarifOutput", required = true)
     boolean sarifOutput
 
+    /**
+     * Sarif full Path used with sarif.
+     *
+     * @since 4.3.1
+     */
     @Parameter(defaultValue = "false", property = "spotbugs.sarifFullPath", required = true)
     boolean sarifFullPath
 
@@ -87,7 +92,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
 
     /**
-     * Set the name of the output SARIF file produced
+     * Set the name of the output SARIF file produced.
      *
      * @since 4.7.2.2
      */
@@ -142,28 +147,24 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     /**
      * Directory containing the test class files for Spotbugs to analyze.
-     *
      */
     @Parameter(defaultValue = '${project.build.testOutputDirectory}', required = true)
     File testClassFilesDirectory
 
     /**
      * Location of the Xrefs to link to.
-     *
      */
     @Parameter(defaultValue = '${project.reporting.outputDirectory}/xref')
     File xrefLocation
 
     /**
      * Location of the Test Xrefs to link to.
-     *
      */
     @Parameter(defaultValue = '${project.reporting.outputDirectory}/xref-test')
     File xrefTestLocation
 
     /**
      * The directories containing the sources to be compiled.
-     *
      */
     @Parameter(defaultValue = '${project.compileSourceRoots}', required = true, readonly = true)
     List compileSourceRoots
@@ -186,14 +187,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     /**
      * Run Spotbugs with -sourcepath parameter populated with the known source roots.
-     *
      */
     @Parameter(defaultValue = "false", property = "spotbugs.addSourceDirs")
     boolean addSourceDirs
 
     /**
      * List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin.
-     *
      */
     @Parameter(property = "plugin.artifacts", required = true, readonly = true)
     List pluginArtifacts
@@ -207,14 +206,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     /**
      * The local repository, needed to download the coreplugin jar.
-     *
      */
     @Parameter(property = "localRepository", required = true, readonly = true)
     ArtifactRepository localRepository
 
     /**
      * Remote repositories which will be searched for the coreplugin jar.
-     *
      */
     @Parameter(property = "project.remoteArtifactRepositories", required = true, readonly = true)
     List remoteArtifactRepositories
@@ -227,14 +224,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     /**
      * Maven Project.
-     *
      */
     @Parameter(property = "project", required = true, readonly = true)
     MavenProject project
 
     /**
      * Encoding used for xml files. Default value is UTF-8.
-     *
      */
     @Parameter(defaultValue = "UTF-8", readonly = true)
     String xmlEncoding
@@ -259,7 +254,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     /**
      * Threshold of minimum bug severity to report. Valid values are High, Default, Low, Ignore, and Exp (for experimental).
-     *
      */
     @Parameter(defaultValue = "Default", property = "spotbugs.threshold")
     String threshold
@@ -272,27 +266,20 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     /**
      * Used to look up Artifacts in the remote repository.
-     *
      */
     @Component(role = RepositorySystem.class)
     RepositorySystem factory
 
     /**
-     * <p>
      * File name of the include filter. Only bugs in matching the filters are reported.
-     * </p>
-     *
      * <p>
      * Potential values are a filesystem path, a URL, or a classpath resource.
-     * </p>
-     *
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
      * directory before being passed to Spotbugs as a filter file.
      * It supports multiple files separated by a comma
-     * </p>
      *
      * @since 1.0-beta-1
      */
@@ -300,25 +287,17 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     String includeFilterFile
 
     /**
-     * <p>
      * File name for include filter files. Only bugs in matching the filters are reported.
-     * </p>
-     *
      * <p>
      * Potential values are a filesystem path, a URL, or a classpath resource.
-     * </p>
-     *
      * <p>
      * This is an alternative to <code>&lt;includeFilterFile&gt;</code> which allows multiple
      * files to be specified as separate elements in a pom.
-     * </p>
-     *
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
      * directory before being passed to Spotbugs as a filter file.
-     * </p>
      *
      * @since 4.7.1.0
      */
@@ -326,21 +305,15 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     List includeFilterFiles
 
     /**
-     * <p>
      * File name of the exclude filter. Bugs matching the filters are not reported.
-     * </p>
-     *
      * <p>
      * Potential values are a filesystem path, a URL, or a classpath resource.
-     * </p>
-     *
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
      * directory before being passed to Spotbugs as a filter file.
      * It supports multiple files separated by a comma
-     * </p>
      *
      * @since 1.0-beta-1
      */
@@ -348,21 +321,15 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     String excludeFilterFile
 
     /**
-     * <p>
      * File name for exclude filter files. Bugs matching the filters are not reported.
-     * </p>
-     *
      * <p>
      * This is an alternative to <code>&lt;excludeFilterFile&gt;</code> which allows multiple
      * files to be specified as separate elements in a pom.
-     * </p>
-     *
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
      * directory before being passed to Spotbugs as a filter file.
-     * </p>
      *
      * @since 4.7.1.0
      */
@@ -370,21 +337,15 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     List excludeFilterFiles
 
     /**
-     * <p>
      * File names of the baseline files. Bugs found in the baseline files won't be reported.
-     * </p>
-     *
      * <p>
      * Potential values are a filesystem path, a URL, or a classpath resource.
-     * </p>
-     *
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
      * directory before being passed to Spotbugs as a filter file.
-     * </p>
-     *
+     * <p>
      * This is a comma-delimited list.
      *
      * @since 2.4.1
@@ -393,25 +354,17 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     String excludeBugsFile
 
     /**
-     * <p>
      * File names of the baseline files. Bugs found in the baseline files won't be reported.
-     * </p>
-     *
      * <p>
      * Potential values are a filesystem path, a URL, or a classpath resource.
-     * </p>
-     *
      * <p>
      * This is an alternative to <code>&lt;excludeBugsFile&gt;</code> which allows multiple
      * files to be specified as separate elements in a pom.
-     * </p>
-     *
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
      * directory before being passed to Spotbugs as a filter file.
-     * </p>
      *
      * @since 4.7.1.0
      */
@@ -459,20 +412,14 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     String omitVisitors
 
     /**
-     * <p>
      * The plugin list to include in the report. This is a comma-delimited list.
-     * </p>
-     *
      * <p>
      * Potential values are a filesystem path, a URL, or a classpath resource.
-     * </p>
-     *
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
      * directory before being passed to Spotbugs as a plugin file.
-     * </p>
      *
      * @since 1.0-beta-1
      */
@@ -480,11 +427,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     String pluginList
 
     /**
-     * <p>
      * Collection of PluginArtifact to work on. (PluginArtifact contains groupId, artifactId, version, type.)
      * See <a href="./usage.html#Using Detectors from a Repository">Usage</a> for details.
-     * </p>
-     *
      *
      * @since 2.4.1
      */
@@ -586,9 +530,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     int timeout
 
     /**
-     * <p>
      * The arguments to pass to the forked VM (ignored if fork is disabled).
-     * </p>
      *
      * @since 2.4.1
      */
@@ -618,9 +560,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     String userPrefs
 
     /**
-     * <p>
      * System properties to set in the VM (or the forked VM if fork is enabled).
-     * <p>
      *
      * @since 4.3.0
      */
@@ -921,7 +861,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)
         def args = new ArrayList<String>()
 
-        if(userPrefs) {
+        if (userPrefs) {
             log.debug(" Adding User Preferences File -> ${userPrefs}" )
 
             args << "-userPrefs"
@@ -1290,7 +1230,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         }
 
-        if(sarifTempFile && sarifOutput && sarifTempFile.size() > 0) {
+        if (sarifTempFile && sarifOutput && sarifTempFile.size() > 0) {
 
             def slurpedResult = new JsonSlurper().parse(sarifTempFile)
             def builder = new JsonBuilder(slurpedResult)
@@ -1314,7 +1254,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                         String newFileName = indexer.searchActualFilesLocation(originalFullPath)
 
                         if (newFileName != null) {
-                            if(getLog().isDebugEnabled()) {
+                            if (getLog().isDebugEnabled()) {
                                 getLog().info("$originalFullPath modified to $newFileName")
                             }
                             loc.physicalLocation.artifactLocation.uri = newFileName
