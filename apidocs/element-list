@@ -1,1 +1,1 @@
-org.codehaus.mojo.spotbugs
+com.github.spotbugs.spotbugs_maven_plugin
