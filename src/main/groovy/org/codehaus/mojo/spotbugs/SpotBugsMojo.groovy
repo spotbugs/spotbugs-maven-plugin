@@ -65,6 +65,14 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     boolean xmlOutput
 
     /**
+     * Turn on and off HTML output of the Spotbugs report.
+     *
+     * @since 4.7.3.1
+     */
+    @Parameter(defaultValue = "false", property = "spotbugs.htmlOutput", required = true)
+    boolean htmlOutput
+
+    /**
      * Turn on and off SARIF output of the Spotbugs report.
      * SARIF is a JSON format standardize for all code scanning tools.
      * https://docs.github.com/en/code-security/secure-coding/integrating-with-code-scanning/sarif-support-for-code-scanning
@@ -852,13 +860,14 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /**
      * Get the Spotbugs command line arguments.
      *
+     * @param htmlTempFile Spotbugs html temp output file
      * @param xmlTempFile Spotbugs xml temp output file
      * @param sarifTempFile Spotbugs sarif temp output file
      *
      * @return Spotbugs command line arguments.
      *
      */
-    private ArrayList<String> getSpotbugsArgs(File xmlTempFile, File sarifTempFile) {
+    private ArrayList<String> getSpotbugsArgs(File htmlTempFile, File xmlTempFile, File sarifTempFile) {
         ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)
         def args = new ArrayList<String>()
 
@@ -867,6 +876,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             args << "-userPrefs"
             args << resourceHelper.getResourceFile(userPrefs.trim())
+        }
+
+        if (htmlOutput) {
+             args << "-html=" + htmlTempFile.getAbsolutePath()
         }
 
         args << "-xml:withMessages=" + xmlTempFile.getAbsolutePath()
@@ -1075,16 +1088,20 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         long startTime
         long duration
 
+        File htmlTempFile = new File("${project.build.directory}/spotbugs.html")
         File xmlTempFile = new File("${project.build.directory}/spotbugsTemp.xml")
         File sarifTempFile = new File("${project.build.directory}/spotbugsTempSarif.json")
         File sarifFinalFile = new File(sarifOutputDirectory, sarifOutputFilename)
+
+        if (htmlOutput) {
+            forceFileCreation(htmlTempFile)
+        }
 
         forceFileCreation(xmlTempFile)
 
         if (sarifOutput) {
             forceFileCreation(sarifTempFile)
         }
-
 
         outputEncoding = outputEncoding ?: 'UTF-8'
 
@@ -1100,6 +1117,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug("Plugin Artifacts to be added -> ${pluginArtifacts.toString()}")
             log.debug("outputFile is ${outputFile.getCanonicalPath()}")
             log.debug("output Directory is ${spotbugsXmlOutputDirectory.getAbsolutePath()}")
+            if (htmlOutput) {
+                log.debug("HtmlTempFile is ${htmlTempFile.getCanonicalPath()}");
+            }
             log.debug("XmlTempFile is ${xmlTempFile.getCanonicalPath()}");
             if (sarifOutput) {
                 log.debug("SarifTempFile is ${sarifTempFile.getCanonicalPath()}");
@@ -1114,7 +1134,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             startTime = System.nanoTime()
         }
 
-        def spotbugsArgs = getSpotbugsArgs(xmlTempFile, sarifTempFile)
+        def spotbugsArgs = getSpotbugsArgs(htmlTempFile, xmlTempFile, sarifTempFile)
 
         def effectiveEncoding = System.getProperty("file.encoding", "UTF-8")
 
@@ -1171,8 +1191,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         log.info("Done SpotBugs Analysis....")
 
-        if (xmlTempFile.exists()) {
+        if (htmlTempFile.exists() && htmlOutput && htmlTempFile.size() > 0) {
+            // Do nothing more at this time
+        }
 
+        if (xmlTempFile.exists()) {
             if (xmlTempFile.size() > 0) {
                 def path = new XmlSlurper().parse(xmlTempFile)
 
