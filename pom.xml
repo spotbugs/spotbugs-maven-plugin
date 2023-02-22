@@ -190,7 +190,7 @@
     <scmPluginVersion>1.13.0</scmPluginVersion>
     <sitePluginVersion>3.12.1</sitePluginVersion>
     <sitePlugin36Version>3.6</sitePlugin36Version> <!-- For MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 4.8.x and simply drop the old support) -->
-    <versionsPluginVersion>2.14.2</versionsPluginVersion>
+    <versionsPluginVersion>2.15.0</versionsPluginVersion>
 
     <spotbugsTestDebug>false</spotbugsTestDebug>
     <integrationTestSrc>${project.build.directory}/it-src-spotbugs</integrationTestSrc>
