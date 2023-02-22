@@ -860,6 +860,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /**
      * Get the Spotbugs command line arguments.
      *
+     * @param htmlTempFile Spotbugs html temp output file
      * @param xmlTempFile Spotbugs xml temp output file
      * @param sarifTempFile Spotbugs sarif temp output file
      *
