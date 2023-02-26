@@ -21,7 +21,10 @@ package org.codehaus.mojo.spotbugs
 
 import groovy.xml.slurpersupport.GPathResult
 
+import org.apache.maven.doxia.markup.HtmlMarkup
 import org.apache.maven.doxia.sink.Sink
+import org.apache.maven.doxia.sink.SinkEventAttributes
+import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet
 import org.apache.maven.doxia.tools.SiteTool
 import org.apache.maven.plugin.logging.Log
 
@@ -502,8 +505,10 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         log.debug("Opening Class Report Section")
 
-        sink.anchor(bugClass)
-        sink.anchor_()
+        // Dollar '$' for nested classes is not valid character in sink.anchor() and therefore it is ignored
+        // https://github.com/spotbugs/spotbugs-maven-plugin/issues/236
+        sink.unknown(HtmlMarkup.A.toString(), new Object[] { HtmlMarkup.TAG_TYPE_START }, new SinkEventAttributeSet(SinkEventAttributes.NAME, bugClass));
+        sink.unknown(HtmlMarkup.A.toString(), new Object[] { HtmlMarkup.TAG_TYPE_END }, null);
 
         sink.section2()
         sink.sectionTitle2()
