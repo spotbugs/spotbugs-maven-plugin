@@ -508,7 +508,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
                 log.info('No errors/warnings found')
                 return
             } else if (maxAllowedViolations > 0 && bugCount <= maxAllowedViolations) {
-                log.info("total ${bugCount} violations are found which is set to be acceptable using configured property maxAllowedViolations :"+maxAllowedViolations +".\nBelow are list of bugs ignored :\n")
+                log.info("total ${bugCount} violations are found which is set to be acceptable using configured property maxAllowedViolations :" + maxAllowedViolations + "." + SpotBugsInfo.EOL + "Below are list of bugs ignored :" + SpotBugsInfo.EOL)
                 printBugs(bugCount, bugs)
                 return;
             }
@@ -536,7 +536,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
                 }
             }
 
-            log.info('\n\n\nTo see bug detail using the Spotbugs GUI, use the following command "mvn spotbugs:gui"\n\n\n')
+            log.info(SpotBugsInfo.EOL + SpotBugsInfo.EOL + SpotBugsInfo.EOL + 'To see bug detail using the Spotbugs GUI, use the following command "mvn spotbugs:gui"' + SpotBugsInfo.EOL + SpotBugsInfo.EOL + SpotBugsInfo.EOL)
 
             if ((bugCountAboveThreshold || errorCount) && failOnError) {
                 throw new MojoExecutionException("failed with ${bugCountAboveThreshold} bugs and ${errorCount} errors ")
