@@ -82,7 +82,7 @@ interface SpotBugsInfo {
 
     static final String PERIOD = "."
 
-    static final EOL = "\n"
+    static final EOL = System.lineSeparator()
 
     static final String URL = "url"
 

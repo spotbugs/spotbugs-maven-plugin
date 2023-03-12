@@ -1053,7 +1053,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                 auxClasspathList.each() { auxClasspathElement ->
                     log.debug("  Adding to AuxClasspath ->" + auxClasspathElement.toString())
-                    auxClasspathFile << auxClasspathElement.toString() + "\n"
+                    auxClasspathFile << auxClasspathElement.toString() + SpotBugsInfo.EOL
                 }
             }
         }
@@ -1244,7 +1244,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                     writer.write "<?xml version=\"1.0\" encoding=\"" + effectiveEncoding.toLowerCase(Locale.ENGLISH) + "\"?>"
                 }
 
-                writer.write "\n"
+                writer.write SpotBugsInfo.EOL
 
                 writer << xmlBuilder.bind { mkp.yield path }
             } else {
