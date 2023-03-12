@@ -8,14 +8,14 @@
 </head>
 <body>
 <div id="overview"><a href="../apidocs//UselessCurrentThread.html">View Javadoc</a></div><pre>
-<a class="jxr_linenumber" id="L1" href="#L1">1</a>   
+<a class="jxr_linenumber" id="L1" href="#L1">1</a>
 <a class="jxr_linenumber" id="L2" href="#L2">2</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="..//UselessCurrentThread.html">UselessCurrentThread</a> <strong class="jxr_keyword">implements</strong> Runnable {
 <a class="jxr_linenumber" id="L3" href="#L3">3</a>   	<strong class="jxr_keyword">private</strong> Thread unknownThread;
-<a class="jxr_linenumber" id="L4" href="#L4">4</a>   
+<a class="jxr_linenumber" id="L4" href="#L4">4</a>
 <a class="jxr_linenumber" id="L5" href="#L5">5</a>   	<strong class="jxr_keyword">public</strong> <a href="..//UselessCurrentThread.html">UselessCurrentThread</a>(Thread t) {
 <a class="jxr_linenumber" id="L6" href="#L6">6</a>   		unknownThread = t;
 <a class="jxr_linenumber" id="L7" href="#L7">7</a>   	}
-<a class="jxr_linenumber" id="L8" href="#L8">8</a>   
+<a class="jxr_linenumber" id="L8" href="#L8">8</a>
 <a class="jxr_linenumber" id="L9" href="#L9">9</a>   	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() {
 <a class="jxr_linenumber" id="L10" href="#L10">10</a>  		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" id="L11" href="#L11">11</a>  			<em class="jxr_comment">// The first should be ok, the next two are silly, the third is</em>
@@ -24,18 +24,18 @@
 <a class="jxr_linenumber" id="L14" href="#L14">14</a>  				System.out.println(<span class="jxr_string">"huh?"</span>);
 <a class="jxr_linenumber" id="L15" href="#L15">15</a>  				Thread.sleep(10000);
 <a class="jxr_linenumber" id="L16" href="#L16">16</a>  			}
-<a class="jxr_linenumber" id="L17" href="#L17">17</a>  
+<a class="jxr_linenumber" id="L17" href="#L17">17</a>
 <a class="jxr_linenumber" id="L18" href="#L18">18</a>  			<strong class="jxr_keyword">while</strong> (!Thread.currentThread().interrupted()) {
 <a class="jxr_linenumber" id="L19" href="#L19">19</a>  				System.out.println(<span class="jxr_string">"huh?"</span>);
 <a class="jxr_linenumber" id="L20" href="#L20">20</a>  				Thread.sleep(10000);
 <a class="jxr_linenumber" id="L21" href="#L21">21</a>  			}
-<a class="jxr_linenumber" id="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" id="L22" href="#L22">22</a>
 <a class="jxr_linenumber" id="L23" href="#L23">23</a>  			Thread t = Thread.currentThread();
 <a class="jxr_linenumber" id="L24" href="#L24">24</a>  			<strong class="jxr_keyword">while</strong> (!t.interrupted()) {
 <a class="jxr_linenumber" id="L25" href="#L25">25</a>  				System.out.println(<span class="jxr_string">"huh?"</span>);
 <a class="jxr_linenumber" id="L26" href="#L26">26</a>  				Thread.sleep(10000);
 <a class="jxr_linenumber" id="L27" href="#L27">27</a>  			}
-<a class="jxr_linenumber" id="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" id="L28" href="#L28">28</a>
 <a class="jxr_linenumber" id="L29" href="#L29">29</a>  			<strong class="jxr_keyword">while</strong> (!unknownThread.interrupted()) {
 <a class="jxr_linenumber" id="L30" href="#L30">30</a>  				System.out.println(<span class="jxr_string">"huh?"</span>);
 <a class="jxr_linenumber" id="L31" href="#L31">31</a>  				Thread.sleep(10000);

@@ -25,8 +25,8 @@ import org.apache.maven.plugins.annotations.ResolutionScope
 
 /**
  * Fail the build if any SpotBugs violations can be found in a preexisting {@code spotBugs.xml} file.
- * Note that unlike the {@code check} goal, this goal only reads existing XML reports, <b>without</b> actually performing SpotBugs analysis. 
- * This way, it is possible to split the analysis and verification into lifecycle phases of one's choosing. 
+ * Note that unlike the {@code check} goal, this goal only reads existing XML reports, <b>without</b> actually performing SpotBugs analysis.
+ * This way, it is possible to split the analysis and verification into lifecycle phases of one's choosing.
  * One use case for that is running multiple code analyzers at once and only failing the build at a later stage, so that all of them have a chance to run.
  * To see more documentation about SpotBugs' options, please see the <a href="https://spotbugs.readthedocs.io/en/latest/" class="externalLink">SpotBugs Manual.</a>.
  *
