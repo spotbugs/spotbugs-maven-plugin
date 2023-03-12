@@ -14,12 +14,12 @@
 <a class="jxr_linenumber" id="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.io.FileOutputStream;
 <a class="jxr_linenumber" id="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.io.IOException;
 <a class="jxr_linenumber" id="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> java.io.ObjectOutputStream;
-<a class="jxr_linenumber" id="L7" href="#L7">7</a>   
+<a class="jxr_linenumber" id="L7" href="#L7">7</a>
 <a class="jxr_linenumber" id="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> edu.umd.cs.findbugs.annotations.ExpectWarning;
-<a class="jxr_linenumber" id="L9" href="#L9">9</a>   
-<a class="jxr_linenumber" id="L10" href="#L10">10</a>  
+<a class="jxr_linenumber" id="L9" href="#L9">9</a>
+<a class="jxr_linenumber" id="L10" href="#L10">10</a>
 <a class="jxr_linenumber" id="L11" href="#L11">11</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="..//AppendingToAnObjectOutputStream.html">AppendingToAnObjectOutputStream</a> {
-<a class="jxr_linenumber" id="L12" href="#L12">12</a>  	
+<a class="jxr_linenumber" id="L12" href="#L12">12</a>
 <a class="jxr_linenumber" id="L13" href="#L13">13</a>  	@ExpectWarning(<span class="jxr_string">"IO"</span>)
 <a class="jxr_linenumber" id="L14" href="#L14">14</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> appendObject1(File f, Object o) <strong class="jxr_keyword">throws</strong> FileNotFoundException, IOException {
 <a class="jxr_linenumber" id="L15" href="#L15">15</a>  		ObjectOutputStream out = <strong class="jxr_keyword">new</strong> ObjectOutputStream (<strong class="jxr_keyword">new</strong> FileOutputStream(f, <strong class="jxr_keyword">true</strong>));

@@ -131,7 +131,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      */
     @Parameter (defaultValue = '${session}', required = true, readonly = true)
     MavenSession session;
- 
+
     /**
      * Maven Project.
      *

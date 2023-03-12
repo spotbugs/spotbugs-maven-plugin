@@ -15,4 +15,4 @@
  */
 
 File buildLog = new File( basedir, 'build.log' )
-assert buildLog.text.contains( '[java] INFO: System variables are considered to be tainted' ) 
+assert buildLog.text.contains( '[java] INFO: System variables are considered to be tainted' )

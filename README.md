@@ -51,7 +51,7 @@ mvn -DtestSrc=remote -Prun-its -Dinvoker.test=build-*,basic-1,check-nofail clean
 
 Run tests in debugger
 ```
-mvn -Dmaven.surefire.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 -Xnoagent -Djava.compiler=NONE" -Prun-its clean install 
+mvn -Dmaven.surefire.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 -Xnoagent -Djava.compiler=NONE" -Prun-its clean install
 ```
 
 Run selected tests in debugger
@@ -61,7 +61,7 @@ mvn -Dmaven.surefire.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspe
 
 Run gui with a specific version 
 ```
-mvn com.github.spotbugs:spotbugs-maven-plugin:4.0.0:gui 
+mvn com.github.spotbugs:spotbugs-maven-plugin:4.0.0:gui
 ```
 
 ## Contributing ##

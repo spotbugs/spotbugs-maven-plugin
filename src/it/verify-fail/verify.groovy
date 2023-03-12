@@ -15,4 +15,4 @@
  */
 
 File buildLog = new File( basedir, 'build.log' )
-assert buildLog.text.contains( '[ERROR] High: Found reliance on default encoding in UserMistakes' ) 
+assert buildLog.text.contains( '[ERROR] High: Found reliance on default encoding in UserMistakes' )

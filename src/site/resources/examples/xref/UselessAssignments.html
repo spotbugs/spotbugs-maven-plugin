@@ -9,11 +9,11 @@
 <body>
 <div id="overview"><a href="../apidocs//UselessAssignments.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" id="L1" href="#L1">1</a>   <strong class="jxr_keyword">import</strong> edu.umd.cs.findbugs.annotations.ExpectWarning;
-<a class="jxr_linenumber" id="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" id="L2" href="#L2">2</a>
 <a class="jxr_linenumber" id="L3" href="#L3">3</a>   <strong class="jxr_keyword">class</strong> <a href="..//UselessAssignments.html">UselessAssignments</a> {
 <a class="jxr_linenumber" id="L4" href="#L4">4</a>   	@ExpectWarning(<span class="jxr_string">"UuF,UrF"</span>)
 <a class="jxr_linenumber" id="L5" href="#L5">5</a>   	<strong class="jxr_keyword">int</strong> foo, bar,g1,g2;
-<a class="jxr_linenumber" id="L6" href="#L6">6</a>   
+<a class="jxr_linenumber" id="L6" href="#L6">6</a>
 <a class="jxr_linenumber" id="L7" href="#L7">7</a>   	@ExpectWarning(<span class="jxr_string">"DLS,SA"</span>)
 <a class="jxr_linenumber" id="L8" href="#L8">8</a>   	<strong class="jxr_keyword">public</strong> <a href="..//UselessAssignments.html">UselessAssignments</a>(<strong class="jxr_keyword">int</strong> Foo, <strong class="jxr_keyword">int</strong> Bar) {
 <a class="jxr_linenumber" id="L9" href="#L9">9</a>   		<strong class="jxr_keyword">int</strong> x,y;
@@ -22,12 +22,12 @@
 <a class="jxr_linenumber" id="L12" href="#L12">12</a>  		g1 = g1 = 0;
 <a class="jxr_linenumber" id="L13" href="#L13">13</a>  		x = x = 0;
 <a class="jxr_linenumber" id="L14" href="#L14">14</a>  	}
-<a class="jxr_linenumber" id="L15" href="#L15">15</a>  
+<a class="jxr_linenumber" id="L15" href="#L15">15</a>
 <a class="jxr_linenumber" id="L16" href="#L16">16</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setFoo(<a href="..//UselessAssignments.html">UselessAssignments</a> ua1, <a href="..//UselessAssignments.html">UselessAssignments</a> ua2) {
 <a class="jxr_linenumber" id="L17" href="#L17">17</a>  		ua1.foo = ua2.foo = 1;
 <a class="jxr_linenumber" id="L18" href="#L18">18</a>  		ua1.bar = ua1.bar = ua1.bar = 2;
 <a class="jxr_linenumber" id="L19" href="#L19">19</a>      }
-<a class="jxr_linenumber" id="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" id="L20" href="#L20">20</a>
 <a class="jxr_linenumber" id="L21" href="#L21">21</a>  	<strong class="jxr_keyword">int</strong> oops() {
 <a class="jxr_linenumber" id="L22" href="#L22">22</a>  		<strong class="jxr_keyword">int</strong> i = 7;
 <a class="jxr_linenumber" id="L23" href="#L23">23</a>          i = ++i;
@@ -36,14 +36,14 @@
 <a class="jxr_linenumber" id="L26" href="#L26">26</a>  		foo = ++foo;
 <a class="jxr_linenumber" id="L27" href="#L27">27</a>          <strong class="jxr_keyword">return</strong> i;
 <a class="jxr_linenumber" id="L28" href="#L28">28</a>  	}
-<a class="jxr_linenumber" id="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" id="L29" href="#L29">29</a>
 <a class="jxr_linenumber" id="L30" href="#L30">30</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> report(<a href="..//UselessAssignments.html">UselessAssignments</a> ua1, <a href="..//UselessAssignments.html">UselessAssignments</a> ua2) {
 <a class="jxr_linenumber" id="L31" href="#L31">31</a>  		ua1.foo = ua1.foo = ua1.foo = 17;
 <a class="jxr_linenumber" id="L32" href="#L32">32</a>  	}
 <a class="jxr_linenumber" id="L33" href="#L33">33</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> doNotReport(<a href="..//UselessAssignments.html">UselessAssignments</a> ua1, <a href="..//UselessAssignments.html">UselessAssignments</a> ua2) {
 <a class="jxr_linenumber" id="L34" href="#L34">34</a>  		ua1.bar = ua2.bar = 42;
 <a class="jxr_linenumber" id="L35" href="#L35">35</a>  	}
-<a class="jxr_linenumber" id="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" id="L36" href="#L36">36</a>
 <a class="jxr_linenumber" id="L37" href="#L37">37</a>  }
 </pre>
 <hr/>
