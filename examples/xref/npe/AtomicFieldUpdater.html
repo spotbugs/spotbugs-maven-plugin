@@ -9,41 +9,41 @@
 <body>
 <div id="overview"><a href="../../apidocs/npe/AtomicFieldUpdater.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" id="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> npe;
-<a class="jxr_linenumber" id="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" id="L2" href="#L2">2</a>
 <a class="jxr_linenumber" id="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 <a class="jxr_linenumber" id="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.AtomicLongFieldUpdater;
 <a class="jxr_linenumber" id="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
-<a class="jxr_linenumber" id="L6" href="#L6">6</a>   
+<a class="jxr_linenumber" id="L6" href="#L6">6</a>
 <a class="jxr_linenumber" id="L7" href="#L7">7</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../npe/AtomicFieldUpdater.html">AtomicFieldUpdater</a> {
-<a class="jxr_linenumber" id="L8" href="#L8">8</a>   
+<a class="jxr_linenumber" id="L8" href="#L8">8</a>
 <a class="jxr_linenumber" id="L9" href="#L9">9</a>   	<strong class="jxr_keyword">volatile</strong> Object x;
 <a class="jxr_linenumber" id="L10" href="#L10">10</a>  	<strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">int</strong> y;
 <a class="jxr_linenumber" id="L11" href="#L11">11</a>      <strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">long</strong> z;
-<a class="jxr_linenumber" id="L12" href="#L12">12</a>  
-<a class="jxr_linenumber" id="L13" href="#L13">13</a>  	AtomicReferenceFieldUpdater&lt;AtomicFieldUpdater  , Object&gt; updaterX 
+<a class="jxr_linenumber" id="L12" href="#L12">12</a>
+<a class="jxr_linenumber" id="L13" href="#L13">13</a>  	AtomicReferenceFieldUpdater&lt;AtomicFieldUpdater  , Object&gt; updaterX
 <a class="jxr_linenumber" id="L14" href="#L14">14</a>  	 = AtomicReferenceFieldUpdater.newUpdater(AtomicFieldUpdater.<strong class="jxr_keyword">class</strong>, Object.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"x"</span>);
-<a class="jxr_linenumber" id="L15" href="#L15">15</a>      
+<a class="jxr_linenumber" id="L15" href="#L15">15</a>
 <a class="jxr_linenumber" id="L16" href="#L16">16</a>  	AtomicIntegerFieldUpdater&lt;AtomicFieldUpdater&gt; updaterY
 <a class="jxr_linenumber" id="L17" href="#L17">17</a>  	= AtomicIntegerFieldUpdater.newUpdater(AtomicFieldUpdater.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"y"</span>);
-<a class="jxr_linenumber" id="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" id="L18" href="#L18">18</a>
 <a class="jxr_linenumber" id="L19" href="#L19">19</a>      AtomicLongFieldUpdater&lt;AtomicFieldUpdater&gt; updaterZ
 <a class="jxr_linenumber" id="L20" href="#L20">20</a>  	= AtomicLongFieldUpdater.newUpdater(AtomicFieldUpdater.<strong class="jxr_keyword">class</strong>,  <span class="jxr_string">"z"</span>);
-<a class="jxr_linenumber" id="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" id="L21" href="#L21">21</a>
 <a class="jxr_linenumber" id="L22" href="#L22">22</a>  	<strong class="jxr_keyword">int</strong> f() {
 <a class="jxr_linenumber" id="L23" href="#L23">23</a>          <strong class="jxr_keyword">return</strong> x.hashCode();
 <a class="jxr_linenumber" id="L24" href="#L24">24</a>  	}
-<a class="jxr_linenumber" id="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" id="L25" href="#L25">25</a>
 <a class="jxr_linenumber" id="L26" href="#L26">26</a>  	<strong class="jxr_keyword">void</strong> setX(Object foo) {
 <a class="jxr_linenumber" id="L27" href="#L27">27</a>          updaterX.set(<strong class="jxr_keyword">this</strong>, foo);
 <a class="jxr_linenumber" id="L28" href="#L28">28</a>  	}
 <a class="jxr_linenumber" id="L29" href="#L29">29</a>  	<strong class="jxr_keyword">void</strong> setY(<strong class="jxr_keyword">int</strong> foo) {
 <a class="jxr_linenumber" id="L30" href="#L30">30</a>  		updaterY.set(<strong class="jxr_keyword">this</strong>, foo);
 <a class="jxr_linenumber" id="L31" href="#L31">31</a>      }
-<a class="jxr_linenumber" id="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" id="L32" href="#L32">32</a>
 <a class="jxr_linenumber" id="L33" href="#L33">33</a>  	<strong class="jxr_keyword">void</strong> setZ(<strong class="jxr_keyword">long</strong> foo) {
 <a class="jxr_linenumber" id="L34" href="#L34">34</a>  		updaterZ.set(<strong class="jxr_keyword">this</strong>, foo);
 <a class="jxr_linenumber" id="L35" href="#L35">35</a>      }
-<a class="jxr_linenumber" id="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" id="L36" href="#L36">36</a>
 <a class="jxr_linenumber" id="L37" href="#L37">37</a>  }
 </pre>
 <hr/>
