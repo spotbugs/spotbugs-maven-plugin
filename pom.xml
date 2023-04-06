@@ -11,7 +11,7 @@
 
   <groupId>com.github.spotbugs</groupId>
   <artifactId>spotbugs-maven-plugin</artifactId>
-  <version>4.7.3.4-SNAPSHOT</version>
+  <version>4.7.3.4</version>
   <packaging>maven-plugin</packaging>
 
   <name>SpotBugs Maven Plugin</name>
@@ -124,7 +124,7 @@
     <connection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</developerConnection>
     <url>https://github.com/spotbugs/spotbugs-maven-plugin</url>
-    <tag>HEAD</tag>
+    <tag>spotbugs-maven-plugin-4.7.3.4</tag>
   </scm>
   <issueManagement>
     <system>Github</system>
@@ -147,7 +147,7 @@
     <projectVersion>${project.version}</projectVersion>
 
     <!-- Reproducible Builds: override timestamp value from parent -->
-    <project.build.outputTimestamp>1679579370</project.build.outputTimestamp>
+    <project.build.outputTimestamp>1680820861</project.build.outputTimestamp>
 
     <!-- Override spotbugs to this version from base-parent -->
     <spotbugs.version>4.7.3</spotbugs.version>
