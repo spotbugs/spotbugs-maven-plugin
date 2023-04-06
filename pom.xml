@@ -216,7 +216,7 @@
     <jgit.version>5.13.1.202206130422-r</jgit.version>
 
     <!-- Targeted patches -->
-    <asm.version>9.4</asm.version>
+    <asm.version>9.5</asm.version>
     <beanutils.version>1.9.4</beanutils.version>
     <chain.version>1.2</chain.version>
     <codec.version>1.15</codec.version>
