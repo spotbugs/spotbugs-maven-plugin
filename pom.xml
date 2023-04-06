@@ -184,7 +184,7 @@
     <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
     <gmavenPluginVersion>2.1.0</gmavenPluginVersion>
     <infoReportsPluginVersion>3.4.2</infoReportsPluginVersion>
-    <invokerPluginVersion>3.5.0</invokerPluginVersion>
+    <invokerPluginVersion>3.5.1</invokerPluginVersion>
     <javadocPluginVersion>3.5.0</javadocPluginVersion>
     <pluginPluginVersion>3.8.1</pluginPluginVersion>
     <scmPluginVersion>2.0.0</scmPluginVersion>
