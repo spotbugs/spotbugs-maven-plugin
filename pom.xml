@@ -213,7 +213,7 @@
     <servletApiVersion>4.0.4</servletApiVersion>
     <sb-contribVersion>7.6.0</sb-contribVersion>
 
-    <jgit.version>5.13.1.202206130422-r</jgit.version>
+    <jgit.version>6.5.0.202303070854-r</jgit.version>
 
     <!-- Targeted patches -->
     <asm.version>9.5</asm.version>
