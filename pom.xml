@@ -14,7 +14,7 @@
   <version>4.7.3.5-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
-  <name>SpotBugs Maven Plugin</name>
+  <name>spotbugs-maven-plugin</name>
   <description>This Plug-In generates reports based on the SpotBugs Library</description>
   <url>https://spotbugs.github.io/spotbugs-maven-plugin/</url>
   <inceptionYear>2005</inceptionYear>
