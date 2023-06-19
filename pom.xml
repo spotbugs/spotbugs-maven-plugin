@@ -177,6 +177,7 @@
 
     <plexusContainerVersion>2.1.1</plexusContainerVersion>
     <plexusResourcesVersion>1.2.0</plexusResourcesVersion>
+    <plexusUtilsVersion>4.0.0</plexusUtilsVersion>
     <plexusXmlVersion>4.0.0</plexusXmlVersion>
 
     <antrunPluginVersion>3.1.0</antrunPluginVersion>
@@ -566,6 +567,11 @@
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-resources</artifactId>
       <version>${plexusResourcesVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>${plexusXmlVersion}</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
