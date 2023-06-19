@@ -29,15 +29,14 @@ String[] paths =
 for ( String path : paths ) {
     File file = new File( basedir, path );
     System.out.println( "Checking for existence of " + file );
-    if ( !file.isFile() )
-    {
+    if ( !file.isFile() ) {
         throw new FileNotFoundException( "Missing: " + file.getAbsolutePath() );
     }
 }
 
 File report = new File( basedir, "target/site/spotbugs.html" );
 String content = FileUtils.fileRead( report, "UTF-8" );
-if ( content.indexOf( "<a href=\"./xref/org/codehaus/mojo/spotbugsmavenplugin/it/mfindbugs145/App.html#L17\">" ) < 0 ) {
+if ( content.indexOf( "<a href=\"./xref/org/codehaus/mojo/spotbugsmavenplugin/it/mfindbugs145/App.html#L32\">" ) < 0 ) {
     throw new IOException( "XRef link not generated." );
 }
 
