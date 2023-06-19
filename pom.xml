@@ -177,7 +177,7 @@
 
     <plexusContainerVersion>2.1.1</plexusContainerVersion>
     <plexusResourcesVersion>1.2.0</plexusResourcesVersion>
-    <plexusXmlVersion>4.0.0</plexusXmlVersion>
+    <plexusUtilsVersion>3.5.1</plexusUtilsVersion>
 
     <antrunPluginVersion>3.1.0</antrunPluginVersion>
     <l10nPluginVersion>1.0.0</l10nPluginVersion>
@@ -225,6 +225,7 @@
     <digester.version>2.1</digester.version>
     <gson.version>2.10.1</gson.version>
     <io.version>2.13.0</io.version>
+    <jaxen.version>2.0.0</jaxen.version>
     <lang2.version>2.6</lang2.version>
     <lang3.version>3.12.0</lang3.version>
 
@@ -372,6 +373,12 @@
       <groupId>com.github.javaparser</groupId>
       <artifactId>javaparser-core</artifactId>
       <version>${javaparserVersion}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+      <version>${jaxen.version}</version>
     </dependency>
 
     <!-- Maven -->
@@ -569,8 +576,8 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-xml</artifactId>
-      <version>${plexusXmlVersion}</version>
+      <artifactId>plexus-utils</artifactId>
+      <version>${plexusUtilsVersion}</version>
     </dependency>
   </dependencies>
 
