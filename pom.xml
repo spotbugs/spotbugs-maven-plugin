@@ -152,9 +152,6 @@
     <!-- Override spotbugs to this version from base-parent -->
     <spotbugs.version>4.7.3</spotbugs.version>
 
-    <!-- Groovymavenplus doesn't like simple '8' for java 8 until next release -->
-    <java.version>1.8</java.version>
-
     <junitVersion>5.9.3</junitVersion>
     <spotbugsVersion>4.7.3</spotbugsVersion>
     <spotbugsTag>4.7.3</spotbugsTag>
