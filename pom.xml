@@ -618,27 +618,28 @@
             </dependency>
           </dependencies>
         </plugin>
+
         <plugin>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-maven-plugin</artifactId>
           <version>${project.version}</version>
         </plugin>
 
-        <!-- Skip System Dependencies as com.sun:tools:jar:1.8.0:system blows up site -->
         <plugin>
-          <groupId>org.owasp</groupId>
-          <artifactId>dependency-check-maven</artifactId>
+          <groupId>com.mycila</groupId>
+          <artifactId>license-maven-plugin</artifactId>
           <configuration>
-            <skipSystemScope>true</skipSystemScope>
-          </configuration>
-        </plugin>
-
-        <!-- TODO: pdf fails on site if reports included so skip reports at this time -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-pdf-plugin</artifactId>
-          <configuration>
-            <includeReports>false</includeReports>
+            <licenseSets>
+              <licenseSet>
+                <header>LICENSE_HEADER</header>
+                <excludes>
+                  <exclude>**/*edu.umd.cs.findbugs.core.prefs</exclude>
+                </excludes>
+              </licenseSet>
+            </licenseSets>
+            <mapping>
+              <bsh>SLASHSTAR_STYLE</bsh>
+            </mapping>
           </configuration>
         </plugin>
       </plugins>
