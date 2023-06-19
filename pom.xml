@@ -638,7 +638,7 @@
               </licenseSet>
             </licenseSets>
             <mapping>
-              <bsh>SLASHSTAR_STYLE</bsh>
+              <bsh>DOUBLESLASH_STYLE</bsh>
             </mapping>
           </configuration>
         </plugin>
