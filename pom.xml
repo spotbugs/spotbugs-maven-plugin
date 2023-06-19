@@ -217,6 +217,7 @@
 
     <!-- Targeted patches -->
     <asm.version>9.5</asm.version>
+    <bcel.version>6.7.0</bcel.version>
     <beanutils.version>1.9.4</beanutils.version>
     <chain.version>1.2</chain.version>
     <codec.version>1.15</codec.version>
@@ -296,6 +297,13 @@
     <dependency>
       <groupId>org.ow2.asm</groupId>
       <artifactId>asm-util</artifactId>
+    </dependency>
+
+    <!-- bcel -->
+    <dependency>
+      <groupId>org.apache.bcel</groupId>
+      <artifactId>bcel</artifactId>
+      <version>${bcel.version}</version>
     </dependency>
 
     <!-- gson -->
