@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2005-2023 the original author or authors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd ">
   <modelVersion>4.0.0</modelVersion>
 
@@ -601,27 +618,28 @@
             </dependency>
           </dependencies>
         </plugin>
+
         <plugin>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-maven-plugin</artifactId>
           <version>${project.version}</version>
         </plugin>
 
-        <!-- Skip System Dependencies as com.sun:tools:jar:1.8.0:system blows up site -->
         <plugin>
-          <groupId>org.owasp</groupId>
-          <artifactId>dependency-check-maven</artifactId>
+          <groupId>com.mycila</groupId>
+          <artifactId>license-maven-plugin</artifactId>
           <configuration>
-            <skipSystemScope>true</skipSystemScope>
-          </configuration>
-        </plugin>
-
-        <!-- TODO: pdf fails on site if reports included so skip reports at this time -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-pdf-plugin</artifactId>
-          <configuration>
-            <includeReports>false</includeReports>
+            <licenseSets>
+              <licenseSet>
+                <header>LICENSE_HEADER</header>
+                <excludes>
+                  <exclude>**/*edu.umd.cs.findbugs.core.prefs</exclude>
+                </excludes>
+              </licenseSet>
+            </licenseSets>
+            <mapping>
+              <bsh>SLASHSTAR_STYLE</bsh>
+            </mapping>
           </configuration>
         </plugin>
       </plugins>
