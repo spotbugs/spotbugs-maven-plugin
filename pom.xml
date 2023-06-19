@@ -246,6 +246,9 @@
 
     <!-- Automatic Module Name -->
     <module.name>com.github.spotbugs.maven</module.name>
+
+    <!-- TODO: Overrice parent for latest enforcer rules: Remove with parent 41. -->
+    <extra-enforcer-rules.version>1.7.0</extra-enforcer-rules.version>
   </properties>
 
   <dependencyManagement>
