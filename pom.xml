@@ -181,7 +181,7 @@
     <doxiaVersion>1.12.0</doxiaVersion>
     <doxiaSiteToolsVersion>1.11.1</doxiaSiteToolsVersion>
 
-    <mavenCoreVersion>3.9.2</mavenCoreVersion>
+    <mavenCoreVersion>3.9.3</mavenCoreVersion>
     <mavenSharedUtilsVersion>3.4.2</mavenSharedUtilsVersion>
     <mavenTransferVersion>0.13.1</mavenTransferVersion>
     <mavenCommonArtifactFilters>3.3.2</mavenCommonArtifactFilters>
