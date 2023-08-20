@@ -1,11 +1,11 @@
-name: Java Integration Tests Maven 4.0.0-alpha-4
+name: Java Integration Tests Maven 4.0.0-alpha-7
 
 on: [push, pull_request]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Integration Tests Maven 4.0.0-alpha-4
+    name: Integration Tests Maven 4.0.0-alpha-7
 
     steps:
       - uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
@@ -14,9 +14,9 @@ jobs:
         with:
           java-version: 17
           distribution: zulu
-      - name: Load Maven 4.0.0-alpha-4
-        run: ./mvnw -B -V org.apache.maven.plugins:maven-wrapper-plugin:3.2.0:wrapper -Dmaven=4.0.0-alpha-4 --no-transfer-progress
+      - name: Load Maven 4.0.0-alpha-7
+        run: ./mvnw -B -V org.apache.maven.plugins:maven-wrapper-plugin:3.2.0:wrapper -Dmaven=4.0.0-alpha-7 --no-transfer-progress
       - name: Build Setup
-        run: ./mvnw -B -V clean install -Dlicense.skip=true -Dmaven.min-version=4.0.0-alpha-4 --no-transfer-progress
+        run: ./mvnw -B -V clean install -Dlicense.skip=true -Dmaven.min-version=4.0.0-alpha-7 --no-transfer-progress
       - name: Integration Test with Maven
-        run: ./mvnw -B -V -DtestSrc=remote -Prun-its clean install -Dinvoker.parallelThreads=4 -Dlicense.skip=true -Dmaven.min-version=4.0.0-alpha-4 --no-transfer-progress
+        run: ./mvnw -B -V -DtestSrc=remote -Prun-its clean install -Dinvoker.parallelThreads=4 -Dlicense.skip=true -Dmaven.min-version=4.0.0-alpha-7 --no-transfer-progress
