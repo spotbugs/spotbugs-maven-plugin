@@ -172,7 +172,7 @@
     <junitVersion>5.9.3</junitVersion>
     <spotbugsVersion>4.7.3</spotbugsVersion>
     <spotbugsTag>4.7.3</spotbugsTag>
-    <slf4jVersion>2.0.7</slf4jVersion>
+    <slf4jVersion>2.0.9</slf4jVersion>
 
     <antVersion>1.10.14</antVersion>
     <groovyVersion>4.0.14</groovyVersion>
