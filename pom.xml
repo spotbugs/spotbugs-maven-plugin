@@ -643,6 +643,7 @@
                 <header>LICENSE_HEADER</header>
                 <excludes>
                   <exclude>**/*edu.umd.cs.findbugs.core.prefs</exclude>
+                  <exclude>**/*.txt</exclude>
                 </excludes>
               </licenseSet>
             </licenseSets>

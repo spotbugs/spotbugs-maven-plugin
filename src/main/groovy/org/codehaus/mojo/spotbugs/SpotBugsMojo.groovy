@@ -38,6 +38,10 @@ import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceLoader
 
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.util.stream.Collectors
+
 /**
  * Generates a SpotBugs Report when the site plugin is run.
  * The HTML report is generated for site commands only.
@@ -929,7 +933,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (onlyAnalyze) {
             args << "-onlyAnalyze"
-            args << onlyAnalyze
+            args << Arrays.stream(onlyAnalyze.split(",")).map {
+                it.startsWith("file:") ? Files.lines(Paths.get(it.substring(5))).collect(Collectors.joining(",")) : it
+            }.collect(Collectors.joining(","))
         }
 
         if (includeFilterFile) {
