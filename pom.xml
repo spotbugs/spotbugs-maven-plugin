@@ -196,7 +196,7 @@
     <antrunPluginVersion>3.1.0</antrunPluginVersion>
     <l10nPluginVersion>1.0.0</l10nPluginVersion>
     <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
-    <gmavenPluginVersion>3.0.0</gmavenPluginVersion>
+    <gmavenPluginVersion>3.0.2</gmavenPluginVersion>
     <infoReportsPluginVersion>3.4.5</infoReportsPluginVersion>
     <invokerPluginVersion>3.6.0</invokerPluginVersion>
     <javadocPluginVersion>3.6.0</javadocPluginVersion>
