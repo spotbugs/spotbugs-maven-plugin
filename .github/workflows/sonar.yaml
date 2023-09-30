@@ -3,7 +3,7 @@ name: SonarCloud
 on:
   push:
     branches:
-      - spotbugs
+      - master
 
 jobs:
   build:

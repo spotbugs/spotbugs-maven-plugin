@@ -3,7 +3,7 @@ name: Sonatype
 on:
   push:
     branches:
-      - spotbugs
+      - master
 
 jobs:
   build:
