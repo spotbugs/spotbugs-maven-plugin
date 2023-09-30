@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright 2005-2023 the original author or authors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<BugCollection sequence="0" release="" analysisTimestamp="1653586688929" version="4.7.0" timestamp="1653586685292">
+  <BugInstance instanceOccurrenceNum="0" instanceHash="c7f9edd192cfef80d2e55dde64a514bc" rank="2" abbrev="INT" category="CORRECTNESS" priority="1" type="INT_BAD_COMPARISON_WITH_SIGNED_BYTE" instanceOccurrenceMax="0">
+    <ShortMessage>Bad comparison of signed byte</ShortMessage>
+    <LongMessage>Bad comparison of signed byte with 200 in AssumeUnsignedBytes.find200(byte[])</LongMessage>
+    <Class classname="AssumeUnsignedBytes" primary="true">
+      <SourceLine classname="AssumeUnsignedBytes" start="3" end="10" sourcepath="AssumeUnsignedBytes.java" sourcefile="AssumeUnsignedBytes.java">
+        <Message>At AssumeUnsignedBytes.java:[lines 3-10]</Message>
+      </SourceLine>
+      <Message>In class AssumeUnsignedBytes</Message>
+    </Class>
+    <Method isStatic="false" classname="AssumeUnsignedBytes" signature="([B)I" name="find200" primary="true">
+      <SourceLine endBytecode="82" classname="AssumeUnsignedBytes" start="7" end="10" sourcepath="AssumeUnsignedBytes.java" sourcefile="AssumeUnsignedBytes.java" startBytecode="0"/>
+      <Message>In method AssumeUnsignedBytes.find200(byte[])</Message>
+    </Method>
+    <Int role="INT_VALUE" value="200">
+      <Message>Value 200</Message>
+    </Int>
+    <SourceLine endBytecode="14" classname="AssumeUnsignedBytes" start="8" end="8" sourcepath="AssumeUnsignedBytes.java" sourcefile="AssumeUnsignedBytes.java" startBytecode="14" primary="true">
+      <Message>At AssumeUnsignedBytes.java:[line 8]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum="0" instanceHash="c44f97bf502b32aba37c238aae4e404c" rank="14" abbrev="HE" category="BAD_PRACTICE" priority="1" type="HE_EQUALS_USE_HASHCODE" instanceOccurrenceMax="0">
+    <ShortMessage>Class defines equals() and uses Object.hashCode()</ShortMessage>
+    <LongMessage>UseOfNonHashableClassInHashDataStructure defines equals and uses Object.hashCode()</LongMessage>
+    <Class classname="UseOfNonHashableClassInHashDataStructure" primary="true">
+      <SourceLine classname="UseOfNonHashableClassInHashDataStructure" start="3" end="24" sourcepath="UseOfNonHashableClassInHashDataStructure.java" sourcefile="UseOfNonHashableClassInHashDataStructure.java">
+        <Message>At UseOfNonHashableClassInHashDataStructure.java:[lines 3-24]</Message>
+      </SourceLine>
+      <Message>In class UseOfNonHashableClassInHashDataStructure</Message>
+    </Class>
+    <Method isStatic="false" classname="UseOfNonHashableClassInHashDataStructure" signature="(Ljava/lang/Object;)Z" name="equals" primary="true">
+      <SourceLine endBytecode="51" classname="UseOfNonHashableClassInHashDataStructure" start="16" end="16" sourcepath="UseOfNonHashableClassInHashDataStructure.java" sourcefile="UseOfNonHashableClassInHashDataStructure.java" startBytecode="0"/>
+      <Message>In method UseOfNonHashableClassInHashDataStructure.equals(Object)</Message>
+    </Method>
+    <SourceLine synthetic="true" endBytecode="51" classname="UseOfNonHashableClassInHashDataStructure" start="16" end="16" sourcepath="UseOfNonHashableClassInHashDataStructure.java" sourcefile="UseOfNonHashableClassInHashDataStructure.java" startBytecode="0">
+      <Message>At UseOfNonHashableClassInHashDataStructure.java:[line 16]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum="0" instanceHash="a4564c101ee03f13b56ee6a6b66efd77" rank="5" abbrev="HE" category="CORRECTNESS" priority="1" type="HE_SIGNATURE_DECLARES_HASHING_OF_UNHASHABLE_CLASS" instanceOccurrenceMax="0">
+    <ShortMessage>Signature declares use of unhashable class in hashed construct</ShortMessage>
+    <LongMessage>UseOfNonHashableClassInHashDataStructure doesn't define a hashCode() method but it is used in a hashed context in UseOfNonHashableClassInHashDataStructure$UMap</LongMessage>
+    <Class classname="UseOfNonHashableClassInHashDataStructure$UMap" primary="true">
+      <SourceLine classname="UseOfNonHashableClassInHashDataStructure$UMap" start="5" end="5" sourcepath="UseOfNonHashableClassInHashDataStructure.java" sourcefile="UseOfNonHashableClassInHashDataStructure.java">
+        <Message>At UseOfNonHashableClassInHashDataStructure.java:[line 5]</Message>
+      </SourceLine>
+      <Message>In class UseOfNonHashableClassInHashDataStructure$UMap</Message>
+    </Class>
+    <Class classname="UseOfNonHashableClassInHashDataStructure$UMap">
+      <SourceLine classname="UseOfNonHashableClassInHashDataStructure$UMap" start="5" end="5" sourcepath="UseOfNonHashableClassInHashDataStructure.java" sourcefile="UseOfNonHashableClassInHashDataStructure.java">
+        <Message>At UseOfNonHashableClassInHashDataStructure.java:[line 5]</Message>
+      </SourceLine>
+      <Message>In class UseOfNonHashableClassInHashDataStructure$UMap</Message>
+    </Class>
+    <Type role="TYPE_UNHASHABLE" descriptor="LUseOfNonHashableClassInHashDataStructure;">
+      <SourceLine classname="UseOfNonHashableClassInHashDataStructure" start="3" end="24" sourcepath="UseOfNonHashableClassInHashDataStructure.java" sourcefile="UseOfNonHashableClassInHashDataStructure.java">
+        <Message>At UseOfNonHashableClassInHashDataStructure.java:[lines 3-24]</Message>
+      </SourceLine>
+      <Message>Unhashable class UseOfNonHashableClassInHashDataStructure </Message>
+    </Type>
+    <SourceLine synthetic="true" classname="UseOfNonHashableClassInHashDataStructure$UMap" start="5" end="5" sourcepath="UseOfNonHashableClassInHashDataStructure.java" sourcefile="UseOfNonHashableClassInHashDataStructure.java">
+      <Message>At UseOfNonHashableClassInHashDataStructure.java:[line 5]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum="0" instanceHash="e248f9d4626fdfcebf961d28bcbd1d88" cweid="563" rank="5" abbrev="DLS" category="CORRECTNESS" priority="1" type="DLS_OVERWRITTEN_INCREMENT" instanceOccurrenceMax="0">
+    <ShortMessage>Overwritten increment</ShortMessage>
+    <LongMessage>Overwritten increment in UselessAssignments.oops()</LongMessage>
+    <Class classname="UselessAssignments" primary="true">
+      <SourceLine classname="UselessAssignments" start="14" end="42" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java">
+        <Message>At UselessAssignments.java:[lines 14-42]</Message>
+      </SourceLine>
+      <Message>In class UselessAssignments</Message>
+    </Class>
+    <Method isStatic="false" classname="UselessAssignments" signature="()I" name="oops" primary="true">
+      <SourceLine endBytecode="88" classname="UselessAssignments" start="28" end="33" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java" startBytecode="0"/>
+      <Message>In method UselessAssignments.oops()</Message>
+    </Method>
+    <SourceLine endBytecode="12" classname="UselessAssignments" start="30" end="30" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java" startBytecode="12" primary="true">
+      <Message>At UselessAssignments.java:[line 30]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum="0" instanceHash="c845f2f6bcbb54ef6993e667f2ab9f6a" rank="1" abbrev="SA" category="CORRECTNESS" priority="1" type="SA_FIELD_SELF_ASSIGNMENT" instanceOccurrenceMax="0">
+    <ShortMessage>Self assignment of field</ShortMessage>
+    <LongMessage>Self assignment of field foo in new UselessAssignments(int, int)</LongMessage>
+    <Class classname="UselessAssignments" primary="true">
+      <SourceLine classname="UselessAssignments" start="14" end="42" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java">
+        <Message>At UselessAssignments.java:[lines 14-42]</Message>
+      </SourceLine>
+      <Message>In class UselessAssignments</Message>
+    </Class>
+    <Method isStatic="false" classname="UselessAssignments" signature="(II)V" name="&lt;init&gt;" primary="true">
+      <SourceLine endBytecode="72" classname="UselessAssignments" start="14" end="20" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java" startBytecode="0"/>
+      <Message>In method new UselessAssignments(int, int)</Message>
+    </Method>
+    <Field isStatic="false" classname="UselessAssignments" signature="I" name="foo" primary="true">
+      <SourceLine classname="UselessAssignments" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java">
+        <Message>In UselessAssignments.java</Message>
+      </SourceLine>
+      <Message>Field UselessAssignments.foo</Message>
+    </Field>
+    <LocalVariable role="LOCAL_VARIABLE_DID_YOU_MEAN" pc="0" name="?" register="1">
+      <Message>Did you mean to refer to the local variable ?</Message>
+    </LocalVariable>
+    <SourceLine endBytecode="9" classname="UselessAssignments" start="16" end="16" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java" startBytecode="9" primary="true">
+      <Message>At UselessAssignments.java:[line 16]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum="0" instanceHash="48138b3b7d208c1dee75d30c88c3f630" rank="1" abbrev="SA" category="CORRECTNESS" priority="1" type="SA_FIELD_SELF_ASSIGNMENT" instanceOccurrenceMax="0">
+    <ShortMessage>Self assignment of field</ShortMessage>
+    <LongMessage>Self assignment of field foo in UselessAssignments.oops()</LongMessage>
+    <Class classname="UselessAssignments" primary="true">
+      <SourceLine classname="UselessAssignments" start="14" end="42" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java">
+        <Message>At UselessAssignments.java:[lines 14-42]</Message>
+      </SourceLine>
+      <Message>In class UselessAssignments</Message>
+    </Class>
+    <Method isStatic="false" classname="UselessAssignments" signature="()I" name="oops" primary="true">
+      <SourceLine endBytecode="88" classname="UselessAssignments" start="28" end="33" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java" startBytecode="0"/>
+      <Message>In method UselessAssignments.oops()</Message>
+    </Method>
+    <Field isStatic="false" classname="UselessAssignments" signature="I" name="foo" primary="true">
+      <SourceLine classname="UselessAssignments" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java">
+        <Message>In UselessAssignments.java</Message>
+      </SourceLine>
+      <Message>Field UselessAssignments.foo</Message>
+    </Field>
+    <SourceLine endBytecode="25" classname="UselessAssignments" start="31" end="31" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java" startBytecode="25" primary="true">
+      <Message>At UselessAssignments.java:[line 31]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum="0" instanceHash="ef8d86e8b4ffe32c6b42c02f53d79967" rank="1" abbrev="UR" category="CORRECTNESS" priority="1" type="UR_UNINIT_READ" instanceOccurrenceMax="0">
+    <ShortMessage>Uninitialized read of field in constructor</ShortMessage>
+    <LongMessage>Uninitialized read of foo in new UselessAssignments(int, int)</LongMessage>
+    <Class classname="UselessAssignments" primary="true">
+      <SourceLine classname="UselessAssignments" start="14" end="42" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java">
+        <Message>At UselessAssignments.java:[lines 14-42]</Message>
+      </SourceLine>
+      <Message>In class UselessAssignments</Message>
+    </Class>
+    <Method isStatic="false" classname="UselessAssignments" signature="(II)V" name="&lt;init&gt;" primary="true">
+      <SourceLine endBytecode="72" classname="UselessAssignments" start="14" end="20" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java" startBytecode="0"/>
+      <Message>In method new UselessAssignments(int, int)</Message>
+    </Method>
+    <Field isStatic="false" classname="UselessAssignments" signature="I" name="foo" primary="true">
+      <SourceLine classname="UselessAssignments" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java">
+        <Message>In UselessAssignments.java</Message>
+      </SourceLine>
+      <Message>Field UselessAssignments.foo</Message>
+    </Field>
+    <LocalVariable role="LOCAL_VARIABLE_DID_YOU_MEAN" pc="0" name="?" register="1">
+      <Message>Did you mean to refer to the local variable ?</Message>
+    </LocalVariable>
+    <SourceLine endBytecode="6" classname="UselessAssignments" start="16" end="16" sourcepath="UselessAssignments.java" sourcefile="UselessAssignments.java" startBytecode="6" primary="true">
+      <Message>At UselessAssignments.java:[line 16]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum="0" instanceHash="c605add53d7d36f5dea72b09c753696b" rank="19" abbrev="Dm" category="I18N" priority="1" type="DM_DEFAULT_ENCODING" instanceOccurrenceMax="0">
+    <ShortMessage>Reliance on default encoding</ShortMessage>
+    <LongMessage>Found reliance on default encoding in UserMistakes.main(String[]): new java.io.FileReader(String)</LongMessage>
+    <Class classname="UserMistakes" primary="true">
+      <SourceLine classname="UserMistakes" start="10" end="43" sourcepath="UserMistakes.java" sourcefile="UserMistakes.java">
+        <Message>At UserMistakes.java:[lines 10-43]</Message>
+      </SourceLine>
+      <Message>In class UserMistakes</Message>
+    </Class>
+    <Method isStatic="true" classname="UserMistakes" signature="([Ljava/lang/String;)V" name="main" primary="true">
+      <SourceLine endBytecode="318" classname="UserMistakes" start="13" end="43" sourcepath="UserMistakes.java" sourcefile="UserMistakes.java" startBytecode="0"/>
+      <Message>In method UserMistakes.main(String[])</Message>
+    </Method>
+    <Method isStatic="false" role="METHOD_CALLED" classname="java.io.FileReader" signature="(Ljava/lang/String;)V" name="&lt;init&gt;">
+      <SourceLine endBytecode="68" classname="java.io.FileReader" start="60" end="61" sourcepath="java/io/FileReader.java" sourcefile="FileReader.java" startBytecode="0"/>
+      <Message>Called method new java.io.FileReader(String)</Message>
+    </Method>
+    <SourceLine endBytecode="57" classname="UserMistakes" start="26" end="26" sourcepath="UserMistakes.java" sourcefile="UserMistakes.java" startBytecode="57" primary="true">
+      <Message>At UserMistakes.java:[line 26]</Message>
+    </SourceLine>
+    <SourceLine role="SOURCE_LINE_ANOTHER_INSTANCE" endBytecode="111" classname="UserMistakes" start="37" end="37" sourcepath="UserMistakes.java" sourcefile="UserMistakes.java" startBytecode="111">
+      <Message>Another occurrence at UserMistakes.java:[line 37]</Message>
+    </SourceLine>
+  </BugInstance>
+</BugCollection>

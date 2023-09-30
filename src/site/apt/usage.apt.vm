@@ -1,3 +1,18 @@
+#*
+ * Copyright 2005-2023 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *#
  ------
  Usage
  ------
@@ -12,7 +27,7 @@
 ~~ "License"); you may not use this file except in compliance
 ~~ with the License.  You may obtain a copy of the License at
 ~~
-~~   http://www.apache.org/licenses/LICENSE-2.0
+~~   https://www.apache.org/licenses/LICENSE-2.0
 ~~
 ~~ Unless required by applicable law or agreed to in writing,
 ~~ software distributed under the License is distributed on an
@@ -22,26 +37,27 @@
 ~~ under the License.
 
 ~~ NOTE: For help with the syntax of this file, see:
-~~ http://maven.apache.org/doxia/references/apt-format.html
+~~ https://maven.apache.org/doxia/references/apt-format.html
 
 Usage
 <version>${projectVersion}</version>
- The following examples describe the basic usage of the FindBugs plugin.
+ The following examples describe the basic usage of the SpotBugs plugin.
 
-* Generate FindBugs Report As Part of the Project Reports
+* Generate SpotBugs Report As Part of the Project Reports
 
-  To generate the FindBugs report as part of the Project Reports, add the
-  FindBugs plugin in the <<<\<reporting\>>>> section
+  To generate the SpotBugs report as part of the Project Reports, add the
+  SpotBugs plugin in the <<<\<reporting\>>>> section
   of your <<<pom.xml>>>.
 
 +-----+
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   ...
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
       </plugin>
     </plugins>
@@ -56,28 +72,29 @@ Usage
 mvn site
 +-----+
 
-* Generate FindBugs xdoc Report As Part of the Project Reports
+* Generate SpotBugs xdoc Report As Part of the Project Reports
 
-  To generate the FindBugs xdoc report as part of the Project Reports, add the
-  FindBugs plugin in the <<<\<reporting\>>>> section
-  of your <<<pom.xml>>>.  This will be the same report as that of the Maven 1 FindBugs
+  To generate the SpotBugs xdoc report as part of the Project Reports, add the
+  SpotBugs plugin in the <<<\<reporting\>>>> section
+  of your <<<pom.xml>>>.  This will be the same report as that of the Maven 1 SpotBugs
   report.   It is also the format used by Hudson.
-  The output file will be written as <<<findbugs.xml>>> to either the default output
+  The output file will be written as <<<spotbugs.xml>>> to either the default output
   directory of $\{project.build.directory\} or by that started in the
   <<<\<xmlOutputDirectory\>>>> option.
 
 +-----+
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   ...
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
           <xmlOutput>true</xmlOutput>
-          <!-- Optional directory to put findbugs xdoc xml report -->
+          <!-- Optional directory to put spotbugs xdoc xml report -->
           <xmlOutputDirectory>target/site</xmlOutputDirectory>
         </configuration>
       </plugin>
@@ -87,51 +104,11 @@ mvn site
 </project>
 +-----+
 
-  Then, execute the site plugin to generate the report.  
-
-
-+-----+
-mvn site
-+-----+
-
-
-* Filter bugs to report
-
-  To filter the classes and methods which are analyzed or omitted from analysis
-  you can use filters.
-  The filters allow specifying by class and method which bug categories to
-  include/exclude in/from the reports. The
-  {{{http://findbugs.sourceforge.net/manual/filter.html}filter format specification}}
-  also contains useful examples.
-
-+-----+
-<project>
-  ...
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>${projectVersion}</version>
-        <configuration>
-          <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
-          <includeFilterFile>findbugs-include.xml</includeFilterFile>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
-  ...
-</project>
-+-----+
-
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
-
 
 * Specifying which bug filters to run
 
@@ -139,21 +116,22 @@ mvn site
   you can use filters.
   The filters allow specifying by class and method which bug categories to
   include/exclude in/from the reports. The
-  {{{http://findbugs.sourceforge.net/manual/filter.html}filter format specification}}
+  {{{https://spotbugs.readthedocs.io/en/latest/filter.html}filter format specification}}
   also contains useful examples.
 
 +-----+
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   ...
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
-          <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
-          <includeFilterFile>findbugs-include.xml</includeFilterFile>
+          <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
+          <includeFilterFile>spotbugs-include.xml</includeFilterFile>
         </configuration>
       </plugin>
     </plugins>
@@ -164,11 +142,9 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
 
 * Specifying which bug detectors to run
 
@@ -178,13 +154,14 @@ mvn site
   are run.
 
 +-----+
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   ...
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
           <visitors>FindDeadLocalStores,UnreadFields</visitors>
@@ -198,11 +175,9 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
 
 * Specifying which bug detectors to skip
 
@@ -210,13 +185,14 @@ mvn site
   detectors which will not be run.
 
 +-----+
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   ...
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
           <omitVisitors>FindDeadLocalStores,UnreadFields</omitVisitors>
@@ -230,11 +206,9 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
 
 * Specifying which classes to analyze
 
@@ -242,16 +216,17 @@ mvn site
   list of classes and packages.
 
 +-----+
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   ...
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
-         <onlyAnalyze>org.codehaus.mojo.findbugs.*</onlyAnalyze>
+         <onlyAnalyze>com.github.spotbugs.spotbugs.*</onlyAnalyze>
         </configuration>
       </plugin>
     </plugins>
@@ -262,12 +237,9 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
-
 
 * Using Third party or your own detectors
 
@@ -275,13 +247,14 @@ mvn site
   Jar files to add.
 
 +-----+
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   ...
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
           <pluginList>myDetectors.jar, yourDetectors.jar</pluginList>
@@ -295,30 +268,29 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
-
 
 * Using Detectors from a Repository
 
   The <<<plugins>>> option defines a collection of PluginArtifact to work on. (PluginArtifact contains groupId, artifactId, version, type.) 
 
 +-----+
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   ...
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
           <plugins>
             <plugin>
               <groupId>com.timgroup</groupId>
-              <artifactId>findbugs4jmock</artifactId>
+              <artifactId>spotbugs4jmock</artifactId>
               <version>0.2</version>
             </plugin>
           </plugins>
@@ -332,29 +304,29 @@ mvn site
 
   Then, execute the site plugin to generate the report.
 
-
 +-----+
 mvn site
 +-----+
 
 
-* Launch the Findbugs GUI
+* Launch the Spotbugs GUI
 
-  This will launch the FindBugs GUI configured for this project and will open the
-  findbugsXml.xml file if present.  It therefore assumes a pom.xml with the minimum
+  This will launch the SpotBugs GUI configured for this project and will open the
+  spotbugsXml.xml file if present.  It therefore assumes a pom.xml with the minimum
   as follows.
 
 +-----+
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   ...
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${projectVersion}</version>
         <configuration>
-          <!-- Optional directory to put findbugs xml report -->
+          <!-- Optional directory to put spotbugs xml report -->
         </configuration>
       </plugin>
     </plugins>
@@ -363,10 +335,9 @@ mvn site
 </project>
 +-----+
 
-  Then, execute the findbugs plugin with the gui option.
-
+  Then, execute the spotbugs plugin with the gui option.
 
 +-----+
-mvn findbugs:gui
+mvn spotbugs:gui
 +-----+
 

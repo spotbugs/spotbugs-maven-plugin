@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2006-2017 the original author or authors.
+ * Copyright 2005-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,35 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import groovy.xml.XmlSlurper
 
+File spotbugXdoc = new File(basedir, 'target/spotbugs.xml')
+assert spotbugXdoc.exists()
 
-File findbugXdoc = new File(basedir, 'target/findbugs.xml')
-assert findbugXdoc.exists()
-
-File findbugXml = new File(basedir, 'target/findbugsXml.xml')
-assert findbugXml.exists()
+File spotbugXml = new File(basedir, 'target/spotbugsXml.xml')
+assert spotbugXml.exists()
 
 
 println '**********************************'
-println "Checking Findbugs Native XML file"
+println "Checking Spotbugs Native XML file"
 println '**********************************'
 
-path = new XmlSlurper().parse(findbugXml)
+path = new XmlSlurper().parse(spotbugXml)
 
 allNodes = path.depthFirst().collect{ it }
-def findbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
-println "BugInstance size is ${findbugsXmlErrors}"
+def spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+println "BugInstance size is ${spotbugsXmlErrors}"
 
 
 println '***************************'
 println "Checking xDoc file"
 println '***************************'
 
-def path = new XmlSlurper().parse(findbugXdoc)
+def path = new XmlSlurper().parse(spotbugXdoc)
 
 def allNodes = path.depthFirst().collect{ it }
 def xdocErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${xdocErrors}"
 
-assert xdocErrors == findbugsXmlErrors
-
+assert xdocErrors == spotbugsXmlErrors

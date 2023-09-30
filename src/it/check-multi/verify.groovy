@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2006-2017 the original author or authors.
+ * Copyright 2005-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,42 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-
 //  check module 1
 
+import groovy.xml.XmlSlurper
 
-File findbugXml = new File(basedir, "modules/module-1/target/findbugsXml.xml")
-assert findbugXml.exists()
+File spotbugXml = new File(basedir, "modules/module-1/target/spotbugsXml.xml")
+assert spotbugXml.exists()
 
-def path = new XmlSlurper().parse(findbugXml)
+def path = new XmlSlurper().parse(spotbugXml)
 
 println '**********************************'
-println "Checking Findbugs Native XML file"
+println "Checking Spotbugs Native XML file"
 println '**********************************'
 
 
 allNodes = path.depthFirst().collect { it }
-def findbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
-println "BugInstance size is ${findbugsErrors}"
+def spotbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+println "BugInstance size is ${spotbugsErrors}"
 
-assert findbugsErrors > 0
+assert spotbugsErrors > 0
 
 
 //  check module 2
 
-findbugXml = new File(basedir, "modules/module-2/target/findbugsXml.xml")
-assert findbugXml.exists()
+spotbugXml = new File(basedir, "modules/module-2/target/spotbugsXml.xml")
+assert spotbugXml.exists()
 
-path = new XmlSlurper().parse(findbugXml)
+path = new XmlSlurper().parse(spotbugXml)
 
 println '**********************************'
-println "Checking Findbugs Native XML file"
+println "Checking Spotbugs Native XML file"
 println '**********************************'
 
 allNodes = path.depthFirst().collect { it }
-findbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
-println "BugInstance size is ${findbugsErrors}"
+spotbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+println "BugInstance size is ${spotbugsErrors}"
 
-assert findbugsErrors > 0
+assert spotbugsErrors > 0

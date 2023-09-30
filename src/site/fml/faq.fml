@@ -1,10 +1,27 @@
+<!--
+
+    Copyright 2005-2023 the original author or authors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
 <faqs xmlns="http://maven.apache.org/FML/1.0.1"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/FML/1.0.1 http://maven.apache.org/xsd/fml-1.0.1.xsd"
+  xsi:schemaLocation="http://maven.apache.org/FML/1.0.1 https://maven.apache.org/xsd/fml-1.0.1.xsd"
   id="FAQ" title="Frequently Asked Questions">
  <part id="General">
    <faq id="Aggregate Reporting">
-     <question>Is there an easy way to generate the aggregate report ?</question>
+     <question>Is there an easy way to generate the aggregate report?</question>
      <answer>
        <p>
        Unfortunately Maven's internal support for report aggregation
@@ -12,7 +29,7 @@
       </p>
       <p>
       This may be addressed in the future by a module like
-      <a href="http://mojo.codehaus.org/dashboard-maven-plugin/">dashboard</a>
+      <a href="https://maven.apache.org/archives/maven-1.x/plugins/dashboard/">dashboard</a>
       to get an aggregate report.
       </p>
      </answer>
@@ -21,8 +38,8 @@
      <question>How do I avoid OutOfMemory errors?</question>
        <answer>
          <p>
-         When running findbugs on a project, the default heap size might not be enough
-         to complete the build. For now there is no way to fork findbugs and run with
+         When running spotbugs on a project, the default heap size might not be enough
+         to complete the build. For now there is no way to fork spotbugs and run with
          its own memory requirements, but the following system variable will allow you
          to do so for Maven:
          <p>
@@ -30,8 +47,18 @@
          </p>
          </p>
          <p>
-         You can also use the <bold>fork</bold> option which will for a new JVM.  You then use the <bold>maxHeap</bold> option to control the heap size.    <p>
+         You can also use the <bold>fork</bold> option which will fork a new JVM.  You then use the <bold>maxHeap</bold> option to control the heap size.    <p>
          </p>
+         </p>
+       </answer>
+    </faq>
+    <faq id="Groovy Conflicts">
+      <question>How do I avoid groovy module conflicts when using groovy along with this plugin?</question>
+        <answer>
+         <p>
+         If using groovy with same group id (org.codehaus.groovy 3.x or before or org.apache.groovy 4.x or above),
+         an error may occur if not on same version. To alleviate that, make sure groovy artifacts are defined in
+         dependency management in order to force the loaded version correctly on your usage.
          </p>
        </answer>
      </faq>

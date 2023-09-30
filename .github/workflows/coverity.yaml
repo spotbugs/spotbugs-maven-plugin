@@ -1,0 +1,33 @@
+name: Coverity
+
+on:
+  push:
+    branches:
+      - coverity_scan
+
+jobs:
+  build:
+    if: github.repository_owner == 'spotbugs'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 21
+          distribution: 'zulu'
+      - name: Analyze with Coverity
+        run: |
+          wget -q https://scan.coverity.com/download/linux64 --post-data "token=$COVERITY_TOKEN&project=spotbugs%2Fspotbugs-maven-plugin" -O coverity_tool.tgz
+          tar -xf coverity_tool.tgz
+          ./cov-analysis-linux64-*/bin/cov-build --dir cov-int ./mvnw -B -V -DskipTests=true -Dlicense.skip=true verify --no-transfer-progress
+          tar czvf spotbugs-maven-plugin.tgz cov-int
+          curl --form token=$COVERITY_TOKEN \
+            --form email=$EMAIL \
+            --form file=@spotbugs-maven-plugin.tgz \
+            --form version="spotbugs-maven-plugin/coverity_scan" \
+            --form description="Spotbugs Maven Plugin Coverity Scan" \
+            https://scan.coverity.com/builds?project=spotbugs%2Fspotbugs-maven-plugin
+        env:
+          COVERITY_TOKEN: ${{ secrets.COVERITY_TOKEN }}
+          EMAIL: ${{ secrets.EMAIL }}

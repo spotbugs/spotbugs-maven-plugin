@@ -1,4 +1,4 @@
-#FindBugs User Preferences
+#SpotBugs User Preferences
 #Wed Jun 18 10:04:41 CEST 2014
 cloud_id=edu.umd.cs.findbugs.cloud.appengine.findbugs-cloud
 detectorAppendingToAnObjectOutputStream=AppendingToAnObjectOutputStream|true
@@ -129,7 +129,7 @@ detectorWrongMapIterator=WrongMapIterator|true
 detectorXMLFactoryBypass=XMLFactoryBypass|true
 detector_threshold=3
 effort=min
-excludefilter0=findbugsExclude.xml|true
+excludefilter0=spotbugsExclude.xml|true
 filter_settings=Low|BAD_PRACTICE,CORRECTNESS,EXPERIMENTAL,I18N,MT_CORRECTNESS,PERFORMANCE,SECURITY,STYLE|false|20
 filter_settings_neg=MALICIOUS_CODE,NOISE|
 run_at_full_build=false

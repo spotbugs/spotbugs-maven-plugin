@@ -1,8 +1,14 @@
 .classpath
+.github/keys
 .project
 .settings
 target/
+.idea/
 *.ipr
 *.iws
 *.iml
 *.asc
+*.releaseBackup
+release.properties
+.mvn/wrapper/maven-wrapper.jar
+.factorypath

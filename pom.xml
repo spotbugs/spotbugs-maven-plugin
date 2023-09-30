@@ -1,42 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd ">
+<!--
+
+    Copyright 2005-2023 the original author or authors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd ">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>mojo-parent</artifactId>
-    <version>40</version>
+    <groupId>com.github.hazendaz</groupId>
+    <artifactId>base-parent</artifactId>
+    <version>41</version>
     <relativePath />
   </parent>
 
-  <groupId>org.codehaus.mojo</groupId>
-  <artifactId>findbugs-maven-plugin</artifactId>
-  <version>3.0.6-SNAPSHOT</version>
+  <groupId>com.github.spotbugs</groupId>
+  <artifactId>spotbugs-maven-plugin</artifactId>
+  <version>4.7.3.7-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
-  <name>FindBugs Maven Plugin</name>
-  <description>This Plug-In generates reports based on the FindBugs Library</description>
-  <url>https://gleclaire.github.io/findbugs-maven-plugin/</url>
+  <name>spotbugs-maven-plugin</name>
+  <description>This Plug-In generates reports based on the SpotBugs Library</description>
+  <url>https://spotbugs.github.io/spotbugs-maven-plugin/</url>
   <inceptionYear>2005</inceptionYear>
   <licenses>
     <license>
       <name>Apache 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
-
-  <!--
-    <repositories>
-      <repository>
-        <id>sonatype</id>
-        <name>SonaType Staging</name>
-        <url>https://oss.sonatype.org/content/repositories/staging/</url>
-      </repository>
-    </repositories>
-  -->
-
+  <organization>
+    <name>Spotbugs</name>
+    <url>https://spotbugs.github.io/</url>
+  </organization>
   <developers>
+    <developer>
+      <id>jlandis</id>
+      <name>Jeremy Landis</name>
+      <email>jeremylandis@hotmail.com</email>
+      <url>https://www.linkedin.com/in/jeremy-landis-548b2719</url>
+      <organization>hazendaz</organization>
+      <organizationUrl>https://github.com/hazendaz</organizationUrl>
+      <roles>
+        <role>Architect</role>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+      <properties>
+        <picUrl>https://avatars0.githubusercontent.com/u/975267</picUrl>
+      </properties>
+    </developer>
     <developer>
       <id>cr</id>
       <name>Cyrill Ruettimann</name>
@@ -51,7 +77,7 @@
       <id>gl</id>
       <name>Garvin LeClaire</name>
       <email>gleclaire@codehaus.org</email>
-      <url>http://gdleclaire.blogspot.com</url>
+      <url>https://gdleclaire.blogspot.com</url>
       <roles>
         <role>Documentation</role>
         <role>Java Developer</role>
@@ -61,10 +87,24 @@
   </developers>
   <contributors>
     <contributor>
+      <name>Jeremy Landis</name>
+      <email>jeremylandis@hotmail.com</email>
+      <url>https://www.linkedin.com/in/jeremy-landis-548b2719</url>
+      <organization>hazendaz</organization>
+      <organizationUrl>https://github.com/hazendaz</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-5</timezone>
+      <properties>
+        <picUrl>https://avatars0.githubusercontent.com/u/975267</picUrl>
+      </properties>
+    </contributor>
+    <contributor>
       <name>Olivier Lamy</name>
       <email>olamy@apache.org</email>
       <organization />
-      <organizationUrl>http://olamy.blogspot.com/</organizationUrl>
+      <organizationUrl>https://olamy.blogspot.com/</organizationUrl>
       <roles>
         <role>Java Developer</role>
       </roles>
@@ -74,7 +114,7 @@
       <name>Detlef Pleiss</name>
       <email>d.pleiss@comundus.com</email>
       <organization>comundus GmbH</organization>
-      <organizationUrl>http://www.comundus.com</organizationUrl>
+      <organizationUrl>https://www.comundus.com</organizationUrl>
       <roles>
         <role>Java Developer</role>
       </roles>
@@ -84,7 +124,7 @@
       <name>Rolf Kulemann</name>
       <email>roku@apache.org</email>
       <organization>NEO Business Partners</organization>
-      <organizationUrl>http://www.neo-partners.com</organizationUrl>
+      <organizationUrl>https://www.axians.de/de/portfolio/sap-solutions-technology/</organizationUrl>
       <roles>
         <role>Java Developer</role>
       </roles>
@@ -94,67 +134,83 @@
   </contributors>
 
   <prerequisites>
-    <maven>3.0.1</maven>
+    <maven>3.3.9</maven>
   </prerequisites>
 
   <scm>
-    <connection>scm:git:https://github.com/gleclaire/findbugs-maven-plugin.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/gleclaire/findbugs-maven-plugin.git</developerConnection>
-    <url>https://github.com/gleclaire/findbugs-maven-plugin</url>
+    <connection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</developerConnection>
+    <url>https://github.com/spotbugs/spotbugs-maven-plugin</url>
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
-    <system>GitHub Issues</system>
-    <url>http://github.com/gleclaire/findbugs-maven-plugin/issues</url>
+    <system>Github</system>
+    <url>https://github.com/spotbugs/spotbugs-maven-plugin/issues</url>
   </issueManagement>
+  <ciManagement>
+    <system>Github</system>
+    <url>https://github.com/spotbugs/spotbugs-maven-plugin/actions</url>
+  </ciManagement>
   <distributionManagement>
     <site>
-      <id>github-project-site</id>
-      <url>gitsite:git@github.com/gleclaire/findbugs-maven-plugin.git</url>
+      <id>gh-pages-scm</id>
+      <url>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</url>
     </site>
   </distributionManagement>
 
   <properties>
-    <project.build.java.target>1.7</project.build.java.target>
+    <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
+
     <projectVersion>${project.version}</projectVersion>
 
-    <findbugsVersion>3.0.1</findbugsVersion>
-    <junitVersion>4.12</junitVersion>
+    <!-- Reproducible Builds: override timestamp value from parent -->
+    <project.build.outputTimestamp>1695603053</project.build.outputTimestamp>
 
-    <antVersion>1.9.9</antVersion>
-    <groovyVersion>2.4.12</groovyVersion>
+    <!-- Override spotbugs to this version from base-parent -->
+    <spotbugs.version>4.7.3</spotbugs.version>
 
-    <doxiaToolsVersion>1.4</doxiaToolsVersion>
-    <doxiaVersion>1.7</doxiaVersion>
+    <junitVersion>5.9.3</junitVersion>
+    <spotbugsVersion>4.7.3</spotbugsVersion>
+    <spotbugsTag>4.7.3</spotbugsTag>
+    <slf4jVersion>2.0.9</slf4jVersion>
 
-    <mavenReportingApiVersion>3.0</mavenReportingApiVersion>
-    <mavenReportingVersion>3.0.0</mavenReportingVersion>
-    <mavenVersion>3.5.0</mavenVersion>
+    <antVersion>1.10.14</antVersion>
+    <groovyVersion>4.0.15</groovyVersion>
+    <javaparserVersion>3.25.5</javaparserVersion>
 
-    <plexusBuildVersion>0.0.7</plexusBuildVersion>
-    <plexusContainerVersion>1.7.1</plexusContainerVersion>
-    <plexusResourcesVersion>1.1.0</plexusResourcesVersion>
-    <plexusUtilsVersion>3.1.0</plexusUtilsVersion>
+    <doxiaVersion>1.12.0</doxiaVersion>
+    <doxiaSiteToolsVersion>1.11.1</doxiaSiteToolsVersion>
 
-    <antrunPluginVersion>1.8</antrunPluginVersion>
-    <l10nPluginVersion>1.8</l10nPluginVersion>
+    <mavenCoreVersion>3.9.4</mavenCoreVersion>
+    <mavenSharedUtilsVersion>3.4.2</mavenSharedUtilsVersion>
+    <mavenTransferVersion>0.13.1</mavenTransferVersion>
+    <mavenCommonArtifactFilters>3.3.2</mavenCommonArtifactFilters>
+    <mavenReportingApiVersion>3.1.1</mavenReportingApiVersion>
+    <mavenReportingVersion>3.2.0</mavenReportingVersion>
+    <mavenVersion>3.9.4</mavenVersion>
+
+    <plexusContainerVersion>2.1.1</plexusContainerVersion>
+    <plexusResourcesVersion>1.2.0</plexusResourcesVersion>
+    <plexusUtilsVersion>3.5.1</plexusUtilsVersion>
+
+    <antrunPluginVersion>3.1.0</antrunPluginVersion>
+    <l10nPluginVersion>1.0.0</l10nPluginVersion>
     <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
-    <gmavenPluginVersion>1.5</gmavenPluginVersion>
-    <infoReportsPluginVersion>2.9</infoReportsPluginVersion>
-    <invokerPluginVersion>3.0.0</invokerPluginVersion>
-    <javadocPluginVersion>2.10.4</javadocPluginVersion>
-    <pluginPluginVersion>3.5</pluginPluginVersion>
-    <scmPluginVersion>1.9.5</scmPluginVersion>
-    <sitePluginVersion>3.6</sitePluginVersion>
-    <versionsPluginVersion>2.4</versionsPluginVersion>
+    <gmavenPluginVersion>3.0.2</gmavenPluginVersion>
+    <infoReportsPluginVersion>3.4.5</infoReportsPluginVersion>
+    <invokerPluginVersion>3.6.0</invokerPluginVersion>
+    <javadocPluginVersion>3.6.0</javadocPluginVersion>
+    <pluginPluginVersion>3.9.0</pluginPluginVersion>
+    <scmPluginVersion>2.0.1</scmPluginVersion>
+    <sitePluginVersion>3.12.1</sitePluginVersion>
+    <sitePlugin36Version>3.6</sitePlugin36Version> <!-- For MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 4.8.x and simply drop the old support) -->
+    <versionsPluginVersion>2.16.1</versionsPluginVersion>
 
-    <wagonGitsiteExtensionVersion>0.3.1</wagonGitsiteExtensionVersion>
-
-    <findbugsTestDebug>false</findbugsTestDebug>
-    <integrationTestSrc>${project.build.directory}/it-src-findbugs</integrationTestSrc>
-    <localTestSrc>${user.dir}/FindBugs</localTestSrc>
-    <remoteTestSrc>scm:git:https://github.com/findbugsproject/findbugs/</remoteTestSrc>
-    <includesTestSrcPattern>**findbugsTestCases/src/java/A*.java, **findbugsTestCases/src/java/Use*.java, **findbugsTestCases/src/java/annotations/*.java</includesTestSrcPattern>
+    <spotbugsTestDebug>false</spotbugsTestDebug>
+    <integrationTestSrc>${project.build.directory}/it-src-spotbugs</integrationTestSrc>
+    <localTestSrc>${user.dir}/SpotBugs</localTestSrc>
+    <remoteTestSrc>scm:git:https://github.com/spotbugs/spotbugs/</remoteTestSrc>
+    <includesTestSrcPattern>**spotbugsTestCases/src/java/A*.java, **spotbugsTestCases/src/java/Use*.java, **spotbugsTestCases/src/java/annotations/*.java</includesTestSrcPattern>
     <testSrc>remote</testSrc>
 
     <pmd.skip>true</pmd.skip>
@@ -163,28 +219,117 @@
     <skipSurefireReport>true</skipSurefireReport>
 
     <!-- Used by Integration tests -->
-    <compilerPluginVersion>3.7.0</compilerPluginVersion>
-    <fb-contribVersion>7.0.5</fb-contribVersion>
-    <findsecbugsVersion>1.7.1</findsecbugsVersion>
-    <jxrPluginVersion>2.5</jxrPluginVersion>
-    <mavenSurefireVersion>2.20.1</mavenSurefireVersion>
-    <javaeeApiVersion>6.0</javaeeApiVersion>
-    <servletApiVersion>3.0.1</servletApiVersion>
+    <compilerPluginVersion>3.11.0</compilerPluginVersion>
+    <findsecbugsVersion>1.12.0</findsecbugsVersion>
+    <jxrPluginVersion>3.3.0</jxrPluginVersion>
+    <mavenSurefireVersion>3.0.0</mavenSurefireVersion>
+    <jakartaeeApiVersion>8.0.0</jakartaeeApiVersion>
+    <servletApiVersion>4.0.4</servletApiVersion>
+    <sb-contribVersion>7.6.0</sb-contribVersion>
 
+    <jgit.version>5.13.2.202306221912-r</jgit.version>
+
+    <!-- Targeted patches -->
+    <asm.version>9.6</asm.version>
+    <bcel.version>6.6.1</bcel.version>
+    <beanutils.version>1.9.4</beanutils.version>
+    <chain.version>1.2</chain.version>
+    <codec.version>1.16.0</codec.version>
+    <collections.version>3.2.2</collections.version>
+    <digester.version>2.1</digester.version>
+    <gson.version>2.10.1</gson.version>
+    <guava.version>32.1.2-jre</guava.version>
+    <io.version>2.14.0</io.version>
+    <jaxen.version>2.0.0</jaxen.version>
+    <lang2.version>2.6</lang2.version>
+    <lang3.version>3.13.0</lang3.version>
+
+    <!-- Automatic Module Name -->
+    <module.name>com.github.spotbugs.maven</module.name>
+
+    <!-- TODO: Overrice parent for latest enforcer rules: Remove with parent 41. -->
+    <extra-enforcer-rules.version>1.7.0</extra-enforcer-rules.version>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm-bom</artifactId>
+        <version>${asm.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.groovy</groupId>
+        <artifactId>groovy-bom</artifactId>
+        <version>${groovyVersion}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
 
+    <!-- Spotbugs -->
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>findbugs</artifactId>
-      <version>${findbugsVersion}</version>
-      <exclusions>
-          <exclusion>
-              <groupId>xml-apis</groupId>
-              <artifactId>xml-apis</artifactId>
-          </exclusion>
-      </exclusions>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs</artifactId>
+      <version>${spotbugsVersion}</version>
+    </dependency>
+
+    <!-- Logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>${slf4jVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4jVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>${slf4jVersion}</version>
+    </dependency>
+
+    <!-- asm -->
+    <dependency>
+      <groupId>org.ow2.asm</groupId>
+      <artifactId>asm</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.asm</groupId>
+      <artifactId>asm-analysis</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.asm</groupId>
+      <artifactId>asm-commons</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.asm</groupId>
+      <artifactId>asm-tree</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.asm</groupId>
+      <artifactId>asm-util</artifactId>
+    </dependency>
+
+    <!-- bcel -->
+    <dependency>
+      <groupId>org.apache.bcel</groupId>
+      <artifactId>bcel</artifactId>
+      <version>${bcel.version}</version>
+    </dependency>
+
+    <!-- gson -->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>${gson.version}</version>
     </dependency>
 
     <!-- gmaven -->
@@ -194,24 +339,73 @@
       <version>${antVersion}</version>
     </dependency>
 
+    <!-- Groovy -->
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
+      <groupId>org.apache.groovy</groupId>
       <artifactId>groovy</artifactId>
-      <version>${groovyVersion}</version>
     </dependency>
 
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
+      <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-ant</artifactId>
-      <version>${groovyVersion}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.ant</groupId>
+          <artifactId>ant-antlr</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.ant</groupId>
+          <artifactId>ant-junit</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
-      <artifactId>groovy-xml</artifactId>
-      <version>${groovyVersion}</version>
+      <groupId>org.apache.groovy</groupId>
+      <artifactId>groovy-dateutil</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.groovy</groupId>
+      <artifactId>groovy-docgenerator</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.groovy</groupId>
+      <artifactId>groovy-json</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.groovy</groupId>
+      <artifactId>groovy-templates</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.groovy</groupId>
+      <artifactId>groovy-xml</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.javaparser</groupId>
+      <artifactId>javaparser-core</artifactId>
+      <version>${javaparserVersion}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+      <version>${jaxen.version}</version>
+    </dependency>
+
+    <!-- Maven -->
     <dependency>
       <groupId>org.apache.maven.reporting</groupId>
       <artifactId>maven-reporting-impl</artifactId>
@@ -241,18 +435,49 @@
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
       <version>${mavenVersion}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-compat</artifactId>
-      <version>${mavenVersion}</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-artifact</artifactId>
       <version>${mavenVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-artifact-transfer</artifactId>
+      <version>${mavenTransferVersion}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.sonatype.sisu</groupId>
+          <artifactId>sisu-guice</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-common-artifact-filters</artifactId>
+      <version>${mavenCommonArtifactFilters}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+      <version>${mavenCoreVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-model</artifactId>
+      <version>${mavenCoreVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-shared-utils</artifactId>
+      <version>${mavenSharedUtilsVersion}</version>
     </dependency>
 
     <!-- doxia -->
@@ -260,6 +485,16 @@
       <groupId>org.apache.maven.doxia</groupId>
       <artifactId>doxia-core</artifactId>
       <version>${doxiaVersion}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.codehaus.plexus</groupId>
+          <artifactId>plexus-container-default</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
@@ -269,16 +504,20 @@
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
       <artifactId>doxia-decoration-model</artifactId>
-      <version>${doxiaVersion}</version>
+      <version>${doxiaSiteToolsVersion}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
       <artifactId>doxia-site-renderer</artifactId>
-      <version>${doxiaVersion}</version>
+      <version>${doxiaSiteToolsVersion}</version>
       <exclusions>
         <exclusion>
-          <groupId>org.codehaus.plexus</groupId>
-          <artifactId>plexus-component-api</artifactId>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>dom4j</groupId>
+          <artifactId>dom4j</artifactId>
         </exclusion>
         <exclusion>
           <groupId>org.codehaus.plexus</groupId>
@@ -287,9 +526,9 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.shared</groupId>
-      <artifactId>maven-doxia-tools</artifactId>
-      <version>${doxiaToolsVersion}</version>
+      <groupId>org.apache.maven.doxia</groupId>
+      <artifactId>doxia-integration-tools</artifactId>
+      <version>${doxiaSiteToolsVersion}</version>
       <exclusions>
         <exclusion>
           <groupId>org.codehaus.plexus</groupId>
@@ -298,56 +537,75 @@
       </exclusions>
     </dependency>
 
-    <!-- plexus -->
+    <!-- Commons -->
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-container-default</artifactId>
-      <version>${plexusContainerVersion}</version>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>${beanutils.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
+    <dependency>
+      <groupId>commons-chain</groupId>
+      <artifactId>commons-chain</artifactId>
+      <version>${chain.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>${codec.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>${collections.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-digester</groupId>
+      <artifactId>commons-digester</artifactId>
+      <version>${digester.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>${io.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>${lang2.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${lang3.version}</version>
+    </dependency>
+
+    <!-- plexus -->
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-resources</artifactId>
       <version>${plexusResourcesVersion}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.plexus</groupId>
-          <artifactId>plexus-container-default</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
       <version>${plexusUtilsVersion}</version>
     </dependency>
-    <dependency>
-      <groupId>org.sonatype.plexus</groupId>
-      <artifactId>plexus-build-api</artifactId>
-      <version>${plexusBuildVersion}</version>
-    </dependency>
   </dependencies>
 
   <build>
     <defaultGoal>install</defaultGoal>
-
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.scm</groupId>
-        <artifactId>maven-scm-provider-gitexe</artifactId>
-        <version>${scmPluginVersion}</version>
-      </extension>
-      <extension>
-        <groupId>org.apache.maven.scm</groupId>
-        <artifactId>maven-scm-manager-plexus</artifactId>
-        <version>${scmPluginVersion}</version>
-      </extension>
-      <extension>
-        <!-- note you can download this from http://github.com/khuxtable/wagon-gitsite -->
-        <groupId>org.kathrynhuxtable.maven.wagon</groupId>
-        <artifactId>wagon-gitsite</artifactId>
-        <version>${wagonGitsiteExtensionVersion}</version>
-      </extension>
-    </extensions>
 
     <pluginManagement>
       <plugins>
@@ -361,29 +619,42 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>${sitePluginVersion}</version>
-          <configuration>
-            <skipDeploy>false</skipDeploy>
-          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-sink-api</artifactId>
+              <version>${doxiaVersion}</version>
+            </dependency>
+          </dependencies>
         </plugin>
 
-        <!--  Disable cobertura from parent -->
         <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>cobertura-maven-plugin</artifactId>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>${project.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>com.mycila</groupId>
+          <artifactId>license-maven-plugin</artifactId>
           <configuration>
-            <skip>true</skip>
+            <licenseSets>
+              <licenseSet>
+                <header>LICENSE_HEADER</header>
+                <excludes>
+                  <exclude>**/*edu.umd.cs.findbugs.core.prefs</exclude>
+                </excludes>
+              </licenseSet>
+            </licenseSets>
+            <mapping>
+              <bsh>SLASHSTAR_STYLE</bsh>
+            </mapping>
           </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
+
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <target>1.7</target>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
@@ -391,8 +662,11 @@
           <execution>
             <id>default-descriptor</id>
             <phase>process-classes</phase>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
           </execution>
-          <!-- if you want to generate help goal -->
+          <!-- Generate help goal -->
           <execution>
             <id>help-goal</id>
             <goals>
@@ -406,8 +680,16 @@
         <artifactId>gmavenplus-plugin</artifactId>
         <version>${gmavenPluginVersion}</version>
         <configuration>
-          <groovydocOutputDirectory>${project.reporting.outputDirectory}/apidocs</groovydocOutputDirectory>
+          <groovyDocOutputDirectory>${project.reporting.outputDirectory}/gapidocs</groovyDocOutputDirectory>
+          <invokeDynamic>true</invokeDynamic>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>${groovyVersion}</version>
+          </dependency>
+        </dependencies>
         <executions>
           <execution>
             <id>compileGroovy</id>
@@ -416,20 +698,20 @@
               <goal>addTestSources</goal>
               <goal>generateStubs</goal>
               <goal>compile</goal>
-              <goal>testGenerateStubs</goal>
-              <goal>testCompile</goal>
-<!--
+              <goal>generateTestStubs</goal>
+              <goal>compileTests</goal>
               <goal>removeStubs</goal>
               <goal>removeTestStubs</goal>
--->
             </goals>
           </execution>
           <execution>
             <id>site</id>
             <phase>site</phase>
             <goals>
+              <goal>generateStubs</goal>
+              <goal>generateTestStubs</goal>
               <goal>groovydoc</goal>
-              <goal>testGroovydoc</goal>
+              <goal>groovydocTests</goal>
             </goals>
           </execution>
         </executions>
@@ -441,27 +723,12 @@
           <skipTests>true</skipTests>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <configuration>
-          <pushChanges>false</pushChanges>
-          <localCheckout>true</localCheckout>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
+
   <reporting>
     <excludeDefaults>true</excludeDefaults>
     <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>${project.version}</version>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -469,7 +736,7 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-plugin</artifactId>
+        <artifactId>maven-plugin-report-plugin</artifactId>
         <version>${pluginPluginVersion}</version>
         <configuration>
           <requirements>
@@ -483,7 +750,7 @@
         <version>${infoReportsPluginVersion}</version>
       </plugin>
       <plugin>
-        <groupId>com.googlecode.l10n-maven-plugin</groupId>
+        <groupId>org.codehaus.mojo</groupId>
         <artifactId>l10n-maven-plugin</artifactId>
         <version>${l10nPluginVersion}</version>
         <configuration>
@@ -506,27 +773,31 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>${project.artifactId}</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <version>${project.version}</version>
+        <configuration>
+            <excludeFilterFile>${project.basedir}/src/main/tools/spotbugs-exclude-filters.xml</excludeFilterFile>
+        </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <version>${infoReportsPluginVersion}</version>
         <reportSets>
           <reportSet>
             <reports>
-              <report>cim</report>
+              <report>ci-management</report>
               <report>dependency-info</report>
               <report>dependencies</report>
               <report>dependency-convergence</report>
               <report>dependency-management</report>
               <report>index</report>
-              <report>issue-tracking</report>
-              <report>license</report>
-              <report>mailing-list</report>
+              <report>issue-management</report>
+              <report>licenses</report>
+              <report>mailing-lists</report>
               <report>plugin-management</report>
-              <report>project-team</report>
+              <report>team</report>
               <report>scm</report>
               <report>summary</report>
             </reports>
@@ -547,21 +818,14 @@
           </reportSet>
         </reportSets>
       </plugin>
-      <!--  Disable cobertura from parent -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>cobertura-maven-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
     </plugins>
   </reporting>
+
   <profiles>
     <profile>
       <id>run-its</id>
       <properties>
-        <findbug.debug>false</findbug.debug>
+        <spotbug.debug>false</spotbug.debug>
       </properties>
       <build>
         <plugins>
@@ -592,7 +856,8 @@
                     <goal>clean</goal>
                     <goal>install</goal>
                   </goals>
-                  <settingsFile>src/it/settings.xml</settingsFile>
+                  <settingsFile>${project.basedir}/src/it/settings.xml</settingsFile>
+                  <streamLogsOnFailures>true</streamLogsOnFailures>
                 </configuration>
               </execution>
               <execution>
@@ -601,7 +866,7 @@
                   <goal>run</goal>
                 </goals>
                 <configuration>
-                  <projectsDirectory>src/it</projectsDirectory>
+                  <projectsDirectory>${project.basedir}/src/it</projectsDirectory>
                   <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
                   <showVersion>true</showVersion>
                   <pomIncludes>
@@ -609,17 +874,41 @@
                   </pomIncludes>
                   <postBuildHookScript>verify</postBuildHookScript>
                   <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-                  <settingsFile>src/it/settings.xml</settingsFile>
+                  <settingsFile>${project.basedir}/src/it/settings.xml</settingsFile>
+                  <streamLogsOnFailures>true</streamLogsOnFailures>
                 </configuration>
               </execution>
             </executions>
+            <dependencies>
+              <!-- Keep groovy at same version we are using -->
+              <dependency>
+                <groupId>org.apache.groovy</groupId>
+                <artifactId>groovy</artifactId>
+                <version>${groovyVersion}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.apache.groovy</groupId>
+                <artifactId>groovy-json</artifactId>
+                <version>${groovyVersion}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.apache.groovy</groupId>
+                <artifactId>groovy-nio</artifactId>
+                <version>${groovyVersion}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.apache.groovy</groupId>
+                <artifactId>groovy-xml</artifactId>
+                <version>${groovyVersion}</version>
+              </dependency>
+            </dependencies>
           </plugin>
         </plugins>
       </build>
     </profile>
 
     <profile>
-      <id>find-it-src-checkout</id>
+      <id>spot-it-src-checkout</id>
       <activation>
         <property>
           <name>testSrc</name>
@@ -634,7 +923,7 @@
             <version>${scmPluginVersion}</version>
             <executions>
               <execution>
-                <id>prepare-integration-test-remote-findbugs-src</id>
+                <id>prepare-integration-test-remote-spotbugs-src</id>
                 <phase>pre-integration-test</phase>
                 <goals>
                   <goal>checkout</goal>
@@ -646,8 +935,8 @@
                     <git>jgit</git>
                   </providerImplementations>
                   <includes>${includesTestSrcPattern}</includes>
-                  <scmVersion>release-${findbugsVersion}</scmVersion>
-                  <scmVersionType>branch</scmVersionType>
+                  <scmVersion>${spotbugsTag}</scmVersion>
+                  <scmVersionType>tag</scmVersionType>
                 </configuration>
               </execution>
             </executions>
@@ -657,6 +946,16 @@
                 <artifactId>maven-scm-provider-jgit</artifactId>
                 <version>${scmPluginVersion}</version>
               </dependency>
+              <dependency>
+                <groupId>org.eclipse.jgit</groupId>
+                <artifactId>org.eclipse.jgit</artifactId>
+                <version>${jgit.version}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.eclipse.jgit</groupId>
+                <artifactId>org.eclipse.jgit.ssh.jsch</artifactId>
+                <version>${jgit.version}</version>
+              </dependency>
             </dependencies>
           </plugin>
         </plugins>
@@ -664,7 +963,7 @@
     </profile>
 
     <profile>
-      <id>find-it-src-local</id>
+      <id>spot-it-src-local</id>
       <activation>
         <property>
           <name>testSrc</name>
@@ -679,7 +978,7 @@
             <version>${antrunPluginVersion}</version>
             <executions>
               <execution>
-                <id>prepare-integration-test-local-findbugs-src</id>
+                <id>prepare-integration-test-local-spotbugs-src</id>
                 <phase>pre-integration-test</phase>
                 <goals>
                   <goal>run</goal>
