@@ -122,7 +122,7 @@
     <junitVersion>4.12</junitVersion>
 
     <antVersion>1.9.9</antVersion>
-    <groovyVersion>2.4.12</groovyVersion>
+    <groovyVersion>2.4.21</groovyVersion>
 
     <doxiaToolsVersion>1.4</doxiaToolsVersion>
     <doxiaVersion>1.7</doxiaVersion>
