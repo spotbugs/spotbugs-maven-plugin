@@ -121,7 +121,7 @@
     <findbugsVersion>3.0.1</findbugsVersion>
     <junitVersion>4.12</junitVersion>
 
-    <antVersion>1.9.9</antVersion>
+    <antVersion>1.10.11</antVersion>
     <groovyVersion>2.4.12</groovyVersion>
 
     <doxiaToolsVersion>1.4</doxiaToolsVersion>
