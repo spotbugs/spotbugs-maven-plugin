@@ -129,7 +129,7 @@
 
     <mavenReportingApiVersion>3.0</mavenReportingApiVersion>
     <mavenReportingVersion>3.0.0</mavenReportingVersion>
-    <mavenVersion>3.5.0</mavenVersion>
+    <mavenVersion>3.8.1</mavenVersion>
 
     <plexusBuildVersion>0.0.7</plexusBuildVersion>
     <plexusContainerVersion>1.7.1</plexusContainerVersion>
