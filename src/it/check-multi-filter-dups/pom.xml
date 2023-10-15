@@ -25,8 +25,8 @@
     <version>testing</version>
     <relativePath>../common.xml</relativePath>
   </parent>
-  <artifactId>check-multi-parent-relative-path</artifactId>
-  <name>check-multi-parent-relative-path</name>
+  <artifactId>check-multi-filter-dups</artifactId>
+  <name>check-multi-filter-dups</name>
   <packaging>pom</packaging>
   <modules>
     <module>module1</module>

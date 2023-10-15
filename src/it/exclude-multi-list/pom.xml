@@ -26,8 +26,8 @@
     <version>testing</version>
     <relativePath>../common.xml</relativePath>
   </parent>
-  <artifactId>excludeFile-multi-list</artifactId>
-  <name>excludeFile-multi-list</name>
+  <artifactId>exclude-multi-list</artifactId>
+  <name>exclude-multi-list</name>
   <packaging>jar</packaging>
   <build>
     <extensions>

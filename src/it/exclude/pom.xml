@@ -26,8 +26,8 @@
     <version>testing</version>
     <relativePath>../common.xml</relativePath>
   </parent>
-  <artifactId>excludeFile</artifactId>
-  <name>excludeFile</name>
+  <artifactId>exclude</artifactId>
+  <name>exclude</name>
   <packaging>jar</packaging>
   <build>
     <extensions>
