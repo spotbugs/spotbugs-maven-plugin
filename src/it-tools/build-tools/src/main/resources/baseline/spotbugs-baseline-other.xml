@@ -16,7 +16,7 @@
     limitations under the License.
 
 -->
-<BugCollection sequence="0" release="" analysisTimestamp="1653586688929" version="4.7.0" timestamp="1653586685292">
+<BugCollection sequence="0" release="" analysisTimestamp="1697396613578" version="4.8.0" timestamp="1697396611249">
   <BugInstance instanceOccurrenceNum="0" instanceHash="c7f9edd192cfef80d2e55dde64a514bc" rank="2" abbrev="INT" category="CORRECTNESS" priority="1" type="INT_BAD_COMPARISON_WITH_SIGNED_BYTE" instanceOccurrenceMax="0">
     <ShortMessage>Bad comparison of signed byte</ShortMessage>
     <LongMessage>Bad comparison of signed byte with 200 in AssumeUnsignedBytes.find200(byte[])</LongMessage>
@@ -52,6 +52,33 @@
     </Method>
     <SourceLine synthetic="true" endBytecode="51" classname="UseOfNonHashableClassInHashDataStructure" start="16" end="16" sourcepath="UseOfNonHashableClassInHashDataStructure.java" sourcefile="UseOfNonHashableClassInHashDataStructure.java" startBytecode="0">
       <Message>At UseOfNonHashableClassInHashDataStructure.java:[line 16]</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugInstance instanceOccurrenceNum='0' instanceHash='39b83e2bc727181dff8f79450a6ccedb' rank='1' abbrev='HE' category='CORRECTNESS' priority='1' type='HE_USE_OF_UNHASHABLE_CLASS' instanceOccurrenceMax='0'>
+    <ShortMessage>Use of class without a hashCode() method in a hashed data structure</ShortMessage>
+    <LongMessage>UseOfNonHashableClassInHashDataStructure doesn't define a hashCode() method but is used in a hashed data structure in UseOfNonHashableClassInHashDataStructure.get(UseOfNonHashableClassInHashDataStructure)</LongMessage>
+    <Class classname='UseOfNonHashableClassInHashDataStructure' primary='true'>
+      <SourceLine classname='UseOfNonHashableClassInHashDataStructure' start='3' end='24' sourcepath='UseOfNonHashableClassInHashDataStructure.java' sourcefile='UseOfNonHashableClassInHashDataStructure.java'>
+        <Message>At UseOfNonHashableClassInHashDataStructure.java:[lines 3-24]</Message>
+      </SourceLine>
+      <Message>In class UseOfNonHashableClassInHashDataStructure</Message>
+    </Class>
+    <Method isStatic='true' classname='UseOfNonHashableClassInHashDataStructure' signature='(LUseOfNonHashableClassInHashDataStructure;)Ljava/lang/String;' name='get' primary='true'>
+      <SourceLine endBytecode='34' classname='UseOfNonHashableClassInHashDataStructure' start='24' end='24' sourcepath='UseOfNonHashableClassInHashDataStructure.java' sourcefile='UseOfNonHashableClassInHashDataStructure.java' startBytecode='0'></SourceLine>
+      <Message>In method UseOfNonHashableClassInHashDataStructure.get(UseOfNonHashableClassInHashDataStructure)</Message>
+    </Method>
+    <Type role='TYPE_UNHASHABLE' descriptor='LUseOfNonHashableClassInHashDataStructure;'>
+      <SourceLine classname='UseOfNonHashableClassInHashDataStructure' start='3' end='24' sourcepath='UseOfNonHashableClassInHashDataStructure.java' sourcefile='UseOfNonHashableClassInHashDataStructure.java'>
+        <Message>At UseOfNonHashableClassInHashDataStructure.java:[lines 3-24]</Message>
+      </SourceLine>
+      <Message>Unhashable class UseOfNonHashableClassInHashDataStructure </Message>
+    </Type>
+    <Method isStatic='false' role='METHOD_CALLED' classname='java.util.HashMap' signature='(Ljava/lang/Object;)Ljava/lang/Object;' name='get'>
+      <SourceLine endBytecode='130' classname='java.util.HashMap' start='553' end='553' sourcepath='java/util/HashMap.java' sourcefile='HashMap.java' startBytecode='0'></SourceLine>
+      <Message>Called method java.util.HashMap.get(Object)</Message>
+    </Method>
+    <SourceLine endBytecode='4' classname='UseOfNonHashableClassInHashDataStructure' start='24' end='24' sourcepath='UseOfNonHashableClassInHashDataStructure.java' sourcefile='UseOfNonHashableClassInHashDataStructure.java' startBytecode='4' primary='true'>
+      <Message>At UseOfNonHashableClassInHashDataStructure.java:[line 24]</Message>
     </SourceLine>
   </BugInstance>
   <BugInstance instanceOccurrenceNum="0" instanceHash="a4564c101ee03f13b56ee6a6b66efd77" rank="5" abbrev="HE" category="CORRECTNESS" priority="1" type="HE_SIGNATURE_DECLARES_HASHING_OF_UNHASHABLE_CLASS" instanceOccurrenceMax="0">

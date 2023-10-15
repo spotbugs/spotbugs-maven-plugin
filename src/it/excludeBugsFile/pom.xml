@@ -27,7 +27,7 @@
     <relativePath>../common.xml</relativePath>
   </parent>
   <artifactId>excludeBugsFiles</artifactId>
-  <name>excludeBugsFiless</name>
+  <name>excludeBugsFiles</name>
   <packaging>jar</packaging>
   <build>
     <plugins>

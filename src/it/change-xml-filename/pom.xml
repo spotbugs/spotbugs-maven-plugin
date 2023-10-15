@@ -26,8 +26,8 @@
     <version>testing</version>
     <relativePath>../common.xml</relativePath>
   </parent>
-  <artifactId>change-filename</artifactId>
-  <name>change-filename</name>
+  <artifactId>change-xml-filename</artifactId>
+  <name>change-xml-filename</name>
   <packaging>jar</packaging>
   <reporting>
     <excludeDefaults>true</excludeDefaults>

@@ -26,8 +26,8 @@
     <version>testing</version>
     <relativePath>../common.xml</relativePath>
   </parent>
-  <artifactId>check</artifactId>
-  <name>check</name>
+  <artifactId>verify-clean</artifactId>
+  <name>verify-clean</name>
   <packaging>jar</packaging>
   <build>
     <plugins>

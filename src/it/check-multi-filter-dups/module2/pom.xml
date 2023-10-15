@@ -22,7 +22,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>spotbugs-maven-plugin.it</groupId>
-    <artifactId>check-multi-parent-relative-path</artifactId>
+    <artifactId>check-multi-filter-dups</artifactId>
     <version>testing</version>
     <relativePath>..</relativePath>
   </parent>

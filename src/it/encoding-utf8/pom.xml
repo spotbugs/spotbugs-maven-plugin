@@ -26,7 +26,7 @@
     <version>testing</version>
     <relativePath>../common.xml</relativePath>
   </parent>
-  <artifactId>basic-1</artifactId>
+  <artifactId>encoding-utf8</artifactId>
   <name>encoding-utf8</name>
   <packaging>jar</packaging>
   <properties>

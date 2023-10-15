@@ -28,7 +28,7 @@
 
   <groupId>com.github.spotbugs</groupId>
   <artifactId>spotbugs-maven-plugin</artifactId>
-  <version>4.7.3.7-SNAPSHOT</version>
+  <version>4.8.0.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>spotbugs-maven-plugin</name>
@@ -167,11 +167,11 @@
     <project.build.outputTimestamp>1695603053</project.build.outputTimestamp>
 
     <!-- Override spotbugs to this version from base-parent -->
-    <spotbugs.version>4.7.3</spotbugs.version>
+    <spotbugs.version>4.8.0</spotbugs.version>
 
-    <junitVersion>5.9.3</junitVersion>
-    <spotbugsVersion>4.7.3</spotbugsVersion>
-    <spotbugsTag>4.7.3</spotbugsTag>
+    <junitVersion>5.10.0</junitVersion>
+    <spotbugsVersion>4.8.0</spotbugsVersion>
+    <spotbugsTag>4.8.0</spotbugsTag>
     <slf4jVersion>2.0.9</slf4jVersion>
 
     <antVersion>1.10.14</antVersion>
@@ -191,7 +191,8 @@
 
     <plexusContainerVersion>2.1.1</plexusContainerVersion>
     <plexusResourcesVersion>1.2.0</plexusResourcesVersion>
-    <plexusUtilsVersion>3.5.1</plexusUtilsVersion>
+    <plexusUtilsVersion>4.0.0</plexusUtilsVersion>
+    <plexusXmlVersion>3.0.0</plexusXmlVersion>
 
     <antrunPluginVersion>3.1.0</antrunPluginVersion>
     <l10nPluginVersion>1.0.0</l10nPluginVersion>
@@ -222,7 +223,7 @@
     <compilerPluginVersion>3.11.0</compilerPluginVersion>
     <findsecbugsVersion>1.12.0</findsecbugsVersion>
     <jxrPluginVersion>3.3.0</jxrPluginVersion>
-    <mavenSurefireVersion>3.0.0</mavenSurefireVersion>
+    <mavenSurefireVersion>3.1.2</mavenSurefireVersion>
     <jakartaeeApiVersion>8.0.0</jakartaeeApiVersion>
     <servletApiVersion>4.0.4</servletApiVersion>
     <sb-contribVersion>7.6.0</sb-contribVersion>
@@ -246,9 +247,6 @@
 
     <!-- Automatic Module Name -->
     <module.name>com.github.spotbugs.maven</module.name>
-
-    <!-- TODO: Overrice parent for latest enforcer rules: Remove with parent 41. -->
-    <extra-enforcer-rules.version>1.7.0</extra-enforcer-rules.version>
   </properties>
 
   <dependencyManagement>
@@ -601,6 +599,11 @@
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
       <version>${plexusUtilsVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-xml</artifactId>
+      <version>${plexusXmlVersion}</version>
     </dependency>
   </dependencies>
 

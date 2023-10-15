@@ -25,8 +25,8 @@
     <version>testing</version>
     <relativePath>../common.xml</relativePath>
   </parent>
-  <artifactId>multi</artifactId>
-  <name>multi</name>
+  <artifactId>check-multi</artifactId>
+  <name>check-multi</name>
   <packaging>pom</packaging>
   <modules>
     <module>modules</module>
