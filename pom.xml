@@ -201,7 +201,7 @@
     <infoReportsPluginVersion>3.4.5</infoReportsPluginVersion>
     <invokerPluginVersion>3.6.0</invokerPluginVersion>
     <javadocPluginVersion>3.6.0</javadocPluginVersion>
-    <pluginPluginVersion>3.10.1</pluginPluginVersion>
+    <pluginPluginVersion>3.10.2</pluginPluginVersion>
     <scmPluginVersion>2.0.1</scmPluginVersion>
     <sitePluginVersion>3.12.1</sitePluginVersion>
     <sitePlugin36Version>3.6</sitePlugin36Version> <!-- For MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 4.8.x and simply drop the old support) -->
