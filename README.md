@@ -85,3 +85,21 @@ If using groovy with same group id (```org.codehaus.groovy 3.x``` or before or `
 ## Eclipse m2e Integration ##
 
 The plugin cycles controlled by Eclipse require compilation phase for m2e without further help.  This plugin runs verify and during site generation.  Therefore Eclipse m2e will show up but not do anything with this plugin alone.  In order to have proper execution within Ecipse m2e, use [m2e-code-quality](https://github.com/m2e-code-quality/m2e-code-quality) plugin for spotbugs.
+
+## Analysis Properties ##
+
+Is there some way to set the [Analysis Properties](https://spotbugs.readthedocs.io/en/stable/analysisprops.html) when using the maven plugin?
+
+Analysis properties are passed as Java system properties, so they can be set in the <jvmArgs> configuration element.
+
+E.g. to set the findbugs.assertionmethods analyzer property:
+
+```
+<plugin>
+    <groupId>com.github.spotbugs</groupId>
+    <artifactId>spotbugs-maven-plugin</artifactId>
+    <configuration>
+        <jvmArgs>-Dfindbugs.assertionmethods=org.apache.commons.lang3.Validate.notNull</jvmArgs>
+    </configuration?
+</plugin>
+```
