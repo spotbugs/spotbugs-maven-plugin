@@ -204,7 +204,7 @@
     <pluginPluginVersion>3.10.2</pluginPluginVersion>
     <scmPluginVersion>2.0.1</scmPluginVersion>
     <sitePluginVersion>3.12.1</sitePluginVersion>
-    <sitePlugin36Version>3.6</sitePlugin36Version> <!-- For MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 4.8.x and simply drop the old support) -->
+    <sitePlugin36Version>3.6</sitePlugin36Version> <!-- For MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 5.0.x and simply drop the old support) -->
     <versionsPluginVersion>2.16.1</versionsPluginVersion>
 
     <spotbugsTestDebug>false</spotbugsTestDebug>
@@ -222,8 +222,8 @@
     <!-- Used by Integration tests -->
     <compilerPluginVersion>3.11.0</compilerPluginVersion>
     <findsecbugsVersion>1.12.0</findsecbugsVersion>
-    <jxrPluginVersion>3.3.0</jxrPluginVersion>
-    <mavenSurefireVersion>3.1.2</mavenSurefireVersion>
+    <jxrPluginVersion>3.3.1</jxrPluginVersion>
+    <mavenSurefireVersion>3.2.2</mavenSurefireVersion>
     <jakartaeeApiVersion>8.0.0</jakartaeeApiVersion>
     <servletApiVersion>4.0.4</servletApiVersion>
     <sb-contribVersion>7.6.0</sb-contribVersion>
