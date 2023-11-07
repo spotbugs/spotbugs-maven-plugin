@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 21
-          distribution: 'zulu'
+          distribution: zulu
       - name: Deploy to Sonatype
         run: ./mvnw deploy -DskipTests -B -V --no-transfer-progress --settings ./.mvn/settings.xml -Dlicense.skip=true
         env:
