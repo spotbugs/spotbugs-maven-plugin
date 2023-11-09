@@ -12,7 +12,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: 17
+          java-version: 11
           distribution: zulu
       - name: Load Maven 4.0.0-alpha-8
         run: ./mvnw -B -V org.apache.maven.plugins:maven-wrapper-plugin:3.2.0:wrapper -Dmaven=4.0.0-alpha-8 --no-transfer-progress
