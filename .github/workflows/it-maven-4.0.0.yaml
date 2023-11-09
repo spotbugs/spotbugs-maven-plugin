@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Integration Tests Maven 4.0.0-alpha-48
+    name: Integration Tests Maven 4.0.0-alpha-8
 
     steps:
       - uses: actions/checkout@v4
@@ -14,7 +14,7 @@ jobs:
         with:
           java-version: 21
           distribution: zulu
-      - name: Load Maven 4.0.0-alpha-48
+      - name: Load Maven 4.0.0-alpha-8
         run: ./mvnw -B -V org.apache.maven.plugins:maven-wrapper-plugin:3.2.0:wrapper -Dmaven=4.0.0-alpha-8 --no-transfer-progress
       - name: Build Setup
         run: ./mvnw -B -V clean install -Dlicense.skip=true -Dmaven.min-version=4.0.0-alpha-8 --no-transfer-progress
