@@ -198,7 +198,7 @@
         <l10nPluginVersion>1.0.0</l10nPluginVersion>
         <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
         <gmavenPluginVersion>3.0.2</gmavenPluginVersion>
-        <infoReportsPluginVersion>3.4.5</infoReportsPluginVersion>
+        <infoReportsPluginVersion>3.5.0</infoReportsPluginVersion>
         <invokerPluginVersion>3.6.0</invokerPluginVersion>
         <javadocPluginVersion>3.6.2</javadocPluginVersion>
         <pluginPluginVersion>3.10.2</pluginPluginVersion>
