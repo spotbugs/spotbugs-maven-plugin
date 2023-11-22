@@ -244,7 +244,7 @@
         <io.version>2.15.0</io.version>
         <jaxen.version>2.0.0</jaxen.version>
         <lang2.version>2.6</lang2.version>
-        <lang3.version>3.13.0</lang3.version>
+        <lang3.version>3.14.0</lang3.version>
 
         <!-- Automatic Module Name -->
         <module.name>com.github.spotbugs.maven</module.name>
