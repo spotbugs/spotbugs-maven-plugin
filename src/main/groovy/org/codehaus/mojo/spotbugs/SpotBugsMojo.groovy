@@ -934,7 +934,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (onlyAnalyze) {
             args << "-onlyAnalyze"
             args << Arrays.stream(onlyAnalyze.split(",")).map {
-                it.startsWith("file:") ? Files.lines(Paths.get(it.substring(5))).collect(Collectors.joining(",")) : it
+                it.startsWith("file:") ? Files.lines(resourceHelper.getResourceFile(it.substring(5)).toPath()).collect(Collectors.joining(",")) : it
             }.collect(Collectors.joining(","))
         }
 
