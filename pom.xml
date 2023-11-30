@@ -181,7 +181,6 @@
         <doxiaVersion>1.12.0</doxiaVersion>
         <doxiaSiteToolsVersion>1.11.1</doxiaSiteToolsVersion>
 
-        <mavenCoreVersion>3.9.5</mavenCoreVersion>
         <mavenSharedUtilsVersion>3.4.2</mavenSharedUtilsVersion>
         <mavenTransferVersion>0.13.1</mavenTransferVersion>
         <mavenCommonArtifactFilters>3.3.2</mavenCommonArtifactFilters>
@@ -475,13 +474,13 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
-            <version>${mavenCoreVersion}</version>
+            <version>${mavenVersion}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-model</artifactId>
-            <version>${mavenCoreVersion}</version>
+            <version>${mavenVersion}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
