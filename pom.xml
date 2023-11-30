@@ -181,7 +181,6 @@
         <doxiaVersion>1.12.0</doxiaVersion>
         <doxiaSiteToolsVersion>1.11.1</doxiaSiteToolsVersion>
 
-        <mavenCoreVersion>3.9.5</mavenCoreVersion>
         <mavenSharedUtilsVersion>3.4.2</mavenSharedUtilsVersion>
         <mavenTransferVersion>0.13.1</mavenTransferVersion>
         <mavenCommonArtifactFilters>3.3.2</mavenCommonArtifactFilters>
@@ -280,9 +279,20 @@
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs</artifactId>
             <version>${spotbugsVersion}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Logging -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-to-slf4j</artifactId>
+            <version>2.22.0</version>
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
@@ -297,13 +307,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4jVersion}</version>
-        </dependency>
-
-        <!-- Logging (temp fix due to bug in spotbugs) -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j2-impl</artifactId>
-            <version>2.22.0</version>
         </dependency>
 
         <!-- asm -->
@@ -475,13 +478,13 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
-            <version>${mavenCoreVersion}</version>
+            <version>${mavenVersion}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-model</artifactId>
-            <version>${mavenCoreVersion}</version>
+            <version>${mavenVersion}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
