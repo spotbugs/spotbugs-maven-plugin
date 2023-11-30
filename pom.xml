@@ -28,7 +28,7 @@
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.8.1.1-SNAPSHOT</version>
+    <version>4.8.2.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
@@ -167,11 +167,11 @@
         <project.build.outputTimestamp>1699325020</project.build.outputTimestamp>
 
         <!-- Override spotbugs to this version from base-parent -->
-        <spotbugs.version>4.8.1</spotbugs.version>
+        <spotbugs.version>4.8.2</spotbugs.version>
 
-        <junitVersion>5.10.0</junitVersion>
+        <junitVersion>5.10.1</junitVersion>
         <spotbugsVersion>4.8.2</spotbugsVersion>
-        <spotbugsTag>4.8.1</spotbugsTag>
+        <spotbugsTag>4.8.2</spotbugsTag>
         <slf4jVersion>2.0.9</slf4jVersion>
 
         <antVersion>1.10.14</antVersion>
