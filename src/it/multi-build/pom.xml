@@ -42,7 +42,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>@site.doxia1.plugin@</version>
+        <version>@site.plugin@</version>
       </plugin>
     </plugins>
   </build>

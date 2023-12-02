@@ -180,12 +180,12 @@
         <groovyVersion>4.0.26</groovyVersion>
         <javaparserVersion>3.26.3</javaparserVersion>
 
-        <doxiaVersion>1.12.0</doxiaVersion>
-        <doxiaSiteToolsVersion>1.11.1</doxiaSiteToolsVersion>
+        <doxiaVersion>2.0.0</doxiaVersion>
+        <doxiaSiteToolsVersion>2.0.0</doxiaSiteToolsVersion>
 
         <mavenSharedUtilsVersion>3.4.2</mavenSharedUtilsVersion>
-        <mavenReportingApiVersion>3.1.1</mavenReportingApiVersion>
-        <mavenReportingVersion>3.2.0</mavenReportingVersion>
+        <mavenReportingApiVersion>4.0.0</mavenReportingApiVersion>
+        <mavenReportingVersion>4.0.0</mavenReportingVersion>
         <mavenVersion>3.9.9</mavenVersion>
 
         <resolver.version>1.9.22</resolver.version>
@@ -199,11 +199,7 @@
         <!-- TODO: Run latest dependency check as prior is throwing errors. Remove after next parent update. -->
         <dependency-check.plugin>12.1.0</dependency-check.plugin>
 
-        <!-- TODO: For running plugin, continue to use site plugin 3.12.1 -->
-        <site.doxia1.plugin note="3.21.0+ requires doxia 2">3.12.1</site.doxia1.plugin>
-
         <pluginPluginVersion>3.15.1</pluginPluginVersion>
-
         <l10nPluginVersion>1.1.0</l10nPluginVersion>
         <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
         <gmavenPluginVersion>4.1.1</gmavenPluginVersion>
@@ -233,16 +229,13 @@
         <asm.version>9.7.1</asm.version>
         <bcel.version>6.10.0</bcel.version>
         <beanutils.version>1.10.1</beanutils.version>
-        <chain.version>1.2</chain.version>
         <codec.version>1.18.0</codec.version>
         <codenarc.version>3.6.0-groovy-4.0</codenarc.version>
         <collections.version>3.2.2</collections.version>
-        <digester.version>2.1</digester.version>
         <gson.version>2.12.1</gson.version>
         <inject.version>1</inject.version>
         <io.version>2.18.0</io.version>
         <jaxen.version>2.0.0</jaxen.version>
-        <lang2.version>2.6</lang2.version>
         <lang3.version>3.17.0</lang3.version>
         <logging.version>1.3.5</logging.version>
         <saxon.he.version>12.5</saxon.he.version>
@@ -322,11 +315,6 @@
                 <version>${beanutils.version}</version>
             </dependency>
             <dependency>
-                <groupId>commons-chain</groupId>
-                <artifactId>commons-chain</artifactId>
-                <version>${chain.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>${codec.version}</version>
@@ -337,19 +325,9 @@
                 <version>${collections.version}</version>
             </dependency>
             <dependency>
-                <groupId>commons-digester</groupId>
-                <artifactId>commons-digester</artifactId>
-                <version>${digester.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
                 <version>${lang2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${lang3.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-logging</groupId>
@@ -488,12 +466,6 @@
             <groupId>org.apache.maven.reporting</groupId>
             <artifactId>maven-reporting-impl</artifactId>
             <version>${mavenReportingVersion}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.codehaus.plexus</groupId>
-                    <artifactId>plexus-container-default</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -549,13 +521,6 @@
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-core</artifactId>
             <version>${doxiaVersion}</version>
-            <exclusions>
-                <!-- We don't need the plexus container default -->
-                <exclusion>
-                    <groupId>org.codehaus.plexus</groupId>
-                    <artifactId>plexus-container-default</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.doxia</groupId>
@@ -567,16 +532,6 @@
             <artifactId>doxia-site-renderer</artifactId>
             <version>${doxiaSiteToolsVersion}</version>
             <exclusions>
-                <!-- Using org.dom4j instead -->
-                <exclusion>
-                    <groupId>dom4j</groupId>
-                    <artifactId>dom4j</artifactId>
-                </exclusion>
-                <!-- We don't need the plexus container default -->
-                <exclusion>
-                    <groupId>org.codehaus.plexus</groupId>
-                    <artifactId>plexus-container-default</artifactId>
-                </exclusion>
                 <!-- We don't need doxia html (using html5) -->
                 <exclusion>
                     <groupId>org.apache.maven.doxia</groupId>
@@ -588,13 +543,6 @@
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-integration-tools</artifactId>
             <version>${doxiaSiteToolsVersion}</version>
-            <exclusions>
-                <!-- We don't need the plexus container default -->
-                <exclusion>
-                    <groupId>org.codehaus.plexus</groupId>
-                    <artifactId>plexus-container-default</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- plexus -->
