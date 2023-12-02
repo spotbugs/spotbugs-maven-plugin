@@ -421,6 +421,11 @@
         <!-- Maven -->
         <dependency>
             <groupId>org.apache.maven.reporting</groupId>
+            <artifactId>maven-reporting-api</artifactId>
+            <version>${mavenReportingApiVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.reporting</groupId>
             <artifactId>maven-reporting-impl</artifactId>
             <version>${mavenReportingVersion}</version>
             <exclusions>
@@ -429,12 +434,6 @@
                     <artifactId>plexus-container-default</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.maven.reporting</groupId>
-            <artifactId>maven-reporting-api</artifactId>
-            <version>${mavenReportingApiVersion}</version>
         </dependency>
 
         <dependency>
