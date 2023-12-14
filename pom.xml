@@ -170,7 +170,7 @@
         <spotbugs.version>4.8.2</spotbugs.version>
 
         <junitVersion>5.10.1</junitVersion>
-        <spotbugsVersion>4.8.2</spotbugsVersion>
+        <spotbugsVersion>4.8.3</spotbugsVersion>
         <spotbugsTag>4.8.2</spotbugsTag>
         <slf4jVersion>2.0.9</slf4jVersion>
 
