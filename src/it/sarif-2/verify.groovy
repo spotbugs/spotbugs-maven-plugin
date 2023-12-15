@@ -15,7 +15,7 @@
  */
 import groovy.json.JsonSlurper
 
-def effortLevel = 'default'
+String effortLevel = 'default'
 
 
 File spotbugSarifFile = new File(basedir, 'target/spotbugsSarif.json')
@@ -27,7 +27,7 @@ println "Checking SARIF file"
 println '**********************************'
 
 
-def String normalizePath(String path) {
+String normalizePath(String path) {
 	return path.replaceAll("\\\\","/");
 }
 

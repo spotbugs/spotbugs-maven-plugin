@@ -15,7 +15,7 @@
  */
 import groovy.xml.XmlSlurper
 
-def effortLevel = 'default'
+String effortLevel = 'default'
 
 
 //  check module 1
@@ -24,7 +24,7 @@ println '***************************'
 println "Checking Module-1"
 println '***************************'
 
-def module = "module-1"
+String module = 'module-1'
 
 File spotbugsHtml =  new File(basedir, "modules/${module}/target/site/spotbugs.html")
 assert spotbugsHtml.exists()
@@ -42,7 +42,7 @@ println '***************************'
 
 assert spotbugsHtml.text.contains( "<i>" + effortLevel + "</i>" )
 
-def xhtmlParser = new XmlSlurper();
+XmlSlurper xhtmlParser = new XmlSlurper();
 xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
 xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
 def path = xhtmlParser.parse( spotbugsHtml )
@@ -57,7 +57,7 @@ println '***************************'
 path = new XmlSlurper().parse(new File(basedir, "modules/${module}/target/spotbugs.xml"))
 
 allNodes = path.depthFirst().collect{ it }
-def xdocErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+int xdocErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${xdocErrors}"
 
 assert spotbugsErrors == xdocErrors
@@ -74,7 +74,7 @@ println '**********************************'
 path = new XmlSlurper().parse(new File(basedir, "modules/${module}/target/spotbugsXml.xml"))
 
 allNodes = path.depthFirst().collect{ it }
-def spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+int spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
@@ -83,9 +83,6 @@ spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'  && it.@type ==
 println "BugInstance with includes size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
-
-
-
 
 //  check module 2
 

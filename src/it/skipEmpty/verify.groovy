@@ -32,7 +32,7 @@ println '**********************************'
 path = new XmlSlurper().parse(spotbugXml)
 
 allNodes = path.depthFirst().collect{ it }
-def spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+int spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${spotbugsXmlErrors}"
 
 assert spotbugsXmlErrors == 0

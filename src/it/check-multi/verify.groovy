@@ -28,7 +28,7 @@ println '**********************************'
 
 
 allNodes = path.depthFirst().collect { it }
-def spotbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+int spotbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${spotbugsErrors}"
 
 assert spotbugsErrors > 0

@@ -15,7 +15,7 @@
  */
 import groovy.json.JsonSlurper
 
-def effortLevel = 'default'
+String effortLevel = 'default'
 
 
 File spotbugSarifFile = new File(basedir, 'target/spotbugsSarif.json')
