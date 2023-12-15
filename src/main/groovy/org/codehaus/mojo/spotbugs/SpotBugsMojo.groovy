@@ -65,6 +65,14 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     boolean xmlOutput
 
     /**
+     * Output empty warning file if no classes are specified.
+     *
+     * @since 4.8.3.0
+     */
+    @Parameter(defaultValue = "false", property = "spotbugs.noClassOk", required = true)
+    boolean noClassOk
+
+    /**
      * Turn on and off HTML output of the Spotbugs report.
      *
      * @since 4.7.3.1
@@ -1024,6 +1032,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (testClassFilesDirectory.exists() && testClassFilesDirectory.isDirectory() && includeTests) {
             log.debug("  Adding to Source Directory ->" + testClassFilesDirectory.absolutePath)
             args << testClassFilesDirectory.absolutePath
+        }
+
+        if (noClassOk) {
+            args << "-noClassOk"
         }
 
         return args
