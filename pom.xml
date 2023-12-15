@@ -28,7 +28,7 @@
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.8.2.1-SNAPSHOT</version>
+    <version>4.8.3.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
@@ -167,11 +167,11 @@
         <project.build.outputTimestamp>1701558282</project.build.outputTimestamp>
 
         <!-- Override spotbugs to this version from base-parent -->
-        <spotbugs.version>4.8.2</spotbugs.version>
+        <spotbugs.version>4.8.3</spotbugs.version>
 
         <junitVersion>5.10.1</junitVersion>
         <spotbugsVersion>4.8.3</spotbugsVersion>
-        <spotbugsTag>4.8.2</spotbugsTag>
+        <spotbugsTag>4.8.3</spotbugsTag>
         <slf4jVersion>2.0.9</slf4jVersion>
 
         <antVersion>1.10.14</antVersion>
@@ -203,8 +203,8 @@
         <pluginPluginVersion>3.10.2</pluginPluginVersion>
         <scmPluginVersion>2.0.1</scmPluginVersion>
         <sitePluginVersion>3.12.1</sitePluginVersion>
+        <!-- Site Plugin for MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 5.0.x and simply drop the old support) -->
         <sitePlugin36Version>3.6</sitePlugin36Version>
-        <!-- For MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 5.0.x and simply drop the old support) -->
         <versionsPluginVersion>2.16.2</versionsPluginVersion>
 
         <spotbugsTestDebug>false</spotbugsTestDebug>
@@ -223,10 +223,10 @@
         <compilerPluginVersion>3.11.0</compilerPluginVersion>
         <findsecbugsVersion>1.12.0</findsecbugsVersion>
         <jxrPluginVersion>3.3.1</jxrPluginVersion>
-        <mavenSurefireVersion>3.2.2</mavenSurefireVersion>
         <jakartaeeApiVersion>8.0.0</jakartaeeApiVersion>
+        <mavenSurefireVersion>3.2.3</mavenSurefireVersion>
         <servletApiVersion>4.0.4</servletApiVersion>
-        <sb-contribVersion>7.6.0</sb-contribVersion>
+        <sb-contribVersion>7.6.3</sb-contribVersion>
 
         <jgit.version>5.13.2.202306221912-r</jgit.version>
 
@@ -247,10 +247,6 @@
 
         <!-- Automatic Module Name -->
         <module.name>com.github.spotbugs.maven</module.name>
-
-        <!-- TODO: Remove enforcer setup after parent 42 -->
-        <!-- Enforcer Jdks Allowed -->
-        <allowed.build.jdks>[11,12),[17,18),[21,22),[22,23)</allowed.build.jdks>
     </properties>
 
     <dependencyManagement>
