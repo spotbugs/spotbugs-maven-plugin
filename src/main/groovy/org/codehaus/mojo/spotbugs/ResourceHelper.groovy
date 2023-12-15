@@ -15,11 +15,11 @@
  */
 package org.codehaus.mojo.spotbugs
 
+import java.nio.file.Files
 import org.apache.maven.plugin.logging.Log
 import org.codehaus.plexus.resource.loader.FileResourceCreationException
 import org.codehaus.plexus.resource.loader.FileResourceLoader
 import org.codehaus.plexus.resource.ResourceManager
-import org.codehaus.plexus.util.FileUtils
 
 final class ResourceHelper {
 
@@ -96,7 +96,7 @@ final class ResourceHelper {
         File outputResourceFile
 
         if (outputPath == null) {
-            outputResourceFile = FileUtils.createTempFile("plexus-resources", "tmp", null)
+            outputResourceFile = Files.createTempFile("plexus-resources", "tmp")
         } else {
             if (outputDirectory != null) {
                 outputResourceFile = new File(outputDirectory, outputPath)
