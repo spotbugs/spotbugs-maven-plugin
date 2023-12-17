@@ -93,12 +93,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>jakarta.platform</groupId>
-      <artifactId>jakarta.jakartaee-api</artifactId>
-      <version>@jakartaeeApiVersion@</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
       <version>@servletApiVersion@</version>
