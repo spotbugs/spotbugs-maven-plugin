@@ -62,7 +62,6 @@
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>@pom.version@</version>
         <configuration>
-          <spotbugsXmlOutput>true</spotbugsXmlOutput>
           <skipEmptyReport>true</skipEmptyReport>
           <xmlOutput>true</xmlOutput>
         </configuration>

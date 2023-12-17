@@ -37,7 +37,6 @@
         <artifactId>spotbugs-maven-plugin</artifactId>
         <configuration>
           <threshold>Exp</threshold>
-          <spotbugsXmlOutput>true</spotbugsXmlOutput>
           <xmlOutput>true</xmlOutput>
           <relaxed>true</relaxed>
         </configuration>

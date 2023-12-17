@@ -68,16 +68,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     File xmlOutputDirectory
 
     /**
-     * This has been deprecated and is on by default.
-     *
-     * @since 1.2.0
-     *
-     */
-    @Deprecated
-    @Parameter(defaultValue = "true")
-    boolean spotbugsXmlOutput
-
-    /**
      * Specifies the directory where the Spotbugs native xml output will be generated.
      *
      * @since 1.2.0

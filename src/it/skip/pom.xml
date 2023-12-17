@@ -42,7 +42,6 @@
         <artifactId>spotbugs-maven-plugin</artifactId>
         <configuration>
           <skip>true</skip>
-          <spotbugsXmlOutput>true</spotbugsXmlOutput>
           <xmlOutput>true</xmlOutput>
           <includeTests>true</includeTests>
         </configuration>

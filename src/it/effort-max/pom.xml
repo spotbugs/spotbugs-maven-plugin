@@ -37,7 +37,6 @@
         <artifactId>spotbugs-maven-plugin</artifactId>
         <configuration>
           <effort>Max</effort>
-          <spotbugsXmlOutput>true</spotbugsXmlOutput>
           <xmlOutput>true</xmlOutput>
           <relaxed>true</relaxed>
         </configuration>
