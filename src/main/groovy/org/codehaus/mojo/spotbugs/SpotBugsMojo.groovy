@@ -400,7 +400,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      */
     @Parameter(defaultValue = "false", property = "spotbugs.debug")
-    Boolean debug
+    boolean debug
 
     /**
      * Relaxed reporting mode. For many detectors, this option suppresses the heuristics used to avoid reporting false
