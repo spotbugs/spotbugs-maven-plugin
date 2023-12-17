@@ -50,7 +50,6 @@
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <configuration>
-          <spotbugsXmlOutput>true</spotbugsXmlOutput>
           <xmlOutput>true</xmlOutput>
           <excludeFilterFile>whizbang/lib-filter.xml,filters/lib-filter2.xml</excludeFilterFile>
         </configuration>

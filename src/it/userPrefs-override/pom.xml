@@ -37,7 +37,6 @@
         <artifactId>spotbugs-maven-plugin</artifactId>
         <configuration>
           <userPrefs>${project.basedir}/edu.umd.cs.findbugs.core.prefs</userPrefs>
-          <spotbugsXmlOutput>true</spotbugsXmlOutput>
           <xmlOutput>true</xmlOutput>
           <effort>Max</effort>
           <relaxed>true</relaxed>
