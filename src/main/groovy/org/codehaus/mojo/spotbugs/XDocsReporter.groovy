@@ -185,10 +185,10 @@ class XDocsReporter {
                                return
                             }
 
-                            def priority = evaluateThresholdParameter(bugInstance.@priority.text())
                             String type = bugInstance.@type.text()
                             String category = bugInstance.@category.text()
                             String message = bugInstance.LongMessage.text()
+                            String priority = evaluateThresholdParameter(bugInstance.@priority.text())
                             String line = bugInstance.SourceLine.@start[0].text()
                             log.debug("BugInstance message is ${message}")
 
