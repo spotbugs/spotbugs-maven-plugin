@@ -63,7 +63,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      *
      */
     @Parameter( defaultValue = "false", property="spotbugs.debug" )
-    Boolean debug
+    boolean debug
 
     /**
      * List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin.
