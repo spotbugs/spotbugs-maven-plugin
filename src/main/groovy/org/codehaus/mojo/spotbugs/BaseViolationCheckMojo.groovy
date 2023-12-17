@@ -494,10 +494,10 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             def xml = new XmlParser().parse(outputFile)
 
             def bugs = xml.BugInstance
-            def bugCount = bugs.size()
+            int bugCount = bugs.size()
             log.info("BugInstance size is ${bugCount}")
 
-            def errorCount = xml.Error.size()
+            int errorCount = xml.Error.size()
             log.info("Error size is ${errorCount}")
 
             if (bugCount <= 0) {
@@ -510,15 +510,15 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             }
 
             log.info('Total bugs: ' + bugCount)
-            def bugCountAboveThreshold = 0
-            def priorityThresholdNum = failThreshold ? SpotBugsInfo.spotbugsPriority.indexOf(failThreshold) : Integer.MAX_VALUE
+            int bugCountAboveThreshold = 0
+            int priorityThresholdNum = failThreshold ? SpotBugsInfo.spotbugsPriority.indexOf(failThreshold) : Integer.MAX_VALUE
             if (priorityThresholdNum == -1) {
                 throw new MojoExecutionException("Invalid value for failThreshold: ${failThreshold}")
             }
 
             for (i in 0..bugCount-1) {
                 def bug = bugs[i]
-                def priorityNum = bug.'@priority' as Integer
+                int priorityNum = bug.'@priority' as Integer
                 def priorityName = SpotBugsInfo.spotbugsPriority[priorityNum]
                 def logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
                         bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type'
