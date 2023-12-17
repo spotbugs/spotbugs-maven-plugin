@@ -59,7 +59,7 @@ trait SpotBugsPluginsTrait {
 
         URL[] pluginURL
 
-        def urlPlugins = ""
+        String urlPlugins = ""
 
         if (pluginList) {
             log.debug("  Adding Plugins ")
