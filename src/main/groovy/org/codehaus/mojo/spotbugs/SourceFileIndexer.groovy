@@ -43,7 +43,7 @@ class SourceFileIndexer {
         //String basePath = project.basedir.absolutePath
         String basePath = normalizePath(session.getExecutionRootDirectory())
 
-        def allSourceFiles = new ArrayList<>()
+        List<File> allSourceFiles = new ArrayList<>()
 
         // Resource
         for (Resource r in project.getResources()) {

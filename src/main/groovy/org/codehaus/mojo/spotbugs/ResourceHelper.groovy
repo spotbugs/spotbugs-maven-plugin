@@ -112,7 +112,7 @@ final class ResourceHelper {
                 outputResourceFile.getParentFile().mkdirs()
             }
 
-            def os = new FileOutputStream(outputResourceFile)
+            FileOutputStream os = new FileOutputStream(outputResourceFile)
 
             os << is
 

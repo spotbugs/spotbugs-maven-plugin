@@ -151,7 +151,7 @@ class XDocsReporter {
 
     public void generateReport() {
 
-        def xmlBuilder = new StreamingMarkupBuilder()
+        StreamingMarkupBuilder xmlBuilder = new StreamingMarkupBuilder()
         xmlBuilder.encoding = "UTF-8"
 
         def xdoc = {
@@ -164,8 +164,8 @@ class XDocsReporter {
 
                 spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() {classStats ->
 
-                    def classStatsValue = classStats.'@class'.text()
-                    def classStatsBugCount = classStats.'@bugs'.text()
+                    String classStatsValue = classStats.'@class'.text()
+                    String classStatsBugCount = classStats.'@bugs'.text()
 
                     log.debug("classStats...")
                     log.debug("classStatsValue is ${classStatsValue}")
@@ -185,11 +185,11 @@ class XDocsReporter {
                                return
                             }
 
-                            def type = bugInstance.@type.text()
-                            def category = bugInstance.@category.text()
-                            def message = bugInstance.LongMessage.text()
                             def priority = evaluateThresholdParameter(bugInstance.@priority.text())
-                            def line = bugInstance.SourceLine.@start[0].text()
+                            String type = bugInstance.@type.text()
+                            String category = bugInstance.@category.text()
+                            String message = bugInstance.LongMessage.text()
+                            String line = bugInstance.SourceLine.@start[0].text()
                             log.debug("BugInstance message is ${message}")
 
                             BugInstance(type: type, priority: priority, category: category, message: message, lineNumber: ((line) ? line: "-1"))

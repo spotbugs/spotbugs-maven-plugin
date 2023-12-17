@@ -186,7 +186,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     @Override
     void execute() {
 
-        def ant = new AntBuilder()
+        AntBuilder ant = new AntBuilder()
 
         def auxClasspathElements = project.compileClasspathElements
 
@@ -199,7 +199,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
         ant.java(classname: "edu.umd.cs.findbugs.LaunchAppropriateUI", fork: "true", failonerror: "true", clonevm: "true", maxmemory: "${maxHeap}m") {
 
-            def effectiveEncoding = System.getProperty( "file.encoding", "UTF-8" )
+            String effectiveEncoding = System.getProperty("file.encoding", "UTF-8")
 
             if ( encoding ) {
                 effectiveEncoding = encoding
@@ -213,7 +213,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
             jvmarg(value: "-Dfindbugs.launchUI=gui2")
 
             // options must be added before the spotbugsXml path
-            def spotbugsArgs = new ArrayList<String>()
+            List<String> spotbugsArgs = new ArrayList<>()
 
             spotbugsArgs << getEffortParameter()
 
@@ -226,8 +226,8 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
                 arg(value: spotbugsArg)
             }
 
-            def spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + "/" + spotbugsXmlOutputFilename
-            def spotbugsXml = new File(spotbugsXmlName)
+            String spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + "/" + spotbugsXmlOutputFilename
+            File spotbugsXml = new File(spotbugsXmlName)
 
             if ( spotbugsXml.exists() ) {
                 log.debug("  Found an SpotBugs XML at ->" + spotbugsXml.toString())

@@ -877,8 +877,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     private ArrayList<String> getSpotbugsArgs(File htmlTempFile, File xmlTempFile, File sarifTempFile) {
         ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)
-        def args = new ArrayList<String>()
         def auxClasspathFile = createSpotbugsAuxClasspathFile()
+        List<String> args = new ArrayList<>()
 
         if (userPrefs) {
             log.debug(" Adding User Preferences File -> ${userPrefs}" )
@@ -1141,7 +1141,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
         }
 
-        def ant = new AntBuilder()
+        AntBuilder ant = new AntBuilder()
 
         log.info("Fork Value is ${fork}")
 
@@ -1151,7 +1151,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         def spotbugsArgs = getSpotbugsArgs(htmlTempFile, xmlTempFile, sarifTempFile)
 
-        def effectiveEncoding = System.getProperty("file.encoding", "UTF-8")
+        String effectiveEncoding = System.getProperty("file.encoding", "UTF-8")
 
         if (sourceEncoding) {
             effectiveEncoding = sourceEncoding
@@ -1241,7 +1241,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                     WrkDir(project.build.directory)
                 }
 
-                def xmlBuilder = new StreamingMarkupBuilder()
+                StreamingMarkupBuilder xmlBuilder = new StreamingMarkupBuilder()
 
                 if (outputFile.exists()) {
                     outputFile.delete()
@@ -1274,7 +1274,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (sarifTempFile && sarifOutput && sarifTempFile.size() > 0) {
 
             def slurpedResult = new JsonSlurper().parse(sarifTempFile)
-            def builder = new JsonBuilder(slurpedResult)
+            JsonBuilder builder = new JsonBuilder(slurpedResult)
 
             // With -Dspotbugs.sarifFullPath=true
             // The location uri will be replace by path relative to the root of project
@@ -1282,7 +1282,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             // This change is required for some tool including Github code scanning API
             if (sarifFullPath) {
 
-                def indexer = new SourceFileIndexer()
+                SourceFileIndexer indexer = new SourceFileIndexer()
 
                 indexer.buildListSourceFiles(getProject(),getSession())
 

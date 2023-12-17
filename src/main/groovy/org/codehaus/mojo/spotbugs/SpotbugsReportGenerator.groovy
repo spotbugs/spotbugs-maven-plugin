@@ -374,11 +374,11 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
                 return
             }
 
-            def type = bugInstance.@type.text()
-            def category = bugInstance.@category.text()
-            def message = bugInstance.LongMessage.text()
-            def priority = bugInstance.@priority.text()
             def line = bugInstance.SourceLine[0]
+            String type = bugInstance.@type.text()
+            String category = bugInstance.@category.text()
+            String message = bugInstance.LongMessage.text()
+            String priority = bugInstance.@priority.text()
             log.debug("BugInstance message is ${message}")
 
             sink.tableRow()
@@ -465,7 +465,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             }
         }
 
-        def path = prefix + line.@classname.text().replaceAll("[.]", "/").replaceAll("[\$].*", "")
+        String path = prefix + line.@classname.text().replaceAll("[.]", "/").replaceAll("[\$].*", "")
         String lineNumber = valueForLine(line)
 
         if (lineNumber != bundle.getString(NOLINE_KEY)) {
@@ -647,8 +647,8 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() { classStats ->
 
-            def classStatsValue = classStats.'@class'.text()
-            def classStatsBugCount = classStats.'@bugs'.text()
+            String classStatsValue = classStats.'@class'.text()
+            String classStatsBugCount = classStats.'@bugs'.text()
 
             if (Integer.parseInt(classStatsBugCount) == 0) {
                 return
@@ -712,8 +712,8 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         String value
 
         if (line) {
-            def startLine = line.@start.text()
-            def endLine = line.@end.text()
+            String startLine = line.@start.text()
+            String endLine = line.@end.text()
 
             if (startLine == endLine) {
                 if (startLine) {
