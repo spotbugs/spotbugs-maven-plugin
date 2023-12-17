@@ -188,7 +188,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
         AntBuilder ant = new AntBuilder()
 
-        def auxClasspathElements = project.compileClasspathElements
+        List<String> auxClasspathElements = project.compileClasspathElements
 
         if ( debug ) {
             log.debug("  Plugin Artifacts to be added ->" + pluginArtifacts.toString())

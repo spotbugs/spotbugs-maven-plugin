@@ -877,8 +877,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     private ArrayList<String> getSpotbugsArgs(File htmlTempFile, File xmlTempFile, File sarifTempFile) {
         ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)
-        def auxClasspathFile = createSpotbugsAuxClasspathFile()
         List<String> args = new ArrayList<>()
+        File auxClasspathFile = createSpotbugsAuxClasspathFile()
 
         if (userPrefs) {
             log.debug(" Adding User Preferences File -> ${userPrefs}" )
@@ -1046,7 +1046,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      */
     private File createSpotbugsAuxClasspathFile() {
-        def auxClasspathElements
+        List<String> auxClasspathElements
 
         if (testClassFilesDirectory.exists() && testClassFilesDirectory.isDirectory() && includeTests) {
             auxClasspathElements = project.testClasspathElements
@@ -1061,7 +1061,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             auxClasspathFile.deleteOnExit()
             log.debug("  AuxClasspath Elements ->" + auxClasspathElements)
 
-            def auxClasspathList = auxClasspathElements.findAll { project.build.outputDirectory != it.toString() }
+            List<String> auxClasspathList = auxClasspathElements.findAll { project.build.outputDirectory != it.toString() }
             if (auxClasspathList.size() > 0) {
                 log.debug("  Last AuxClasspath is ->" + auxClasspathList[auxClasspathList.size() - 1])
 
@@ -1149,7 +1149,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             startTime = System.nanoTime()
         }
 
-        def spotbugsArgs = getSpotbugsArgs(htmlTempFile, xmlTempFile, sarifTempFile)
+        List<String> spotbugsArgs = getSpotbugsArgs(htmlTempFile, xmlTempFile, sarifTempFile)
 
         String effectiveEncoding = System.getProperty("file.encoding", "UTF-8")
 
