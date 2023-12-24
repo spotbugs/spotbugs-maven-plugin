@@ -38,6 +38,7 @@ import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceLoader
 
+import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.stream.Collectors
@@ -774,7 +775,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 }
 
                 XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
-                xDocsReporter.setOutputWriter(new OutputStreamWriter(new FileOutputStream(new File("${xmlOutputDirectory}/spotbugs.xml")), outputEncoding))
+                xDocsReporter.setOutputWriter(Files.newBufferedWriter(Paths.get("${xmlOutputDirectory}/spotbugs.xml"), Charset.forName(outputEncoding)))
                 xDocsReporter.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
                 xDocsReporter.setCompileSourceRoots(this.compileSourceRoots)
                 xDocsReporter.setTestSourceRoots(this.testSourceRoots)
@@ -1240,7 +1241,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 outputFile.getParentFile().mkdirs()
                 outputFile.createNewFile()
 
-                def writer = outputFile.newWriter(effectiveEncoding)
+                BufferedWriter writer = Files.newBufferedWriter(outputFile.toPath(), Charset.forName(effectiveEncoding))
 
                 if (effectiveEncoding.equalsIgnoreCase("Cp1252")) {
                     writer.write "<?xml version=\"1.0\" encoding=\"windows-1252\"?>"
