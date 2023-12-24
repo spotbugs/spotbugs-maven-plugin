@@ -1279,7 +1279,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 for (result in slurpedResult.runs.results[0]) {
 
                     for (loc in result.locations) {
-                        def originalFullPath = loc.physicalLocation.artifactLocation.uri
+                        String originalFullPath = loc.physicalLocation.artifactLocation.uri
 
                         //We replace relative path to the complete path
                         String newFileName = indexer.searchActualFilesLocation(originalFullPath)
