@@ -66,7 +66,7 @@ trait SpotBugsPluginsTrait {
             String[] pluginJars = pluginList.split(SpotBugsInfo.COMMA)
 
             pluginJars.each() { pluginJar ->
-                def pluginFileName = pluginJar.trim()
+                String pluginFileName = pluginJar.trim()
 
                 if (!pluginFileName.endsWith(".jar")) {
                     throw new IllegalArgumentException("Plugin File is not a Jar file: " + pluginFileName)
