@@ -1016,12 +1016,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             args << maxRank
         }
 
-        if (classFilesDirectory.exists() && classFilesDirectory.isDirectory()) {
+        if (classFilesDirectory.isDirectory()) {
             log.debug("  Adding to Source Directory ->" + classFilesDirectory.absolutePath)
             args << classFilesDirectory.absolutePath
         }
 
-        if (testClassFilesDirectory.exists() && testClassFilesDirectory.isDirectory() && includeTests) {
+        if (testClassFilesDirectory.isDirectory() && includeTests) {
             log.debug("  Adding to Source Directory ->" + testClassFilesDirectory.absolutePath)
             args << testClassFilesDirectory.absolutePath
         }
@@ -1041,9 +1041,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     private File createSpotbugsAuxClasspathFile() {
         List<String> auxClasspathElements
 
-        if (testClassFilesDirectory.exists() && testClassFilesDirectory.isDirectory() && includeTests) {
+        if (testClassFilesDirectory.isDirectory() && includeTests) {
             auxClasspathElements = project.testClasspathElements
-        } else if (classFilesDirectory.exists() && classFilesDirectory.isDirectory()) {
+        } else if (classFilesDirectory.isDirectory()) {
             auxClasspathElements = project.compileClasspathElements
         }
 
@@ -1221,7 +1221,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                     xmlProject.appendNode { SrcDir(compileSourceRoot) }
                 }
 
-                if (testClassFilesDirectory.exists() && testClassFilesDirectory.isDirectory() && includeTests) {
+                if (testClassFilesDirectory.isDirectory() && includeTests) {
                     testSourceRoots.each() { testSourceRoot ->
                         xmlProject.appendNode { SrcDir(testSourceRoot) }
                     }
