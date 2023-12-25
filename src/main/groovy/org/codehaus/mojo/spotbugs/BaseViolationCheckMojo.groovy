@@ -505,11 +505,11 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     private boolean doSourceFilesExist() {
         List sourceFiles = new ArrayList()
 
-        if (this.classFilesDirectory.exists() && this.classFilesDirectory.isDirectory()) {
+        if (this.classFilesDirectory.isDirectory()) {
             sourceFiles.addAll(FileUtils.getFiles(classFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null))
         }
 
-        if (this.includeTests && this.testClassFilesDirectory.exists() && this.testClassFilesDirectory.isDirectory()) {
+        if (this.includeTests && this.testClassFilesDirectory.isDirectory()) {
             sourceFiles.addAll(FileUtils.getFiles(testClassFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null))
         }
 
