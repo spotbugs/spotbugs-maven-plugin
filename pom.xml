@@ -693,6 +693,7 @@
                 <artifactId>gmavenplus-plugin</artifactId>
                 <version>${gmavenPluginVersion}</version>
                 <configuration>
+                    <attachGroovyDocAnnotation>true</attachGroovyDocAnnotation>
                     <groovyDocOutputDirectory>${project.reporting.outputDirectory}/gapidocs</groovyDocOutputDirectory>
                     <invokeDynamic>true</invokeDynamic>
                 </configuration>
