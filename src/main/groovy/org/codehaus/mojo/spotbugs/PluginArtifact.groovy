@@ -20,4 +20,5 @@ class PluginArtifact {
     String artifactId
     String version
     String type = "jar"
+    String classifier
 }
