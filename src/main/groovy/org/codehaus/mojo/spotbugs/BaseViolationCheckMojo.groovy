@@ -46,7 +46,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     /**
      * Location where generated html will be created.
-     *
      */
     @Parameter(defaultValue = '${project.reporting.outputDirectory}', required = true)
     File outputDirectory
@@ -277,7 +276,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      * @since 1.1
      */
     @Parameter(defaultValue = "false", property = "spotbugs.relaxed")
-    Boolean relaxed
+    boolean relaxed
 
     /**
      * The visitor list to run. This is a comma-delimited list.
@@ -327,7 +326,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      * @since 2.3.2
      */
     @Parameter(property = "spotbugs.nested", defaultValue = "false")
-    Boolean nested
+    boolean nested
 
     /**
      * Prints a trace of detectors run and classes analyzed to standard output.
@@ -336,7 +335,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      * @since 2.3.2
      */
     @Parameter(property = "spotbugs.trace", defaultValue = "false")
-    Boolean trace
+    boolean trace
 
     /**
      * Maximum bug ranking to record.
