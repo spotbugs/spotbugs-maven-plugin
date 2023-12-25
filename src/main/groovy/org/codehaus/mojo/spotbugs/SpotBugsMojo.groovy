@@ -838,7 +838,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         reportPlugins.each() { reportPlugin ->
 
             log.debug("report plugin -> ${reportPlugin.getArtifactId()}")
-            if ("maven-jxr-plugin".equals(reportPlugin.getArtifactId()) || "jxr-maven-plugin".equals(reportPlugin.getArtifactId())) {
+            if ("maven-jxr-plugin".equals(reportPlugin.getArtifactId())) {
                 isEnabled = true
             }
         }
