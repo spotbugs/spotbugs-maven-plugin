@@ -15,6 +15,8 @@
  */
 package org.codehaus.mojo.spotbugs
 
+import edu.umd.cs.findbugs.Version
+
 import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.StreamingMarkupBuilder
 
@@ -146,7 +148,7 @@ class XDocsReporter {
      * @return The Spotbugs Version used on the report.
      */
     protected String getSpotBugsVersion() {
-        return edu.umd.cs.findbugs.Version.VERSION_STRING
+        return Version.VERSION_STRING
     }
 
     public void generateReport() {
