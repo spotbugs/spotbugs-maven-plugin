@@ -438,15 +438,13 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      *
      */
     protected String assembleJxrHyperlink(GPathResult line) {
-        String hyperlink
-        String prefix
-
         log.debug("Inside assembleJxrHyperlink")
         log.debug("line is " + line.text())
         log.debug("outputDirectory is " + outputDirectory.getAbsolutePath())
         log.debug("xrefLocation is " + xrefLocation.getAbsolutePath())
         log.debug("xrefTestLocation is " + xrefTestLocation.getAbsolutePath())
 
+        String prefix
         compileSourceRoots.each { compileSourceRoot ->
             if (!new File(compileSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
                 return
@@ -468,6 +466,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         String path = prefix + line.@classname.text().replaceAll("[.]", "/").replaceAll("[\$].*", "")
         String lineNumber = valueForLine(line)
 
+        String hyperlink
         if (lineNumber != bundle.getString(NOLINE_KEY)) {
             hyperlink = "<a href=\"" + path + ".html#L" + line.@start.text() + "\">" + lineNumber + "</a>"
         } else {

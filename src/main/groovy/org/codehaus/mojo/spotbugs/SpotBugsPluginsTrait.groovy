@@ -57,8 +57,6 @@ trait SpotBugsPluginsTrait {
     String getSpotbugsPlugins() {
         ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)
 
-        URL[] pluginURL
-
         String urlPlugins = ""
 
         if (pluginList) {
