@@ -1027,6 +1027,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (noClassOk) {
+            log.debug("  Adding no class ok")
             args << "-noClassOk"
         }
 

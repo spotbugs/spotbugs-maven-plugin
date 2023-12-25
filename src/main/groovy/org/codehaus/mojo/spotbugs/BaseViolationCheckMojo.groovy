@@ -435,7 +435,10 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     void execute() {
         log.debug("Executing spotbugs:check")
 
-        if (skip || !doSourceFilesExist()) {
+        if (skip) {
+            log.info("Spotbugs plugin skipped")
+            return
+        } else if (!doSourceFilesExist()) {
             log.debug("Nothing for SpotBugs to do here.")
             return
         }
