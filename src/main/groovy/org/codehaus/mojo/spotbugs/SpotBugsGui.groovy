@@ -87,10 +87,8 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     String pluginList
 
     /**
-     * <p>
      * Collection of PluginArtifact to work on. (PluginArtifact contains groupId, artifactId, version, type.)
      * See <a href="./usage.html#Using Detectors from a Repository">Usage</a> for details.
-     * </p>
      */
     @Parameter
     PluginArtifact[] plugins

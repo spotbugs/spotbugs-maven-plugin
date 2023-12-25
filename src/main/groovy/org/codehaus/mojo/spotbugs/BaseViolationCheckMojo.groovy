@@ -97,28 +97,24 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     /**
      * Directory containing the test class files for Spotbugs to analyze.
-     *
      */
     @Parameter(defaultValue = '${project.build.testOutputDirectory}', required = true)
     File testClassFilesDirectory
 
     /**
      * Location of the Xrefs to link to.
-     *
      */
     @Parameter(defaultValue = '${project.reporting.outputDirectory}/xref')
     File xrefLocation
 
     /**
      * Location of the Test Xrefs to link to.
-     *
      */
     @Parameter(defaultValue = '${project.reporting.outputDirectory}/xref-test')
     File xrefTestLocation
 
     /**
      * The directories containing the sources to be compiled.
-     *
      */
     @Parameter(defaultValue = '${project.compileSourceRoots}', required = true, readonly = true)
     List compileSourceRoots
@@ -141,21 +137,18 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     /**
      * List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin.
-     *
      */
     @Parameter(property = "plugin.artifacts", required = true, readonly = true)
     List pluginArtifacts
 
     /**
      * The local repository, needed to download the coreplugin jar.
-     *
      */
     @Parameter(property = "localRepository", required = true, readonly = true)
     ArtifactRepository localRepository
 
     /**
      * Remote repositories which will be searched for the coreplugin jar.
-     *
      */
     @Parameter(property = "project.remoteArtifactRepositories", required = true, readonly = true)
     List remoteArtifactRepositories
@@ -168,14 +161,12 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     /**
      * Maven Project.
-     *
      */
     @Parameter(property = "project", required = true, readonly = true)
     MavenProject project
 
     /**
      * Encoding used for xml files. Default value is UTF-8.
-     *
      */
     @Parameter(defaultValue = "UTF-8", readonly = true)
     String xmlEncoding
@@ -200,7 +191,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     /**
      * Threshold of minimum bug severity to report. Valid values are High, Default, Low, Ignore, and Exp (for experimental).
-     *
      */
     @Parameter(defaultValue = "Default", property = "spotbugs.threshold")
     String threshold
@@ -212,13 +202,10 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     ArtifactResolver artifactResolver
 
     /**
-     * <p>
      * File name of the include filter. Only bugs in matching the filters are reported.
-     * </p>
      *
      * <p>
      * Potential values are a filesystem path, a URL, or a classpath resource.
-     * </p>
      *
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
@@ -226,7 +213,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      * <code>${project.build.directory}</code>
      * directory before being passed to Spotbugs as a filter file.
      * It supports multiple files separated by a comma
-     * </p>
      *
      * @since 1.0-beta-1
      */
@@ -234,13 +220,10 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     String includeFilterFile
 
     /**
-     * <p>
      * File name of the exclude filter. Bugs matching the filters are not reported.
-     * </p>
      *
      * <p>
      * Potential values are a filesystem path, a URL, or a classpath resource.
-     * </p>
      *
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
@@ -248,7 +231,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      * <code>${project.build.directory}</code>
      * directory before being passed to Spotbugs as a filter file.
      * It supports multiple files separated by a comma
-     * </p>
      *
      * @since 1.0-beta-1
      */
@@ -256,20 +238,16 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     String excludeFilterFile
 
     /**
-     * <p>
      * File names of the baseline files. Bugs found in the baseline files won't be reported.
-     * </p>
      *
      * <p>
      * Potential values are a filesystem path, a URL, or a classpath resource.
-     * </p>
      *
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
      * directory before being passed to Spotbugs as a filter file.
-     * </p>
      *
      * This is a comma-delimited list.
      *
@@ -288,7 +266,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     /**
      * Turn on Spotbugs debugging.
-     *
      */
     @Parameter(defaultValue = "false", property = "spotbugs.debug")
     boolean debug
@@ -319,20 +296,16 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     String omitVisitors
 
     /**
-     * <p>
      * The plugin list to include in the report. This is a comma-delimited list.
-     * </p>
      *
      * <p>
      * Potential values are a filesystem path, a URL, or a classpath resource.
-     * </p>
      *
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
      * <code>${project.build.directory}</code>
      * directory before being passed to Spotbugs as a plugin file.
-     * </p>
      *
      * @since 1.0-beta-1
      */
@@ -406,7 +379,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     boolean failOnError
 
     /**
-     * Prioritiy threshold which bugs have to reach to cause a failure. Valid values are High, Medium or Low.
+     * Priority threshold which bugs have to reach to cause a failure. Valid values are High, Medium or Low.
      * Bugs below this threshold will just issue a warning log entry.
      *
      * @since 4.0.1
@@ -443,9 +416,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     int timeout
 
     /**
-     * <p>
      * The arguments to pass to the forked VM (ignored if fork is disabled).
-     * </p>
      *
      * @since 2.4.1
      */
@@ -453,9 +424,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     String jvmArgs
 
     /**
-     * <p>
      * specified max number of violations which can be ignored by the spotbugs.
-     * </p>
      *
      * @since 2.4.1
      */
