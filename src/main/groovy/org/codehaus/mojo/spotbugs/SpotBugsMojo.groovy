@@ -434,10 +434,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     String pluginList
 
     /**
-     * Collection of PluginArtifact to work on. (PluginArtifact contains groupId, artifactId, version, type.)
+     * Collection of PluginArtifact to work on. (PluginArtifact contains groupId, artifactId, version, type, classifier.)
      * See <a href="./usage.html#Using Detectors from a Repository">Usage</a> for details.
      *
      * @since 2.4.1
+     * @since 4.8.3.0 includes classfier
      */
     @Parameter
     PluginArtifact[] plugins;
