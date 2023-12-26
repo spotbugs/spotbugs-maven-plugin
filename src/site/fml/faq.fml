@@ -47,7 +47,7 @@
          </p>
          </p>
          <p>
-         You can also use the <bold>fork</bold> option which will fork a new JVM.  You then use the <bold>maxHeap</bold> option to control the heap size.    <p>
+         You can also use the <span style = "font-weight:700">fork</span> option which will fork a new JVM.  You then use the <span style = "font-weight:700">maxHeap</span> option to control the heap size.    <p>
          </p>
          </p>
        </answer>
