@@ -694,7 +694,7 @@
                 <version>${gmavenPluginVersion}</version>
                 <configuration>
                     <attachGroovyDocAnnotation>true</attachGroovyDocAnnotation>
-                    <docTitle>${project.name} Groovy Documentation<docTitle>
+                    <docTitle>${project.name} Groovy Documentation</docTitle>
                     <groovyDocOutputDirectory>${project.reporting.outputDirectory}/gapidocs</groovyDocOutputDirectory>
                     <footer>${project.name} Groovy Documentation</footer>
                     <header>${project.name} Groovy Documentation</header>
