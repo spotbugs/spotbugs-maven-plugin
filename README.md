@@ -64,6 +64,14 @@ Run gui with a specific version
 mvn com.github.spotbugs:spotbugs-maven-plugin:4.8.2.0:gui
 ```
 
+## Creating new site examples ##
+
+```
+mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=4"
+
+Then replace current src/site/resources entirely with any working example 'site' folder from there (Currently uses basic-1).
+```
+
 ## Contributing ##
 
 Run integration tests
