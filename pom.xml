@@ -376,7 +376,7 @@
         <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-docgenerator</artifactId>
-            <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -387,7 +387,7 @@
         <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-templates</artifactId>
-            <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -693,6 +693,7 @@
                 <artifactId>gmavenplus-plugin</artifactId>
                 <version>${gmavenPluginVersion}</version>
                 <configuration>
+                    <attachGroovyDocAnnotation>true</attachGroovyDocAnnotation>
                     <groovyDocOutputDirectory>${project.reporting.outputDirectory}/gapidocs</groovyDocOutputDirectory>
                     <invokeDynamic>true</invokeDynamic>
                 </configuration>
@@ -722,8 +723,8 @@
                         <goals>
                             <goal>generateStubs</goal>
                             <goal>generateTestStubs</goal>
-                            <goal>groovydoc</goal>
-                            <goal>groovydocTests</goal>
+                            <goal>groovydoc-jar</goal>
+                            <goal>groovydocTests-jar</goal>
                         </goals>
                         <phase>site</phase>
                     </execution>
