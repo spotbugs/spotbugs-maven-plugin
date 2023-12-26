@@ -695,7 +695,6 @@
                 <configuration>
                     <attachGroovyDocAnnotation>true</attachGroovyDocAnnotation>
                     <groovyDocOutputDirectory>${project.reporting.outputDirectory}/gapidocs</groovyDocOutputDirectory>
-                    <invokeDynamic>true</invokeDynamic>
                 </configuration>
                 <dependencies>
                     <dependency>
