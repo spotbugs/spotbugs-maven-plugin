@@ -69,7 +69,7 @@ mvn com.github.spotbugs:spotbugs-maven-plugin:4.8.2.0:gui
 ```
 mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=4"
 
-Then replace current src/site/resources entirely with any working example 'site' folder from there (Currently uses basic-1).
+Then replace current src/site/resources entirely with any working example 'site' folder from there (Currently uses basic-1).  Also top files top level of the basic site folder 'spotbugs.xml' and 'spotbugsXml.xml'.
 ```
 
 ## Contributing ##
