@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     Copyright 2005-2023 the original author or authors.
@@ -16,12 +16,38 @@
     limitations under the License.
 
 -->
-<project>
-  <publishDate position="left" format="MM-dd-yyyy HH:MM"/>
-  <body>
-    <links>
-      <item name="Maven" href="https://maven.apache.org/"/>
-    </links>
-    ${reports}
-  </body>
+<project xmlns="http://maven.apache.org/DECORATION/1.8.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.1 https://maven.apache.org/xsd/decoration-1.8.1.xsd"
+    name="SpotBugs Maven Plugin">
+
+  <bannerLeft>
+    <name>SpotBugs Maven Plugin</name>
+  </bannerLeft>
+
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>1.12.0</version>
+  </skin>
+
+  <custom>
+    <fluidoSkin>
+      <topBarEnabled>false</topBarEnabled>
+      <sideBarEnabled>false</sideBarEnabled>
+      <breadcrumbDivider>»</breadcrumbDivider>
+      <gitHub>
+        <projectId>spotbugs/spotbugs-maven-plugin</projectId>
+        <ribbonOrientation>right</ribbonOrientation>
+        <ribbonColor>red</ribbonColor>
+      </gitHub>
+      <ohloh>
+        <projectId>spotbugs-maven-plugin</projectId>
+        <widget>thin-badge</widget>
+      </ohloh>
+    </fluidoSkin>
+  </custom>
+
+  <publishDate format="yyyy-MM-dd" position="right"/>
+  <version position="right"/>
+
 </project>
