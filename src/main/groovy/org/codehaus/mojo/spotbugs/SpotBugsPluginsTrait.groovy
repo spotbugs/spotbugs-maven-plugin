@@ -89,7 +89,7 @@ trait SpotBugsPluginsTrait {
 
             Artifact pomArtifact
 
-            ProjectBuildingRequest configuration = session.getProjectBuildingRequest();
+            ProjectBuildingRequest configuration = session.getProjectBuildingRequest()
             log.debug("  Session is: " + session.toString())
             configuration.setRemoteRepositories(this.remoteRepositories)
             configuration.setLocalRepository(this.localRepository)

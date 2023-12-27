@@ -30,7 +30,7 @@ class SourceFileIndexer {
     /**
      * List of source files found in the current Maven project
      */
-    private List<String> allSourceFiles;
+    private List<String> allSourceFiles
 
     /**
      * Initialize the complete list of source files with their
@@ -87,7 +87,7 @@ class SourceFileIndexer {
         if (directory.exists()) {
             for (File child : directory.listFiles()) {
                 if (child.isDirectory()) {
-                    scanDirectory(child, files, baseDirectory);
+                    scanDirectory(child, files, baseDirectory)
                 } else {
                     String newSourceFile = normalizePath(child.canonicalPath)
                     if (newSourceFile.startsWith(baseDirectory)) {
@@ -116,7 +116,7 @@ class SourceFileIndexer {
      * @return Path safe to use for comparison
      */
     private String normalizePath(String path) {
-        return path.replaceAll("\\\\","/");
+        return path.replaceAll("\\\\","/")
     }
 
     /**

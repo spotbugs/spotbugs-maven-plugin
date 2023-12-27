@@ -228,7 +228,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * Maven Session.
      */
     @Parameter (defaultValue = '${session}', required = true, readonly = true)
-    MavenSession session;
+    MavenSession session
 
     /**
      * Maven Project.
@@ -1004,12 +1004,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (addSourceDirs) {
             log.debug("  Adding Source directories (To process source exclusions)")
             args << "-sourcepath"
-            String sourceRoots = "";
+            String sourceRoots = ""
             compileSourceRoots.each() { sourceRoots += it + File.pathSeparator }
             if (includeTests) {
                 testSourceRoots.each() { sourceRoots + it + File.pathSeparator }
             }
-            args << sourceRoots.substring(0, sourceRoots.length() -1);
+            args << sourceRoots.substring(0, sourceRoots.length() -1)
         }
 
         if (maxRank) {
@@ -1127,11 +1127,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug("outputFile is ${outputFile.getCanonicalPath()}")
             log.debug("output Directory is ${spotbugsXmlOutputDirectory.getAbsolutePath()}")
             if (htmlOutput) {
-                log.debug("HtmlTempFile is ${htmlTempFile.getCanonicalPath()}");
+                log.debug("HtmlTempFile is ${htmlTempFile.getCanonicalPath()}")
             }
-            log.debug("XmlTempFile is ${xmlTempFile.getCanonicalPath()}");
+            log.debug("XmlTempFile is ${xmlTempFile.getCanonicalPath()}")
             if (sarifOutput) {
-                log.debug("SarifTempFile is ${sarifTempFile.getCanonicalPath()}");
+                log.debug("SarifTempFile is ${sarifTempFile.getCanonicalPath()}")
             }
         }
 

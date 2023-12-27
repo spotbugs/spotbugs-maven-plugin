@@ -420,7 +420,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             sink.tableRow_()
         }
 
-        sink.tableRows_();
+        sink.tableRows_()
         sink.table_()
 
         sink.section2_()
@@ -502,8 +502,8 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         // Dollar '$' for nested classes is not valid character in sink.anchor() and therefore it is ignored
         // https://github.com/spotbugs/spotbugs-maven-plugin/issues/236
-        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_START] as Object[], new SinkEventAttributeSet(SinkEventAttributes.NAME, bugClass));
-        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_END] as Object[], null);
+        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_START] as Object[], new SinkEventAttributeSet(SinkEventAttributes.NAME, bugClass))
+        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_END] as Object[], null)
 
         sink.section2()
         sink.sectionTitle2()
@@ -604,7 +604,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         sink.tableCell_()
 
         sink.tableRow_()
-        sink.tableRows_();
+        sink.tableRows_()
         sink.table_()
 
         sink.section1_()
@@ -672,7 +672,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             bugClasses << classStatsValue
         }
 
-        sink.tableRows_();
+        sink.tableRows_()
         sink.table_()
 
         sink.section1_()
