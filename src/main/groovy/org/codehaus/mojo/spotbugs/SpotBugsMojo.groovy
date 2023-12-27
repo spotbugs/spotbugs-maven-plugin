@@ -21,6 +21,7 @@ import groovy.json.JsonSlurper
 import groovy.xml.XmlSlurper
 import groovy.xml.StreamingMarkupBuilder
 
+import org.apache.maven.reporting.MavenReport
 import org.apache.maven.artifact.repository.ArtifactRepository
 import org.apache.maven.doxia.siterenderer.Renderer
 import org.apache.maven.doxia.tools.SiteTool
@@ -587,7 +588,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * Checks whether prerequisites for generating this report are given.
      *
      * @return true if report can be generated, otherwise false
-     * @see org.apache.maven.reporting.MavenReport#canGenerateReport()
+     * @see MavenReport#canGenerateReport()
      */
     @Override
     boolean canGenerateReport() {
@@ -637,7 +638,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *            the locale the report should be generated for
      *
      * @return description of the report
-     * @see org.apache.maven.reporting.MavenReport#getDescription(java.util.Locale)
+     * @see MavenReport#getDescription(Locale)
      */
     @Override
     String getDescription(Locale locale) {
@@ -651,7 +652,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *            the locale the report should be generated for
      *
      * @return name of the report
-     * @see org.apache.maven.reporting.MavenReport#getName(java.util.Locale)
+     * @see MavenReport#getName(Locale)
      */
     @Override
     String getName(Locale locale) {
@@ -664,7 +665,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * Called by AbstractMavenReport.execute() for creating the sink.
      *
      * @return name of the generated page
-     * @see org.apache.maven.reporting.MavenReport#getOutputName()
+     * @see MavenReport#getOutputName()
      */
     @Override
     String getOutputName() {
@@ -678,7 +679,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @param locale the wanted locale to generate the report, could be null.
      *
-     * @see org.apache.maven.reporting.MavenReport #executeReport(java.util.Locale)
+     * @see MavenReport#executeReport(Locale)
      */
     @Override
     void executeReport(Locale locale) {
@@ -792,7 +793,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * Called by AbstractMavenReport.execute() for creating the sink.
      *
      * @return full path to the directory where the files in the site get copied to
-     * @see org.apache.maven.reporting.AbstractMavenReport#getOutputDirectory()
+     * @see AbstractMavenReport#getOutputDirectory()
      */
     @Override
     protected String getOutputDirectory() {
@@ -803,7 +804,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * Return the project.
      *
      * @return the project.
-     * @see org.apache.maven.reporting.AbstractMavenReport#getProject()
+     * @see AbstractMavenReport#getProject()
      */
     @Override
     protected MavenProject getProject() {
@@ -1349,7 +1350,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     }
 
     /**
-     * @see org.apache.maven.reporting.AbstractMavenReport#setReportOutputDirectory(java.io.File)
+     * @see AbstractMavenReport#setReportOutputDirectory(File)
      */
     @Override
     public void setReportOutputDirectory(File reportOutputDirectory) {
