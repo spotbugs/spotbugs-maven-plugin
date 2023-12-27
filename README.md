@@ -33,7 +33,7 @@ The [SpotBugs documentation](https://spotbugs.readthedocs.io/en/latest/maven.htm
 
 Run all tests
 ```
-mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=4"
+mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=8"
 ```
 Skip tests
 ```
@@ -41,12 +41,12 @@ mvn -DskipTests=true clean install
 ```
 Run tests on spotbugs test source code that is local instead of from SpotBugs github repository
 ```
-mvn -DtestSrc=local -DlocalTestSrc=/opt/spotBugs -Prun-its clean install -D"invoker.parallelThreads=4"
+mvn -DtestSrc=local -DlocalTestSrc=/opt/spotBugs -Prun-its clean install -D"invoker.parallelThreads=8"
 ```
 
 Run selected tests
 ```
-mvn -DtestSrc=remote -Prun-its -Dinvoker.test=build-*,basic-1,check-nofail clean install -D"invoker.parallelThreads=4"
+mvn -DtestSrc=remote -Prun-its -Dinvoker.test=build-*,basic-1,check-nofail clean install -D"invoker.parallelThreads=8"
 ```
 
 Run tests in debugger
@@ -67,7 +67,7 @@ mvn com.github.spotbugs:spotbugs-maven-plugin:4.8.2.0:gui
 ## Creating new site examples ##
 
 ```
-mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=4"
+mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=8"
 
 Then replace current src/site/resources entirely with any working example 'site' folder from there (Currently uses basic-1).  Also top files top level of the basic site folder 'spotbugs.xml' and 'spotbugsXml.xml'.
 ```
