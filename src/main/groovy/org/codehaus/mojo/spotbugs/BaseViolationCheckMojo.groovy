@@ -21,22 +21,12 @@ import org.apache.commons.io.FileUtils
 
 import org.apache.maven.artifact.repository.ArtifactRepository
 
-import org.apache.maven.doxia.siterenderer.Renderer
-import org.apache.maven.doxia.tools.SiteTool
-
-import org.apache.maven.execution.MavenSession
-
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 
 import org.apache.maven.plugins.annotations.Component
-import org.apache.maven.plugins.annotations.Execute
-import org.apache.maven.plugins.annotations.LifecyclePhase
-import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
-import org.apache.maven.plugins.annotations.ResolutionScope
 
-import org.apache.maven.project.MavenProject
 
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 
@@ -81,12 +71,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      */
     @Parameter(property = "spotbugs.outputXmlFilename", defaultValue = "spotbugsXml.xml")
     String spotbugsXmlOutputFilename
-
-    /**
-     * Doxia Site Renderer.
-     */
-    @Component(role = Renderer.class)
-    Renderer siteRenderer
 
     /**
      * Directory containing the class files for Spotbugs to analyze.
@@ -151,18 +135,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      */
     @Parameter(property = "project.remoteArtifactRepositories", required = true, readonly = true)
     List remoteArtifactRepositories
-
-    /**
-     * Maven Session.
-     */
-    @Parameter (defaultValue = '${session}', required = true, readonly = true)
-    MavenSession session
-
-    /**
-     * Maven Project.
-     */
-    @Parameter(property = "project", required = true, readonly = true)
-    MavenProject project
 
     /**
      * Encoding used for xml files. Default value is UTF-8.
@@ -360,14 +332,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      */
     @Component(role = ResourceManager.class)
     ResourceManager resourceManager
-
-    /**
-     * SiteTool.
-     *
-     * @since 2.1-SNAPSHOT
-     */
-    @Component(role = SiteTool.class)
-    SiteTool siteTool
 
     /**
      * Fail the build on an error.
