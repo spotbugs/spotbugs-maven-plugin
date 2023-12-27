@@ -20,7 +20,7 @@ import groovy.xml.XmlSlurper
 
 import org.apache.maven.artifact.repository.ArtifactRepository
 
-import org.apache.maven.doxia.siterenderer.Renderer;
+import org.apache.maven.doxia.siterenderer.Renderer
 import org.apache.maven.doxia.tools.SiteTool
 
 import org.apache.maven.execution.MavenSession
@@ -156,7 +156,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      * Maven Session.
      */
     @Parameter (defaultValue = '${session}', required = true, readonly = true)
-    MavenSession session;
+    MavenSession session
 
     /**
      * Maven Project.
@@ -467,7 +467,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             } else if (maxAllowedViolations > 0 && bugCount <= maxAllowedViolations) {
                 log.info("total ${bugCount} violations are found which is set to be acceptable using configured property maxAllowedViolations :" + maxAllowedViolations + "." + SpotBugsInfo.EOL + "Below are list of bugs ignored :" + SpotBugsInfo.EOL)
                 printBugs(bugCount, bugs)
-                return;
+                return
             }
 
             log.info('Total bugs: ' + bugCount)

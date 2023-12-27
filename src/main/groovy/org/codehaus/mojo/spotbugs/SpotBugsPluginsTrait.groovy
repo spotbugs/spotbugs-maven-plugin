@@ -89,7 +89,7 @@ trait SpotBugsPluginsTrait {
 
             Artifact pomArtifact
 
-            ProjectBuildingRequest configuration = session.getProjectBuildingRequest();
+            ProjectBuildingRequest configuration = session.getProjectBuildingRequest()
             log.debug("  Session is: " + session.toString())
             configuration.setRemoteRepositories(this.remoteRepositories)
             configuration.setLocalRepository(this.localRepository)
@@ -131,13 +131,16 @@ trait SpotBugsPluginsTrait {
 
         switch (effort) {
             case "Max":
-                effortParameter = "max"; break
+                effortParameter = "max"
+                break
 
             case "Min":
-                effortParameter = "min"; break
+                effortParameter = "min"
+                break
 
             default:
-                effortParameter = "default"; break
+                effortParameter = "default"
+                break
         }
 
         log.debug("effortParameter is ${effortParameter}")
