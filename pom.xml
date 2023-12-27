@@ -224,7 +224,7 @@
         <findsecbugsVersion>1.12.0</findsecbugsVersion>
         <jxrPluginVersion>3.3.1</jxrPluginVersion>
         <mavenSurefireVersion>3.2.3</mavenSurefireVersion>
-        <servletApiVersion>5.0.0</servletApiVersion>
+        <servletApiVersion>6.0.0</servletApiVersion>
         <sb-contribVersion>7.6.3</sb-contribVersion>
 
         <jgit.version>5.13.2.202306221912-r</jgit.version>
