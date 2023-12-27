@@ -21,7 +21,6 @@ import groovy.json.JsonSlurper
 import groovy.xml.XmlSlurper
 import groovy.xml.StreamingMarkupBuilder
 
-import org.apache.maven.reporting.MavenReport
 import org.apache.maven.artifact.repository.ArtifactRepository
 import org.apache.maven.doxia.siterenderer.Renderer
 import org.apache.maven.doxia.tools.SiteTool
@@ -33,6 +32,7 @@ import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
 import org.apache.maven.project.MavenProject
 import org.apache.maven.reporting.AbstractMavenReport
+import org.apache.maven.reporting.MavenReport
 import org.apache.maven.repository.RepositorySystem
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 
@@ -52,7 +52,7 @@ import java.util.stream.Collectors
 class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     /**
-     * Location where generated html will be created.
+     * Location where generated html will be created allowed to be not read only as defined in AbstractMavenParent.
      *
      */
     @Parameter(defaultValue = '${project.reporting.outputDirectory}', required = true)
@@ -588,7 +588,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * Checks whether prerequisites for generating this report are given.
      *
      * @return true if report can be generated, otherwise false
-     * @see MavenReport#canGenerateReport()
+     * @see AbstractMavenReport#canGenerateReport()
      */
     @Override
     boolean canGenerateReport() {
@@ -679,7 +679,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @param locale the wanted locale to generate the report, could be null.
      *
-     * @see MavenReport#executeReport(Locale)
+     * @see AbstractMavenReport#executeReport(Locale)
      */
     @Override
     void executeReport(Locale locale) {
@@ -788,7 +788,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     }
 
     /**
-     * Returns the report output directory.
+     * Returns the report output directory allowed to be not read only as defined in AbstractMavenParent.
      *
      * Called by AbstractMavenReport.execute() for creating the sink.
      *
@@ -1350,6 +1350,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     }
 
     /**
+     *  Set report output directory, allowed to be not read only as defined in AbstractMavenParent.
+     * 
      * @see AbstractMavenReport#setReportOutputDirectory(File)
      */
     @Override
