@@ -1094,20 +1094,16 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     private void executeSpotbugs(File outputFile) {
 
         log.debug("****** SpotBugsMojo executeSpotbugs *******")
-        long startTime
-        long duration
 
         File htmlTempFile = new File("${project.build.directory}/spotbugs.html")
-        File xmlTempFile = new File("${project.build.directory}/spotbugsTemp.xml")
-        File sarifTempFile = new File("${project.build.directory}/spotbugsTempSarif.json")
-        File sarifFinalFile = new File(sarifOutputDirectory, sarifOutputFilename)
-
         if (htmlOutput) {
             forceFileCreation(htmlTempFile)
         }
 
+        File xmlTempFile = new File("${project.build.directory}/spotbugsTemp.xml")
         forceFileCreation(xmlTempFile)
 
+        File sarifTempFile = new File("${project.build.directory}/spotbugsTempSarif.json")
         if (sarifOutput) {
             forceFileCreation(sarifTempFile)
         }
@@ -1139,6 +1135,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         log.info("Fork Value is ${fork}")
 
+        long startTime
         if (log.isDebugEnabled()) {
             startTime = System.nanoTime()
         }
@@ -1193,6 +1190,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         }
 
+        long duration
         if (log.isDebugEnabled()) {
             duration = (System.nanoTime() - startTime) / 1000000000.00
             log.debug("SpotBugs duration is ${duration}")
@@ -1302,6 +1300,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 }
             }
 
+            File sarifFinalFile = new File(sarifOutputDirectory, sarifOutputFilename)
             forceFileCreation(sarifFinalFile)
 
             sarifFinalFile.withWriter {
