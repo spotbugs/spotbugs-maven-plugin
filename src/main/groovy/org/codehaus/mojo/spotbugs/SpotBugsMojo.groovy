@@ -23,14 +23,11 @@ import groovy.xml.slurpersupport.GPathResult;
 import groovy.xml.StreamingMarkupBuilder
 
 import org.apache.maven.artifact.repository.ArtifactRepository
-import org.apache.maven.doxia.siterenderer.Renderer
-import org.apache.maven.doxia.tools.SiteTool
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
-import org.apache.maven.project.MavenProject
 import org.apache.maven.reporting.AbstractMavenReport
 import org.apache.maven.reporting.MavenReport
 import org.apache.maven.repository.RepositorySystem
@@ -139,10 +136,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Parameter(defaultValue = "spotbugsXml.xml", property = "spotbugs.outputXmlFilename")
     String spotbugsXmlOutputFilename
 
-    /** Doxia Site Renderer. */
-    @Inject
-    Renderer siteRenderer
-
     /** Directory containing the class files for Spotbugs to analyze. */
     @Parameter(defaultValue = '${project.build.outputDirectory}', required = true)
     File classFilesDirectory
@@ -204,10 +197,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /** Maven Session. */
     @Parameter (defaultValue = '${session}', required = true, readonly = true)
     MavenSession session
-
-    /** Maven Project. */
-    @Parameter(property = "project", required = true, readonly = true)
-    MavenProject project
 
     /** Encoding used for xml files. Default value is UTF-8. */
     @Parameter(defaultValue = "UTF-8", readonly = true)
@@ -455,14 +444,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Inject
     ResourceManager resourceManager
-
-    /**
-     * SiteTool.
-     *
-     * @since 2.1
-     */
-    @Inject
-    SiteTool siteTool
 
     /**
      * Fail the build on an error.
@@ -753,26 +734,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Override
     protected String getOutputDirectory() {
         return outputDirectory.getAbsolutePath()
-    }
-
-    /**
-     * Return the project.
-     *
-     * @return the project.
-     * @see AbstractMavenReport#getProject()
-     */
-    @Override
-    protected MavenProject getProject() {
-        return this.project
-    }
-
-    /**
-     * Return the Site Renderer.
-     *
-     */
-    @Override
-    protected Renderer getSiteRenderer() {
-        return this.siteRenderer
     }
 
     /**
