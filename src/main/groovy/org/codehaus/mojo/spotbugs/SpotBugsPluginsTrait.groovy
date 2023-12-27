@@ -131,13 +131,16 @@ trait SpotBugsPluginsTrait {
 
         switch (effort) {
             case "Max":
-                effortParameter = "max"; break
+                effortParameter = "max"
+                break
 
             case "Min":
-                effortParameter = "min"; break
+                effortParameter = "min"
+                break
 
             default:
-                effortParameter = "default"; break
+                effortParameter = "default"
+                break
         }
 
         log.debug("effortParameter is ${effortParameter}")

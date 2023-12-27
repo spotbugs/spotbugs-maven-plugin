@@ -1329,19 +1329,24 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         switch (threshold) {
             case "High":
-                thresholdParameter = "-high"; break
+                thresholdParameter = "-high"
+                break
 
             case "Exp":
-                thresholdParameter = "-experimental"; break
+                thresholdParameter = "-experimental"
+                break
 
             case "Low":
-                thresholdParameter = "-low"; break
+                thresholdParameter = "-low"
+                break
 
             case "high":
-                thresholdParameter = "-high"; break
+                thresholdParameter = "-high"
+                break
 
             default:
-                thresholdParameter = "-medium"; break
+                thresholdParameter = "-medium"
+                break
         }
         log.debug("thresholdParameter is ${thresholdParameter}")
 
