@@ -67,7 +67,6 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
     /**
      * List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin.
-     *
      */
     @Parameter( property="plugin.artifacts", required = true, readonly = true )
     List pluginArtifacts
@@ -81,7 +80,6 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
     /**
      * The plugin list to include in the report. This is a SpotbugsInfo.COMMA-delimited list.
-     *
      */
     @Parameter( property="spotbugs.pluginList" )
     String pluginList
