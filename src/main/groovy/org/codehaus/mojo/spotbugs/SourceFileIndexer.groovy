@@ -84,28 +84,31 @@ class SourceFileIndexer {
      */
     private void scanDirectory(File directory,List<String> files,String baseDirectory) {
 
-        if (directory.exists()) {
-            for (File child : directory.listFiles()) {
-                if (child.isDirectory()) {
-                    scanDirectory(child, files, baseDirectory)
+        if (!directory.exists()) {
+            return
+        }
+
+        for (File child : directory.listFiles()) {
+            if (child.isDirectory()) {
+                scanDirectory(child, files, baseDirectory)
+            } else {
+                String newSourceFile = normalizePath(child.canonicalPath)
+                if (newSourceFile.startsWith(baseDirectory)) {
+                    // The project will not be at the root of our file system.
+                    // It will most likely be stored in a work directory.
+                    // Example: /work/project-code-to-scan/src/main/java/File.java => src/main/java/File.java
+                    //   (Here baseDirectory is /work/project-code-to-scan/)
+                    String relativePath = Paths.get(baseDirectory).relativize(Paths.get(newSourceFile))
+                    files.add(normalizePath(relativePath))
                 } else {
-                    String newSourceFile = normalizePath(child.canonicalPath)
-                    if (newSourceFile.startsWith(baseDirectory)) {
-                        // The project will not be at the root of our file system.
-                        // It will most likely be stored in a work directory.
-                        // Example: /work/project-code-to-scan/src/main/java/File.java => src/main/java/File.java
-                        //   (Here baseDirectory is /work/project-code-to-scan/)
-                        String relativePath = Paths.get(baseDirectory).relativize(Paths.get(newSourceFile))
-                        files.add(normalizePath(relativePath))
-                    } else {
-                        // Use the full path instead:
-                        // This will occurs in many cases including when the pom.xml is
-                        // not in the same directory tree as the sources.
-                        files.add(newSourceFile)
-                    }
+                    // Use the full path instead:
+                    // This will occurs in many cases including when the pom.xml is
+                    // not in the same directory tree as the sources.
+                    files.add(newSourceFile)
                 }
             }
         }
+
     }
 
     /**
