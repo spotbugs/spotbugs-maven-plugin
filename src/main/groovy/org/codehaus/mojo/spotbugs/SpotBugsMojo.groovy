@@ -21,7 +21,6 @@ import groovy.json.JsonSlurper
 import groovy.xml.XmlSlurper
 import groovy.xml.StreamingMarkupBuilder
 
-import org.apache.maven.reporting.MavenReport
 import org.apache.maven.artifact.repository.ArtifactRepository
 import org.apache.maven.doxia.siterenderer.Renderer
 import org.apache.maven.doxia.tools.SiteTool
@@ -33,6 +32,7 @@ import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
 import org.apache.maven.project.MavenProject
 import org.apache.maven.reporting.AbstractMavenReport
+import org.apache.maven.reporting.MavenReport
 import org.apache.maven.repository.RepositorySystem
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 
