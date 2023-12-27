@@ -765,26 +765,28 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     private void generateXDoc(Locale locale) {
         log.debug("****** SpotBugsMojo generateXDoc *******")
 
-        if (outputSpotbugsFile != null && outputSpotbugsFile.exists()) {
-
-            log.debug("xmlOutput is ${xmlOutput}")
-
-            if (xmlOutput) {
-                log.debug("  Using the xdoc format")
-
-                if (!xmlOutputDirectory.exists() && !xmlOutputDirectory.mkdirs()) {
-                    throw new MojoExecutionException("Cannot create xdoc output directory")
-                }
-
-                XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
-                xDocsReporter.setOutputWriter(Files.newBufferedWriter(Paths.get("${xmlOutputDirectory}/spotbugs.xml"), Charset.forName(outputEncoding)))
-                xDocsReporter.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
-                xDocsReporter.setCompileSourceRoots(this.compileSourceRoots)
-                xDocsReporter.setTestSourceRoots(this.testSourceRoots)
-
-                xDocsReporter.generateReport()
-            }
+        if (outputSpotbugsFile == null || !outputSpotbugsFile.exists()) {
+            return
         }
+
+        log.debug("xmlOutput is ${xmlOutput}")
+
+        if (xmlOutput) {
+            log.debug("  Using the xdoc format")
+
+            if (!xmlOutputDirectory.exists() && !xmlOutputDirectory.mkdirs()) {
+                throw new MojoExecutionException("Cannot create xdoc output directory")
+            }
+
+            XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
+            xDocsReporter.setOutputWriter(Files.newBufferedWriter(Paths.get("${xmlOutputDirectory}/spotbugs.xml"), Charset.forName(outputEncoding)))
+            xDocsReporter.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
+            xDocsReporter.setCompileSourceRoots(this.compileSourceRoots)
+            xDocsReporter.setTestSourceRoots(this.testSourceRoots)
+
+            xDocsReporter.generateReport()
+        }
+
     }
 
     /**
@@ -1094,20 +1096,16 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     private void executeSpotbugs(File outputFile) {
 
         log.debug("****** SpotBugsMojo executeSpotbugs *******")
-        long startTime
-        long duration
 
         File htmlTempFile = new File("${project.build.directory}/spotbugs.html")
-        File xmlTempFile = new File("${project.build.directory}/spotbugsTemp.xml")
-        File sarifTempFile = new File("${project.build.directory}/spotbugsTempSarif.json")
-        File sarifFinalFile = new File(sarifOutputDirectory, sarifOutputFilename)
-
         if (htmlOutput) {
             forceFileCreation(htmlTempFile)
         }
 
+        File xmlTempFile = new File("${project.build.directory}/spotbugsTemp.xml")
         forceFileCreation(xmlTempFile)
 
+        File sarifTempFile = new File("${project.build.directory}/spotbugsTempSarif.json")
         if (sarifOutput) {
             forceFileCreation(sarifTempFile)
         }
@@ -1139,6 +1137,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         log.info("Fork Value is ${fork}")
 
+        long startTime
         if (log.isDebugEnabled()) {
             startTime = System.nanoTime()
         }
@@ -1193,6 +1192,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         }
 
+        long duration
         if (log.isDebugEnabled()) {
             duration = (System.nanoTime() - startTime) / 1000000000.00
             log.debug("SpotBugs duration is ${duration}")
@@ -1302,6 +1302,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 }
             }
 
+            File sarifFinalFile = new File(sarifOutputDirectory, sarifOutputFilename)
             forceFileCreation(sarifFinalFile)
 
             sarifFinalFile.withWriter {

@@ -105,9 +105,8 @@ final class ResourceHelper {
             }
         }
 
-        InputStream is = new BufferedInputStream(resourceManager.getResourceAsInputStream(name))
+        try (InputStream is = new BufferedInputStream(resourceManager.getResourceAsInputStream(name))) {
 
-        try {
             if (!outputResourceFile.getParentFile().exists()) {
                 outputResourceFile.getParentFile().mkdirs()
             }
@@ -118,8 +117,6 @@ final class ResourceHelper {
 
         } catch (IOException e) {
             throw new FileResourceCreationException("Cannot create file-based resource.", e)
-        } finally {
-            is.close()
         }
 
         return outputResourceFile

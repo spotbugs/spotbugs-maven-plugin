@@ -471,12 +471,13 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             }
 
             log.info('Total bugs: ' + bugCount)
-            int bugCountAboveThreshold = 0
+
             int priorityThresholdNum = failThreshold ? SpotBugsInfo.spotbugsPriority.indexOf(failThreshold) : Integer.MAX_VALUE
             if (priorityThresholdNum == -1) {
                 throw new MojoExecutionException("Invalid value for failThreshold: ${failThreshold}")
             }
 
+            int bugCountAboveThreshold = 0
             for (i in 0..bugCount-1) {
                 def bug = bugs[i]
                 int priorityNum = bug.'@priority' as Integer
