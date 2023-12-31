@@ -481,7 +481,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             for (i in 0..bugCount-1) {
                 def bug = bugs[i]
                 int priorityNum = bug.'@priority' as Integer
-                def priorityName = SpotBugsInfo.spotbugsPriority[priorityNum]
+                String priorityName = SpotBugsInfo.spotbugsPriority[priorityNum]
                 String logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
                         bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type'
 
