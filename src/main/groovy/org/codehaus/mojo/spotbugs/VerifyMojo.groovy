@@ -28,7 +28,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope
  *
  * @since 4.7
  */
-@Mojo( name = "verify", defaultPhase = LifecyclePhase.VERIFY, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true, threadSafe = true)
+@Mojo(name = "verify", defaultPhase = LifecyclePhase.VERIFY, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true, threadSafe = true)
 class VerifyMojo extends BaseViolationCheckMojo {
     // Verification Mojo to verify existing bugs rather than run spotbugs
 }

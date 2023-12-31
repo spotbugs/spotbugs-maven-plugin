@@ -18,4 +18,3 @@ assert !(new File(basedir, 'target/site/spotbugs.html').exists())
 assert !(new File(basedir, 'target/spotbugs.xml').exists())
 
 assert !(new File(basedir, 'target/spotbugsXml.xml').exists())
-

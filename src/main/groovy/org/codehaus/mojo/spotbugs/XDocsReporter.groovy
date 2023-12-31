@@ -119,7 +119,7 @@ class XDocsReporter {
     protected String evaluateThresholdParameter(String thresholdValue) {
         String thresholdName
 
-        switch ( thresholdValue ) {
+        switch (thresholdValue) {
             case "1":
                 thresholdName = "High"
                 break
@@ -216,7 +216,7 @@ class XDocsReporter {
                 Project() {
                     log.debug("Printing Source Roots")
 
-                    if ( !compileSourceRoots.isEmpty() ) {
+                    if (!compileSourceRoots.isEmpty()) {
                         compileSourceRoots.each() { srcDir ->
                             log.debug("SrcDir is ${srcDir}")
                             SrcDir(srcDir)

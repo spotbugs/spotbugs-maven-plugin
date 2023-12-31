@@ -13,5 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-File buildLog = new File( basedir, 'build.log' )
-assert buildLog.text.contains( 'BugInstance size is 2' )
+File buildLog = new File(basedir, 'build.log')
+assert buildLog.text.contains('BugInstance size is 2')

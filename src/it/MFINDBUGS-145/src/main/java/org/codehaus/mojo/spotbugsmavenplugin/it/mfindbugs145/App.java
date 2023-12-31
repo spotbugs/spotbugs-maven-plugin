@@ -19,16 +19,13 @@ package org.codehaus.mojo.spotbugsmavenplugin.it.mfindbugs145;
  * Hello world!
  *
  */
-public class App implements Cloneable
-{
+public class App implements Cloneable {
 
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+    public static void main(String[] args) {
+        System.out.println("Hello World!");
     }
 
-    public Object clone()
-    {
+    public Object clone() {
         return null; // Does not call 'super.clone()'.
     }
 

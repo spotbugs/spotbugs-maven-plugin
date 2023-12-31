@@ -22,8 +22,8 @@ import org.junit.jupiter.api.Assertions;
  */
 public class App {
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         Assertions.assertNull(args);
-        System.out.println( "Hello World!" );
+        System.out.println("Hello World!");
     }
 }

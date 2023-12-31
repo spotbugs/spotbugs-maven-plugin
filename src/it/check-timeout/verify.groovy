@@ -13,12 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-//  check module 1
+// Check no missing classes
 
-File spotbugXmlInModule = new File(basedir, 'module1/src/main/config/spotbugs-exclude-filters.xml')
-assert !spotbugXmlInModule.exists()
-
-//  check module 2
-
-spotbugXmlInModule = new File(basedir, 'module2/src/main/config/spotbugs-exclude-filters.xml')
-assert !spotbugXmlInModule.exists()
+File buildLog = new File(basedir, 'build.log')
+assert buildLog.text.contains('Timeout: killed the sub-process')

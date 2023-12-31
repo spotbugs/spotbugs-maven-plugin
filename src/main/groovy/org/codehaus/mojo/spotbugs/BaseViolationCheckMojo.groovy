@@ -308,7 +308,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0-beta-1
      */
-    @Parameter( property="spotbugs.pluginList" )
+    @Parameter(property="spotbugs.pluginList")
     String pluginList
 
     /**
@@ -519,7 +519,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     private void printBugs(total, bugs) {
         for (i in 0..total - 1) {
             def bug = bugs[i]
-            log.error( bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK + bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
+            log.error(bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK + bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
         }
     }
 
