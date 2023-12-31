@@ -15,20 +15,15 @@
  */
 import groovy.json.JsonSlurper
 
-String effortLevel = 'default'
-
-
 File spotbugSarifFile = new File(basedir, 'target/spotbugsSarif.json')
 assert spotbugSarifFile.exists()
 
-
-println '**********************************'
-println "Checking SARIF file"
-println '**********************************'
-
+println '*******************'
+println 'Checking SARIF file'
+println '*******************'
 
 String normalizePath(String path) {
-	return path.replaceAll("\\\\","/");
+    return path.replaceAll("\\\\","/");
 }
 
 def slurpedResult = new JsonSlurper().parse(spotbugSarifFile)
@@ -36,7 +31,6 @@ def slurpedResult = new JsonSlurper().parse(spotbugSarifFile)
 def results = slurpedResult.runs.results[0]
 
 for (result in slurpedResult.runs.results[0]) {
-
     for (loc in result.locations) {
         String location = normalizePath(loc.physicalLocation.artifactLocation.uri)
         //Making sure that the path was expanded
@@ -44,8 +38,6 @@ for (result in slurpedResult.runs.results[0]) {
     }
 }
 
-
 println "BugInstance size is ${results.size()}"
-
 
 assert results.size() > 0

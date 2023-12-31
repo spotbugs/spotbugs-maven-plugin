@@ -15,12 +15,10 @@
  */
 //  check module 1
 
-File spotbugXmlInModule = new File(basedir, "module1/src/main/config/spotbugs-exclude-filters.xml")
+File spotbugXmlInModule = new File(basedir, 'module1/src/main/config/spotbugs-exclude-filters.xml')
 assert !spotbugXmlInModule.exists()
-
 
 //  check module 2
 
-spotbugXmlInModule = new File(basedir, "module2/src/main/config/spotbugs-exclude-filters.xml")
+spotbugXmlInModule = new File(basedir, 'module2/src/main/config/spotbugs-exclude-filters.xml')
 assert !spotbugXmlInModule.exists()
-

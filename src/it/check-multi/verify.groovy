@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 //  check module 1
-
 import groovy.xml.XmlSlurper
+import groovy.xml.slurpersupport.GPathResult;
 
 File spotbugXml = new File(basedir, "modules/module-1/target/spotbugsXml.xml")
 assert spotbugXml.exists()
 
-def path = new XmlSlurper().parse(spotbugXml)
+GPathResult path = new XmlSlurper().parse(spotbugXml)
 
-println '**********************************'
-println "Checking Spotbugs Native XML file"
-println '**********************************'
+println '*********************************'
+println 'Checking Spotbugs Native XML file'
+println '*********************************'
 
-
-allNodes = path.depthFirst().collect { it }
+def allNodes = path.depthFirst().collect { it }
 int spotbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${spotbugsErrors}"
 
 assert spotbugsErrors > 0
-
 
 //  check module 2
 
@@ -41,9 +39,9 @@ assert spotbugXml.exists()
 
 path = new XmlSlurper().parse(spotbugXml)
 
-println '**********************************'
-println "Checking Spotbugs Native XML file"
-println '**********************************'
+println '*********************************'
+println 'Checking Spotbugs Native XML file'
+println '*********************************'
 
 allNodes = path.depthFirst().collect { it }
 spotbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
