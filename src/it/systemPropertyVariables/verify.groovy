@@ -13,5 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-File buildLog = new File( basedir, 'build.log' )
-assert buildLog.text.contains( '[java] INFO: System variables are considered to be tainted' )
+File buildLog = new File(basedir, 'build.log')
+assert buildLog.text.contains('[java] INFO: System variables are considered to be tainted')

@@ -15,6 +15,5 @@
  */
 // Check no missing classes
 
-File buildLog = new File( basedir, 'build.log' )
-assert !buildLog.text.contains( 'The following classes needed for analysis were missing' )
-
+File buildLog = new File(basedir, 'build.log')
+assert !buildLog.text.contains('The following classes needed for analysis were missing')
