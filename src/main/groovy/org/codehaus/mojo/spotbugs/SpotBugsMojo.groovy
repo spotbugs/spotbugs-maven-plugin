@@ -19,6 +19,7 @@ import groovy.ant.AntBuilder
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovy.xml.XmlSlurper
+import groovy.xml.slurpersupport.GPathResult;
 import groovy.xml.StreamingMarkupBuilder
 
 import org.apache.maven.artifact.repository.ArtifactRepository
@@ -876,7 +877,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         File auxClasspathFile = createSpotbugsAuxClasspathFile()
 
         if (userPrefs) {
-            log.debug(" Adding User Preferences File -> ${userPrefs}" )
+            log.debug(" Adding User Preferences File -> ${userPrefs}")
 
             args << "-userPrefs"
             args << resourceHelper.getResourceFile(userPrefs.trim())
@@ -1206,7 +1207,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (xmlTempFile.exists()) {
             if (xmlTempFile.size() > 0) {
-                def path = new XmlSlurper().parse(xmlTempFile)
+                GPathResult path = new XmlSlurper().parse(xmlTempFile)
 
                 def allNodes = path.depthFirst().collect { it }
 
