@@ -1209,7 +1209,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             if (xmlTempFile.size() > 0) {
                 GPathResult path = new XmlSlurper().parse(xmlTempFile)
 
-                def allNodes = path.depthFirst().collect { it }
+                List<Node> allNodes = path.depthFirst().collect { it }
 
                 bugCount = allNodes.findAll { it.name() == 'BugInstance' }.size()
                 log.debug("BugInstance size is ${bugCount}")

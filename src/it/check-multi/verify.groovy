@@ -26,7 +26,7 @@ println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-def allNodes = path.depthFirst().collect { it }
+List<Node> allNodes = path.depthFirst().collect { it }
 int spotbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${spotbugsErrors}"
 
