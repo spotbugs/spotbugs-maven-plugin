@@ -44,7 +44,7 @@ import org.codehaus.plexus.resource.ResourceManager
  *
  * @description Launch the Spotbugs GUI using the parameters in the POM fle.
  */
-@Mojo( name = "gui", requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true )
+@Mojo(name = "gui", requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
 class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
     /**
@@ -55,33 +55,33 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     /**
      * Directory containing the class files for Spotbugs to analyze.
      */
-    @Parameter( defaultValue = '${project.build.outputDirectory}', required = true )
+    @Parameter(defaultValue = '${project.build.outputDirectory}', required = true)
     File classFilesDirectory
 
     /**
      * Turn on Spotbugs debugging.
      *
      */
-    @Parameter( defaultValue = "false", property="spotbugs.debug" )
+    @Parameter(defaultValue = "false", property="spotbugs.debug")
     boolean debug
 
     /**
      * List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin.
      */
-    @Parameter( property="plugin.artifacts", required = true, readonly = true )
+    @Parameter(property="plugin.artifacts", required = true, readonly = true)
     List pluginArtifacts
 
     /**
      * Effort of the bug finders. Valid values are Min, Default and Max.
      *
      */
-    @Parameter( defaultValue = "Default", property="spotbugs.effort" )
+    @Parameter(defaultValue = "Default", property="spotbugs.effort")
     String effort
 
     /**
      * The plugin list to include in the report. This is a SpotbugsInfo.COMMA-delimited list.
      */
-    @Parameter( property="spotbugs.pluginList" )
+    @Parameter(property="spotbugs.pluginList")
     String pluginList
 
     /**
@@ -131,21 +131,21 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      * Maven Project.
      *
      */
-    @Parameter( property="project", required = true, readonly = true )
+    @Parameter(property="project", required = true, readonly = true)
     MavenProject project
 
     /**
      * Resource bundle for a specific locale.
      *
      */
-    @Parameter( readonly = true )
+    @Parameter(readonly = true)
     ResourceBundle bundle
 
     /**
      * Specifies the directory where the Spotbugs native xml output will be generated.
      *
      */
-    @Parameter( defaultValue = '${project.build.directory}', required = true )
+    @Parameter(defaultValue = '${project.build.directory}', required = true)
     File spotbugsXmlOutputDirectory
 
     /**
@@ -163,7 +163,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      *
      * @since 2.2
      */
-    @Parameter( property="encoding", defaultValue = '${project.build.sourceEncoding}' )
+    @Parameter(property="encoding", defaultValue = '${project.build.sourceEncoding}')
     String encoding
 
     /**
@@ -171,7 +171,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      *
      * @since 2.2
      */
-    @Parameter( property="spotbugs.maxHeap", defaultValue = "512" )
+    @Parameter(property="spotbugs.maxHeap", defaultValue = "512")
     int maxHeap
 
     /**

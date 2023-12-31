@@ -27,8 +27,8 @@ import org.apache.maven.plugins.annotations.ResolutionScope
  *
  * @since 2.0
  */
-@Mojo( name = "check", defaultPhase = LifecyclePhase.VERIFY, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true, threadSafe = true)
-@Execute( goal = "spotbugs")
+@Mojo(name = "check", defaultPhase = LifecyclePhase.VERIFY, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true, threadSafe = true)
+@Execute(goal = "spotbugs")
 class CheckMojo extends BaseViolationCheckMojo {
     // Check Mojo to run spotbugs execution
 }
