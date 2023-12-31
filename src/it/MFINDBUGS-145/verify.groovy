@@ -21,25 +21,21 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-String[] paths =
-{
-    "target/site/spotbugs.html",
-    "target/site/xref/index.html",
-};
+String[] paths = [ "target/site/spotbugs.html", "target/site/xref/index.html" ]
 
 // Spotbugs and JXR reports
-for ( String path : paths ) {
-    File file = new File( basedir, path );
-    System.out.println( "Checking for existence of " + file );
-    if ( !file.isFile() ) {
-        throw new FileNotFoundException( "Missing: " + file.getAbsolutePath() );
+for (String path : paths) {
+    File file = new File(basedir, path)
+    System.out.println("Checking for existence of " + file)
+    if (!file.isFile()) {
+        throw new FileNotFoundException("Missing: " + file.getAbsolutePath())
     }
 }
 
-File report = new File( basedir, "target/site/spotbugs.html" );
-String content = new String(Files.readAllBytes(report.toPath()), StandardCharsets.UTF_8);
-if ( content.indexOf( "<a href=\"./xref/org/codehaus/mojo/spotbugsmavenplugin/it/mfindbugs145/App.html#L32\">" ) < 0 ) {
-    throw new IOException( "XRef link not generated." );
+File report = new File(basedir, "target/site/spotbugs.html")
+String content = new String(Files.readAllBytes(report.toPath()), StandardCharsets.UTF_8)
+if (content.indexOf("<a href=\"./xref/org/codehaus/mojo/spotbugsmavenplugin/it/mfindbugs145/App.html#L29\">") < 0) {
+    throw new IOException("XRef link not generated.")
 }
 
-return true;
+return true
