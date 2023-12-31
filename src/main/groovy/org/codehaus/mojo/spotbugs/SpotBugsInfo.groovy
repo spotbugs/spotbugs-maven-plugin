@@ -85,9 +85,9 @@ interface SpotBugsInfo {
 
     static final String CLASS_SUFFIX = '.class'
 
-    def spotbugsEfforts = [Max: "max", Min: "min", Default: "default"]
+    Map<String, String> spotbugsEfforts = [Max: "max", Min: "min", Default: "default"]
 
-    def spotbugsThresholds = [High: "high", Exp: "experimental", Low: "low", Medium: "medium", Default: "medium"]
+    Map<String, String> spotbugsThresholds = [High: "high", Exp: "experimental", Low: "low", Medium: "medium", Default: "medium"]
 
     def spotbugsPriority = ["unknown", "High", "Medium", "Low"]
 }
