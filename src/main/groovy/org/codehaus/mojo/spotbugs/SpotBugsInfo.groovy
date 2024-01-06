@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2023 the original author or authors.
+ * Copyright 2005-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,9 +60,9 @@ interface SpotBugsInfo {
     static final String JAVA_SOURCES_KEY = "report.spotbugs.javasources"
 
     /**
-     * The regex pattern to search for java class files.
+     * The extensions to search files for.
      */
-    static final String JAVA_REGEX_PATTERN = "**/*.class"
+    static final String[] EXTENSIONS = [ "class" ]
 
     static final String COMMA = ","
 
