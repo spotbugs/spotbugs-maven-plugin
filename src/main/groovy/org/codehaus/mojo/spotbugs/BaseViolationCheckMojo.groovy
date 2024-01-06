@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2023 the original author or authors.
+ * Copyright 2005-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package org.codehaus.mojo.spotbugs
 
 import groovy.xml.XmlParser
 import groovy.xml.XmlSlurper
+import org.apache.commons.io.FileUtils
 
 import org.apache.maven.artifact.repository.ArtifactRepository
 
@@ -40,7 +41,6 @@ import org.apache.maven.project.MavenProject
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 
 import org.codehaus.plexus.resource.ResourceManager
-import org.codehaus.plexus.util.FileUtils
 
 abstract class BaseViolationCheckMojo extends AbstractMojo {
 
@@ -503,16 +503,19 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     }
 
     private boolean doSourceFilesExist() {
-        List sourceFiles = new ArrayList()
+        Collection<File> sourceFiles = new ArrayList<>()
 
         if (this.classFilesDirectory.isDirectory()) {
-            sourceFiles.addAll(FileUtils.getFiles(classFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null))
+            log.debug("looking for class files with extensions: " + SpotBugsInfo.EXTENSIONS)
+            sourceFiles.addAll(FileUtils.listFiles(classFilesDirectory, SpotBugsInfo.EXTENSIONS, true))
         }
 
         if (this.includeTests && this.testClassFilesDirectory.isDirectory()) {
-            sourceFiles.addAll(FileUtils.getFiles(testClassFilesDirectory, SpotBugsInfo.JAVA_REGEX_PATTERN, null))
+            log.debug("looking for test class files: " + SpotBugsInfo.EXTENSIONS)
+            sourceFiles.addAll(FileUtils.listFiles(testClassFilesDirectory, SpotBugsInfo.EXTENSIONS, true))
         }
 
+        log.debug("SourceFiles: " + Arrays.toString(sourceFiles));
         !sourceFiles.isEmpty()
     }
 
