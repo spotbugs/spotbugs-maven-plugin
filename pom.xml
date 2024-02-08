@@ -178,7 +178,7 @@
         <groovyVersion>4.0.19</groovyVersion>
         <javaparserVersion>3.25.9</javaparserVersion>
 
-        <doxiaVersion>2.0.0-M9</doxiaVersion>
+        <doxiaVersion>2.0.0-M8</doxiaVersion>
         <doxiaSiteToolsVersion>2.0.0-M16</doxiaSiteToolsVersion>
 
         <!-- Site Plugin for MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 5.0.x and simply drop the old support) -->
