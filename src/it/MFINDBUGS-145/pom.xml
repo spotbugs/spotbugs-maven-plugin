@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2005-2023 the original author or authors.
+    Copyright 2005-2024 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -71,47 +71,47 @@
           <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-sink-api</artifactId>
-            <version>@doxiaVersion@</version>
+            <version>@doxia1Version@</version>
           </dependency>
           <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-module-xhtml</artifactId>
-            <version>@doxiaVersion@</version>
+            <version>@doxia1Version@</version>
           </dependency>
           <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-module-apt</artifactId>
-            <version>@doxiaVersion@</version>
+            <version>@doxia1Version@</version>
           </dependency>
           <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-module-xdoc</artifactId>
-            <version>@doxiaVersion@</version>
+            <version>@doxia1Version@</version>
           </dependency>
           <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-module-fml</artifactId>
-            <version>@doxiaVersion@</version>
+            <version>@doxia1Version@</version>
           </dependency>
           <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-module-markdown</artifactId>
-            <version>@doxiaVersion@</version>
+            <version>@doxia1Version@</version>
           </dependency>
           <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-decoration-model</artifactId>
-            <version>@doxiaSiteToolsVersion@</version>
+            <version>@doxia1SiteToolsVersion@</version>
           </dependency>
           <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-site-renderer</artifactId>
-            <version>@doxiaSiteToolsVersion@</version>
+            <version>@doxia1SiteToolsVersion@</version>
           </dependency>
           <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-integration-tools</artifactId>
-            <version>@doxiaSiteToolsVersion@</version>
+            <version>@doxia1SiteToolsVersion@</version>
           </dependency>
         </dependencies>
       </plugin>

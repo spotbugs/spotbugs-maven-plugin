@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2005-2023 the original author or authors.
+    Copyright 2005-2024 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -16,15 +16,18 @@
     limitations under the License.
 
 -->
-<site name="${project.name}" xmlns="http://maven.apache.org/SITE/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd">
+<project xmlns="http://maven.apache.org/DECORATION/1.8.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.1 https://maven.apache.org/xsd/decoration-1.8.1.xsd"
+    name="SpotBugs Maven Plugin">
 
-  <bannerLeft name="SpotBugs Maven Plugin" />
+  <bannerLeft>
+    <name>SpotBugs Maven Plugin</name>
+  </bannerLeft>
 
   <skin>
     <groupId>org.apache.maven.skins</groupId>
     <artifactId>maven-fluido-skin</artifactId>
-    <version>2.0.0-M8</version>
+    <version>1.12.0</version>
   </skin>
 
   <custom>
@@ -47,4 +50,4 @@
   <publishDate format="yyyy-MM-dd" position="right"/>
   <version position="right"/>
 
-</site>
+</project>
