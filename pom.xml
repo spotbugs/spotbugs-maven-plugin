@@ -234,7 +234,7 @@
         <bcel.version>6.8.1</bcel.version>
         <beanutils.version>1.9.4</beanutils.version>
         <chain.version>1.2</chain.version>
-        <codec.version>1.16.0</codec.version>
+        <codec.version>1.16.1</codec.version>
         <collections.version>3.2.2</collections.version>
         <digester.version>2.1</digester.version>
         <gson.version>2.10.1</gson.version>
