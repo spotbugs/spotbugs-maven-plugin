@@ -246,6 +246,10 @@
 
         <!-- Automatic Module Name -->
         <module.name>com.github.spotbugs.maven</module.name>
+
+        <!-- TODO: Drop modernizer back to 2.7.0 due to strict maven 3.9.5 requirement -->
+        <modernizer.version>2.7.0</modernizer.version>
+        <modernizer.plugin>2.7.0</modernizer.plugin>
     </properties>
 
     <dependencyManagement>
