@@ -1,0 +1,22 @@
+name: Java Integration Tests Maven 3.6.3
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Integration Tests Maven 3.6.3
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: zulu
+      - name: Load Maven 3.6.3
+        run: mvn -B -V org.apache.maven.plugins:maven-wrapper-plugin:3.2.0:wrapper -Dmaven=3.6.3 --no-transfer-progress
+      - name: Build Setup
+        run: ./mvnw -B -V clean install -Dlicense.skip=true -Dmaven.min-version=3.6.3
+      - name: Integration Test with Maven
+        run: ./mvnw -B -V -DtestSrc=remote -Prun-its clean install -Dinvoker.parallelThreads=8 -Dlicense.skip=true -Dmaven.min-version=3.6.3
