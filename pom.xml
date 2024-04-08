@@ -220,10 +220,10 @@
         <skipSurefireReport>true</skipSurefireReport>
 
         <!-- Used by Integration tests -->
-        <jxrPluginVersion>3.3.1</jxrPluginVersion>
         <mavenSurefireVersion>3.2.3</mavenSurefireVersion>
         <compilerPluginVersion>3.13.0</compilerPluginVersion>
         <findsecbugsVersion>1.13.0</findsecbugsVersion>
+        <jxrPluginVersion>3.3.2</jxrPluginVersion>
         <servletApiVersion>6.0.0</servletApiVersion>
         <sb-contribVersion>7.6.4</sb-contribVersion>
 
