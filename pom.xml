@@ -28,7 +28,7 @@
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.8.3.2-SNAPSHOT</version>
+    <version>4.8.4.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
@@ -167,11 +167,11 @@
         <project.build.outputTimestamp>1707610824</project.build.outputTimestamp>
 
         <!-- Override spotbugs to this version from base-parent -->
-        <spotbugs.version>4.8.3</spotbugs.version>
+        <spotbugs.version>4.8.4</spotbugs.version>
 
-        <junitVersion>5.10.1</junitVersion>
-        <spotbugsVersion>4.8.3</spotbugsVersion>
-        <spotbugsTag>4.8.3</spotbugsTag>
+        <junitVersion>5.10.2</junitVersion>
+        <spotbugsVersion>4.8.4</spotbugsVersion>
+        <spotbugsTag>4.8.4</spotbugsTag>
         <slf4jVersion>2.0.12</slf4jVersion>
 
         <antVersion>1.10.14</antVersion>
@@ -220,10 +220,10 @@
         <skipSurefireReport>true</skipSurefireReport>
 
         <!-- Used by Integration tests -->
-        <compilerPluginVersion>3.12.1</compilerPluginVersion>
-        <findsecbugsVersion>1.12.0</findsecbugsVersion>
-        <jxrPluginVersion>3.3.1</jxrPluginVersion>
-        <mavenSurefireVersion>3.2.3</mavenSurefireVersion>
+        <compilerPluginVersion>3.13.0</compilerPluginVersion>
+        <findsecbugsVersion>1.13.0</findsecbugsVersion>
+        <jxrPluginVersion>3.3.2</jxrPluginVersion>
+        <mavenSurefireVersion>3.2.5</mavenSurefireVersion>
         <servletApiVersion>6.0.0</servletApiVersion>
         <sb-contribVersion>7.6.4</sb-contribVersion>
 
