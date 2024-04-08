@@ -1,11 +1,11 @@
-name: Java Integration Tests Maven 4.0.0-alpha-10
+name: Java Integration Tests Maven 4.0.0-alpha-13
 
 on: [push, pull_request]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Integration Tests Maven 4.0.0-alpha-10
+    name: Integration Tests Maven 4.0.0-alpha-13
 
     steps:
       - uses: actions/checkout@v4
@@ -14,9 +14,9 @@ jobs:
         with:
           java-version: 21
           distribution: zulu
-      - name: Load Maven 4.0.0-alpha-10
-        run: mvn -B -V org.apache.maven.plugins:maven-wrapper-plugin:3.2.0:wrapper -Dmaven=4.0.0-alpha-10 --no-transfer-progress
+      - name: Load Maven 4.0.0-alpha-13
+        run: mvn -B -V org.apache.maven.plugins:maven-wrapper-plugin:3.2.0:wrapper -Dmaven=4.0.0-alpha-13 --no-transfer-progress
       - name: Build Setup
-        run: ./mvnw -B -V clean install -Dlicense.skip=true -Dmaven.min-version=4.0.0-alpha-10 --no-transfer-progress
+        run: ./mvnw -B -V clean install -Dlicense.skip=true -Dmaven.min-version=4.0.0-alpha-13 --no-transfer-progress
       - name: Integration Test with Maven
-        run: ./mvnw -B -V -DtestSrc=remote -Prun-its clean install -Dinvoker.parallelThreads=8 -Dlicense.skip=true -Dmaven.min-version=4.0.0-alpha-10 --no-transfer-progress
+        run: ./mvnw -B -V -DtestSrc=remote -Prun-its clean install -Dinvoker.parallelThreads=8 -Dlicense.skip=true -Dmaven.min-version=4.0.0-alpha-13 --no-transfer-progress
