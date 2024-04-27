@@ -232,7 +232,7 @@
 
         <!-- Targeted patches -->
         <asm.version>9.7</asm.version>
-        <bcel.version>6.8.2</bcel.version>
+        <bcel.version>6.9.0</bcel.version>
         <beanutils.version>1.9.4</beanutils.version>
         <chain.version>1.2</chain.version>
         <codec.version>1.16.1</codec.version>
