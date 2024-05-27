@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.github.hazendaz</groupId>
         <artifactId>base-parent</artifactId>
-        <version>45</version>
+        <version>46</version>
         <relativePath />
     </parent>
 
