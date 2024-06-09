@@ -36,8 +36,7 @@
   <name>skipEmpty</name>
 
   <properties>
-    <maven.compiler.source>8</maven.compiler.source>
-    <maven.compiler.target>8</maven.compiler.target>
+    <maven.compiler.release>8</maven.compiler.release>
   </properties>
 
   <build>
