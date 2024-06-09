@@ -38,8 +38,11 @@
   <url>http://maven.apache.org</url>
 
   <properties>
+    <!-- These two are used due to old compiler on maven 3.6.3 GHA build -->
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
+
+    <maven.compiler.release>8</maven.compiler.release>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

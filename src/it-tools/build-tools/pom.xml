@@ -92,8 +92,7 @@
         <version>@compilerPluginVersion@</version>
         <configuration>
           <debug>false</debug>
-          <source>8</source>
-          <target>8</target>
+          <release>8</release>
           <excludes>
             <exclude>fakeAnnotations/**</exclude>
             <exclude>jsr305/**</exclude>
