@@ -160,6 +160,11 @@
     </distributionManagement>
 
     <properties>
+        <!-- Drop back to java 8 to allow with spotbugs -->
+        <java.version>8</java.version>
+        <java.release.version>8</java.release.version>
+        <javadoc.java.release.version>8</javadoc.java.release.version>
+
         <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
 
         <projectVersion>${project.version}</projectVersion>
