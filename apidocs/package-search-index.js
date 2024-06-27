@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.github.spotbugs.spotbugs_maven_plugin"}];updateSearchResults();
