@@ -211,7 +211,7 @@
         <sitePluginVersion>3.12.1</sitePluginVersion>
         <!-- Site Plugin for MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 5.0.x and simply drop the old support) -->
         <sitePlugin36Version>3.6</sitePlugin36Version>
-        <versionsPluginVersion>2.16.2</versionsPluginVersion>
+        <versionsPluginVersion>2.17.0</versionsPluginVersion>
 
         <spotbugsTestDebug>false</spotbugsTestDebug>
         <integrationTestSrc>${project.build.directory}/it-src-spotbugs</integrationTestSrc>
