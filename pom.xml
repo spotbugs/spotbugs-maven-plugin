@@ -23,13 +23,13 @@
     <parent>
         <groupId>com.github.hazendaz</groupId>
         <artifactId>base-parent</artifactId>
-        <version>45</version>
+        <version>47</version>
         <relativePath />
     </parent>
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.8.5.1-SNAPSHOT</version>
+    <version>4.9.0.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
@@ -160,34 +160,39 @@
     </distributionManagement>
 
     <properties>
+        <!-- Drop back to java 8 to allow with spotbugs -->
+        <java.version>8</java.version>
+        <java.release.version>8</java.release.version>
+        <javadoc.java.release.version>8</javadoc.java.release.version>
+
         <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
 
         <projectVersion>${project.version}</projectVersion>
 
         <!-- Reproducible Builds: override timestamp value from parent -->
-        <project.build.outputTimestamp>1714932977</project.build.outputTimestamp>
+        <project.build.outputTimestamp>1720223482</project.build.outputTimestamp>
 
         <!-- Override spotbugs to this version from base-parent -->
-        <spotbugs.version>4.8.5</spotbugs.version>
+        <spotbugs.version>4.8.6</spotbugs.version>
 
         <junitVersion>5.10.2</junitVersion>
-        <spotbugsVersion>4.8.5</spotbugsVersion>
+        <spotbugsVersion>4.8.6</spotbugsVersion>
         <spotbugsTag>4.8.5</spotbugsTag>
         <slf4jVersion>2.0.13</slf4jVersion>
 
         <antVersion>1.10.14</antVersion>
-        <groovyVersion>4.0.21</groovyVersion>
-        <javaparserVersion>3.25.10</javaparserVersion>
+        <groovyVersion>4.0.22</groovyVersion>
+        <javaparserVersion>3.26.1</javaparserVersion>
 
         <doxiaVersion>1.12.0</doxiaVersion>
         <doxiaSiteToolsVersion>1.11.1</doxiaSiteToolsVersion>
 
         <mavenSharedUtilsVersion>3.4.2</mavenSharedUtilsVersion>
         <mavenTransferVersion>0.13.1</mavenTransferVersion>
-        <mavenCommonArtifactFilters>3.3.2</mavenCommonArtifactFilters>
+        <mavenCommonArtifactFilters>3.4.0</mavenCommonArtifactFilters>
         <mavenReportingApiVersion>3.1.1</mavenReportingApiVersion>
         <mavenReportingVersion>3.2.0</mavenReportingVersion>
-        <mavenVersion>3.9.6</mavenVersion>
+        <mavenVersion>3.9.8</mavenVersion>
 
         <plexusContainerVersion>2.1.1</plexusContainerVersion>
         <plexusResourcesVersion>1.3.0</plexusResourcesVersion>
@@ -198,15 +203,15 @@
         <l10nPluginVersion>1.0.0</l10nPluginVersion>
         <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
         <gmavenPluginVersion>3.0.2</gmavenPluginVersion>
-        <infoReportsPluginVersion>3.5.0</infoReportsPluginVersion>
-        <invokerPluginVersion>3.6.1</invokerPluginVersion>
-        <javadocPluginVersion>3.6.3</javadocPluginVersion>
-        <pluginPluginVersion>3.13.0</pluginPluginVersion>
+        <infoReportsPluginVersion>3.6.2</infoReportsPluginVersion>
+        <invokerPluginVersion>3.7.0</invokerPluginVersion>
+        <javadocPluginVersion>3.7.0</javadocPluginVersion>
+        <pluginPluginVersion>3.13.1</pluginPluginVersion>
         <scmPluginVersion>2.1.0</scmPluginVersion>
         <sitePluginVersion>3.12.1</sitePluginVersion>
         <!-- Site Plugin for MFINDBUGS-145 (breaks on newer jdks, revisit this on spotbugs 5.0.x and simply drop the old support) -->
         <sitePlugin36Version>3.6</sitePlugin36Version>
-        <versionsPluginVersion>2.16.2</versionsPluginVersion>
+        <versionsPluginVersion>2.17.0</versionsPluginVersion>
 
         <spotbugsTestDebug>false</spotbugsTestDebug>
         <integrationTestSrc>${project.build.directory}/it-src-spotbugs</integrationTestSrc>
@@ -239,7 +244,7 @@
         <collections.version>3.2.2</collections.version>
         <digester.version>2.1</digester.version>
         <gson.version>2.11.0</gson.version>
-        <guava.version>33.2.0-jre</guava.version>
+        <guava.version>33.2.1-jre</guava.version>
         <io.version>2.16.1</io.version>
         <jaxen.version>2.0.0</jaxen.version>
         <lang2.version>2.6</lang2.version>

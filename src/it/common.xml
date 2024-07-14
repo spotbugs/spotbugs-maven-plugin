@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2005-2023 the original author or authors.
+    Copyright 2005-2024 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -146,8 +146,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <debug>false</debug>
-          <source>1.8</source>
-          <target>1.8</target>
+          <release>8</release>
           <excludes>
             <exclude>*fakeAnnotations/**</exclude>
             <exclude>jsr305/**</exclude>

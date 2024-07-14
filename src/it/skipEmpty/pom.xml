@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2005-2023 the original author or authors.
+    Copyright 2005-2024 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -32,12 +32,15 @@
   <groupId>spotbugs-maven-plugin.it</groupId>
   <version>testing</version>
   <artifactId>skipEmpty</artifactId>
+
   <name>skipEmpty</name>
-  <packaging>jar</packaging>
 
   <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <!-- These two are used due to old compiler on maven 3.6.3 GHA build -->
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+
+    <maven.compiler.release>8</maven.compiler.release>
   </properties>
 
   <build>

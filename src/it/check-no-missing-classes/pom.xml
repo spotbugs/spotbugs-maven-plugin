@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2005-2023 the original author or authors.
+    Copyright 2005-2024 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -18,7 +18,9 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
+
   <!-- Parent is disabled on purpose
   <parent>
     <groupId>spotbugs-maven-plugin.it</groupId>
@@ -27,15 +29,20 @@
     <relativePath>../common.xml</relativePath>
   </parent>
   -->
+
   <groupId>spotbugs-maven-plugin.it</groupId>
   <artifactId>check-no-missing-classes</artifactId>
   <version>testing</version>
   <name>check-no-missing-classes</name>
-  <packaging>jar</packaging>
+
   <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <!-- These two are used due to old compiler on maven 3.6.3 GHA build -->
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+
+    <maven.compiler.release>8</maven.compiler.release>
   </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -43,6 +50,7 @@
       <version>@junitVersion@</version>
     </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
