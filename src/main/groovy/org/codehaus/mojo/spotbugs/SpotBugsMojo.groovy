@@ -1098,7 +1098,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         log.debug("****** SpotBugsMojo executeSpotbugs *******")
 
-        File htmlTempFile = new File("${project.build.directory}/spotbugs.html")
+        File htmlTempFile = new File("${outputDirectory}/spotbugs.html")
         if (htmlOutput) {
             forceFileCreation(htmlTempFile)
         }

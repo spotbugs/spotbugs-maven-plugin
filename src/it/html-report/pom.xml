@@ -40,6 +40,7 @@
         <configuration>
           <xmlOutput>true</xmlOutput>
           <htmlOutput>true</htmlOutput>
+          <outputDirectory>target/test-output-directory</outputDirectory>
           <failOnError>false</failOnError>
           <debug>@spotbugsTestDebug@</debug>
           <threshold>High</threshold>
