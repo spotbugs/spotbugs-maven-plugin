@@ -240,7 +240,7 @@
         <bcel.version>6.9.0</bcel.version>
         <beanutils.version>1.9.4</beanutils.version>
         <chain.version>1.2</chain.version>
-        <codec.version>1.17.0</codec.version>
+        <codec.version>1.17.1</codec.version>
         <collections.version>3.2.2</collections.version>
         <digester.version>2.1</digester.version>
         <gson.version>2.11.0</gson.version>
