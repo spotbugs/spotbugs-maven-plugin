@@ -326,7 +326,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     /**
      * SiteTool.
      *
-     * @since 2.1-SNAPSHOT
+     * @since 2.1
      */
     @Component(role = SiteTool.class)
     SiteTool siteTool
