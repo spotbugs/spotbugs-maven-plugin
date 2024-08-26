@@ -18,22 +18,15 @@ package org.codehaus.mojo.spotbugs
 import groovy.ant.AntBuilder
 
 import org.apache.maven.artifact.repository.ArtifactRepository
-
 import org.apache.maven.execution.MavenSession
-
 import org.apache.maven.plugin.AbstractMojo
-
 import org.apache.maven.plugins.annotations.Component
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
-
 import org.apache.maven.project.MavenProject
-
 import org.apache.maven.repository.RepositorySystem
-
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
-
 import org.codehaus.plexus.resource.ResourceManager
 
 /**
