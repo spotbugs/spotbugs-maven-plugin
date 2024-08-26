@@ -31,6 +31,7 @@ import java.util.stream.Collectors
 
 import javax.inject.Inject
 
+import org.apache.maven.doxia.siterenderer.Renderer
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugins.annotations.Mojo
@@ -134,6 +135,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Parameter(defaultValue = 'spotbugsXml.xml', property = 'spotbugs.outputXmlFilename')
     String spotbugsXmlOutputFilename
+
+    /** Doxia Site Renderer. */
+    @Inject
+    Renderer siteRenderer
 
     /** Directory containing the class files for Spotbugs to analyze. */
     @Parameter(defaultValue = '${project.build.outputDirectory}', required = true)
@@ -715,6 +720,15 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Override
     protected String getOutputDirectory() {
         return outputDirectory.getAbsolutePath()
+    }
+
+    /**
+     * Return the Site Renderer.
+     *
+     */
+    @Override
+    protected Renderer getSiteRenderer() {
+        return this.siteRenderer
     }
 
     /**
