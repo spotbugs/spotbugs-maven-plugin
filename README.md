@@ -61,7 +61,7 @@ mvn -Dmaven.surefire.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspe
 
 Run gui with a specific version 
 ```
-mvn com.github.spotbugs:spotbugs-maven-plugin:4.8.5.0:gui
+mvn com.github.spotbugs:spotbugs-maven-plugin:4.8.6.2:gui
 ```
 
 ## Creating new site examples ##
