@@ -111,7 +111,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 4.7.2.2
      */
-    @Parameter(property = "spotbugs.sarifOutputFilename", defaultValue = "spotbugsSarif.json", required = true)
+    @Parameter(defaultValue = "spotbugsSarif.json", property = "spotbugs.sarifOutputFilename", required = true)
     String sarifOutputFilename
 
     /**
@@ -135,7 +135,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 3.1.12.2
      */
-    @Parameter(property = "spotbugs.outputXmlFilename", defaultValue = "spotbugsXml.xml")
+    @Parameter(defaultValue = "spotbugsXml.xml", property = "spotbugs.outputXmlFilename")
     String spotbugsXmlOutputFilename
 
     /** Doxia Site Renderer. */

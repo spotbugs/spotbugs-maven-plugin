@@ -71,7 +71,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 3.1.12.2
      */
-    @Parameter(property = "spotbugs.outputXmlFilename", defaultValue = "spotbugsXml.xml")
+    @Parameter(defaultValue = "spotbugsXml.xml", property = "spotbugs.outputXmlFilename")
     String spotbugsXmlOutputFilename
 
     /** Doxia Site Renderer. */

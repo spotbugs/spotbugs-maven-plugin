@@ -113,7 +113,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      *
      * @since 3.1.12.2
      */
-    @Parameter(property = "spotbugs.outputXmlFilename", defaultValue = "spotbugsXml.xml")
+    @Parameter(defaultValue = "spotbugsXml.xml", property = "spotbugs.outputXmlFilename")
     String spotbugsXmlOutputFilename
 
     /**
@@ -123,7 +123,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      *
      * @since 2.2
      */
-    @Parameter(property="encoding", defaultValue = '${project.build.sourceEncoding}')
+    @Parameter(defaultValue = '${project.build.sourceEncoding}', property="encoding")
     String encoding
 
     /**
@@ -131,7 +131,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      *
      * @since 2.2
      */
-    @Parameter(property="spotbugs.maxHeap", defaultValue = "512")
+    @Parameter(defaultValue = "512", property="spotbugs.maxHeap")
     int maxHeap
 
     /**
