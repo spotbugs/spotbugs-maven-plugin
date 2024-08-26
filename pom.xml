@@ -175,9 +175,9 @@
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.8.6</spotbugs.version>
 
-        <junitVersion>5.10.2</junitVersion>
+        <junitVersion>5.11.0</junitVersion>
         <spotbugsVersion>4.8.6</spotbugsVersion>
-        <spotbugsTag>4.8.5</spotbugsTag>
+        <spotbugsTag>4.8.6</spotbugsTag>
         <slf4jVersion>2.0.16</slf4jVersion>
 
         <antVersion>1.10.14</antVersion>
@@ -228,8 +228,8 @@
         <!-- Used by Integration tests -->
         <compilerPluginVersion>3.13.0</compilerPluginVersion>
         <findsecbugsVersion>1.13.0</findsecbugsVersion>
-        <jxrPluginVersion>3.3.2</jxrPluginVersion>
-        <mavenSurefireVersion>3.2.5</mavenSurefireVersion>
+        <jxrPluginVersion>3.5.0</jxrPluginVersion>
+        <mavenSurefireVersion>3.4.0</mavenSurefireVersion>
         <servletApiVersion>6.0.0</servletApiVersion>
         <sb-contribVersion>7.6.4</sb-contribVersion>
 
@@ -252,10 +252,6 @@
 
         <!-- Automatic Module Name -->
         <module.name>com.github.spotbugs.maven</module.name>
-
-        <!-- TODO: Remove after base-parent 46 released -->
-        <modernizer.version>2.9.0</modernizer.version>
-        <modernizer.plugin>2.9.0</modernizer.plugin>
     </properties>
 
     <dependencyManagement>
