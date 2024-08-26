@@ -252,10 +252,6 @@
 
         <!-- Automatic Module Name -->
         <module.name>com.github.spotbugs.maven</module.name>
-
-        <!-- TODO: Remove after base-parent 46 released -->
-        <modernizer.version>2.9.0</modernizer.version>
-        <modernizer.plugin>2.9.0</modernizer.plugin>
     </properties>
 
     <dependencyManagement>
