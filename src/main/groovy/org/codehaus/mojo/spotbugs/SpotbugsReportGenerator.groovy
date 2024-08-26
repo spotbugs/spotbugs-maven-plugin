@@ -32,100 +32,61 @@ import org.codehaus.plexus.util.PathTool
  */
 class SpotbugsReportGenerator implements SpotBugsInfo {
 
-    /**
-     * The key to get the value if the line number is not available.
-     */
+    /** The key to get the value if the line number is not available. */
     static final String NOLINE_KEY = "report.spotbugs.noline"
 
-    /**
-     * The key to get the column title for the line.
-     */
+    /** The key to get the column title for the line. */
     static final String COLUMN_LINE_KEY = "report.spotbugs.column.line"
 
-    /**
-     * The key to get the column title for the bug.
-     */
+    /** The key to get the column title for the bug. */
     static final String COLUMN_BUG_KEY = "report.spotbugs.column.bug"
 
-    /**
-     * The key to get the column title for the bugs.
-     */
+    /** The key to get the column title for the bugs. */
     static final String COLUMN_BUGS_KEY = "report.spotbugs.column.bugs"
 
-    /**
-     * The key to get the column title for the category.
-     */
+    /** The key to get the column title for the category. */
     static final String COLUMN_CATEGORY_KEY = "report.spotbugs.column.category"
 
-    /**
-     * The key to get the column title for the priority.
-     */
+    /** The key to get the column title for the priority. */
     static final String COLUMN_PRIORITY_KEY = "report.spotbugs.column.priority"
 
-    /**
-     * The key to get the column title for the details.
-     */
+    /** The key to get the column title for the details. */
     static final String COLUMN_DETAILS_KEY = "report.spotbugs.column.details"
 
-    /**
-     * The key to get the report title of the Plug-In from the bundle.
-     */
+    /** The key to get the report title of the Plug-In from the bundle. */
     static final String REPORT_TITLE_KEY = "report.spotbugs.reporttitle"
 
-    /**
-     * The key to get the report link title of the Plug-In from the bundle.
-     */
+    /** The key to get the report link title of the Plug-In from the bundle. */
     static final String LINKTITLE_KEY = "report.spotbugs.linktitle"
 
-    /**
-     * The key to get the report link of the Plug-In from the bundle.
-     */
+    /** The key to get the report link of the Plug-In from the bundle. */
     static final String LINK_KEY = "report.spotbugs.link"
 
-    /**
-     * The key to get the files title of the Plug-In from the bundle.
-     */
+    /** The key to get the files title of the Plug-In from the bundle. */
     static final String FILES_KEY = "report.spotbugs.files"
 
-    /**
-     * The key to get the threshold of the report from the bundle.
-     */
+    /** The key to get the threshold of the report from the bundle. */
     static final String THRESHOLD_KEY = "report.spotbugs.threshold"
 
-    /**
-     * The key to get the effort of the report from the bundle.
-     */
+    /** The key to get the effort of the report from the bundle. */
     static final String EFFORT_KEY = "report.spotbugs.effort"
 
-    /**
-     * The key to get the link to SpotBugs description page from the bundle.
-     */
+    /** The key to get the link to SpotBugs description page from the bundle. */
     static final String DETAILSLINK_KEY = "report.spotbugs.detailslink"
 
-    /**
-     * The key to get the version title for SpotBugs from the bundle.
-     *
-     */
+    /** The key to get the version title for SpotBugs from the bundle. */
     static final String VERSIONTITLE_KEY = "report.spotbugs.versiontitle"
 
-    /**
-     * The key to get the files title of the Plug-In from the bundle.
-     */
+    /** The key to get the files title of the Plug-In from the bundle. */
     static final String SUMMARY_KEY = "report.spotbugs.summary"
 
-    /**
-     * The key to column title for the Class.
-     */
+    /** The key to column title for the Class. */
     static final String COLUMN_CLASS_KEY = "report.spotbugs.column.class"
 
-    /**
-     * The key to column title for the Classes.
-     */
+    /** The key to column title for the Classes. */
     static final String COLUMN_CLASSES_KEY = "report.spotbugs.column.classes"
 
-    /**
-     * The key to column title for the errors.
-     */
+    /** The key to column title for the errors. */
     static final String COLUMN_ERRORS_KEY = "report.spotbugs.column.errors"
 
     /**
@@ -135,119 +96,73 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      */
     static final String COLUMN_FILES_KEY = "report.spotbugs.column.files"
 
-    /**
-     * The key to column title for the files.
-     */
+    /** The key to column title for the files. */
     static final String COLUMN_MISSINGCLASSES_KEY = "report.spotbugs.column.missingclasses"
 
-    /**
-     * The sink to write the report to.
-     */
+    /** The sink to write the report to. */
     Sink sink
 
-    /**
-     * The bundle to get the messages from.
-     */
+    /** The bundle to get the messages from. */
     ResourceBundle bundle
 
-    /**
-     * The logger to write logs to.
-     */
+    /** The logger to write logs to. */
     Log log
 
-    /**
-     * The threshold of bugs severity.
-     */
+    /** The threshold of bugs severity. */
     String threshold
 
-    /**
-     * The used effort for searching bugs.
-     */
+    /** The used effort for searching bugs. */
     String effort
 
-    /**
-     * The name of the current class which is analysed by SpotBugs.
-     */
+    /** The name of the current class which is analysed by SpotBugs. */
     String currentClassName
 
-    /**
-     * Signals if the jxr report plugin is enabled.
-     */
+    /** Signals if the jxr report plugin is enabled. */
     boolean isJXRReportEnabled
 
-    /**
-     * The running total of bugs reported.
-     */
+    /** The running total of bugs reported. */
     int bugCount
 
-    /**
-     * The running total of missing classes reported.
-     */
+    /** The running total of missing classes reported. */
     int missingClassCount
 
-    /**
-     * The running total of files analyzed.
-     */
+    /** The running total of files analyzed. */
     int fileCount
 
-    /**
-     * The Set of missing classes names reported.
-     */
+    /** The Set of missing classes names reported. */
     Set missingClassSet = new HashSet()
 
-    /**
-     * The running total of errors reported.
-     */
+    /** The running total of errors reported. */
     int errorCount
 
-    /**
-     * Location where generated html will be created.
-     */
+    /** Location where generated html will be created. */
     File outputDirectory
 
-    /**
-     * Location of the Xrefs to link to.
-     */
+    /** Location of the Xrefs to link to. */
     File xrefLocation
 
-    /**
-     * Location of the Test Xrefs to link to.
-     */
+    /** Location of the Test Xrefs to link to. */
     File xrefTestLocation
 
-    /**
-     * The directories containing the sources to be compiled.
-     */
+    /** The directories containing the sources to be compiled. */
     List compileSourceRoots
 
-    /**
-     * The directories containing the test-sources to be compiled.
-     */
+    /** The directories containing the test-sources to be compiled. */
     List testSourceRoots
 
-    /**
-     * Run Spotbugs on the tests.
-     */
+    /** Run Spotbugs on the tests. */
     boolean includeTests
 
-    /**
-     * Doxia site tool.
-     */
+    /** Doxia site tool. */
     SiteTool siteTool
 
-    /**
-     * Base directory.
-     */
+    /** Base directory. */
     File basedir
 
-    /**
-     * Spotbugs results.
-     */
+    /** Spotbugs results. */
     GPathResult spotbugsResults
 
-    /**
-     * Bug classes.
-     */
+    /** Bug classes. */
     List bugClasses
 
     /**
