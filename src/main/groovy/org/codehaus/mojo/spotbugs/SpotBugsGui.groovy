@@ -47,40 +47,26 @@ import org.codehaus.plexus.resource.ResourceManager
 @Mojo(name = "gui", requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
 class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
-    /**
-     * locale to use for Resource bundle.
-     */
+    /** Locale to use for Resource bundle. */
     static Locale locale = Locale.ENGLISH
 
-    /**
-     * Directory containing the class files for Spotbugs to analyze.
-     */
+    /** Directory containing the class files for Spotbugs to analyze. */
     @Parameter(defaultValue = '${project.build.outputDirectory}', required = true)
     File classFilesDirectory
 
-    /**
-     * Turn on Spotbugs debugging.
-     *
-     */
+    /** Turn on Spotbugs debugging. */
     @Parameter(defaultValue = "false", property="spotbugs.debug")
     boolean debug
 
-    /**
-     * List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin.
-     */
+    /** List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin. */
     @Parameter(property="plugin.artifacts", required = true, readonly = true)
     List pluginArtifacts
 
-    /**
-     * Effort of the bug finders. Valid values are Min, Default and Max.
-     *
-     */
+    /** Effort of the bug finders. Valid values are Min, Default and Max. */
     @Parameter(defaultValue = "Default", property="spotbugs.effort")
     String effort
 
-    /**
-     * The plugin list to include in the report. This is a SpotbugsInfo.COMMA-delimited list.
-     */
+    /** The plugin list to include in the report. This is a SpotbugsInfo.COMMA-delimited list. */
     @Parameter(property="spotbugs.pluginList")
     String pluginList
 
@@ -94,23 +80,15 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     @Parameter
     PluginArtifact[] plugins
 
-    /**
-     * Artifact resolver, needed to download the coreplugin jar.
-     */
+    /** Artifact resolver, needed to download the coreplugin jar. */
     @Component(role = ArtifactResolver.class)
     ArtifactResolver artifactResolver
 
-    /**
-     * Used to look up Artifacts in the remote repository.
-     *
-     */
+    /** Used to look up Artifacts in the remote repository. */
     @Component(role = RepositorySystem.class)
     RepositorySystem factory
 
-    /**
-     * List of Remote Repositories used by the resolver.
-     *
-     */
+    /** List of Remote Repositories used by the resolver. */
     @Parameter(property = "project.remoteArtifactRepositories", required = true, readonly = true)
     List remoteRepositories
 
@@ -121,30 +99,19 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     @Parameter(property = "localRepository", required = true, readonly = true)
     ArtifactRepository localRepository
 
-    /**
-     * Maven Session.
-     */
+    /** Maven Session. */
     @Parameter (defaultValue = '${session}', required = true, readonly = true)
     MavenSession session
 
-    /**
-     * Maven Project.
-     *
-     */
+    /** Maven Project. */
     @Parameter(property="project", required = true, readonly = true)
     MavenProject project
 
-    /**
-     * Resource bundle for a specific locale.
-     *
-     */
+    /** Resource bundle for a specific locale. */
     @Parameter(readonly = true)
     ResourceBundle bundle
 
-    /**
-     * Specifies the directory where the Spotbugs native xml output will be generated.
-     *
-     */
+    /** Specifies the directory where the Spotbugs native xml output will be generated. */
     @Parameter(defaultValue = '${project.build.directory}', required = true)
     File spotbugsXmlOutputDirectory
 
