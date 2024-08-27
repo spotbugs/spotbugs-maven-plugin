@@ -1254,12 +1254,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                         String newFileName = indexer.searchActualFilesLocation(originalFullPath)
 
                         if (newFileName != null) {
-                            if (getLog().isDebugEnabled()) {
-                                getLog().info("$originalFullPath modified to $newFileName")
+                            if (log.isDebugEnabled()) {
+                                log.info("$originalFullPath modified to $newFileName")
                             }
                             loc.physicalLocation.artifactLocation.uri = newFileName
                         } else {
-                            getLog().warn("No source file found for $originalFullPath. " +
+                            log.warn("No source file found for $originalFullPath. " +
                                     "The path include in the SARIF report could be incomplete.")
                         }
                     }
