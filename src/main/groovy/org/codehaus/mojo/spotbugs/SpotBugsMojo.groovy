@@ -36,7 +36,6 @@ import org.apache.maven.reporting.AbstractMavenReport
 import org.apache.maven.reporting.MavenReport
 import org.apache.maven.repository.RepositorySystem
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
-
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceLoader
 
@@ -112,7 +111,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 4.7.2.2
      */
-    @Parameter(property = "spotbugs.sarifOutputFilename", defaultValue = "spotbugsSarif.json", required = true)
+    @Parameter(defaultValue = "spotbugsSarif.json", property = "spotbugs.sarifOutputFilename", required = true)
     String sarifOutputFilename
 
     /**
@@ -136,7 +135,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 3.1.12.2
      */
-    @Parameter(property = "spotbugs.outputXmlFilename", defaultValue = "spotbugsXml.xml")
+    @Parameter(defaultValue = "spotbugsXml.xml", property = "spotbugs.outputXmlFilename")
     String spotbugsXmlOutputFilename
 
     /** Doxia Site Renderer. */
@@ -1255,12 +1254,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                         String newFileName = indexer.searchActualFilesLocation(originalFullPath)
 
                         if (newFileName != null) {
-                            if (getLog().isDebugEnabled()) {
-                                getLog().info("$originalFullPath modified to $newFileName")
+                            if (log.isDebugEnabled()) {
+                                log.info("$originalFullPath modified to $newFileName")
                             }
                             loc.physicalLocation.artifactLocation.uri = newFileName
                         } else {
-                            getLog().warn("No source file found for $originalFullPath. " +
+                            log.warn("No source file found for $originalFullPath. " +
                                     "The path include in the SARIF report could be incomplete.")
                         }
                     }

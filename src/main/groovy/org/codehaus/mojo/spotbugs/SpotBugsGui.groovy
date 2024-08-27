@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2023 the original author or authors.
+ * Copyright 2005-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,22 +18,15 @@ package org.codehaus.mojo.spotbugs
 import groovy.ant.AntBuilder
 
 import org.apache.maven.artifact.repository.ArtifactRepository
-
 import org.apache.maven.execution.MavenSession
-
 import org.apache.maven.plugin.AbstractMojo
-
 import org.apache.maven.plugins.annotations.Component
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
-
 import org.apache.maven.project.MavenProject
-
 import org.apache.maven.repository.RepositorySystem
-
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
-
 import org.codehaus.plexus.resource.ResourceManager
 
 /**
@@ -120,7 +113,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      *
      * @since 3.1.12.2
      */
-    @Parameter(property = "spotbugs.outputXmlFilename", defaultValue = "spotbugsXml.xml")
+    @Parameter(defaultValue = "spotbugsXml.xml", property = "spotbugs.outputXmlFilename")
     String spotbugsXmlOutputFilename
 
     /**
@@ -130,7 +123,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      *
      * @since 2.2
      */
-    @Parameter(property="encoding", defaultValue = '${project.build.sourceEncoding}')
+    @Parameter(defaultValue = '${project.build.sourceEncoding}', property="encoding")
     String encoding
 
     /**
@@ -138,7 +131,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      *
      * @since 2.2
      */
-    @Parameter(property="spotbugs.maxHeap", defaultValue = "512")
+    @Parameter(defaultValue = "512", property="spotbugs.maxHeap")
     int maxHeap
 
     /**

@@ -23,23 +23,17 @@ import org.apache.maven.artifact.repository.ArtifactRepository
 
 import org.apache.maven.doxia.siterenderer.Renderer
 import org.apache.maven.doxia.tools.SiteTool
-
 import org.apache.maven.execution.MavenSession
-
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
-
 import org.apache.maven.plugins.annotations.Component
 import org.apache.maven.plugins.annotations.Execute
 import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
-
 import org.apache.maven.project.MavenProject
-
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
-
 import org.codehaus.plexus.resource.ResourceManager
 
 abstract class BaseViolationCheckMojo extends AbstractMojo {
@@ -77,7 +71,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 3.1.12.2
      */
-    @Parameter(property = "spotbugs.outputXmlFilename", defaultValue = "spotbugsXml.xml")
+    @Parameter(defaultValue = "spotbugsXml.xml", property = "spotbugs.outputXmlFilename")
     String spotbugsXmlOutputFilename
 
     /** Doxia Site Renderer. */
