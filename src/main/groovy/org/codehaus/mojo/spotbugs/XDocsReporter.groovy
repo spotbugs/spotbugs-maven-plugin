@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2023 the original author or authors.
+ * Copyright 2005-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,59 +27,37 @@ import org.apache.maven.plugin.logging.Log
  */
 class XDocsReporter {
 
-    /**
-     * The key to get the value if the line number is not available.
-     */
+    /** The key to get the value if the line number is not available. */
     static final String NOLINE_KEY = "report.spotbugs.noline"
 
-    /**
-     * The bundle to get the messages from.
-     */
+    /** The bundle to get the messages from. */
     ResourceBundle bundle
 
-    /**
-     * The logger to write logs to.
-     */
+    /** The logger to write logs to. */
     Log log
 
-    /**
-     * The threshold of bugs severity.
-     */
+    /** The threshold of bugs severity. */
     String threshold
 
-    /**
-     * The used effort for searching bugs.
-     */
+    /** The used effort for searching bugs. */
     String effort
 
-    /**
-     * The output Writer stream.
-     */
+    /** The output Writer stream. */
     Writer outputWriter
 
-    /**
-     * Spotbugs Results.
-     */
+    /** Spotbugs Results. */
     GPathResult spotbugsResults
 
-    /**
-     * Bug Classes.
-     */
+    /** Bug Classes. */
     List bugClasses
 
-    /**
-     * The directories containing the sources to be compiled.
-     */
+    /** The directories containing the sources to be compiled. */
     List compileSourceRoots
 
-    /**
-     * The directories containing the test sources to be compiled.
-     */
+    /** The directories containing the test sources to be compiled. */
     List testSourceRoots
 
-    /**
-     * The output encoding.
-     */
+    /** The output encoding. */
     String outputEncoding
 
     /**

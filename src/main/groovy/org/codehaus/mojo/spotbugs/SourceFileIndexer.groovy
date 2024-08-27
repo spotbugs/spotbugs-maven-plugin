@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2023 the original author or authors.
+ * Copyright 2005-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,7 @@ import java.nio.file.Paths
  */
 class SourceFileIndexer {
 
-    /**
-     * List of source files found in the current Maven project
-     */
+    /** List of source files found in the current Maven project. */
     private List<String> allSourceFiles
 
     /**
@@ -113,6 +111,7 @@ class SourceFileIndexer {
 
     /**
      * Normalize path to use forward slash.
+     * <p>
      * This will facilitate searches.
      *
      * @param path Path to clean up
