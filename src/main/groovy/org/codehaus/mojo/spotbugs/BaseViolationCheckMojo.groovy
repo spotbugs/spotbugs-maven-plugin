@@ -17,10 +17,9 @@ package org.codehaus.mojo.spotbugs
 
 import groovy.xml.XmlParser
 import groovy.xml.XmlSlurper
+
 import org.apache.commons.io.FileUtils
-
 import org.apache.maven.artifact.repository.ArtifactRepository
-
 import org.apache.maven.doxia.siterenderer.Renderer
 import org.apache.maven.doxia.tools.SiteTool
 import org.apache.maven.execution.MavenSession
