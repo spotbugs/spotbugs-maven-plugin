@@ -19,7 +19,6 @@ import groovy.ant.AntBuilder
 
 import javax.inject.Inject
 
-import org.apache.maven.artifact.repository.ArtifactRepository
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.Mojo
@@ -81,17 +80,6 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     /** Used to look up Artifacts in the remote repository. */
     @Inject
     RepositorySystem factory
-
-    /** List of Remote Repositories used by the resolver. */
-    @Parameter(property = "project.remoteArtifactRepositories", required = true, readonly = true)
-    List remoteRepositories
-
-    /**
-     * The local repository, needed to download the coreplugin jar.
-     *
-     */
-    @Parameter(property = "localRepository", required = true, readonly = true)
-    ArtifactRepository localRepository
 
     /** Maven Session. */
     @Parameter (defaultValue = '${session}', required = true, readonly = true)

@@ -21,7 +21,6 @@ import groovy.xml.XmlSlurper
 import javax.inject.Inject
 
 import org.apache.commons.io.FileUtils
-import org.apache.maven.artifact.repository.ArtifactRepository
 import org.apache.maven.doxia.siterenderer.Renderer
 import org.apache.maven.doxia.tools.SiteTool
 import org.apache.maven.execution.MavenSession
@@ -117,16 +116,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     /** List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin. */
     @Parameter(property = "plugin.artifacts", required = true, readonly = true)
     List pluginArtifacts
-
-    /**
-     * The local repository, needed to download the coreplugin jar.
-     */
-    @Parameter(property = "localRepository", required = true, readonly = true)
-    ArtifactRepository localRepository
-
-    /** Remote repositories which will be searched for the coreplugin jar. */
-    @Parameter(property = "project.remoteArtifactRepositories", required = true, readonly = true)
-    List remoteArtifactRepositories
 
     /** Maven Session. */
     @Parameter (defaultValue = '${session}', required = true, readonly = true)
