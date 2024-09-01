@@ -17,4 +17,4 @@ jobs:
       - name: Build Setup
         run: ./mvnw -B -V clean install -Dlicense.skip=true --no-transfer-progress
       - name: Integration Test with Maven
-        run: ./mvnw -B -V -DtestSrc=remote -Prun-its clean install -Dinvoker.parallelThreads=8 -Dlicense.skip=true --no-transfer-progress
+        run: ./mvnw -B -V -DtestSrc=remote -Prun-its install -Dinvoker.parallelThreads=8 -Dlicense.skip=true --no-transfer-progress
