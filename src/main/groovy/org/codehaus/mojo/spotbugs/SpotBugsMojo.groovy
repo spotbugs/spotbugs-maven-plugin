@@ -27,7 +27,6 @@ import org.apache.maven.doxia.siterenderer.Renderer
 import org.apache.maven.doxia.tools.SiteTool
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.MojoExecutionException
-import org.apache.maven.plugins.annotations.Component
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
@@ -43,6 +42,8 @@ import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.stream.Collectors
+
+import javax.inject.Inject
 
 /**
  * Generates a SpotBugs Report when the site plugin is run.
@@ -139,7 +140,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     String spotbugsXmlOutputFilename
 
     /** Doxia Site Renderer. */
-    @Component(role = Renderer.class)
+    @Inject
     Renderer siteRenderer
 
     /** Directory containing the class files for Spotbugs to analyze. */
@@ -235,11 +236,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     String threshold
 
     /** Artifact resolver, needed to download the coreplugin jar. */
-    @Component(role = ArtifactResolver.class)
+    @Inject
     ArtifactResolver artifactResolver
 
     /** Used to look up Artifacts in the remote repository. */
-    @Component(role = RepositorySystem.class)
+    @Inject
     RepositorySystem factory
 
     /**
@@ -452,7 +453,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 2.0
      */
-    @Component(role = ResourceManager.class)
+    @Inject
     ResourceManager resourceManager
 
     /**
@@ -460,7 +461,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 2.1
      */
-    @Component(role = SiteTool.class)
+    @Inject
     SiteTool siteTool
 
     /**

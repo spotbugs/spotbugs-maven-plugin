@@ -17,10 +17,11 @@ package org.codehaus.mojo.spotbugs
 
 import groovy.ant.AntBuilder
 
+import javax.inject.Inject
+
 import org.apache.maven.artifact.repository.ArtifactRepository
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.AbstractMojo
-import org.apache.maven.plugins.annotations.Component
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
@@ -74,11 +75,11 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     PluginArtifact[] plugins
 
     /** Artifact resolver, needed to download the coreplugin jar. */
-    @Component(role = ArtifactResolver.class)
+    @Inject
     ArtifactResolver artifactResolver
 
     /** Used to look up Artifacts in the remote repository. */
-    @Component(role = RepositorySystem.class)
+    @Inject
     RepositorySystem factory
 
     /** List of Remote Repositories used by the resolver. */
@@ -139,7 +140,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      *
      * @since 2.0
      */
-    @Component(role = ResourceManager.class)
+    @Inject
     ResourceManager resourceManager
 
     @Override
