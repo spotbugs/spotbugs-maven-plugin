@@ -234,7 +234,7 @@
         <jgit.version>7.0.0.202409031743-r</jgit.version>
 
         <!-- Targeted patches -->
-        <asm.version>9.7</asm.version>
+        <asm.version>9.7.1</asm.version>
         <bcel.version>6.10.0</bcel.version>
         <beanutils.version>1.9.4</beanutils.version>
         <chain.version>1.2</chain.version>
