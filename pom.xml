@@ -185,7 +185,7 @@
         <javaparserVersion>3.26.2</javaparserVersion>
 
         <doxiaVersion>1.12.0</doxiaVersion>
-        <doxiaSiteToolsVersion>1.11.1</doxiaSiteToolsVersion>
+        <doxiaSiteToolsVersion>2.0.0</doxiaSiteToolsVersion>
 
         <mavenSharedUtilsVersion>3.4.2</mavenSharedUtilsVersion>
         <mavenTransferVersion>0.13.1</mavenTransferVersion>
