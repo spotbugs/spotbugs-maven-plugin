@@ -91,23 +91,19 @@ final class ResourceHelper {
     private File getResourceAsFile(String name, String outputPath) {
         // Optimization for File to File fetches
         File f = FileResourceLoader.getResourceAsFile(name, outputPath, outputDirectory)
-
         if (f != null) {
             return f
         }
-
         // End optimization
 
         File outputResourceFile
 
         if (outputPath == null) {
             outputResourceFile = Files.createTempFile("plexus-resources", "tmp")
+        } else if (outputDirectory != null) {
+            outputResourceFile = new File(outputDirectory, outputPath)
         } else {
-            if (outputDirectory != null) {
-                outputResourceFile = new File(outputDirectory, outputPath)
-            } else {
-                outputResourceFile = new File(outputPath)
-            }
+            outputResourceFile = new File(outputPath)
         }
 
         try (InputStream is = new BufferedInputStream(resourceManager.getResourceAsInputStream(name))) {
