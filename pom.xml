@@ -191,7 +191,7 @@
         <mavenTransferVersion>0.13.1</mavenTransferVersion>
         <mavenCommonArtifactFilters>3.4.0</mavenCommonArtifactFilters>
         <mavenReportingApiVersion>3.1.1</mavenReportingApiVersion>
-        <mavenReportingVersion>3.2.0</mavenReportingVersion>
+        <mavenReportingVersion>4.0.0</mavenReportingVersion>
         <mavenVersion>3.9.9</mavenVersion>
 
         <plexusContainerVersion>2.1.1</plexusContainerVersion>
