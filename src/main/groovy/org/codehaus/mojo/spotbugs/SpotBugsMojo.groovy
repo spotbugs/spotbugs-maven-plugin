@@ -186,10 +186,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Parameter(property = "plugin.artifacts", required = true, readonly = true)
     List pluginArtifacts
 
-    /** Remote repositories which will be searched for the coreplugin jar. */
-    @Parameter(property = "project.remoteArtifactRepositories", required = true, readonly = true)
-    List remoteArtifactRepositories
-
     /** Maven Session. */
     @Parameter (defaultValue = '${session}', required = true, readonly = true)
     MavenSession session
