@@ -189,10 +189,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Parameter (defaultValue = '${session}', required = true, readonly = true)
     MavenSession session
 
-    /** Encoding used for xml files. Default value is UTF-8. */
-    @Parameter(defaultValue = "UTF-8", readonly = true)
-    String xmlEncoding
-
     /**
      * The file encoding to use when reading the source files. If the property <code>project.build.sourceEncoding</code>
      * is not set, the platform default encoding is used.
