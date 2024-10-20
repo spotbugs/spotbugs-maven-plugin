@@ -1,6 +1,6 @@
 <!--
 
-    Copyright 2005-2023 the original author or authors.
+    Copyright 2005-2024 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -24,17 +24,17 @@
 <body>
 <div id="overview"><a href="../apidocs/UselessAssignments.html">View Javadoc</a></div><pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">import</strong> edu.umd.cs.findbugs.annotations.ExpectWarning;
-<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">class</strong> <a name="UselessAssignments" href="..//UselessAssignments.html#UselessAssignments">UselessAssignments</a> {
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>       @ExpectWarning(<span class="jxr_string">"UR"</span>)
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>       <strong class="jxr_keyword">int</strong> foo;
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>       @ExpectWarning(<span class="jxr_string">"UrF"</span>)
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>       <strong class="jxr_keyword">int</strong> bar, g1;
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>      @ExpectWarning(<span class="jxr_string">"UuF"</span>)
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>      <strong class="jxr_keyword">int</strong> g2;
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>      @ExpectWarning(<span class="jxr_string">"DLS,SA"</span>)
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>      <strong class="jxr_keyword">public</strong> <a name="UselessAssignments" href="..//UselessAssignments.html#UselessAssignments">UselessAssignments</a>(<strong class="jxr_keyword">int</strong> Foo, <strong class="jxr_keyword">int</strong> Bar) {
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>          <strong class="jxr_keyword">int</strong> x, y;
@@ -43,12 +43,12 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>          g1 = g1 = 0;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>          x = x = 0;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>      }
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>      <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setFoo(<a name="UselessAssignments" href="..//UselessAssignments.html#UselessAssignments">UselessAssignments</a> ua1, <a name="UselessAssignments" href="..//UselessAssignments.html#UselessAssignments">UselessAssignments</a> ua2) {
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>          ua1.foo = ua2.foo = 1;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>          ua1.bar = ua1.bar = ua1.bar = 2;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>      }
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>      <strong class="jxr_keyword">int</strong> oops() {
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>          <strong class="jxr_keyword">int</strong> i = 7;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>          i = ++i;
@@ -57,15 +57,15 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>          foo = ++foo;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>          <strong class="jxr_keyword">return</strong> i;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>      }
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> report(<a name="UselessAssignments" href="..//UselessAssignments.html#UselessAssignments">UselessAssignments</a> ua1, <a name="UselessAssignments" href="..//UselessAssignments.html#UselessAssignments">UselessAssignments</a> ua2) {
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>          ua1.foo = ua1.foo = ua1.foo = 17;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>      }
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> doNotReport(<a name="UselessAssignments" href="..//UselessAssignments.html#UselessAssignments">UselessAssignments</a> ua1, <a name="UselessAssignments" href="..//UselessAssignments.html#UselessAssignments">UselessAssignments</a> ua2) {
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>          ua1.bar = ua2.bar = 42;
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>      }
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  }
 </pre>
 <hr/>
