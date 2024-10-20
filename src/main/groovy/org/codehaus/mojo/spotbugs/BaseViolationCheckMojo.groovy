@@ -31,7 +31,6 @@ import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
-import org.apache.maven.project.MavenProject
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 import org.codehaus.plexus.resource.ResourceManager
 
@@ -120,10 +119,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     /** Maven Session. */
     @Parameter (defaultValue = '${session}', required = true, readonly = true)
     MavenSession session
-
-    /** Maven Project. */
-    @Parameter(property = "project", required = true, readonly = true)
-    MavenProject project
 
     /** Encoding used for xml files. Default value is UTF-8. */
     @Parameter(defaultValue = "UTF-8", readonly = true)

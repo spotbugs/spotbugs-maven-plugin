@@ -29,7 +29,6 @@ import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
-import org.apache.maven.project.MavenProject
 import org.apache.maven.reporting.AbstractMavenReport
 import org.apache.maven.reporting.MavenReport
 import org.apache.maven.repository.RepositorySystem
@@ -189,10 +188,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /** Maven Session. */
     @Parameter (defaultValue = '${session}', required = true, readonly = true)
     MavenSession session
-
-    /** Maven Project. */
-    @Parameter(property = "project", required = true, readonly = true)
-    MavenProject project
 
     /** Encoding used for xml files. Default value is UTF-8. */
     @Parameter(defaultValue = "UTF-8", readonly = true)
@@ -665,7 +660,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             } else {
                 log.debug("Generating Spotbugs HTML")
 
-                SpotbugsReportGenerator generator = new SpotbugsReportGenerator(getSink(), getBundle(locale), this.project.getBasedir(), siteTool)
+                SpotbugsReportGenerator generator = new SpotbugsReportGenerator(getSink(), getBundle(locale), this.session.getCurrentProject().getBasedir(), siteTool)
 
                 boolean isJxrPluginEnabled = isJxrPluginEnabled()
 
@@ -751,17 +746,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Override
     protected String getOutputDirectory() {
         return outputDirectory.getAbsolutePath()
-    }
-
-    /**
-     * Return the project.
-     *
-     * @return the project.
-     * @see AbstractMavenReport#getProject()
-     */
-    @Override
-    protected MavenProject getProject() {
-        return this.project
     }
 
     /**
@@ -996,9 +980,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         List<String> auxClasspathElements
 
         if (testClassFilesDirectory.isDirectory() && includeTests) {
-            auxClasspathElements = project.testClasspathElements
+            auxClasspathElements = session.getCurrentProject().testClasspathElements
         } else if (classFilesDirectory.isDirectory()) {
-            auxClasspathElements = project.compileClasspathElements
+            auxClasspathElements = session.getCurrentProject().compileClasspathElements
         }
 
         File auxClasspathFile = null
@@ -1008,7 +992,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             auxClasspathFile.deleteOnExit()
             log.debug("  AuxClasspath Elements ->" + auxClasspathElements)
 
-            List<String> auxClasspathList = auxClasspathElements.findAll { project.build.outputDirectory != it.toString() }
+            List<String> auxClasspathList = auxClasspathElements.findAll { session.getCurrentProject().getBuild().outputDirectory != it.toString() }
             if (auxClasspathList.size() > 0) {
                 log.debug("  Last AuxClasspath is ->" + auxClasspathList[auxClasspathList.size() - 1])
 
@@ -1065,10 +1049,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         log.debug("****** Executing SpotBugsMojo *******")
 
-        resourceManager.addSearchPath(FileResourceLoader.ID, project.getFile().getParentFile().getAbsolutePath())
+        resourceManager.addSearchPath(FileResourceLoader.ID, session.getCurrentProject().getFile().getParentFile().getAbsolutePath())
         resourceManager.addSearchPath(SpotBugsInfo.URL, "")
 
-        resourceManager.setOutputDirectory(new File(project.getBuild().getDirectory()))
+        resourceManager.setOutputDirectory(new File(session.getCurrentProject().getBuild().directory))
 
         if (log.isDebugEnabled()) {
             log.debug("resourceManager.outputDirectory is ${resourceManager.outputDirectory}")
@@ -1183,7 +1167,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 path.SpotbugsResults.FindBugsSummary.'total_bugs' = bugCount
 
                 xmlProject.appendNode {
-                    WrkDir(project.build.directory)
+                    WrkDir(session.getCurrentProject().getBuild().directory)
                 }
 
                 StreamingMarkupBuilder xmlBuilder = new StreamingMarkupBuilder()
@@ -1229,7 +1213,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                 SourceFileIndexer indexer = new SourceFileIndexer()
 
-                indexer.buildListSourceFiles(getProject(),getSession())
+                indexer.buildListSourceFiles(session)
 
                 for (result in slurpedResult.runs.results[0]) {
 

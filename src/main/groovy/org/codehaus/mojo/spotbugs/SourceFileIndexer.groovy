@@ -17,7 +17,6 @@ package org.codehaus.mojo.spotbugs
 
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.model.Resource
-import org.apache.maven.project.MavenProject
 
 import java.nio.file.Paths
 
@@ -36,38 +35,37 @@ class SourceFileIndexer {
      * @param project Reference to the Maven project to get the list of source directories
      * @param session Reference to the Maven session used to get the location of the root directory
      */
-    protected void buildListSourceFiles(MavenProject project, MavenSession session) {
+    protected void buildListSourceFiles(MavenSession session) {
 
-        //String basePath = project.basedir.absolutePath
         String basePath = normalizePath(session.getExecutionRootDirectory())
 
         List<File> allSourceFiles = new ArrayList<>()
 
         // Resource
-        for (Resource r in project.getResources()) {
+        for (Resource r in session.getCurrentProject().getResources()) {
             scanDirectory(new File(r.directory), allSourceFiles, basePath)
         }
 
-        for (Resource r in project.getTestResources()) {
+        for (Resource r in session.getCurrentProject().getTestResources()) {
             scanDirectory(new File(r.directory), allSourceFiles, basePath)
         }
 
         // Source files
-        for (String sourceRoot in project.getCompileSourceRoots()) {
+        for (String sourceRoot in session.getCurrentProject().getCompileSourceRoots()) {
             scanDirectory(new File(sourceRoot), allSourceFiles, basePath)
         }
-        for (String sourceRoot in project.getTestCompileSourceRoots()) {
+        for (String sourceRoot in session.getCurrentProject().getTestCompileSourceRoots()) {
             scanDirectory(new File(sourceRoot), allSourceFiles, basePath)
         }
 
-        for (String sourceRoot in project.getScriptSourceRoots()) {
+        for (String sourceRoot in session.getCurrentProject().getScriptSourceRoots()) {
             scanDirectory(new File(sourceRoot), allSourceFiles, basePath)
         }
 
         //While not perfect, add the following paths will add basic support for Kotlin and Groovy
-        scanDirectory(new File(project.getBasedir(),"src/main/webapp"), allSourceFiles, basePath)
-        scanDirectory(new File(project.getBasedir(),"src/main/groovy"), allSourceFiles, basePath)
-        scanDirectory(new File(project.getBasedir(),"src/main/kotlin"), allSourceFiles, basePath)
+        scanDirectory(new File(session.getCurrentProject().getBasedir(),"src/main/webapp"), allSourceFiles, basePath)
+        scanDirectory(new File(session.getCurrentProject().getBasedir(),"src/main/groovy"), allSourceFiles, basePath)
+        scanDirectory(new File(session.getCurrentProject().getBasedir(),"src/main/kotlin"), allSourceFiles, basePath)
 
         this.allSourceFiles = allSourceFiles
     }
