@@ -770,7 +770,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             return true
         }
 
-        List reportPlugins = getProject().getReportPlugins()
+        List reportPlugins = session.getCurrentProject().getReportPlugins()
 
         boolean isEnabled
 
