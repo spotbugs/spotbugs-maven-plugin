@@ -24,7 +24,6 @@ import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
-import org.apache.maven.project.MavenProject
 import org.apache.maven.repository.RepositorySystem
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 import org.codehaus.plexus.resource.ResourceManager
@@ -85,10 +84,6 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     @Parameter (defaultValue = '${session}', required = true, readonly = true)
     MavenSession session
 
-    /** Maven Project. */
-    @Parameter(property="project", required = true, readonly = true)
-    MavenProject project
-
     /** Resource bundle for a specific locale. */
     @Parameter(readonly = true)
     ResourceBundle bundle
@@ -136,7 +131,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
         AntBuilder ant = new AntBuilder()
 
-        List<String> auxClasspathElements = project.compileClasspathElements
+        List<String> auxClasspathElements = session.getCurrentProject().compileClasspathElements
 
         if (debug) {
             log.debug("  Plugin Artifacts to be added ->" + pluginArtifacts.toString())
