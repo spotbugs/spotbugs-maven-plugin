@@ -22,7 +22,6 @@ import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult;
 import groovy.xml.StreamingMarkupBuilder
 
-import org.apache.maven.artifact.repository.ArtifactRepository
 import org.apache.maven.doxia.siterenderer.Renderer
 import org.apache.maven.doxia.tools.SiteTool
 import org.apache.maven.execution.MavenSession
@@ -186,16 +185,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /** List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin. */
     @Parameter(property = "plugin.artifacts", required = true, readonly = true)
     List pluginArtifacts
-
-    /** List of Remote Repositories used by the resolver. */
-    @Parameter(property = "project.remoteArtifactRepositories", required = true, readonly = true)
-    List remoteRepositories
-
-    /**
-     * The local repository, needed to download the coreplugin jar.
-     */
-    @Parameter(property = "localRepository", required = true, readonly = true)
-    ArtifactRepository localRepository
 
     /** Remote repositories which will be searched for the coreplugin jar. */
     @Parameter(property = "project.remoteArtifactRepositories", required = true, readonly = true)

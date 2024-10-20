@@ -16,7 +16,6 @@
 package org.codehaus.mojo.spotbugs
 
 import org.apache.maven.artifact.Artifact
-import org.apache.maven.artifact.repository.ArtifactRepository
 
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.ProjectBuildingRequest
@@ -37,8 +36,6 @@ trait SpotBugsPluginsTrait {
     // classes implement them with implicitly generated property getters
     abstract ArtifactResolver getArtifactResolver()
     abstract RepositorySystem getFactory()
-    abstract List getRemoteRepositories()
-    abstract ArtifactRepository getLocalRepository()
     abstract File getSpotbugsXmlOutputDirectory()
     abstract Log getLog()
     abstract ResourceManager getResourceManager()
@@ -89,10 +86,10 @@ trait SpotBugsPluginsTrait {
 
             Artifact pomArtifact
 
-            ProjectBuildingRequest configuration = session.getProjectBuildingRequest()
+            ProjectBuildingRequest projectBuildingRequest = session.getProjectBuildingRequest()
             log.debug("  Session is: " + session.toString())
-            configuration.setRemoteRepositories(this.remoteRepositories)
-            configuration.setLocalRepository(this.localRepository)
+            projectBuildingRequest.setRemoteRepositories(session.getCurrentProject().getRemoteArtifactRepositories())
+            projectBuildingRequest.setLocalRepository(session.getLocalRepository())
 
             plugins.each() { plugin ->
 
@@ -107,7 +104,7 @@ trait SpotBugsPluginsTrait {
                     log.debug("pomArtifact is ${pomArtifact} ****** groupId is ${pomArtifact['groupId']} ****** artifactId is ${pomArtifact['artifactId']} ****** version is ${pomArtifact['version']} ****** type is ${pomArtifact['type']} ****** classfier is ${pomArtifact['classifier']}")
                 }
 
-                pomArtifact = artifactResolver.resolveArtifact(configuration, pomArtifact).getArtifact()
+                pomArtifact = artifactResolver.resolveArtifact(projectBuildingRequest, pomArtifact).getArtifact()
 
                 urlPlugins += resourceHelper.getResourceFile(pomArtifact.file.absolutePath).absolutePath + ((plugin == plugins[plugins.size() - 1]) ? "" : File.pathSeparator)
             }
