@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1252"?>
 <!--
 
-    Copyright 2005-2023 the original author or authors.
+    Copyright 2005-2024 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -76,14 +76,14 @@ public void foo() {
 &lt;p&gt;Such assignments are useless, and may indicate a logic error or typo.&lt;/p&gt;
 
     </Details></BugPattern><BugPattern abbrev='NP' category='BAD_PRACTICE' type='NP_EQUALS_SHOULD_HANDLE_NULL_ARGUMENT'><ShortDescription>equals() method does not check for null argument</ShortDescription><Details>
-      
+
       &lt;p&gt;
       This implementation of equals(Object) violates the contract defined
       by java.lang.Object.equals() because it does not check for null
       being passed as the argument.  All equals() methods should return
       false if passed a null value.
       &lt;/p&gt;
-      
+
    </Details></BugPattern><BugPattern abbrev='RE' category='CORRECTNESS' type='RE_POSSIBLE_UNINTENDED_PATTERN'><ShortDescription>"." or "|" used for regular expression</ShortDescription><Details>
 
 &lt;p&gt;
@@ -153,13 +153,13 @@ block for an &lt;code&gt;if&lt;/code&gt; statement:&lt;/p&gt;
 &lt;p&gt;Assigning the same value to a variable twice is useless, and may indicate a logic error or typo.&lt;/p&gt;
 
     </Details></BugPattern><BugPattern abbrev='NP' category='BAD_PRACTICE' type='NP_CLONE_COULD_RETURN_NULL'><ShortDescription>Clone method may return null</ShortDescription><Details>
-      
+
       &lt;p&gt;
     This clone method seems to return null in some circumstances, but clone is never
     allowed to return a null value.  If you are convinced this path is unreachable, throw an AssertionError
     instead.
       &lt;/p&gt;
-      
+
    </Details></BugPattern><BugPattern abbrev='HE' category='BAD_PRACTICE' type='HE_INHERITS_EQUALS_USE_HASHCODE'><ShortDescription>Class inherits equals() and uses Object.hashCode()</ShortDescription><Details>
 
   &lt;p&gt; This class inherits &lt;code&gt;equals(Object)&lt;/code&gt; from an abstract
@@ -202,7 +202,7 @@ The field is public or protected, so perhaps
 consider removing it from the class.&lt;/p&gt;
 
     </Details></BugPattern><BugPattern abbrev='IO' category='CORRECTNESS' type='IO_APPENDING_TO_OBJECT_OUTPUT_STREAM'><ShortDescription>Doomed attempt to append to an object output stream</ShortDescription><Details>
-      
+
       &lt;p&gt;
      This code opens a file in append mode and then wraps the result in an object output stream like as follows:
       &lt;/p&gt;
@@ -216,7 +216,7 @@ consider removing it from the class.&lt;/p&gt;
       could work is if on reading the file you plan to open it in random access mode and seek to the byte offset
       where the append started.
       &lt;/p&gt;
-      
+
     </Details></BugPattern><BugPattern abbrev='FI' category='BAD_PRACTICE' type='FI_USELESS'><ShortDescription>Finalizer does nothing but call superclass finalizer</ShortDescription><Details>
 
   &lt;p&gt; The only thing this &lt;code&gt;finalize()&lt;/code&gt; method does is call

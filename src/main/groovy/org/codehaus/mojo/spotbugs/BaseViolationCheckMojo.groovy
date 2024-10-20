@@ -364,7 +364,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      * @since 2.4.1
      */
     @Parameter(property = "spotbugs.maxAllowedViolations", defaultValue = "0")
-    int maxAllowedViolations 
+    int maxAllowedViolations
 
     /** Disable bugs log. */
     @Parameter(defaultValue = "false", property = "spotbugs.quiet")
