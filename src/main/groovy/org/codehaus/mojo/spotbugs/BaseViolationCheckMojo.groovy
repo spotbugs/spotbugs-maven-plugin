@@ -92,18 +92,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     @Parameter(defaultValue = '${project.reporting.outputDirectory}/xref-test')
     File xrefTestLocation
 
-    /** The directories containing the sources to be compiled. */
-    @Parameter(defaultValue = '${project.compileSourceRoots}', required = true, readonly = true)
-    List compileSourceRoots
-
-    /**
-     * The directories containing the test-sources to be compiled.
-     *
-     * @since 2.0
-     */
-    @Parameter(defaultValue = '${project.testCompileSourceRoots}', required = true, readonly = true)
-    List testSourceRoots
-
     /**
      * Run Spotbugs on the tests.
      *
