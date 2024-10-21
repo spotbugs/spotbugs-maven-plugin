@@ -157,18 +157,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Parameter(defaultValue = '${project.reporting.outputDirectory}/xref-test')
     File xrefTestLocation
 
-    /** The directories containing the sources to be compiled. */
-    @Parameter(defaultValue = '${project.compileSourceRoots}', required = true, readonly = true)
-    List compileSourceRoots
-
-    /**
-     * The directories containing the test-sources to be compiled.
-     *
-     * @since 2.0
-     */
-    @Parameter(defaultValue = '${project.testCompileSourceRoots}', required = true, readonly = true)
-    List testSourceRoots
-
     /**
      * Run Spotbugs on the tests.
      *
@@ -663,8 +651,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 generator.setIsJXRReportEnabled(isJxrPluginEnabled)
 
                 if (isJxrPluginEnabled) {
-                    generator.setCompileSourceRoots(this.compileSourceRoots)
-                    generator.setTestSourceRoots(this.testSourceRoots)
+                    generator.setCompileSourceRoots(session.getCurrentProject().compileSourceRoots)
+                    generator.setTestSourceRoots(session.getCurrentProject().testCompileSourceRoots)
                     generator.setXrefLocation(this.xrefLocation)
                     generator.setXrefTestLocation(this.xrefTestLocation)
                     generator.setIncludeTests(this.includeTests)
@@ -723,8 +711,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
             xDocsReporter.setOutputWriter(Files.newBufferedWriter(Paths.get("${xmlOutputDirectory}/spotbugs.xml"), Charset.forName(outputEncoding)))
             xDocsReporter.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
-            xDocsReporter.setCompileSourceRoots(this.compileSourceRoots)
-            xDocsReporter.setTestSourceRoots(this.testSourceRoots)
+            xDocsReporter.setCompileSourceRoots(session.getCurrentProject().compileSourceRoots)
+            xDocsReporter.setTestSourceRoots(session.getCurrentProject().testCompileSourceRoots)
 
             xDocsReporter.generateReport()
         }
@@ -938,9 +926,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug("  Adding Source directories (To process source exclusions)")
             args << "-sourcepath"
             String sourceRoots = ""
-            compileSourceRoots.each() { sourceRoots += it + File.pathSeparator }
+            session.getCurrentProject().compileSourceRoots.each() { sourceRoots += it + File.pathSeparator }
             if (includeTests) {
-                testSourceRoots.each() { sourceRoots + it + File.pathSeparator }
+                session.getCurrentProject().testCompileSourceRoots.each() { sourceRoots + it + File.pathSeparator }
             }
             args << sourceRoots.substring(0, sourceRoots.length() -1)
         }
@@ -1149,12 +1137,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                 def xmlProject = path.Project
 
-                compileSourceRoots.each() { compileSourceRoot ->
+                session.getCurrentProject().compileSourceRoots.each() { compileSourceRoot ->
                     xmlProject.appendNode { SrcDir(compileSourceRoot) }
                 }
 
                 if (testClassFilesDirectory.isDirectory() && includeTests) {
-                    testSourceRoots.each() { testSourceRoot ->
+                    session.getCurrentProject().testCompileSourceRoots.each() { testSourceRoot ->
                         xmlProject.appendNode { SrcDir(testSourceRoot) }
                     }
                 }
