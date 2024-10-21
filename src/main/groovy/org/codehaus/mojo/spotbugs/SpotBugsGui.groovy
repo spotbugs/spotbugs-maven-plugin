@@ -84,10 +84,6 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     @Parameter (defaultValue = '${session}', required = true, readonly = true)
     MavenSession session
 
-    /** Resource bundle for a specific locale. */
-    @Parameter(readonly = true)
-    ResourceBundle bundle
-
     /** Specifies the directory where the Spotbugs native xml output will be generated. */
     @Parameter(defaultValue = '${project.build.directory}', required = true)
     File spotbugsXmlOutputDirectory
