@@ -141,7 +141,7 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</developerConnection>
-        <tag>spotbugs-maven-plugin-4.8.6.4</tag>
+        <tag>HEAD</tag>
         <url>https://github.com/spotbugs/spotbugs-maven-plugin</url>
     </scm>
     <issueManagement>
@@ -656,8 +656,7 @@
                     <configuration>
                         <licenseSets>
                             <licenseSet>
-                                <header>LICENSE_HEADER</header>
-                                <excludes>
+                                <excludes combine.children="append">
                                     <exclude>**/*edu.umd.cs.findbugs.core.prefs</exclude>
                                     <exclude>**/*.txt</exclude>
                                 </excludes>
@@ -1004,7 +1003,6 @@
                                 <phase>pre-integration-test</phase>
                                 <configuration>
                                     <target>
-
                                         <echo>Copying Source for Tests......</echo>
                                         <echo>Making ${integrationTestSrc}</echo>
                                         <mkdir dir="${integrationTestSrc}" />
@@ -1014,7 +1012,6 @@
                                         <copy todir="${integrationTestSrc}">
                                             <fileset dir="${localTestSrc}" includes="${includesTestSrcPattern}" />
                                         </copy>
-
                                     </target>
                                 </configuration>
                             </execution>
