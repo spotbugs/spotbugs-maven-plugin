@@ -1198,7 +1198,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (sarifTempFile && sarifOutput && sarifTempFile.size() > 0) {
 
-            def slurpedResult = new JsonSlurper().parse(sarifTempFile)
+            Map slurpedResult = new JsonSlurper().parse(sarifTempFile)
             JsonBuilder builder = new JsonBuilder(slurpedResult)
 
             // With -Dspotbugs.sarifFullPath=true
