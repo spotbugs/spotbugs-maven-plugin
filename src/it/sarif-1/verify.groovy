@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2023 the original author or authors.
+ * Copyright 2005-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import groovy.json.JsonSlurper
-import groovy.xml.slurpersupport.GPathResult;
 
 File spotbugSarifFile = new File(basedir, 'target/spotbugsSarif.json')
 assert spotbugSarifFile.exists()
@@ -23,9 +22,9 @@ println '*******************'
 println 'Checking SARIF file'
 println '*******************'
 
-def path = new JsonSlurper().parse(spotbugSarifFile)
+Map path = new JsonSlurper().parse(spotbugSarifFile)
 
-def results = path.runs.results[0]
+List results = path.runs.results[0]
 println "BugInstance size is ${results.size()}"
 
 assert results.size() > 0

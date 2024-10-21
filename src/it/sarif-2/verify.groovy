@@ -26,9 +26,9 @@ String normalizePath(String path) {
     return path.replaceAll("\\\\","/");
 }
 
-def slurpedResult = new JsonSlurper().parse(spotbugSarifFile)
+Map slurpedResult = new JsonSlurper().parse(spotbugSarifFile)
 
-def results = slurpedResult.runs.results[0]
+List results = slurpedResult.runs.results[0]
 
 for (result in results) {
     for (loc in result.locations) {
