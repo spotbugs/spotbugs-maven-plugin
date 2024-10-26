@@ -20,6 +20,8 @@ import edu.umd.cs.findbugs.Version
 import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.StreamingMarkupBuilder
 
+import java.nio.charset.StandardCharsets;
+
 import org.apache.maven.plugin.logging.Log
 
 /**
@@ -132,7 +134,7 @@ class XDocsReporter {
     public void generateReport() {
 
         StreamingMarkupBuilder xmlBuilder = new StreamingMarkupBuilder()
-        xmlBuilder.encoding = "UTF-8"
+        xmlBuilder.encoding = StandardCharsets.UTF_8.name()
 
         def xdoc = {
             mkp.xmlDeclaration()

@@ -17,6 +17,9 @@ package org.codehaus.mojo.spotbugs
 
 import groovy.ant.AntBuilder
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 import javax.inject.Inject
 
 import org.apache.maven.execution.MavenSession
@@ -138,15 +141,15 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
         ant.java(classname: "edu.umd.cs.findbugs.LaunchAppropriateUI", fork: "true", failonerror: "true", clonevm: "true", maxmemory: "${maxHeap}m") {
 
-            String effectiveEncoding = System.getProperty("file.encoding", "UTF-8")
+            Charset effectiveEncoding = Charset.defaultCharset() ?: StandardCharsets.UTF_8
 
             if (encoding) {
-                effectiveEncoding = encoding
+                effectiveEncoding = Charset.forName(encoding)
             }
 
-            log.info("File Encoding is " + effectiveEncoding)
+            log.info("File Encoding is " + effectiveEncoding.name())
 
-            sysproperty(key: "file.encoding" , value: effectiveEncoding)
+            sysproperty(key: "file.encoding" , value: effectiveEncoding.name())
 
             // spotbugs assumes that multiple arguments (because of options) means text mode, so need to request gui explicitly
             jvmarg(value: "-Dfindbugs.launchUI=gui2")
