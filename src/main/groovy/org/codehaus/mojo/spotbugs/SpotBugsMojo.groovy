@@ -37,6 +37,7 @@ import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceLoader
 
 import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.stream.Collectors
@@ -1029,7 +1030,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             forceFileCreation(sarifTempFile)
         }
 
-        outputEncoding = outputEncoding ?: 'UTF-8'
+        outputEncoding = outputEncoding ?: StandardCharsets.UTF_8
 
         log.debug("****** Executing SpotBugsMojo *******")
 
@@ -1063,17 +1064,17 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         List<String> spotbugsArgs = getSpotbugsArgs(htmlTempFile, xmlTempFile, sarifTempFile)
 
-        String effectiveEncoding = System.getProperty("file.encoding", "UTF-8")
+        Charset effectiveEncoding = Charset.defaultCharset() ?: StandardCharsets.UTF_8
 
         if (sourceEncoding) {
-            effectiveEncoding = sourceEncoding
+            effectiveEncoding = Charset.forName(sourceEncoding)
         }
 
         ant.java(classname: "edu.umd.cs.findbugs.FindBugs2", fork: "${fork}", failonerror: "true", clonevm: "false", timeout: "${timeout}", maxmemory: "${maxHeap}m") {
 
-            log.debug("File Encoding is " + effectiveEncoding)
+            log.debug("File Encoding is " + effectiveEncoding.name())
 
-            sysproperty(key: "file.encoding", value: effectiveEncoding)
+            sysproperty(key: "file.encoding", value: effectiveEncoding.name())
 
             if (jvmArgs && fork) {
                 log.debug("Adding JVM Args => ${jvmArgs}")
@@ -1093,7 +1094,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             classpath() {
 
                 pluginArtifacts.each() { pluginArtifact ->
-                    log.debug("  Adding to pluginArtifact ->" + pluginArtifact.file.toString())
+                    log.debug("  Adding to pluginArtifact -> " + pluginArtifact.file.toString())
 
                     pathelement(location: pluginArtifact.file)
                 }
@@ -1163,12 +1164,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 outputFile.getParentFile().mkdirs()
                 outputFile.createNewFile()
 
-                BufferedWriter writer = Files.newBufferedWriter(outputFile.toPath(), Charset.forName(effectiveEncoding))
+                BufferedWriter writer = Files.newBufferedWriter(outputFile.toPath(), effectiveEncoding)
 
-                if (effectiveEncoding.equalsIgnoreCase("Cp1252")) {
+                if (effectiveEncoding.name().equalsIgnoreCase("Cp1252")) {
                     writer.write "<?xml version=\"1.0\" encoding=\"windows-1252\"?>"
                 } else {
-                    writer.write "<?xml version=\"1.0\" encoding=\"" + effectiveEncoding.toLowerCase(Locale.ENGLISH) + "\"?>"
+                    writer.write "<?xml version=\"1.0\" encoding=\"" + effectiveEncoding.name().toLowerCase(Locale.ENGLISH) + "\"?>"
                 }
 
                 writer.write SpotBugsInfo.EOL
