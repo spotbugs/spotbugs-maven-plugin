@@ -30,7 +30,7 @@ import org.apache.maven.plugin.logging.Log
 class XDocsReporter {
 
     /** The key to get the value if the line number is not available. */
-    static final String NOLINE_KEY = "report.spotbugs.noline"
+    static final String NOLINE_KEY = 'report.spotbugs.noline'
 
     /** The bundle to get the messages from. */
     ResourceBundle bundle
@@ -100,23 +100,23 @@ class XDocsReporter {
         String thresholdName
 
         switch (thresholdValue) {
-            case "1":
-                thresholdName = "High"
+            case '1':
+                thresholdName = 'High'
                 break
-            case "2":
-                thresholdName = "Normal"
+            case '2':
+                thresholdName = 'Normal'
                 break
-            case "3":
-                thresholdName = "Low"
+            case '3':
+                thresholdName = 'Low'
                 break
-            case "4":
-                thresholdName = "Exp"
+            case '4':
+                thresholdName = 'Exp'
                 break
-            case "5":
-                thresholdName = "Ignore"
+            case '5':
+                thresholdName = 'Ignore'
                 break
             default:
-                thresholdName = "Invalid Priority"
+                thresholdName = 'Invalid Priority'
         }
 
         return thresholdName
@@ -132,7 +132,6 @@ class XDocsReporter {
     }
 
     public void generateReport() {
-
         StreamingMarkupBuilder xmlBuilder = new StreamingMarkupBuilder()
         xmlBuilder.encoding = StandardCharsets.UTF_8.name()
 
@@ -149,7 +148,7 @@ class XDocsReporter {
                     String classStatsValue = classStats.'@class'.text()
                     String classStatsBugCount = classStats.'@bugs'.text()
 
-                    log.debug("classStats...")
+                    log.debug('classStats...')
                     log.debug("classStatsValue is ${classStatsValue}")
                     log.debug("classStatsBugCount is ${classStatsBugCount}")
 

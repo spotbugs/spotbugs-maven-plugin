@@ -48,7 +48,7 @@ import javax.inject.Inject
  * Generates a SpotBugs Report when the site plugin is run.
  * The HTML report is generated for site commands only.
  */
-@Mojo(name = "spotbugs", requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true, threadSafe = true)
+@Mojo(name = 'spotbugs', requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true, threadSafe = true)
 class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     /** Location where generated html will be created allowed to be not read only as defined in AbstractMavenParent. */
@@ -60,7 +60,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 1.0.0
      */
-    @Parameter(defaultValue = "false", property = "spotbugs.xmlOutput", required = true)
+    @Parameter(defaultValue = 'false', property = 'spotbugs.xmlOutput', required = true)
     boolean xmlOutput
 
     /**
@@ -68,7 +68,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 4.8.3.0
      */
-    @Parameter(defaultValue = "false", property = "spotbugs.noClassOk", required = true)
+    @Parameter(defaultValue = 'false', property = 'spotbugs.noClassOk', required = true)
     boolean noClassOk
 
     /**
@@ -76,7 +76,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 4.7.3.1
      */
-    @Parameter(defaultValue = "false", property = "spotbugs.htmlOutput", required = true)
+    @Parameter(defaultValue = 'false', property = 'spotbugs.htmlOutput', required = true)
     boolean htmlOutput
 
     /**
@@ -86,7 +86,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 4.3.1
      */
-    @Parameter(defaultValue = "false", property = "spotbugs.sarifOutput", required = true)
+    @Parameter(defaultValue = 'false', property = 'spotbugs.sarifOutput', required = true)
     boolean sarifOutput
 
     /**
@@ -94,7 +94,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 4.3.1
      */
-    @Parameter(defaultValue = "false", property = "spotbugs.sarifFullPath", required = true)
+    @Parameter(defaultValue = 'false', property = 'spotbugs.sarifFullPath', required = true)
     boolean sarifFullPath
 
     /**
@@ -102,7 +102,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 4.7.2.2
      */
-    @Parameter(defaultValue = '${project.build.directory}', property = "spotbugs.sarifOutputDirectory", required = true)
+    @Parameter(defaultValue = '${project.build.directory}', property = 'spotbugs.sarifOutputDirectory', required = true)
     File sarifOutputDirectory
 
 
@@ -111,7 +111,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 4.7.2.2
      */
-    @Parameter(defaultValue = "spotbugsSarif.json", property = "spotbugs.sarifOutputFilename", required = true)
+    @Parameter(defaultValue = 'spotbugsSarif.json', property = 'spotbugs.sarifOutputFilename', required = true)
     String sarifOutputFilename
 
     /**
@@ -135,7 +135,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 3.1.12.2
      */
-    @Parameter(defaultValue = "spotbugsXml.xml", property = "spotbugs.outputXmlFilename")
+    @Parameter(defaultValue = 'spotbugsXml.xml', property = 'spotbugs.outputXmlFilename')
     String spotbugsXmlOutputFilename
 
     /** Doxia Site Renderer. */
@@ -163,19 +163,19 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 2.0
      */
-    @Parameter(defaultValue = "false", property = "spotbugs.includeTests")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.includeTests')
     boolean includeTests
 
     /** Run Spotbugs with -sourcepath parameter populated with the known source roots. */
-    @Parameter(defaultValue = "false", property = "spotbugs.addSourceDirs")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.addSourceDirs')
     boolean addSourceDirs
 
     /** List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin. */
-    @Parameter(property = "plugin.artifacts", required = true, readonly = true)
+    @Parameter(property = 'plugin.artifacts', readonly = true, required = true)
     List pluginArtifacts
 
     /** Maven Session. */
-    @Parameter (defaultValue = '${session}', required = true, readonly = true)
+    @Parameter (defaultValue = '${session}', readonly = true, required = true)
     MavenSession session
 
     /**
@@ -184,7 +184,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 2.2
      */
-    @Parameter(defaultValue = '${project.build.sourceEncoding}', property = "encoding")
+    @Parameter(defaultValue = '${project.build.sourceEncoding}', property = 'encoding')
     String sourceEncoding
 
     /**
@@ -193,11 +193,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 2.2
      */
-    @Parameter(defaultValue = '${project.reporting.outputEncoding}', property = "outputEncoding")
+    @Parameter(defaultValue = '${project.reporting.outputEncoding}', property = 'outputEncoding')
     String outputEncoding
 
     /** Threshold of minimum bug severity to report. Valid values are High, Default, Low, Ignore, and Exp (for experimental). */
-    @Parameter(defaultValue = "Default", property = "spotbugs.threshold")
+    @Parameter(defaultValue = 'Default', property = 'spotbugs.threshold')
     String threshold
 
     /** Artifact resolver, needed to download the coreplugin jar. */
@@ -221,7 +221,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "spotbugs.includeFilterFile")
+    @Parameter(property = 'spotbugs.includeFilterFile')
     String includeFilterFile
 
     /**
@@ -239,7 +239,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 4.7.1.0
      */
-    @Parameter(property = "spotbugs.includeFilterFiles")
+    @Parameter(property = 'spotbugs.includeFilterFiles')
     List includeFilterFiles
 
     /**
@@ -255,7 +255,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "spotbugs.excludeFilterFile")
+    @Parameter(property = 'spotbugs.excludeFilterFile')
     String excludeFilterFile
 
     /**
@@ -271,7 +271,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 4.7.1.0
      */
-    @Parameter(property = "spotbugs.excludeFilterFiles")
+    @Parameter(property = 'spotbugs.excludeFilterFiles')
     List excludeFilterFiles
 
     /**
@@ -288,7 +288,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 2.4.1
      */
-    @Parameter(property = "spotbugs.excludeBugsFile")
+    @Parameter(property = 'spotbugs.excludeBugsFile')
     String excludeBugsFile
 
     /**
@@ -306,7 +306,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 4.7.1.0
      */
-    @Parameter(property = "spotbugs.excludeBugsFiles")
+    @Parameter(property = 'spotbugs.excludeBugsFiles')
     List excludeBugsFiles
 
     /**
@@ -314,11 +314,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(defaultValue = "Default", property = "spotbugs.effort")
+    @Parameter(defaultValue = 'Default', property = 'spotbugs.effort')
     String effort
 
     /** Turn on Spotbugs debugging. */
-    @Parameter(defaultValue = "false", property = "spotbugs.debug")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.debug')
     boolean debug
 
     /**
@@ -327,7 +327,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 1.1
      */
-    @Parameter(defaultValue = "false", property = "spotbugs.relaxed")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.relaxed')
     boolean relaxed
 
     /**
@@ -335,7 +335,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "spotbugs.visitors")
+    @Parameter(property = 'spotbugs.visitors')
     String visitors
 
     /**
@@ -343,7 +343,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "spotbugs.omitVisitors")
+    @Parameter(property = 'spotbugs.omitVisitors')
     String omitVisitors
 
     /**
@@ -358,7 +358,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "spotbugs.pluginList")
+    @Parameter(property = 'spotbugs.pluginList')
     String pluginList
 
     /**
@@ -366,7 +366,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * See <a href="./usage.html#Using Detectors from a Repository">Usage</a> for details.
      *
      * @since 2.4.1
-     * @since 4.8.3.0 includes classfier
+     * @since 4.8.3.0 includes classifier
      */
     @Parameter
     PluginArtifact[] plugins;
@@ -376,7 +376,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 1.1
      */
-    @Parameter(property = "spotbugs.onlyAnalyze")
+    @Parameter(property = 'spotbugs.onlyAnalyze')
     String onlyAnalyze
 
     /**
@@ -385,7 +385,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 2.3.2
      */
-    @Parameter(property = "spotbugs.nested", defaultValue = "false")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.nested')
     boolean nested
 
     /**
@@ -394,7 +394,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 2.3.2
      */
-    @Parameter(property = "spotbugs.trace", defaultValue = "false")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.trace')
     boolean trace
 
     /**
@@ -402,7 +402,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 2.4.1
      */
-    @Parameter(property = "spotbugs.maxRank")
+    @Parameter(property = 'spotbugs.maxRank')
     int maxRank
 
     /**
@@ -410,7 +410,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 1.1
      */
-    @Parameter(property = "spotbugs.skip", defaultValue = "false")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.skip')
     boolean skip
 
     /**
@@ -434,7 +434,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 2.0
      */
-    @Parameter(property = "spotbugs.failOnError", defaultValue = "true")
+    @Parameter(defaultValue = 'true', property = 'spotbugs.failOnError')
     boolean failOnError
 
     /**
@@ -442,7 +442,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 2.3.2
      */
-    @Parameter(property = "spotbugs.fork", defaultValue = "true")
+    @Parameter(defaultValue = 'true', property = 'spotbugs.fork')
     boolean fork
 
     /**
@@ -451,7 +451,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 2.2
      */
-    @Parameter(property = "spotbugs.maxHeap", defaultValue = "512")
+    @Parameter(defaultValue = '512', property = 'spotbugs.maxHeap')
     int maxHeap
 
     /**
@@ -462,7 +462,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 2.2
      */
-    @Parameter(property = "spotbugs.timeout", defaultValue = "600000")
+    @Parameter(defaultValue = '600000', property = 'spotbugs.timeout')
     int timeout
 
     /**
@@ -470,7 +470,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 2.4.1
      */
-    @Parameter(property = "spotbugs.jvmArgs")
+    @Parameter(property = 'spotbugs.jvmArgs')
     String jvmArgs
 
     /**
@@ -479,7 +479,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 3.0.1
      */
-    @Parameter(property = "spotbugs.skipEmptyReport", defaultValue = "false")
+    @Parameter(defaultValue = "false", property = 'spotbugs.skipEmptyReport')
     boolean skipEmptyReport
 
     /**
@@ -492,7 +492,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 3.0.2
      */
-    @Parameter(property = "spotbugs.userPrefs")
+    @Parameter(property = 'spotbugs.userPrefs')
     String userPrefs
 
     /**
@@ -500,7 +500,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @since 4.3.0
      */
-    @Parameter(property = "spotbugs.systemPropertyVariables")
+    @Parameter(property = 'spotbugs.systemPropertyVariables')
     Map<String, String> systemPropertyVariables
 
     /** The bug count. */
@@ -525,7 +525,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     boolean canGenerateReport() {
 
         boolean canGenerate
-        log.debug("****** SpotBugsMojo canGenerateReport *******")
+        log.debug('****** SpotBugsMojo canGenerateReport *******')
 
         if (!skip && classFilesDirectory.exists()) {
 
@@ -615,35 +615,35 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Override
     void executeReport(Locale locale) {
 
-        log.debug("****** SpotBugsMojo executeReport *******")
+        log.debug('****** SpotBugsMojo executeReport *******')
         executeCheck()
 
         if (skip || !canGenerateReport()) {
-            log.info("cannot generate report")
+            log.info('cannot generate report')
             return
         }
 
         if (log.isDebugEnabled()) {
             log.debug("Locale is ${locale.getLanguage()}")
-            log.debug("****** SpotBugsMojo executeReport *******")
-            log.debug("report Output Directory is " + getReportOutputDirectory())
-            log.debug("Output Directory is " + outputDirectory)
-            log.debug("Classes Directory is " + classFilesDirectory)
-            log.debug("  Plugin Artifacts to be added ->" + pluginArtifacts.toString())
+            log.debug('****** SpotBugsMojo executeReport *******')
+            log.debug('report Output Directory is ' + getReportOutputDirectory())
+            log.debug('Output Directory is ' + outputDirectory)
+            log.debug('Classes Directory is ' + classFilesDirectory)
+            log.debug('  Plugin Artifacts to be added -> ' + pluginArtifacts.toString())
         }
 
         generateXDoc(locale)
 
         if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
-            throw new MojoExecutionException("Cannot create html output directory")
+            throw new MojoExecutionException('Cannot create html output directory')
         }
 
         if (outputSpotbugsFile != null && outputSpotbugsFile.exists()) {
 
             if (skipEmptyReport && bugCount == 0) {
-                log.info("Skipping Generation Spotbugs HTML since there are not any bugs")
+                log.info('Skipping Generation Spotbugs HTML since there are not any bugs')
             } else {
-                log.debug("Generating Spotbugs HTML")
+                log.debug('Generating Spotbugs HTML')
 
                 SpotbugsReportGenerator generator = new SpotbugsReportGenerator(getSink(), getBundle(locale), this.session.getCurrentProject().getBasedir(), siteTool)
 
@@ -672,7 +672,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     @Override
     public void execute() {
-        log.debug("****** SpotBugsMojo execute *******")
+        log.debug('****** SpotBugsMojo execute *******')
 
         if (!skip) {
             executeCheck()
@@ -684,17 +684,17 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     }
 
     private void executeCheck() {
-        log.debug("****** SpotBugsMojo executeCheck *******")
+        log.debug('****** SpotBugsMojo executeCheck *******')
 
-        log.debug("Generating Spotbugs XML")
+        log.debug('Generating Spotbugs XML')
 
         if (!spotbugsXmlOutputDirectory.exists() && !spotbugsXmlOutputDirectory.mkdirs()) {
-            throw new MojoExecutionException("Cannot create xml output directory")
+            throw new MojoExecutionException('Cannot create xml output directory')
         }
     }
 
     private void generateXDoc(Locale locale) {
-        log.debug("****** SpotBugsMojo generateXDoc *******")
+        log.debug('****** SpotBugsMojo generateXDoc *******')
 
         if (outputSpotbugsFile == null || !outputSpotbugsFile.exists()) {
             return
@@ -703,10 +703,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         log.debug("xmlOutput is ${xmlOutput}")
 
         if (xmlOutput) {
-            log.debug("  Using the xdoc format")
+            log.debug('  Using the xdoc format')
 
             if (!xmlOutputDirectory.exists() && !xmlOutputDirectory.mkdirs()) {
-                throw new MojoExecutionException("Cannot create xdoc output directory")
+                throw new MojoExecutionException('Cannot create xdoc output directory')
             }
 
             XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
@@ -762,7 +762,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         reportPlugins.each() { reportPlugin ->
 
             log.debug("report plugin -> ${reportPlugin.getArtifactId()}")
-            if ("maven-jxr-plugin".equals(reportPlugin.getArtifactId())) {
+            if ('maven-jxr-plugin'.equals(reportPlugin.getArtifactId())) {
                 isEnabled = true
             }
         }
@@ -775,7 +775,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         this.bundle = ResourceBundle.getBundle(SpotBugsInfo.BUNDLE_NAME, locale, SpotBugsMojo.class.getClassLoader())
 
-        log.debug("Mojo Locale is " + this.bundle.getLocale().getLanguage())
+        log.debug('Mojo Locale is ' + this.bundle.getLocale().getLanguage())
 
         return bundle
     }
@@ -798,134 +798,134 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (userPrefs) {
             log.debug(" Adding User Preferences File -> ${userPrefs}")
 
-            args << "-userPrefs"
+            args << '-userPrefs'
             args << resourceHelper.getResourceFile(userPrefs.trim())
         }
 
         if (htmlOutput) {
-             args << "-html=" + htmlTempFile.getAbsolutePath()
+             args << '-html=' + htmlTempFile.getAbsolutePath()
         }
 
-        args << "-xml:withMessages=" + xmlTempFile.getAbsolutePath()
+        args << '-xml:withMessages=' + xmlTempFile.getAbsolutePath()
 
         if (sarifOutput) {
-            args << "-sarif=" + sarifTempFile.getAbsolutePath()
+            args << '-sarif=' + sarifTempFile.getAbsolutePath()
         }
 
         if (auxClasspathFile) {
-            args << "-auxclasspathFromFile"
+            args << '-auxclasspathFromFile'
             args << auxClasspathFile.getAbsolutePath()
         }
 
-        args << "-projectName"
+        args << '-projectName'
         args << "${project.name}"
 
         args << getEffortParameter()
         args << getThresholdParameter()
 
         if (debug) {
-            log.debug("progress on")
-            args << "-progress"
+            log.debug('progress on')
+            args << '-progress'
         }
 
         if (pluginList || plugins) {
-            args << "-pluginList"
+            args << '-pluginList'
             args << getSpotbugsPlugins()
         }
 
 
         if (visitors) {
-            args << "-visitors"
+            args << '-visitors'
             args << visitors
         }
 
         if (omitVisitors) {
-            args << "-omitVisitors"
+            args << '-omitVisitors'
             args << omitVisitors
         }
 
         if (relaxed) {
-            args << "-relaxed"
+            args << '-relaxed'
         }
 
         if (nested) {
-            args << "-nested:true"
+            args << '-nested:true'
         } else {
-            args << "-nested:false"
+            args << '-nested:false'
         }
 
         if (onlyAnalyze) {
-            args << "-onlyAnalyze"
-            args << Arrays.stream(onlyAnalyze.split(",")).map {
-                it.startsWith("file:") ? Files.lines(resourceHelper.getResourceFile(it.substring(5)).toPath()).collect(Collectors.joining(",")) : it
+            args << '-onlyAnalyze'
+            args << Arrays.stream(onlyAnalyze.split(SpotBugsInfo.COMMA)).map {
+                it.startsWith("file:") ? Files.lines(resourceHelper.getResourceFile(it.substring(5)).toPath()).collect(Collectors.joining(SpotBugsInfo.COMMA)) : it
             }.collect(Collectors.joining(","))
         }
 
         if (includeFilterFile) {
-            log.debug("  Adding Include Filter File ")
+            log.debug('  Adding Include Filter File ')
 
             String[] includefilters = includeFilterFile.split(SpotBugsInfo.COMMA)
 
             includefilters.each { includefilter ->
-                args << "-include"
+                args << '-include'
                 args << resourceHelper.getResourceFile(includefilter.trim())
             }
 
         }
 
         if (includeFilterFiles) {
-            log.debug("  Adding Include Filter Files ")
+            log.debug('  Adding Include Filter Files')
 
             includeFilterFiles.each { includefilter ->
-                args << "-include"
+                args << '-include'
                 args << resourceHelper.getResourceFile(includefilter.trim())
             }
 
         }
 
         if (excludeFilterFile) {
-            log.debug("  Adding Exclude Filter File ")
+            log.debug('  Adding Exclude Filter File')
             String[] excludefilters = excludeFilterFile.split(SpotBugsInfo.COMMA)
 
             excludefilters.each { excludeFilter ->
-                args << "-exclude"
+                args << '-exclude'
                 args << resourceHelper.getResourceFile(excludeFilter.trim())
             }
 
         }
 
         if (excludeFilterFiles) {
-            log.debug("  Adding Exclude Filter Files ")
+            log.debug('  Adding Exclude Filter Files')
 
             excludeFilterFiles.each { excludeFilter ->
-                args << "-exclude"
+                args << '-exclude'
                 args << resourceHelper.getResourceFile(excludeFilter.trim())
             }
 
         }
 
         if (excludeBugsFile) {
-            log.debug("  Adding Exclude Bug File (Baselines)")
+            log.debug('  Adding Exclude Bug File (Baselines)')
             String[] excludeFiles = excludeBugsFile.split(SpotBugsInfo.COMMA)
 
             excludeFiles.each() { excludeFile ->
-                args << "-excludeBugs"
+                args << '-excludeBugs'
                 args << resourceHelper.getResourceFile(excludeFile.trim())
             }
         }
 
         if (excludeBugsFiles) {
-            log.debug("  Adding Exclude Bug Files (Baselines)")
+            log.debug('  Adding Exclude Bug Files (Baselines)')
 
             excludeBugsFiles.each() { excludeFile ->
-                args << "-excludeBugs"
+                args << '-excludeBugs'
                 args << resourceHelper.getResourceFile(excludeFile.trim())
             }
         }
 
         if (addSourceDirs) {
-            log.debug("  Adding Source directories (To process source exclusions)")
-            args << "-sourcepath"
+            log.debug('  Adding Source directories (To process source exclusions)')
+            args << '-sourcepath'
             String sourceRoots = ""
             session.getCurrentProject().compileSourceRoots.each() { sourceRoots += it + File.pathSeparator }
             if (includeTests) {
@@ -935,23 +935,23 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (maxRank) {
-            args << "-maxRank"
+            args << '-maxRank'
             args << maxRank
         }
 
         if (classFilesDirectory.isDirectory()) {
-            log.debug("  Adding to Source Directory ->" + classFilesDirectory.absolutePath)
+            log.debug('  Adding to Source Directory -> ' + classFilesDirectory.absolutePath)
             args << classFilesDirectory.absolutePath
         }
 
         if (testClassFilesDirectory.isDirectory() && includeTests) {
-            log.debug("  Adding to Source Directory ->" + testClassFilesDirectory.absolutePath)
+            log.debug('  Adding to Source Directory -> ' + testClassFilesDirectory.absolutePath)
             args << testClassFilesDirectory.absolutePath
         }
 
         if (noClassOk) {
-            log.debug("  Adding no class ok")
-            args << "-noClassOk"
+            log.debug('  Adding no class ok')
+            args << '-noClassOk'
         }
 
         return args
@@ -973,16 +973,16 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         File auxClasspathFile = null
 
         if (auxClasspathElements) {
-            auxClasspathFile = File.createTempFile("auxclasspath", ".tmp")
+            auxClasspathFile = File.createTempFile('auxclasspath', '.tmp')
             auxClasspathFile.deleteOnExit()
-            log.debug("  AuxClasspath Elements ->" + auxClasspathElements)
+            log.debug('  AuxClasspath Elements -> ' + auxClasspathElements)
 
             List<String> auxClasspathList = auxClasspathElements.findAll { session.getCurrentProject().getBuild().outputDirectory != it.toString() }
             if (auxClasspathList.size() > 0) {
-                log.debug("  Last AuxClasspath is ->" + auxClasspathList[auxClasspathList.size() - 1])
+                log.debug('  Last AuxClasspath is -> ' + auxClasspathList[auxClasspathList.size() - 1])
 
                 auxClasspathList.each() { auxClasspathElement ->
-                    log.debug("  Adding to AuxClasspath ->" + auxClasspathElement.toString())
+                    log.debug('  Adding to AuxClasspath -> ' + auxClasspathElement.toString())
                     auxClasspathFile << auxClasspathElement.toString() + SpotBugsInfo.EOL
                 }
             }
@@ -1015,7 +1015,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     private void executeSpotbugs(File outputFile) {
 
-        log.debug("****** SpotBugsMojo executeSpotbugs *******")
+        log.debug('****** SpotBugsMojo executeSpotbugs *******')
 
         File htmlTempFile = new File("${outputDirectory}/spotbugs.html")
         if (htmlOutput) {
@@ -1032,7 +1032,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         outputEncoding = outputEncoding ?: StandardCharsets.UTF_8
 
-        log.debug("****** Executing SpotBugsMojo *******")
+        log.debug('****** Executing SpotBugsMojo *******')
 
         resourceManager.addSearchPath(FileResourceLoader.ID, session.getCurrentProject().getFile().getParentFile().getAbsolutePath())
         resourceManager.addSearchPath(SpotBugsInfo.URL, "")
@@ -1070,11 +1070,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             effectiveEncoding = Charset.forName(sourceEncoding)
         }
 
-        ant.java(classname: "edu.umd.cs.findbugs.FindBugs2", fork: "${fork}", failonerror: "true", clonevm: "false", timeout: "${timeout}", maxmemory: "${maxHeap}m") {
+        ant.java(classname: 'edu.umd.cs.findbugs.FindBugs2', fork: "${fork}", failonerror: 'true', clonevm: 'false', timeout: "${timeout}", maxmemory: "${maxHeap}m") {
 
-            log.debug("File Encoding is " + effectiveEncoding.name())
+            log.debug('File Encoding is ' + effectiveEncoding.name())
 
-            sysproperty(key: "file.encoding", value: effectiveEncoding.name())
+            sysproperty(key: 'file.encoding', value: effectiveEncoding.name())
 
             if (jvmArgs && fork) {
                 log.debug("Adding JVM Args => ${jvmArgs}")
@@ -1088,13 +1088,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
 
             if (debug || trace) {
-                sysproperty(key: "findbugs.debug", value: Boolean.TRUE)
+                sysproperty(key: 'findbugs.debug', value: Boolean.TRUE)
             }
 
             classpath() {
 
                 pluginArtifacts.each() { pluginArtifact ->
-                    log.debug("  Adding to pluginArtifact -> " + pluginArtifact.file.toString())
+                    log.debug('  Adding to pluginArtifact -> ' + pluginArtifact.file.toString())
 
                     pathelement(location: pluginArtifact.file)
                 }
@@ -1118,7 +1118,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug("SpotBugs duration is ${duration}")
         }
 
-        log.info("Done SpotBugs Analysis....")
+        log.info('Done SpotBugs Analysis....')
 
         if (htmlTempFile.exists() && htmlOutput && htmlTempFile.size() > 0) {
             // Do nothing more at this time
@@ -1167,16 +1167,16 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 BufferedWriter writer = Files.newBufferedWriter(outputFile.toPath(), effectiveEncoding)
 
                 if (effectiveEncoding.name().equalsIgnoreCase("Cp1252")) {
-                    writer.write "<?xml version=\"1.0\" encoding=\"windows-1252\"?>"
+                    writer.write '<?xml version="1.0" encoding="windows-1252"?>'
                 } else {
-                    writer.write "<?xml version=\"1.0\" encoding=\"" + effectiveEncoding.name().toLowerCase(Locale.ENGLISH) + "\"?>"
+                    writer.write '<?xml version="1.0" encoding="' + effectiveEncoding.name().toLowerCase(Locale.ENGLISH) + '"?>'
                 }
 
                 writer.write SpotBugsInfo.EOL
 
                 writer << xmlBuilder.bind { mkp.yield path }
             } else {
-                log.info("No bugs found")
+                log.info('No bugs found')
             }
 
             if (!log.isDebugEnabled()) {
@@ -1214,8 +1214,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                             }
                             loc.physicalLocation.artifactLocation.uri = newFileName
                         } else {
-                            log.warn("No source file found for $originalFullPath. " +
-                                    "The path include in the SARIF report could be incomplete.")
+                            log.warn("No source file found for ${originalFullPath}. "
+                                    + 'The path include in the SARIF report could be incomplete.')
                         }
                     }
 
@@ -1249,24 +1249,24 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         String thresholdParameter
 
         switch (threshold) {
-            case "High":
-                thresholdParameter = "-high"
+            case 'High':
+                thresholdParameter = '-high'
                 break
 
-            case "Exp":
-                thresholdParameter = "-experimental"
+            case 'Exp':
+                thresholdParameter = '-experimental'
                 break
 
-            case "Low":
-                thresholdParameter = "-low"
+            case 'Low':
+                thresholdParameter = '-low'
                 break
 
-            case "high":
-                thresholdParameter = "-high"
+            case 'high':
+                thresholdParameter = '-high'
                 break
 
             default:
-                thresholdParameter = "-medium"
+                thresholdParameter = '-medium'
                 break
         }
         log.debug("thresholdParameter is ${thresholdParameter}")

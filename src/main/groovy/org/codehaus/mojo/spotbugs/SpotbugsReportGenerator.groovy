@@ -33,71 +33,71 @@ import org.codehaus.plexus.util.PathTool
 class SpotbugsReportGenerator implements SpotBugsInfo {
 
     /** The key to get the value if the line number is not available. */
-    static final String NOLINE_KEY = "report.spotbugs.noline"
+    static final String NOLINE_KEY = 'report.spotbugs.noline'
 
     /** The key to get the column title for the line. */
-    static final String COLUMN_LINE_KEY = "report.spotbugs.column.line"
+    static final String COLUMN_LINE_KEY = 'report.spotbugs.column.line'
 
     /** The key to get the column title for the bug. */
-    static final String COLUMN_BUG_KEY = "report.spotbugs.column.bug"
+    static final String COLUMN_BUG_KEY = 'report.spotbugs.column.bug'
 
     /** The key to get the column title for the bugs. */
-    static final String COLUMN_BUGS_KEY = "report.spotbugs.column.bugs"
+    static final String COLUMN_BUGS_KEY = 'report.spotbugs.column.bugs'
 
     /** The key to get the column title for the category. */
-    static final String COLUMN_CATEGORY_KEY = "report.spotbugs.column.category"
+    static final String COLUMN_CATEGORY_KEY = 'report.spotbugs.column.category'
 
     /** The key to get the column title for the priority. */
-    static final String COLUMN_PRIORITY_KEY = "report.spotbugs.column.priority"
+    static final String COLUMN_PRIORITY_KEY = 'report.spotbugs.column.priority'
 
     /** The key to get the column title for the details. */
-    static final String COLUMN_DETAILS_KEY = "report.spotbugs.column.details"
+    static final String COLUMN_DETAILS_KEY = 'report.spotbugs.column.details'
 
     /** The key to get the report title of the Plug-In from the bundle. */
-    static final String REPORT_TITLE_KEY = "report.spotbugs.reporttitle"
+    static final String REPORT_TITLE_KEY = 'report.spotbugs.reporttitle'
 
     /** The key to get the report link title of the Plug-In from the bundle. */
-    static final String LINKTITLE_KEY = "report.spotbugs.linktitle"
+    static final String LINKTITLE_KEY = 'report.spotbugs.linktitle'
 
     /** The key to get the report link of the Plug-In from the bundle. */
-    static final String LINK_KEY = "report.spotbugs.link"
+    static final String LINK_KEY = 'report.spotbugs.link'
 
     /** The key to get the files title of the Plug-In from the bundle. */
-    static final String FILES_KEY = "report.spotbugs.files"
+    static final String FILES_KEY = 'report.spotbugs.files'
 
     /** The key to get the threshold of the report from the bundle. */
-    static final String THRESHOLD_KEY = "report.spotbugs.threshold"
+    static final String THRESHOLD_KEY = 'report.spotbugs.threshold'
 
     /** The key to get the effort of the report from the bundle. */
-    static final String EFFORT_KEY = "report.spotbugs.effort"
+    static final String EFFORT_KEY = 'report.spotbugs.effort'
 
     /** The key to get the link to SpotBugs description page from the bundle. */
-    static final String DETAILSLINK_KEY = "report.spotbugs.detailslink"
+    static final String DETAILSLINK_KEY = 'report.spotbugs.detailslink'
 
     /** The key to get the version title for SpotBugs from the bundle. */
-    static final String VERSIONTITLE_KEY = "report.spotbugs.versiontitle"
+    static final String VERSIONTITLE_KEY = 'report.spotbugs.versiontitle'
 
     /** The key to get the files title of the Plug-In from the bundle. */
-    static final String SUMMARY_KEY = "report.spotbugs.summary"
+    static final String SUMMARY_KEY = 'report.spotbugs.summary'
 
     /** The key to column title for the Class. */
-    static final String COLUMN_CLASS_KEY = "report.spotbugs.column.class"
+    static final String COLUMN_CLASS_KEY = 'report.spotbugs.column.class'
 
     /** The key to column title for the Classes. */
-    static final String COLUMN_CLASSES_KEY = "report.spotbugs.column.classes"
+    static final String COLUMN_CLASSES_KEY = 'report.spotbugs.column.classes'
 
     /** The key to column title for the errors. */
-    static final String COLUMN_ERRORS_KEY = "report.spotbugs.column.errors"
+    static final String COLUMN_ERRORS_KEY = 'report.spotbugs.column.errors'
 
     /**
      * The key to column title for the files.
      *
      * note: not used but throughout properties
      */
-    static final String COLUMN_FILES_KEY = "report.spotbugs.column.files"
+    static final String COLUMN_FILES_KEY = 'report.spotbugs.column.files'
 
     /** The key to column title for the files. */
-    static final String COLUMN_MISSINGCLASSES_KEY = "report.spotbugs.column.missingclasses"
+    static final String COLUMN_MISSINGCLASSES_KEY = 'report.spotbugs.column.missingclasses'
 
     /** The sink to write the report to. */
     Sink sink
@@ -191,7 +191,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         this.bugClasses = []
 
-        this.currentClassName = ""
+        this.currentClassName = ''
 
         this.bugCount = 0
         this.missingClassCount = 0
@@ -203,8 +203,8 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      * @see edu.umd.cs.findbugs.BugReporter#finish()
      */
     void printBody() {
-        log.debug("Finished searching for bugs!...")
-        log.debug("sink is " + sink)
+        log.debug('Finished searching for bugs!...')
+        log.debug('sink is ' + sink)
 
         bugClasses.each() { bugClass ->
             log.debug("finish bugClass is ${bugClass}")
@@ -214,7 +214,6 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         // close the report, write it
         sink.body_()
-
     }
 
     /**
@@ -264,7 +263,6 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         sink.italic_()
         sink.paragraph_()
         sink.section1_()
-
     }
 
     /**
@@ -274,7 +272,6 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      *            the bug to print
      */
     protected void printBug(String bugClass) {
-
         log.debug("printBug bugClass is ${bugClass}")
 
         openClassReportSection(bugClass)
@@ -319,7 +316,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             sink.tableCell()
 
             if (isJXRReportEnabled) {
-                log.debug("isJXRReportEnabled is enabled")
+                log.debug('isJXRReportEnabled is enabled')
                 sink.rawText(assembleJxrHyperlink(line))
             } else {
                 sink.text(line.@start.text())
@@ -339,7 +336,6 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         sink.table_()
 
         sink.section2_()
-
     }
 
     /**
@@ -353,11 +349,11 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      *
      */
     protected String assembleJxrHyperlink(GPathResult line) {
-        log.debug("Inside assembleJxrHyperlink")
-        log.debug("line is " + line.text())
-        log.debug("outputDirectory is " + outputDirectory.getAbsolutePath())
-        log.debug("xrefLocation is " + xrefLocation.getAbsolutePath())
-        log.debug("xrefTestLocation is " + xrefTestLocation.getAbsolutePath())
+        log.debug('Inside assembleJxrHyperlink')
+        log.debug('line is ' + line.text())
+        log.debug('outputDirectory is ' + outputDirectory.getAbsolutePath())
+        log.debug('xrefLocation is ' + xrefLocation.getAbsolutePath())
+        log.debug('xrefTestLocation is ' + xrefTestLocation.getAbsolutePath())
 
         String prefix
         compileSourceRoots.each { compileSourceRoot ->
@@ -378,12 +374,12 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             }
         }
 
-        String path = prefix + line.@classname.text().replaceAll("[.]", "/").replaceAll("[\$].*", "")
+        String path = prefix + line.@classname.text().replaceAll('[.]', '/').replaceAll('[$].*', '')
         String lineNumber = valueForLine(line)
 
         String hyperlink
         if (lineNumber != bundle.getString(NOLINE_KEY)) {
-            hyperlink = "<a href=\"" + path + ".html#L" + line.@start.text() + "\">" + lineNumber + "</a>"
+            hyperlink = '<a href="' + path + '.html#L' + line.@start.text() + '">' + lineNumber + '</a>'
         } else {
             hyperlink = lineNumber
         }
@@ -413,7 +409,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         log.debug("openClassReportSection bugClass is ${bugClass}")
 
-        log.debug("Opening Class Report Section")
+        log.debug('Opening Class Report Section')
 
         // Dollar '$' for nested classes is not valid character in sink.anchor() and therefore it is ignored
         // https://github.com/spotbugs/spotbugs-maven-plugin/issues/236
@@ -460,8 +456,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      * Print the Summary Section.
      */
     protected void printSummary() {
-
-        log.debug("Entering printSummary")
+        log.debug('Entering printSummary')
 
         sink.section1()
 
@@ -524,14 +519,14 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         sink.section1_()
 
-        log.debug("Exiting printSummary")
+        log.debug('Exiting printSummary')
     }
 
     /**
      * Print the File Summary Section.
      */
     protected void printFilesSummary() {
-        log.debug("Entering printFilesSummary")
+        log.debug('Entering printFilesSummary')
 
         sink.section1()
 
@@ -596,8 +591,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
     }
 
     public void generateReport() {
-
-        log.debug("Reporter Locale is " + this.bundle.getLocale().getLanguage())
+        log.debug('Reporter Locale is ' + this.bundle.getLocale().getLanguage())
 
         doHeading()
 
@@ -607,7 +601,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         printBody()
 
-        log.debug("Closing up report....................")
+        log.debug('Closing up report....................')
 
         sink.flush()
         sink.close()
@@ -636,7 +630,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
                     value = bundle.getString(NOLINE_KEY)
                 }
             } else {
-                value = startLine + "-" + endLine
+                value = startLine + '-' + endLine
             }
         } else {
             value = bundle.getString(NOLINE_KEY)

@@ -25,31 +25,31 @@ package org.codehaus.mojo.spotbugs
 interface SpotBugsInfo {
 
     /** The name of the Plug-In. */
-    static final String PLUGIN_NAME = "spotbugs"
+    static final String PLUGIN_NAME = 'spotbugs'
 
     /** The name of the property resource bundle (Filesystem). */
-    static final String BUNDLE_NAME = "spotbugs"
+    static final String BUNDLE_NAME = 'spotbugs'
 
     /** The key to get the name of the Plug-In from the bundle. */
-    static final String NAME_KEY = "report.spotbugs.name"
+    static final String NAME_KEY = 'report.spotbugs.name'
 
     /** The key to get the description of the Plug-In from the bundle. */
-    static final String DESCRIPTION_KEY = "report.spotbugs.description"
+    static final String DESCRIPTION_KEY = 'report.spotbugs.description'
 
     /** The key to get the source directory message of the Plug-In from the bundle. */
-    static final String SOURCE_ROOT_KEY = "report.spotbugs.sourceRoot"
+    static final String SOURCE_ROOT_KEY = 'report.spotbugs.sourceRoot'
 
     /** The key to get the source directory message of the Plug-In from the bundle. */
-    static final String TEST_SOURCE_ROOT_KEY = "report.spotbugs.testSourceRoot"
+    static final String TEST_SOURCE_ROOT_KEY = 'report.spotbugs.testSourceRoot'
 
     /** The key to get the java source message of the Plug-In from the bundle. */
-    static final String JAVA_SOURCES_KEY = "report.spotbugs.javasources"
+    static final String JAVA_SOURCES_KEY = 'report.spotbugs.javasources'
 
     /** The extensions to search files for. */
-    static final String[] EXTENSIONS = [ "class" ]
+    static final String[] EXTENSIONS = [ 'class' ]
 
     /** The comma character. */
-    static final String COMMA = ","
+    static final String COMMA = ','
 
     /** The forward slash character. */
     static final String FORWARD_SLASH = '/'
@@ -58,29 +58,29 @@ interface SpotBugsInfo {
     static final String BACKWARD_SLASH = '\\'
 
     /** The character to separate URL tokens. */
-    static final String URL_SEPARATOR = "/"
+    static final String URL_SEPARATOR = '/'
 
     /** The blank character. */
-    static final String BLANK = " "
+    static final String BLANK = ' '
 
     /** The period character. */
-    static final String PERIOD = "."
+    static final String PERIOD = '.'
 
     /** The end of line separator. */
     static final EOL = System.lineSeparator()
 
     /** The url static string. */
-    static final String URL = "url"
+    static final String URL = 'url'
 
     /** The static class suffix. */
     static final String CLASS_SUFFIX = '.class'
 
     /** The spotbugs efforts as max, min, and default as default. */
-    Map<String, String> spotbugsEfforts = [Max: "max", Min: "min", Default: "default"]
+    Map<String, String> spotbugsEfforts = [Max: 'max', Min: 'min', Default: 'default']
 
     /** The spotbugs thresholds as high, experimental, low, medium, and default as medium. */
-    Map<String, String> spotbugsThresholds = [High: "high", Exp: "experimental", Low: "low", Medium: "medium", Default: "medium"]
+    Map<String, String> spotbugsThresholds = [High: 'high', Exp: 'experimental', Low: 'low', Medium: 'medium', Default: 'medium']
 
     /** The spotbugs priority as unknown, high, medium, and low. */
-    List<String> spotbugsPriority = ["unknown", "High", "Medium", "Low"]
+    List<String> spotbugsPriority = ['unknown', 'High', 'Medium', 'Low']
 }

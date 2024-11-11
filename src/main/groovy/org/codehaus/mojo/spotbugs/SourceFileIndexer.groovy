@@ -59,9 +59,9 @@ class SourceFileIndexer {
         }
 
         //While not perfect, add the following paths will add basic support for Kotlin and Groovy
-        scanDirectory(new File(session.getCurrentProject().getBasedir(),"src/main/webapp"), allSourceFiles, basePath)
-        scanDirectory(new File(session.getCurrentProject().getBasedir(),"src/main/groovy"), allSourceFiles, basePath)
-        scanDirectory(new File(session.getCurrentProject().getBasedir(),"src/main/kotlin"), allSourceFiles, basePath)
+        scanDirectory(new File(session.getCurrentProject().getBasedir(), 'src/main/groovy'), allSourceFiles, basePath)
+        scanDirectory(new File(session.getCurrentProject().getBasedir(), 'src/main/kotlin'), allSourceFiles, basePath)
+        scanDirectory(new File(session.getCurrentProject().getBasedir(), 'src/main/webapp'), allSourceFiles, basePath)
 
         this.allSourceFiles = allSourceFiles
     }
@@ -74,7 +74,7 @@ class SourceFileIndexer {
      * @param files ArrayList where files found will be stored
      * @param baseDirectory This part will be truncated from path stored
      */
-    private void scanDirectory(File directory,List<String> files,String baseDirectory) {
+    private void scanDirectory(File directory, List<String> files, String baseDirectory) {
 
         if (!directory.exists()) {
             return
@@ -124,15 +124,13 @@ class SourceFileIndexer {
     protected String searchActualFilesLocation(String filename) {
 
         if (allSourceFiles == null) {
-            throw new RuntimeException("Source files cache must be built prior to searches.")
+            throw new RuntimeException('Source files cache must be built prior to searches.')
         }
 
         for (String fileFound in allSourceFiles) {
-
             if (fileFound.endsWith(filename)) {
                 return fileFound
             }
-
         }
 
         // Not found

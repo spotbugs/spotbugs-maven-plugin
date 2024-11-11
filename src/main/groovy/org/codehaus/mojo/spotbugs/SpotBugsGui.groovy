@@ -39,7 +39,7 @@ import org.codehaus.plexus.resource.ResourceManager
  *
  * @description Launch the Spotbugs GUI using the parameters in the POM fle.
  */
-@Mojo(name = "gui", requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
+@Mojo(name = 'gui', requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
 class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
     /** Locale to use for Resource bundle. */
@@ -50,19 +50,19 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     File classFilesDirectory
 
     /** Turn on Spotbugs debugging. */
-    @Parameter(defaultValue = "false", property="spotbugs.debug")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.debug')
     boolean debug
 
     /** List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin. */
-    @Parameter(property="plugin.artifacts", required = true, readonly = true)
+    @Parameter(property = 'plugin.artifacts', readonly = true, required = true)
     List pluginArtifacts
 
     /** Effort of the bug finders. Valid values are Min, Default and Max. */
-    @Parameter(defaultValue = "Default", property="spotbugs.effort")
+    @Parameter(defaultValue = 'Default', property = 'spotbugs.effort')
     String effort
 
     /** The plugin list to include in the report. This is a SpotbugsInfo.COMMA-delimited list. */
-    @Parameter(property="spotbugs.pluginList")
+    @Parameter(property = 'spotbugs.pluginList')
     String pluginList
 
     /**
@@ -84,7 +84,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     RepositorySystem factory
 
     /** Maven Session. */
-    @Parameter (defaultValue = '${session}', required = true, readonly = true)
+    @Parameter (defaultValue = '${session}', readonly = true, required = true)
     MavenSession session
 
     /** Specifies the directory where the Spotbugs native xml output will be generated. */
@@ -96,7 +96,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      *
      * @since 3.1.12.2
      */
-    @Parameter(defaultValue = "spotbugsXml.xml", property = "spotbugs.outputXmlFilename")
+    @Parameter(defaultValue = 'spotbugsXml.xml', property = 'spotbugs.outputXmlFilename')
     String spotbugsXmlOutputFilename
 
     /**
@@ -106,7 +106,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      *
      * @since 2.2
      */
-    @Parameter(defaultValue = '${project.build.sourceEncoding}', property="encoding")
+    @Parameter(defaultValue = '${project.build.sourceEncoding}', property = 'encoding')
     String encoding
 
     /**
@@ -114,7 +114,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      *
      * @since 2.2
      */
-    @Parameter(defaultValue = "512", property="spotbugs.maxHeap")
+    @Parameter(defaultValue = '512', property = 'spotbugs.maxHeap')
     int maxHeap
 
     /**
@@ -133,13 +133,13 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
         List<String> auxClasspathElements = session.getCurrentProject().compileClasspathElements
 
         if (debug) {
-            log.debug("  Plugin Artifacts to be added ->" + pluginArtifacts.toString())
+            log.debug('  Plugin Artifacts to be added -> ' + pluginArtifacts.toString())
         }
 
         ant.project.setProperty('basedir', spotbugsXmlOutputDirectory.getAbsolutePath())
-        ant.project.setProperty('verbose', "true")
+        ant.project.setProperty('verbose', 'true')
 
-        ant.java(classname: "edu.umd.cs.findbugs.LaunchAppropriateUI", fork: "true", failonerror: "true", clonevm: "true", maxmemory: "${maxHeap}m") {
+        ant.java(classname: 'edu.umd.cs.findbugs.LaunchAppropriateUI', fork: 'true', failonerror: 'true', clonevm: 'true', maxmemory: "${maxHeap}m") {
 
             Charset effectiveEncoding = Charset.defaultCharset() ?: StandardCharsets.UTF_8
 
@@ -147,12 +147,12 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
                 effectiveEncoding = Charset.forName(encoding)
             }
 
-            log.info("File Encoding is " + effectiveEncoding.name())
+            log.info('File Encoding is ' + effectiveEncoding.name())
 
             sysproperty(key: "file.encoding" , value: effectiveEncoding.name())
 
             // spotbugs assumes that multiple arguments (because of options) means text mode, so need to request gui explicitly
-            jvmarg(value: "-Dfindbugs.launchUI=gui2")
+            jvmarg(value: '-Dfindbugs.launchUI=gui2')
 
             // options must be added before the spotbugsXml path
             List<String> spotbugsArgs = new ArrayList<>()
@@ -160,7 +160,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
             spotbugsArgs << getEffortParameter()
 
             if (pluginList || plugins) {
-                spotbugsArgs << "-pluginList"
+                spotbugsArgs << '-pluginList'
                 spotbugsArgs << getSpotbugsPlugins()
             }
             spotbugsArgs.each { spotbugsArg ->
@@ -168,11 +168,11 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
                 arg(value: spotbugsArg)
             }
 
-            String spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + "/" + spotbugsXmlOutputFilename
+            String spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + SpotBugsInfo.FORWARD_SLASH + spotbugsXmlOutputFilename
             File spotbugsXml = new File(spotbugsXmlName)
 
             if (spotbugsXml.exists()) {
-                log.debug("  Found an SpotBugs XML at ->" + spotbugsXml.toString())
+                log.debug('  Found an SpotBugs XML at -> ' + spotbugsXml.toString())
                 arg(value: spotbugsXml)
             }
 
@@ -180,7 +180,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
                 pluginArtifacts.each() { pluginArtifact ->
                     if (debug) {
-                        log.debug("  Trying to Add to pluginArtifact ->" + pluginArtifact.file.toString())
+                        log.debug('  Trying to Add to pluginArtifact -> ' + pluginArtifact.file.toString())
                     }
 
                     pathelement(location: pluginArtifact.file)
