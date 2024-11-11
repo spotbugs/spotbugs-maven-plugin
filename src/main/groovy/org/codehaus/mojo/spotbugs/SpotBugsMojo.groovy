@@ -767,7 +767,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
         }
 
-        log.debug("jxr report links are ${isEnabled ? "enabled" : "disabled"}")
+        log.debug("jxr report links are ${isEnabled ? 'enabled' : 'disabled'}")
         return isEnabled
     }
 
