@@ -76,13 +76,13 @@ final class ResourceHelper {
         location = location?.replaceAll("[\\?\\:\\&\\=\\%]", "_")
         artifact = artifact?.replaceAll("[\\?\\:\\&\\=\\%]", "_")
 
-        log.debug("resource is " + resource)
-        log.debug("location is " + location)
-        log.debug("artifact is " + artifact)
+        log.debug('resource is ' + resource)
+        log.debug('location is ' + location)
+        log.debug('artifact is ' + artifact)
 
         File resourceFile = getResourceAsFile(resource, artifact)
 
-        log.debug("location of resourceFile file is " + resourceFile.absolutePath)
+        log.debug('location of resourceFile file is ' + resourceFile.absolutePath)
 
         return resourceFile
 
@@ -99,7 +99,7 @@ final class ResourceHelper {
         File outputResourceFile
 
         if (outputPath == null) {
-            outputResourceFile = Files.createTempFile("plexus-resources", "tmp")
+            outputResourceFile = Files.createTempFile('plexus-resources', 'tmp')
         } else if (outputDirectory != null) {
             outputResourceFile = new File(outputDirectory, outputPath)
         } else {
@@ -117,7 +117,7 @@ final class ResourceHelper {
             os << is
 
         } catch (IOException e) {
-            throw new FileResourceCreationException("Cannot create file-based resource.", e)
+            throw new FileResourceCreationException('Cannot create file-based resource.', e)
         }
 
         return outputResourceFile

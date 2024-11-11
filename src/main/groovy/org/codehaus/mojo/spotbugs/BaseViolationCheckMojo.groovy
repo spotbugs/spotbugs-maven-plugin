@@ -45,7 +45,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0.0
      */
-    @Parameter(defaultValue = "false", property = "spotbugs.xmlOutput", required = true)
+    @Parameter(defaultValue = 'false', property = 'spotbugs.xmlOutput', required = true)
     boolean xmlOutput
 
     /**
@@ -69,7 +69,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 3.1.12.2
      */
-    @Parameter(defaultValue = "spotbugsXml.xml", property = "spotbugs.outputXmlFilename")
+    @Parameter(defaultValue = 'spotbugsXml.xml', property = 'spotbugs.outputXmlFilename')
     String spotbugsXmlOutputFilename
 
     /** Doxia Site Renderer. */
@@ -97,15 +97,15 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.0
      */
-    @Parameter(defaultValue = "false", property = "spotbugs.includeTests")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.includeTests')
     boolean includeTests
 
     /** List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin. */
-    @Parameter(property = "plugin.artifacts", required = true, readonly = true)
+    @Parameter(property = 'plugin.artifacts', readonly = true, required = true)
     List pluginArtifacts
 
     /** Maven Session. */
-    @Parameter (defaultValue = '${session}', required = true, readonly = true)
+    @Parameter (defaultValue = '${session}', readonly = true, required = true)
     MavenSession session
 
     /**
@@ -114,7 +114,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.2
      */
-    @Parameter(defaultValue = '${project.build.sourceEncoding}', property = "encoding")
+    @Parameter(defaultValue = '${project.build.sourceEncoding}', property = 'encoding')
     String sourceEncoding
 
     /**
@@ -123,11 +123,14 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.2
      */
-    @Parameter(defaultValue = '${project.reporting.outputEncoding}', property = "outputEncoding")
+    @Parameter(defaultValue = '${project.reporting.outputEncoding}', property = 'outputEncoding')
     String outputEncoding
 
-    /** Threshold of minimum bug severity to report. Valid values are High, Default, Low, Ignore, and Exp (for experimental). */
-    @Parameter(defaultValue = "Default", property = "spotbugs.threshold")
+    /**
+     * Threshold of minimum bug severity to report. Valid values are 'High', 'Default', 'Low', 'Ignore',
+     * and 'Exp' (for experimental).
+     */
+    @Parameter(defaultValue = 'Default', property = 'spotbugs.threshold')
     String threshold
 
     /** Artifact resolver, needed to download the coreplugin jar. */
@@ -147,7 +150,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "spotbugs.includeFilterFile")
+    @Parameter(property = 'spotbugs.includeFilterFile')
     String includeFilterFile
 
     /**
@@ -163,7 +166,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "spotbugs.excludeFilterFile")
+    @Parameter(property = 'spotbugs.excludeFilterFile')
     String excludeFilterFile
 
     /**
@@ -180,7 +183,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.4.1
      */
-    @Parameter(property = "spotbugs.excludeBugsFile")
+    @Parameter(property = 'spotbugs.excludeBugsFile')
     String excludeBugsFile
 
     /**
@@ -188,11 +191,11 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(defaultValue = "Default", property = "spotbugs.effort")
+    @Parameter(defaultValue = 'Default', property = 'spotbugs.effort')
     String effort
 
     /** Turn on Spotbugs debugging. */
-    @Parameter(defaultValue = "false", property = "spotbugs.debug")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.debug')
     boolean debug
 
     /**
@@ -201,7 +204,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.1
      */
-    @Parameter(defaultValue = "false", property = "spotbugs.relaxed")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.relaxed')
     boolean relaxed
 
     /**
@@ -209,7 +212,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "spotbugs.visitors")
+    @Parameter(property = 'spotbugs.visitors')
     String visitors
 
     /**
@@ -217,7 +220,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property = "spotbugs.omitVisitors")
+    @Parameter(property = 'spotbugs.omitVisitors')
     String omitVisitors
 
     /**
@@ -232,7 +235,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.0-beta-1
      */
-    @Parameter(property="spotbugs.pluginList")
+    @Parameter(property = 'spotbugs.pluginList')
     String pluginList
 
     /**
@@ -240,7 +243,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.1
      */
-    @Parameter(property = "spotbugs.onlyAnalyze")
+    @Parameter(property = 'spotbugs.onlyAnalyze')
     String onlyAnalyze
 
     /**
@@ -249,7 +252,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.3.2
      */
-    @Parameter(property = "spotbugs.nested", defaultValue = "false")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.nested')
     boolean nested
 
     /**
@@ -258,7 +261,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.3.2
      */
-    @Parameter(property = "spotbugs.trace", defaultValue = "false")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.trace')
     boolean trace
 
     /**
@@ -266,7 +269,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.4.1
      */
-    @Parameter(property = "spotbugs.maxRank")
+    @Parameter(property = 'spotbugs.maxRank')
     int maxRank
 
     /**
@@ -274,7 +277,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 1.1
      */
-    @Parameter(property = "spotbugs.skip", defaultValue = "false")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.skip')
     boolean skip
 
     /**
@@ -298,7 +301,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.0
      */
-    @Parameter(property = "spotbugs.failOnError", defaultValue = "true")
+    @Parameter(defaultValue = 'true', property = 'spotbugs.failOnError')
     boolean failOnError
 
     /**
@@ -307,7 +310,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 4.0.1
      */
-    @Parameter(property = "spotbugs.failThreshold")
+    @Parameter(property = 'spotbugs.failThreshold')
     String failThreshold
 
     /**
@@ -315,7 +318,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.3.2
      */
-    @Parameter(property = "spotbugs.fork", defaultValue = "true")
+    @Parameter(defaultValue = 'true', property = 'spotbugs.fork')
     boolean fork
 
     /**
@@ -324,7 +327,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.2
      */
-    @Parameter(property = "spotbugs.maxHeap", defaultValue = "512")
+    @Parameter(defaultValue = '512', property = 'spotbugs.maxHeap')
     int maxHeap
 
     /**
@@ -335,7 +338,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.2
      */
-    @Parameter(property = "spotbugs.timeout", defaultValue = "600000")
+    @Parameter(defaultValue = '600000', property = 'spotbugs.timeout')
     int timeout
 
     /**
@@ -343,7 +346,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.4.1
      */
-    @Parameter(property = "spotbugs.jvmArgs")
+    @Parameter(property = 'spotbugs.jvmArgs')
     String jvmArgs
 
     /**
@@ -351,29 +354,29 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      *
      * @since 2.4.1
      */
-    @Parameter(property = "spotbugs.maxAllowedViolations", defaultValue = "0")
+    @Parameter(defaultValue = '0', property = 'spotbugs.maxAllowedViolations')
     int maxAllowedViolations
 
     /** Disable bugs log. */
-    @Parameter(defaultValue = "false", property = "spotbugs.quiet")
+    @Parameter(defaultValue = 'false', property = 'spotbugs.quiet')
     boolean quiet
 
     @Override
     void execute() {
-        log.debug("Executing spotbugs:check")
+        log.debug('Executing spotbugs:check')
 
         if (skip) {
-            log.info("Spotbugs plugin skipped")
+            log.info('Spotbugs plugin skipped')
             return
         } else if (!doSourceFilesExist()) {
-            log.debug("Nothing for SpotBugs to do here.")
+            log.debug('Nothing for SpotBugs to do here.')
             return
         }
 
-        log.debug("Here goes...............Executing spotbugs:check")
+        log.debug('Here goes...............Executing spotbugs:check')
 
         if (!spotbugsXmlOutputDirectory.exists() && !spotbugsXmlOutputDirectory.mkdirs()) {
-            throw new MojoExecutionException("Cannot create xml output directory")
+            throw new MojoExecutionException('Cannot create xml output directory')
         }
 
         File outputFile = new File("${spotbugsXmlOutputDirectory}/${spotbugsXmlOutputFilename}")
@@ -393,7 +396,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
                 log.info('No errors/warnings found')
                 return
             } else if (maxAllowedViolations > 0 && bugCount <= maxAllowedViolations) {
-                log.info("total ${bugCount} violations are found which is set to be acceptable using configured property maxAllowedViolations :" + maxAllowedViolations + "." + SpotBugsInfo.EOL + "Below are list of bugs ignored :" + SpotBugsInfo.EOL)
+                log.info("total ${bugCount} violations are found which is set to be acceptable using configured property maxAllowedViolations :${maxAllowedViolations}.${SpotBugsInfo.EOL}Below are list of bugs ignored :${SpotBugsInfo.EOL}")
                 printBugs(bugCount, bugs)
                 return
             }
@@ -427,7 +430,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             log.info(SpotBugsInfo.EOL + SpotBugsInfo.EOL + SpotBugsInfo.EOL + 'To see bug detail using the Spotbugs GUI, use the following command "mvn spotbugs:gui"' + SpotBugsInfo.EOL + SpotBugsInfo.EOL + SpotBugsInfo.EOL)
 
             if ((bugCountAboveThreshold || errorCount) && failOnError) {
-                throw new MojoExecutionException("failed with ${bugCountAboveThreshold} bugs and ${errorCount} errors ")
+                throw new MojoExecutionException("failed with ${bugCountAboveThreshold} bugs and ${errorCount} errors")
             }
         }
     }
@@ -436,16 +439,16 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         Collection<File> sourceFiles = new ArrayList<>()
 
         if (this.classFilesDirectory.isDirectory()) {
-            log.debug("looking for class files with extensions: " + SpotBugsInfo.EXTENSIONS)
+            log.debug('looking for class files with extensions: ' + SpotBugsInfo.EXTENSIONS)
             sourceFiles.addAll(FileUtils.listFiles(classFilesDirectory, SpotBugsInfo.EXTENSIONS, true))
         }
 
         if (this.includeTests && this.testClassFilesDirectory.isDirectory()) {
-            log.debug("looking for test class files: " + SpotBugsInfo.EXTENSIONS)
+            log.debug('looking for test class files: ' + SpotBugsInfo.EXTENSIONS)
             sourceFiles.addAll(FileUtils.listFiles(testClassFilesDirectory, SpotBugsInfo.EXTENSIONS, true))
         }
 
-        log.debug("SourceFiles: " + Arrays.toString(sourceFiles));
+        log.debug('SourceFiles: ' + Arrays.toString(sourceFiles));
         !sourceFiles.isEmpty()
     }
 

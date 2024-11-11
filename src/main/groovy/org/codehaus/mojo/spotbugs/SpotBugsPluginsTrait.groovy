@@ -57,28 +57,28 @@ trait SpotBugsPluginsTrait {
         String urlPlugins = ""
 
         if (pluginList) {
-            log.debug("  Adding Plugins ")
+            log.debug('  Adding Plugins ')
             String[] pluginJars = pluginList.split(SpotBugsInfo.COMMA)
 
             pluginJars.each() { pluginJar ->
                 String pluginFileName = pluginJar.trim()
 
-                if (!pluginFileName.endsWith(".jar")) {
+                if (!pluginFileName.endsWith('.jar')) {
                     throw new IllegalArgumentException("Plugin File is not a Jar file: " + pluginFileName)
                 }
 
                 try {
-                    log.debug("  Processing Plugin: " + pluginFileName.toString())
+                    log.debug('  Processing Plugin: ' + pluginFileName.toString())
 
-                    urlPlugins += resourceHelper.getResourceFile(pluginFileName.toString()).absolutePath + ((pluginJar == pluginJars[pluginJars.size() - 1]) ? "" : File.pathSeparator)
+                    urlPlugins += resourceHelper.getResourceFile(pluginFileName.toString()).absolutePath + ((pluginJar == pluginJars[pluginJars.size() - 1]) ? '' : File.pathSeparator)
                 } catch (MalformedURLException e) {
-                    throw new MojoExecutionException("The addin plugin has an invalid URL", e)
+                    throw new MojoExecutionException('The addin plugin has an invalid URL', e)
                 }
             }
         }
 
         if (plugins) {
-            log.debug("  Adding Plugins from a repository")
+            log.debug('  Adding Plugins from a repository')
 
             if (urlPlugins.size() > 0) {
                 urlPlugins += File.pathSeparator
@@ -87,13 +87,13 @@ trait SpotBugsPluginsTrait {
             Artifact pomArtifact
 
             ProjectBuildingRequest projectBuildingRequest = session.getProjectBuildingRequest()
-            log.debug("  Session is: " + session.toString())
+            log.debug('  Session is: ' + session.toString())
             projectBuildingRequest.setRemoteRepositories(session.getCurrentProject().getRemoteArtifactRepositories())
             projectBuildingRequest.setLocalRepository(session.getLocalRepository())
 
             plugins.each() { plugin ->
 
-                log.debug("  Processing Plugin: " + plugin.toString())
+                log.debug('  Processing Plugin: ' + plugin.toString())
                 if (plugin['classifier'] == null) {
                     log.debug("groupId is ${plugin['groupId']} ****** artifactId is ${plugin['artifactId']} ****** version is ${plugin['version']} ****** type is ${plugin['type']}")
                     pomArtifact = this.factory.createArtifact(plugin['groupId'], plugin['artifactId'], plugin['version'], "", plugin['type'])
@@ -127,16 +127,16 @@ trait SpotBugsPluginsTrait {
         String effortParameter
 
         switch (effort) {
-            case "Max":
-                effortParameter = "max"
+            case 'Max':
+                effortParameter = 'max'
                 break
 
-            case "Min":
-                effortParameter = "min"
+            case 'Min':
+                effortParameter = 'min'
                 break
 
             default:
-                effortParameter = "default"
+                effortParameter = 'default'
                 break
         }
 
