@@ -36,7 +36,7 @@ trait SpotBugsPluginsTrait {
     abstract Log getLog()
     abstract ResourceManager getResourceManager()
 
-    // TODO This has been fixed for 2 years now, apply as noted...
+    // TODO This has been fixed for years now, apply as noted...
     // properties in traits should be supported but don't compile currently:
     // https://issues.apache.org/jira/browse/GROOVY-7536
     // when fixed, should move pluginList and plugins properties here
