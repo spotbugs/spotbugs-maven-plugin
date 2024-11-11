@@ -448,7 +448,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             sourceFiles.addAll(FileUtils.listFiles(testClassFilesDirectory, SpotBugsInfo.EXTENSIONS, true))
         }
 
-        log.debug('SourceFiles: ' + Arrays.toString(sourceFiles));
+        log.debug('SourceFiles: ' + Arrays.toString(sourceFiles))
         !sourceFiles.isEmpty()
     }
 
@@ -458,5 +458,4 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             log.error(bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK + bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
         }
     }
-
 }

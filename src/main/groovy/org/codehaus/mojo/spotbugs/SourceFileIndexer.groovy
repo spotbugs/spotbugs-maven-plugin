@@ -100,7 +100,6 @@ class SourceFileIndexer {
                 }
             }
         }
-
     }
 
     /**
@@ -136,5 +135,4 @@ class SourceFileIndexer {
         // Not found
         return null
     }
-
 }

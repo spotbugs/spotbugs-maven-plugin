@@ -17,8 +17,8 @@ package org.codehaus.mojo.spotbugs
 
 import groovy.ant.AntBuilder
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 
 import javax.inject.Inject
 
@@ -149,7 +149,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
             log.info('File Encoding is ' + effectiveEncoding.name())
 
-            sysproperty(key: "file.encoding" , value: effectiveEncoding.name())
+            sysproperty(key: 'file.encoding' , value: effectiveEncoding.name())
 
             // spotbugs assumes that multiple arguments (because of options) means text mode, so need to request gui explicitly
             jvmarg(value: '-Dfindbugs.launchUI=gui2')
@@ -188,5 +188,4 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
             }
         }
     }
-
 }

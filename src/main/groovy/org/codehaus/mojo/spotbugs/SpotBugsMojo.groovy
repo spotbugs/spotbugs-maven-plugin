@@ -19,7 +19,7 @@ import groovy.ant.AntBuilder
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovy.xml.XmlSlurper
-import groovy.xml.slurpersupport.GPathResult;
+import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.StreamingMarkupBuilder
 
 import org.apache.maven.doxia.siterenderer.Renderer
@@ -37,7 +37,7 @@ import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceLoader
 
 import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.stream.Collectors
@@ -369,7 +369,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @since 4.8.3.0 includes classifier
      */
     @Parameter
-    PluginArtifact[] plugins;
+    PluginArtifact[] plugins
 
     /**
      * Restrict analysis to the given comma-separated list of classes and packages.
@@ -717,7 +717,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             xDocsReporter.generateReport()
         }
-
     }
 
     /**
@@ -803,7 +802,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (htmlOutput) {
-             args << '-html=' + htmlTempFile.getAbsolutePath()
+            args << '-html=' + htmlTempFile.getAbsolutePath()
         }
 
         args << '-xml:withMessages=' + xmlTempFile.getAbsolutePath()
@@ -870,7 +869,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 args << '-include'
                 args << resourceHelper.getResourceFile(includefilter.trim())
             }
-
         }
 
         if (includeFilterFiles) {
@@ -880,7 +878,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 args << '-include'
                 args << resourceHelper.getResourceFile(includefilter.trim())
             }
-
         }
 
         if (excludeFilterFile) {
@@ -891,7 +888,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 args << '-exclude'
                 args << resourceHelper.getResourceFile(excludeFilter.trim())
             }
-
         }
 
         if (excludeFilterFiles) {
@@ -901,7 +897,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 args << '-exclude'
                 args << resourceHelper.getResourceFile(excludeFilter.trim())
             }
-
         }
 
         if (excludeBugsFile) {
@@ -1109,7 +1104,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 log.debug("System property ${sysProp.key} is ${sysProp.value}")
                 sysproperty(key: sysProp.key, value: sysProp.value)
             }
-
         }
 
         long duration
@@ -1182,7 +1176,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             if (!log.isDebugEnabled()) {
                 xmlTempFile.delete()
             }
-
         }
 
         if (sarifTempFile && sarifOutput && sarifTempFile.size() > 0) {
@@ -1218,7 +1211,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                                     + 'The path include in the SARIF report could be incomplete.')
                         }
                     }
-
                 }
             }
 
@@ -1233,7 +1225,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 sarifTempFile.delete()
             }
         }
-
     }
 
     /**
@@ -1272,7 +1263,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         log.debug("thresholdParameter is ${thresholdParameter}")
 
         return thresholdParameter
-
     }
 
     /**
@@ -1285,5 +1275,4 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         super.setReportOutputDirectory(reportOutputDirectory)
         this.outputDirectory = reportOutputDirectory
     }
-
 }
