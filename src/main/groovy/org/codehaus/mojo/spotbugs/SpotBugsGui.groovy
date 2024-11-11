@@ -17,8 +17,8 @@ package org.codehaus.mojo.spotbugs
 
 import groovy.ant.AntBuilder
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 
 import javax.inject.Inject
 
@@ -188,5 +188,4 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
             }
         }
     }
-
 }

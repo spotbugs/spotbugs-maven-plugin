@@ -46,7 +46,7 @@ interface SpotBugsInfo {
     static final String JAVA_SOURCES_KEY = 'report.spotbugs.javasources'
 
     /** The extensions to search files for. */
-    static final String[] EXTENSIONS = [ 'class' ]
+    static final String[] EXTENSIONS = ['class']
 
     /** The comma character. */
     static final String COMMA = ','
@@ -82,5 +82,10 @@ interface SpotBugsInfo {
     Map<String, String> spotbugsThresholds = [High: 'high', Exp: 'experimental', Low: 'low', Medium: 'medium', Default: 'medium']
 
     /** The spotbugs priority as unknown, high, medium, and low. */
-    List<String> spotbugsPriority = ['unknown', 'High', 'Medium', 'Low']
+    List<String> spotbugsPriority = [
+        'unknown',
+        'High',
+        'Medium',
+        'Low'
+    ]
 }

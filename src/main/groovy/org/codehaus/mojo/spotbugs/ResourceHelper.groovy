@@ -85,7 +85,6 @@ final class ResourceHelper {
         log.debug('location of resourceFile file is ' + resourceFile.absolutePath)
 
         return resourceFile
-
     }
 
     private File getResourceAsFile(String name, String outputPath) {
@@ -115,12 +114,10 @@ final class ResourceHelper {
             FileOutputStream os = new FileOutputStream(outputResourceFile)
 
             os << is
-
         } catch (IOException e) {
             throw new FileResourceCreationException('Cannot create file-based resource.', e)
         }
 
         return outputResourceFile
     }
-
 }

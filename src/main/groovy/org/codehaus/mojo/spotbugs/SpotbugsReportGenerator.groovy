@@ -638,5 +638,4 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         return value
     }
-
 }

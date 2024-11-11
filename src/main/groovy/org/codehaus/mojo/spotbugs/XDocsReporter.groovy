@@ -20,7 +20,7 @@ import edu.umd.cs.findbugs.Version
 import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.StreamingMarkupBuilder
 
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.StandardCharsets
 
 import org.apache.maven.plugin.logging.Log
 
@@ -163,7 +163,7 @@ class XDocsReporter {
                         spotbugsResults.BugInstance.each() { bugInstance ->
 
                             if (bugInstance.Class.find{ it.@primary == "true" }.@classname.text() != bugClass) {
-                               return
+                                return
                             }
 
                             String type = bugInstance.@type.text()
@@ -215,5 +215,4 @@ class XDocsReporter {
         outputWriter << xmlBuilder.bind(xdoc)
         outputWriter.close()
     }
-
 }

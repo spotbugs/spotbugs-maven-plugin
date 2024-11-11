@@ -144,5 +144,4 @@ trait SpotBugsPluginsTrait {
 
         return "-effort:" + effortParameter
     }
-
 }
