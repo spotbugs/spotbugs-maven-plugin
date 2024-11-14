@@ -209,7 +209,7 @@
         <pluginPluginVersion>3.15.1</pluginPluginVersion>
         <scmPluginVersion>2.1.0</scmPluginVersion>
         <sitePluginVersion>3.12.1</sitePluginVersion>
-        <versionsPluginVersion>2.17.1</versionsPluginVersion>
+        <versionsPluginVersion>2.18.0</versionsPluginVersion>
 
         <spotbugsTestDebug>false</spotbugsTestDebug>
         <integrationTestSrc>${project.build.directory}/it-src-spotbugs</integrationTestSrc>
