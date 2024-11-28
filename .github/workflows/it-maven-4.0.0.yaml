@@ -12,7 +12,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: 21
           distribution: zulu
       - name: Load Maven 4.0.0-rc-1
         run: mvn -B -V org.apache.maven.plugins:maven-wrapper-plugin:3.3.2:wrapper -Dmaven=4.0.0-rc-1 --no-transfer-progress
