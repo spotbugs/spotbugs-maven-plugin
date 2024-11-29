@@ -254,6 +254,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- bom control -->
             <dependency>
                 <groupId>org.ow2.asm</groupId>
                 <artifactId>asm-bom</artifactId>
@@ -274,6 +275,13 @@
                 <version>${slf4jVersion}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- individual control -->
+            <dependency>
+                <groupId>org.apache.bcel</groupId>
+                <artifactId>bcel</artifactId>
+                <version>${bcel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -306,13 +314,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-        </dependency>
-
-        <!-- bcel -->
-        <dependency>
-            <groupId>org.apache.bcel</groupId>
-            <artifactId>bcel</artifactId>
-            <version>${bcel.version}</version>
         </dependency>
 
         <!-- gson -->
