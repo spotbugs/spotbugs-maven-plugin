@@ -352,11 +352,6 @@
 
         <dependency>
             <groupId>org.apache.groovy</groupId>
-            <artifactId>groovy-dateutil</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-docgenerator</artifactId>
             <optional>true</optional>
         </dependency>
