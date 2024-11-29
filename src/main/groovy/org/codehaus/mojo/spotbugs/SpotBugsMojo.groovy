@@ -660,6 +660,18 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
     }
 
+    public void execute() {
+        log.debug('****** SpotBugsMojo execute *******')
+
+        if (!skip) {
+            executeCheck()
+            if (canGenerateReport()) {
+                Locale locale = Locale.getDefault()
+                generateXDoc(locale)
+            }
+        }
+    }
+
     private void executeCheck() {
         log.debug('****** SpotBugsMojo executeCheck *******')
 
