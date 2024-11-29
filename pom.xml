@@ -199,7 +199,6 @@
         <plexusUtilsVersion>4.0.2</plexusUtilsVersion>
         <plexusXmlVersion>3.0.1</plexusXmlVersion>
 
-        <antrunPluginVersion>3.1.0</antrunPluginVersion>
         <l10nPluginVersion>1.1.0</l10nPluginVersion>
         <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
         <gmavenPluginVersion>4.0.1</gmavenPluginVersion>
@@ -993,7 +992,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>${antrunPluginVersion}</version>
                         <executions>
                             <execution>
                                 <id>prepare-integration-test-local-spotbugs-src</id>
@@ -1003,12 +1001,12 @@
                                 <phase>pre-integration-test</phase>
                                 <configuration>
                                     <target>
-                                        <echo>Copying Source for Tests......</echo>
-                                        <echo>Making ${integrationTestSrc}</echo>
+                                        <echo level="debug">Copying Source for Tests......</echo>
+                                        <echo level="debug">Making ${integrationTestSrc}</echo>
                                         <mkdir dir="${integrationTestSrc}" />
-                                        <echo>Copying to ${integrationTestSrc}</echo>
-                                        <echo>from ${localTestSrc}</echo>
-                                        <echo>for ${includesTestSrcPattern}</echo>
+                                        <echo level="debug">Copying to ${integrationTestSrc}</echo>
+                                        <echo level="debug">from ${localTestSrc}</echo>
+                                        <echo level="debug">for ${includesTestSrcPattern}</echo>
                                         <copy todir="${integrationTestSrc}">
                                             <fileset dir="${localTestSrc}" includes="${includesTestSrcPattern}" />
                                         </copy>

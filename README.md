@@ -13,6 +13,7 @@ Building spotbugs-maven-plugin Requirements
 ===========================================
 
 Java 17+ is required to build the project.  Java 8+ is required for spotbugs analysis.
+Maven 3.9.9 is required to build the project.  It can be used as low as maven 3.6.3 in usage.
 
 spotbugs-maven-plugin
 =====================
@@ -61,7 +62,7 @@ mvn -Dmaven.surefire.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspe
 
 Run gui with a specific version 
 ```
-mvn com.github.spotbugs:spotbugs-maven-plugin:4.8.6.2:gui
+mvn com.github.spotbugs:spotbugs-maven-plugin:4.8.6.6:gui
 ```
 
 ## Creating new site examples ##
