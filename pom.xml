@@ -1001,12 +1001,12 @@
                                 <phase>pre-integration-test</phase>
                                 <configuration>
                                     <target>
-                                        <echo>Copying Source for Tests......</echo>
-                                        <echo>Making ${integrationTestSrc}</echo>
+                                        <echo level="debug">Copying Source for Tests......</echo>
+                                        <echo level="debug">Making ${integrationTestSrc}</echo>
                                         <mkdir dir="${integrationTestSrc}" />
-                                        <echo>Copying to ${integrationTestSrc}</echo>
-                                        <echo>from ${localTestSrc}</echo>
-                                        <echo>for ${includesTestSrcPattern}</echo>
+                                        <echo level="debug">Copying to ${integrationTestSrc}</echo>
+                                        <echo level="debug">from ${localTestSrc}</echo>
+                                        <echo level="debug">for ${includesTestSrcPattern}</echo>
                                         <copy todir="${integrationTestSrc}">
                                             <fileset dir="${localTestSrc}" includes="${includesTestSrcPattern}" />
                                         </copy>
