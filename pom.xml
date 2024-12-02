@@ -211,7 +211,7 @@
         <gmavenPluginVersion>4.0.1</gmavenPluginVersion>
         <invokerPluginVersion>3.8.1</invokerPluginVersion>
         <javadocPluginVersion>3.11.1</javadocPluginVersion>
-        <pluginPluginVersion>3.14.0</pluginPluginVersion>
+        <pluginPluginVersion>3.15.1</pluginPluginVersion>
         <scmPluginVersion>2.1.0</scmPluginVersion>
 
         <spotbugsTestDebug>false</spotbugsTestDebug>
