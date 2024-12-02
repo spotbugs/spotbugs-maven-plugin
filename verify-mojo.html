@@ -10,7 +10,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content="Apache Maven Doxia Site Renderer 1.11.1" />
-    <title>SpotBugs Maven Plugin &#x2013; spotbugs:spotbugs</title>
+    <title>SpotBugs Maven Plugin &#x2013; spotbugs:verify</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido-1.12.0.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -31,7 +31,7 @@
         <div id="breadcrumbs">
           <ul class="breadcrumb">
       <li><a href="index.html" title="SpotBugs Maven Plugin">SpotBugs Maven Plugin</a><span class="divider">»</span></li>
-    <li class="active ">spotbugs:spotbugs</li>
+    <li class="active ">spotbugs:verify</li>
         <li id="publishDate" class="pull-right"><span class="divider">|</span> Last Published: 2024-12-02</li>
           <li id="projectVersion" class="pull-right"><span class="divider">|</span>Version: 4.8.6.7-SNAPSHOT</li>
         <li class="pull-right"><a href="https://github.com/spotbugs/" class="externalLink" title="SpotBugs">SpotBugs</a></li>
@@ -70,18 +70,17 @@
         </header>
         <main id="bodyColumn"  class="span10" >
 <section>
-<h2><a name="spotbugs:spotbugs"></a>spotbugs:spotbugs</h2><a name="spotbugs:spotbugs"></a>
-<p><strong>Note</strong>:</p>
-<p>This goal should be used as a Maven report.</p>
+<h2><a name="spotbugs:verify"></a>spotbugs:verify</h2><a name="spotbugs:verify"></a>
 <p><strong>Full name</strong>:</p>
-<p>com.github.spotbugs:spotbugs-maven-plugin:4.8.6.7-SNAPSHOT:spotbugs</p>
+<p>com.github.spotbugs:spotbugs-maven-plugin:4.8.6.7-SNAPSHOT:verify</p>
 <p><strong>Description</strong>:</p>
 <p>No description.</p>
 <p><strong>Attributes</strong>:</p>
 <ul>
 <li>Requires a Maven project to be executed.</li>
 <li>Requires dependency resolution of artifacts in scope: <code>test</code>.</li>
-<li>The goal is thread-safe and supports parallel builds.</li></ul><section>
+<li>The goal is thread-safe and supports parallel builds.</li>
+<li>Binds by default to the <a class="externalLink" href="https://maven.apache.org/ref/current/maven-core/lifecycles.html">lifecycle phase</a>: <code>verify</code>.</li></ul><section>
 <h3><a name="Required_Parameters"></a>Required Parameters</h3><a name="Required_Parameters"></a>
 <table border="0" class="table table-striped">
 <tr class="a">
@@ -95,40 +94,10 @@
 <td><code>-</code></td>
 <td>No description.<br /><strong>Default</strong>: <code>${project.build.outputDirectory}</code></td></tr>
 <tr class="a">
-<td align="left"><a href="#htmlOutput"><code>&lt;htmlOutput&gt;</code></a></td>
-<td><code>boolean</code></td>
-<td><code>-</code></td>
-<td>No description.<br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>spotbugs.htmlOutput</code></td></tr>
-<tr class="b">
-<td align="left"><a href="#noClassOk"><code>&lt;noClassOk&gt;</code></a></td>
-<td><code>boolean</code></td>
-<td><code>-</code></td>
-<td>No description.<br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>spotbugs.noClassOk</code></td></tr>
-<tr class="a">
 <td align="left"><a href="#outputDirectory"><code>&lt;outputDirectory&gt;</code></a></td>
 <td><code>File</code></td>
 <td><code>-</code></td>
 <td>No description.<br /><strong>Default</strong>: <code>${project.reporting.outputDirectory}</code></td></tr>
-<tr class="b">
-<td align="left"><a href="#sarifFullPath"><code>&lt;sarifFullPath&gt;</code></a></td>
-<td><code>boolean</code></td>
-<td><code>-</code></td>
-<td>No description.<br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>spotbugs.sarifFullPath</code></td></tr>
-<tr class="a">
-<td align="left"><a href="#sarifOutput"><code>&lt;sarifOutput&gt;</code></a></td>
-<td><code>boolean</code></td>
-<td><code>-</code></td>
-<td>No description.<br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>spotbugs.sarifOutput</code></td></tr>
-<tr class="b">
-<td align="left"><a href="#sarifOutputDirectory"><code>&lt;sarifOutputDirectory&gt;</code></a></td>
-<td><code>File</code></td>
-<td><code>-</code></td>
-<td>No description.<br /><strong>Default</strong>: <code>${project.build.directory}</code><br /><strong>User Property</strong>: <code>spotbugs.sarifOutputDirectory</code></td></tr>
-<tr class="a">
-<td align="left"><a href="#sarifOutputFilename"><code>&lt;sarifOutputFilename&gt;</code></a></td>
-<td><code>String</code></td>
-<td><code>-</code></td>
-<td>No description.<br /><strong>Default</strong>: <code>spotbugsSarif.json</code><br /><strong>User Property</strong>: <code>spotbugs.sarifOutputFilename</code></td></tr>
 <tr class="b">
 <td align="left"><a href="#spotbugsXmlOutputDirectory"><code>&lt;spotbugsXmlOutputDirectory&gt;</code></a></td>
 <td><code>File</code></td>
@@ -157,45 +126,35 @@
 <th>Since</th>
 <th>Description</th></tr>
 <tr class="b">
-<td align="left"><a href="#addSourceDirs"><code>&lt;addSourceDirs&gt;</code></a></td>
-<td><code>boolean</code></td>
-<td><code>-</code></td>
-<td>No description.<br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>spotbugs.addSourceDirs</code></td></tr>
-<tr class="a">
 <td align="left"><a href="#debug"><code>&lt;debug&gt;</code></a></td>
 <td><code>boolean</code></td>
 <td><code>-</code></td>
 <td>No description.<br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>spotbugs.debug</code></td></tr>
-<tr class="b">
+<tr class="a">
 <td align="left"><a href="#effort"><code>&lt;effort&gt;</code></a></td>
 <td><code>String</code></td>
 <td><code>-</code></td>
 <td>No description.<br /><strong>Default</strong>: <code>Default</code><br /><strong>User Property</strong>: <code>spotbugs.effort</code></td></tr>
-<tr class="a">
+<tr class="b">
 <td align="left"><a href="#excludeBugsFile"><code>&lt;excludeBugsFile&gt;</code></a></td>
 <td><code>String</code></td>
 <td><code>-</code></td>
 <td>No description.<br /><strong>User Property</strong>: <code>spotbugs.excludeBugsFile</code></td></tr>
-<tr class="b">
-<td align="left"><a href="#excludeBugsFiles"><code>&lt;excludeBugsFiles&gt;</code></a></td>
-<td><code>List</code></td>
-<td><code>-</code></td>
-<td>No description.<br /><strong>User Property</strong>: <code>spotbugs.excludeBugsFiles</code></td></tr>
 <tr class="a">
 <td align="left"><a href="#excludeFilterFile"><code>&lt;excludeFilterFile&gt;</code></a></td>
 <td><code>String</code></td>
 <td><code>-</code></td>
 <td>No description.<br /><strong>User Property</strong>: <code>spotbugs.excludeFilterFile</code></td></tr>
 <tr class="b">
-<td align="left"><a href="#excludeFilterFiles"><code>&lt;excludeFilterFiles&gt;</code></a></td>
-<td><code>List</code></td>
-<td><code>-</code></td>
-<td>No description.<br /><strong>User Property</strong>: <code>spotbugs.excludeFilterFiles</code></td></tr>
-<tr class="a">
 <td align="left"><a href="#failOnError"><code>&lt;failOnError&gt;</code></a></td>
 <td><code>boolean</code></td>
 <td><code>-</code></td>
 <td>No description.<br /><strong>Default</strong>: <code>true</code><br /><strong>User Property</strong>: <code>spotbugs.failOnError</code></td></tr>
+<tr class="a">
+<td align="left"><a href="#failThreshold"><code>&lt;failThreshold&gt;</code></a></td>
+<td><code>String</code></td>
+<td><code>-</code></td>
+<td>No description.<br /><strong>User Property</strong>: <code>spotbugs.failThreshold</code></td></tr>
 <tr class="b">
 <td align="left"><a href="#fork"><code>&lt;fork&gt;</code></a></td>
 <td><code>boolean</code></td>
@@ -207,20 +166,20 @@
 <td><code>-</code></td>
 <td>No description.<br /><strong>User Property</strong>: <code>spotbugs.includeFilterFile</code></td></tr>
 <tr class="b">
-<td align="left"><a href="#includeFilterFiles"><code>&lt;includeFilterFiles&gt;</code></a></td>
-<td><code>List</code></td>
-<td><code>-</code></td>
-<td>No description.<br /><strong>User Property</strong>: <code>spotbugs.includeFilterFiles</code></td></tr>
-<tr class="a">
 <td align="left"><a href="#includeTests"><code>&lt;includeTests&gt;</code></a></td>
 <td><code>boolean</code></td>
 <td><code>-</code></td>
 <td>No description.<br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>spotbugs.includeTests</code></td></tr>
-<tr class="b">
+<tr class="a">
 <td align="left"><a href="#jvmArgs"><code>&lt;jvmArgs&gt;</code></a></td>
 <td><code>String</code></td>
 <td><code>-</code></td>
 <td>No description.<br /><strong>User Property</strong>: <code>spotbugs.jvmArgs</code></td></tr>
+<tr class="b">
+<td align="left"><a href="#maxAllowedViolations"><code>&lt;maxAllowedViolations&gt;</code></a></td>
+<td><code>int</code></td>
+<td><code>-</code></td>
+<td>No description.<br /><strong>Default</strong>: <code>0</code><br /><strong>User Property</strong>: <code>spotbugs.maxAllowedViolations</code></td></tr>
 <tr class="a">
 <td align="left"><a href="#maxHeap"><code>&lt;maxHeap&gt;</code></a></td>
 <td><code>int</code></td>
@@ -257,10 +216,10 @@
 <td><code>-</code></td>
 <td>No description.<br /><strong>User Property</strong>: <code>spotbugs.pluginList</code></td></tr>
 <tr class="b">
-<td align="left"><a href="#plugins"><code>&lt;plugins&gt;</code></a></td>
-<td><code>PluginArtifact[]</code></td>
+<td align="left"><a href="#quiet"><code>&lt;quiet&gt;</code></a></td>
+<td><code>boolean</code></td>
 <td><code>-</code></td>
-<td>No description.</td></tr>
+<td>No description.<br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>spotbugs.quiet</code></td></tr>
 <tr class="a">
 <td align="left"><a href="#relaxed"><code>&lt;relaxed&gt;</code></a></td>
 <td><code>boolean</code></td>
@@ -272,25 +231,15 @@
 <td><code>-</code></td>
 <td>No description.<br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>spotbugs.skip</code></td></tr>
 <tr class="a">
-<td align="left"><a href="#skipEmptyReport"><code>&lt;skipEmptyReport&gt;</code></a></td>
-<td><code>boolean</code></td>
-<td><code>-</code></td>
-<td>No description.<br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>spotbugs.skipEmptyReport</code></td></tr>
-<tr class="b">
 <td align="left"><a href="#sourceEncoding"><code>&lt;sourceEncoding&gt;</code></a></td>
 <td><code>String</code></td>
 <td><code>-</code></td>
 <td>No description.<br /><strong>Default</strong>: <code>${project.build.sourceEncoding}</code><br /><strong>User Property</strong>: <code>encoding</code></td></tr>
-<tr class="a">
+<tr class="b">
 <td align="left"><a href="#spotbugsXmlOutputFilename"><code>&lt;spotbugsXmlOutputFilename&gt;</code></a></td>
 <td><code>String</code></td>
 <td><code>-</code></td>
 <td>No description.<br /><strong>Default</strong>: <code>spotbugsXml.xml</code><br /><strong>User Property</strong>: <code>spotbugs.outputXmlFilename</code></td></tr>
-<tr class="b">
-<td align="left"><a href="#systemPropertyVariables"><code>&lt;systemPropertyVariables&gt;</code></a></td>
-<td><code>Map&lt;String,String&gt;</code></td>
-<td><code>-</code></td>
-<td>No description.<br /><strong>User Property</strong>: <code>spotbugs.systemPropertyVariables</code></td></tr>
 <tr class="a">
 <td align="left"><a href="#threshold"><code>&lt;threshold&gt;</code></a></td>
 <td><code>String</code></td>
@@ -307,33 +256,21 @@
 <td><code>-</code></td>
 <td>No description.<br /><strong>Default</strong>: <code>false</code><br /><strong>User Property</strong>: <code>spotbugs.trace</code></td></tr>
 <tr class="b">
-<td align="left"><a href="#userPrefs"><code>&lt;userPrefs&gt;</code></a></td>
-<td><code>String</code></td>
-<td><code>-</code></td>
-<td>No description.<br /><strong>User Property</strong>: <code>spotbugs.userPrefs</code></td></tr>
-<tr class="a">
 <td align="left"><a href="#visitors"><code>&lt;visitors&gt;</code></a></td>
 <td><code>String</code></td>
 <td><code>-</code></td>
 <td>No description.<br /><strong>User Property</strong>: <code>spotbugs.visitors</code></td></tr>
-<tr class="b">
+<tr class="a">
 <td align="left"><a href="#xrefLocation"><code>&lt;xrefLocation&gt;</code></a></td>
 <td><code>File</code></td>
 <td><code>-</code></td>
 <td>No description.<br /><strong>Default</strong>: <code>${project.reporting.outputDirectory}/xref</code></td></tr>
-<tr class="a">
+<tr class="b">
 <td align="left"><a href="#xrefTestLocation"><code>&lt;xrefTestLocation&gt;</code></a></td>
 <td><code>File</code></td>
 <td><code>-</code></td>
 <td>No description.<br /><strong>Default</strong>: <code>${project.reporting.outputDirectory}/xref-test</code></td></tr></table></section><section>
-<h3><a name="Parameter_Details"></a>Parameter Details</h3><a name="Parameter_Details"></a><a name="addSourceDirs"></a><section>
-<h4><a name="a.3CaddSourceDirs.3E"></a>&lt;addSourceDirs&gt;</h4><a name="a.3CaddSourceDirs.3E"></a>
-<div>No description.</div>
-<ul>
-<li><strong>Type</strong>: <code>boolean</code></li>
-<li><strong>Required</strong>: <code>No</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.addSourceDirs</code></li>
-<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a name="classFilesDirectory"></a><section>
+<h3><a name="Parameter_Details"></a>Parameter Details</h3><a name="Parameter_Details"></a><a name="classFilesDirectory"></a><section>
 <h4><a name="a.3CclassFilesDirectory.3E"></a>&lt;classFilesDirectory&gt;</h4><a name="a.3CclassFilesDirectory.3E"></a>
 <div>No description.</div>
 <ul>
@@ -359,58 +296,39 @@
 <ul>
 <li><strong>Type</strong>: <code>java.lang.String</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.excludeBugsFile</code></li></ul><hr /></section><a name="excludeBugsFiles"></a><section>
-<h4><a name="a.3CexcludeBugsFiles.3E"></a>&lt;excludeBugsFiles&gt;</h4><a name="a.3CexcludeBugsFiles.3E"></a>
-<div>No description.</div>
-<ul>
-<li><strong>Type</strong>: <code>java.util.List</code></li>
-<li><strong>Required</strong>: <code>No</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.excludeBugsFiles</code></li></ul><hr /></section><a name="excludeFilterFile"></a><section>
+<li><strong>User Property</strong>: <code>spotbugs.excludeBugsFile</code></li></ul><hr /></section><a name="excludeFilterFile"></a><section>
 <h4><a name="a.3CexcludeFilterFile.3E"></a>&lt;excludeFilterFile&gt;</h4><a name="a.3CexcludeFilterFile.3E"></a>
 <div>No description.</div>
 <ul>
 <li><strong>Type</strong>: <code>java.lang.String</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.excludeFilterFile</code></li></ul><hr /></section><a name="excludeFilterFiles"></a><section>
-<h4><a name="a.3CexcludeFilterFiles.3E"></a>&lt;excludeFilterFiles&gt;</h4><a name="a.3CexcludeFilterFiles.3E"></a>
-<div>No description.</div>
-<ul>
-<li><strong>Type</strong>: <code>java.util.List</code></li>
-<li><strong>Required</strong>: <code>No</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.excludeFilterFiles</code></li></ul><hr /></section><a name="failOnError"></a><section>
+<li><strong>User Property</strong>: <code>spotbugs.excludeFilterFile</code></li></ul><hr /></section><a name="failOnError"></a><section>
 <h4><a name="a.3CfailOnError.3E"></a>&lt;failOnError&gt;</h4><a name="a.3CfailOnError.3E"></a>
 <div>No description.</div>
 <ul>
 <li><strong>Type</strong>: <code>boolean</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
 <li><strong>User Property</strong>: <code>spotbugs.failOnError</code></li>
-<li><strong>Default</strong>: <code>true</code></li></ul><hr /></section><a name="fork"></a><section>
+<li><strong>Default</strong>: <code>true</code></li></ul><hr /></section><a name="failThreshold"></a><section>
+<h4><a name="a.3CfailThreshold.3E"></a>&lt;failThreshold&gt;</h4><a name="a.3CfailThreshold.3E"></a>
+<div>No description.</div>
+<ul>
+<li><strong>Type</strong>: <code>java.lang.String</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>spotbugs.failThreshold</code></li></ul><hr /></section><a name="fork"></a><section>
 <h4><a name="a.3Cfork.3E"></a>&lt;fork&gt;</h4><a name="a.3Cfork.3E"></a>
 <div>No description.</div>
 <ul>
 <li><strong>Type</strong>: <code>boolean</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
 <li><strong>User Property</strong>: <code>spotbugs.fork</code></li>
-<li><strong>Default</strong>: <code>true</code></li></ul><hr /></section><a name="htmlOutput"></a><section>
-<h4><a name="a.3ChtmlOutput.3E"></a>&lt;htmlOutput&gt;</h4><a name="a.3ChtmlOutput.3E"></a>
-<div>No description.</div>
-<ul>
-<li><strong>Type</strong>: <code>boolean</code></li>
-<li><strong>Required</strong>: <code>Yes</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.htmlOutput</code></li>
-<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a name="includeFilterFile"></a><section>
+<li><strong>Default</strong>: <code>true</code></li></ul><hr /></section><a name="includeFilterFile"></a><section>
 <h4><a name="a.3CincludeFilterFile.3E"></a>&lt;includeFilterFile&gt;</h4><a name="a.3CincludeFilterFile.3E"></a>
 <div>No description.</div>
 <ul>
 <li><strong>Type</strong>: <code>java.lang.String</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.includeFilterFile</code></li></ul><hr /></section><a name="includeFilterFiles"></a><section>
-<h4><a name="a.3CincludeFilterFiles.3E"></a>&lt;includeFilterFiles&gt;</h4><a name="a.3CincludeFilterFiles.3E"></a>
-<div>No description.</div>
-<ul>
-<li><strong>Type</strong>: <code>java.util.List</code></li>
-<li><strong>Required</strong>: <code>No</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.includeFilterFiles</code></li></ul><hr /></section><a name="includeTests"></a><section>
+<li><strong>User Property</strong>: <code>spotbugs.includeFilterFile</code></li></ul><hr /></section><a name="includeTests"></a><section>
 <h4><a name="a.3CincludeTests.3E"></a>&lt;includeTests&gt;</h4><a name="a.3CincludeTests.3E"></a>
 <div>No description.</div>
 <ul>
@@ -423,7 +341,14 @@
 <ul>
 <li><strong>Type</strong>: <code>java.lang.String</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.jvmArgs</code></li></ul><hr /></section><a name="maxHeap"></a><section>
+<li><strong>User Property</strong>: <code>spotbugs.jvmArgs</code></li></ul><hr /></section><a name="maxAllowedViolations"></a><section>
+<h4><a name="a.3CmaxAllowedViolations.3E"></a>&lt;maxAllowedViolations&gt;</h4><a name="a.3CmaxAllowedViolations.3E"></a>
+<div>No description.</div>
+<ul>
+<li><strong>Type</strong>: <code>int</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>spotbugs.maxAllowedViolations</code></li>
+<li><strong>Default</strong>: <code>0</code></li></ul><hr /></section><a name="maxHeap"></a><section>
 <h4><a name="a.3CmaxHeap.3E"></a>&lt;maxHeap&gt;</h4><a name="a.3CmaxHeap.3E"></a>
 <div>No description.</div>
 <ul>
@@ -443,13 +368,6 @@
 <li><strong>Type</strong>: <code>boolean</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
 <li><strong>User Property</strong>: <code>spotbugs.nested</code></li>
-<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a name="noClassOk"></a><section>
-<h4><a name="a.3CnoClassOk.3E"></a>&lt;noClassOk&gt;</h4><a name="a.3CnoClassOk.3E"></a>
-<div>No description.</div>
-<ul>
-<li><strong>Type</strong>: <code>boolean</code></li>
-<li><strong>Required</strong>: <code>Yes</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.noClassOk</code></li>
 <li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a name="omitVisitors"></a><section>
 <h4><a name="a.3ComitVisitors.3E"></a>&lt;omitVisitors&gt;</h4><a name="a.3ComitVisitors.3E"></a>
 <div>No description.</div>
@@ -481,60 +399,27 @@
 <ul>
 <li><strong>Type</strong>: <code>java.lang.String</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.pluginList</code></li></ul><hr /></section><a name="plugins"></a><section>
-<h4><a name="a.3Cplugins.3E"></a>&lt;plugins&gt;</h4><a name="a.3Cplugins.3E"></a>
+<li><strong>User Property</strong>: <code>spotbugs.pluginList</code></li></ul><hr /></section><a name="quiet"></a><section>
+<h4><a name="a.3Cquiet.3E"></a>&lt;quiet&gt;</h4><a name="a.3Cquiet.3E"></a>
 <div>No description.</div>
 <ul>
-<li><strong>Type</strong>: <code>org.codehaus.mojo.spotbugs.PluginArtifact[]</code></li>
-<li><strong>Required</strong>: <code>No</code></li></ul><hr /></section><a name="relaxed"></a><section>
+<li><strong>Type</strong>: <code>boolean</code></li>
+<li><strong>Required</strong>: <code>No</code></li>
+<li><strong>User Property</strong>: <code>spotbugs.quiet</code></li>
+<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a name="relaxed"></a><section>
 <h4><a name="a.3Crelaxed.3E"></a>&lt;relaxed&gt;</h4><a name="a.3Crelaxed.3E"></a>
 <div>No description.</div>
 <ul>
 <li><strong>Type</strong>: <code>boolean</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
 <li><strong>User Property</strong>: <code>spotbugs.relaxed</code></li>
-<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a name="sarifFullPath"></a><section>
-<h4><a name="a.3CsarifFullPath.3E"></a>&lt;sarifFullPath&gt;</h4><a name="a.3CsarifFullPath.3E"></a>
-<div>No description.</div>
-<ul>
-<li><strong>Type</strong>: <code>boolean</code></li>
-<li><strong>Required</strong>: <code>Yes</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.sarifFullPath</code></li>
-<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a name="sarifOutput"></a><section>
-<h4><a name="a.3CsarifOutput.3E"></a>&lt;sarifOutput&gt;</h4><a name="a.3CsarifOutput.3E"></a>
-<div>No description.</div>
-<ul>
-<li><strong>Type</strong>: <code>boolean</code></li>
-<li><strong>Required</strong>: <code>Yes</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.sarifOutput</code></li>
-<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a name="sarifOutputDirectory"></a><section>
-<h4><a name="a.3CsarifOutputDirectory.3E"></a>&lt;sarifOutputDirectory&gt;</h4><a name="a.3CsarifOutputDirectory.3E"></a>
-<div>No description.</div>
-<ul>
-<li><strong>Type</strong>: <code>java.io.File</code></li>
-<li><strong>Required</strong>: <code>Yes</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.sarifOutputDirectory</code></li>
-<li><strong>Default</strong>: <code>${project.build.directory}</code></li></ul><hr /></section><a name="sarifOutputFilename"></a><section>
-<h4><a name="a.3CsarifOutputFilename.3E"></a>&lt;sarifOutputFilename&gt;</h4><a name="a.3CsarifOutputFilename.3E"></a>
-<div>No description.</div>
-<ul>
-<li><strong>Type</strong>: <code>java.lang.String</code></li>
-<li><strong>Required</strong>: <code>Yes</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.sarifOutputFilename</code></li>
-<li><strong>Default</strong>: <code>spotbugsSarif.json</code></li></ul><hr /></section><a name="skip"></a><section>
+<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a name="skip"></a><section>
 <h4><a name="a.3Cskip.3E"></a>&lt;skip&gt;</h4><a name="a.3Cskip.3E"></a>
 <div>No description.</div>
 <ul>
 <li><strong>Type</strong>: <code>boolean</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
 <li><strong>User Property</strong>: <code>spotbugs.skip</code></li>
-<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a name="skipEmptyReport"></a><section>
-<h4><a name="a.3CskipEmptyReport.3E"></a>&lt;skipEmptyReport&gt;</h4><a name="a.3CskipEmptyReport.3E"></a>
-<div>No description.</div>
-<ul>
-<li><strong>Type</strong>: <code>boolean</code></li>
-<li><strong>Required</strong>: <code>No</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.skipEmptyReport</code></li>
 <li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a name="sourceEncoding"></a><section>
 <h4><a name="a.3CsourceEncoding.3E"></a>&lt;sourceEncoding&gt;</h4><a name="a.3CsourceEncoding.3E"></a>
 <div>No description.</div>
@@ -555,13 +440,7 @@
 <li><strong>Type</strong>: <code>java.lang.String</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
 <li><strong>User Property</strong>: <code>spotbugs.outputXmlFilename</code></li>
-<li><strong>Default</strong>: <code>spotbugsXml.xml</code></li></ul><hr /></section><a name="systemPropertyVariables"></a><section>
-<h4><a name="a.3CsystemPropertyVariables.3E"></a>&lt;systemPropertyVariables&gt;</h4><a name="a.3CsystemPropertyVariables.3E"></a>
-<div>No description.</div>
-<ul>
-<li><strong>Type</strong>: <code>java.util.Map&lt;java.lang.String, java.lang.String&gt;</code></li>
-<li><strong>Required</strong>: <code>No</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.systemPropertyVariables</code></li></ul><hr /></section><a name="testClassFilesDirectory"></a><section>
+<li><strong>Default</strong>: <code>spotbugsXml.xml</code></li></ul><hr /></section><a name="testClassFilesDirectory"></a><section>
 <h4><a name="a.3CtestClassFilesDirectory.3E"></a>&lt;testClassFilesDirectory&gt;</h4><a name="a.3CtestClassFilesDirectory.3E"></a>
 <div>No description.</div>
 <ul>
@@ -588,13 +467,7 @@
 <li><strong>Type</strong>: <code>boolean</code></li>
 <li><strong>Required</strong>: <code>No</code></li>
 <li><strong>User Property</strong>: <code>spotbugs.trace</code></li>
-<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a name="userPrefs"></a><section>
-<h4><a name="a.3CuserPrefs.3E"></a>&lt;userPrefs&gt;</h4><a name="a.3CuserPrefs.3E"></a>
-<div>No description.</div>
-<ul>
-<li><strong>Type</strong>: <code>java.lang.String</code></li>
-<li><strong>Required</strong>: <code>No</code></li>
-<li><strong>User Property</strong>: <code>spotbugs.userPrefs</code></li></ul><hr /></section><a name="visitors"></a><section>
+<li><strong>Default</strong>: <code>false</code></li></ul><hr /></section><a name="visitors"></a><section>
 <h4><a name="a.3Cvisitors.3E"></a>&lt;visitors&gt;</h4><a name="a.3Cvisitors.3E"></a>
 <div>No description.</div>
 <ul>
