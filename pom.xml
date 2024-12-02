@@ -209,13 +209,10 @@
         <l10nPluginVersion>1.1.0</l10nPluginVersion>
         <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
         <gmavenPluginVersion>4.0.1</gmavenPluginVersion>
-        <infoReportsPluginVersion>3.8.0</infoReportsPluginVersion>
         <invokerPluginVersion>3.8.1</invokerPluginVersion>
         <javadocPluginVersion>3.11.1</javadocPluginVersion>
         <pluginPluginVersion>3.14.0</pluginPluginVersion>
         <scmPluginVersion>2.1.0</scmPluginVersion>
-        <sitePluginVersion>3.12.1</sitePluginVersion>
-        <versionsPluginVersion>2.18.0</versionsPluginVersion>
 
         <spotbugsTestDebug>false</spotbugsTestDebug>
         <integrationTestSrc>${project.build.directory}/it-src-spotbugs</integrationTestSrc>
@@ -634,7 +631,6 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>${sitePluginVersion}</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.apache.maven.doxia</groupId>
@@ -782,7 +778,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>${infoReportsPluginVersion}</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -820,7 +815,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>${infoReportsPluginVersion}</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -844,7 +838,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>${versionsPluginVersion}</version>
                 <reportSets>
                     <reportSet>
                         <reports>
