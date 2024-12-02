@@ -245,6 +245,7 @@
         <beanutils.version>1.9.4</beanutils.version>
         <chain.version>1.2</chain.version>
         <codec.version>1.17.1</codec.version>
+        <codenarc.version>3.5.0-groovy-4.0</codenarc.version>
         <collections.version>3.2.2</collections.version>
         <digester.version>2.1</digester.version>
         <gson.version>2.11.0</gson.version>
@@ -666,6 +667,22 @@
                         </mapping>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>codenarc-maven-plugin</artifactId>
+                    <version>${codenarcPluginVersion}</version>
+                    <configuration>
+                        <!-- Repo https://github.com/gleclaire/codenarc-maven-plugin has been forked and will need major upgrades to use this. -->
+                        <skip>true</skip>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codenarc</groupId>
+                            <artifactId>CodeNarc</artifactId>
+                            <version>${codenarc.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -783,11 +800,13 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>codenarc-maven-plugin</artifactId>
-                <version>${codenarcPluginVersion}</version>
                 <configuration>
+                    <codeNarcVersion>${codenarc.version}</codeNarcVersion>
+                    <groovyVersion>${groovyVersion}</groovyVersion>
                     <maxPriority1Violations>0</maxPriority1Violations>
                     <maxPriority2Violations>0</maxPriority2Violations>
                     <maxPriority3Violations>5</maxPriority3Violations>
+                    <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
                 </configuration>
             </plugin>
             <plugin>
