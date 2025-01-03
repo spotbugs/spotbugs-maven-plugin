@@ -208,7 +208,7 @@
 
         <l10nPluginVersion>1.1.0</l10nPluginVersion>
         <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
-        <gmavenPluginVersion>4.1.0</gmavenPluginVersion>
+        <gmavenPluginVersion>4.1.1</gmavenPluginVersion>
         <invokerPluginVersion>3.9.0</invokerPluginVersion>
         <javadocPluginVersion>3.11.2</javadocPluginVersion>
         <pluginPluginVersion>3.14.0</pluginPluginVersion>
