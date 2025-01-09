@@ -239,7 +239,7 @@
         <!-- Targeted patches -->
         <asm.version>9.7.1</asm.version>
         <bcel.version>6.10.0</bcel.version>
-        <beanutils.version>1.9.4</beanutils.version>
+        <beanutils.version>1.10.0</beanutils.version>
         <chain.version>1.2</chain.version>
         <codec.version>1.17.2</codec.version>
         <codenarc.version>3.5.0-groovy-4.0</codenarc.version>
