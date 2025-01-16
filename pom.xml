@@ -29,7 +29,7 @@
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.8.6.7-SNAPSHOT</version>
+    <version>4.9.0.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
@@ -173,7 +173,7 @@
         <project.build.outputTimestamp>1731432691</project.build.outputTimestamp>
 
         <!-- Override spotbugs to this version from base-parent -->
-        <spotbugs.version>4.8.6</spotbugs.version>
+        <spotbugs.version>4.9.0</spotbugs.version>
 
         <junitVersion>5.11.3</junitVersion>
         <spotbugsVersion>4.9.0</spotbugsVersion>
