@@ -525,6 +525,10 @@
                     <groupId>org.codehaus.plexus</groupId>
                     <artifactId>plexus-container-default</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.apache.maven.doxia</groupId>
+                    <artifactId>doxia-module-xhtml</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
