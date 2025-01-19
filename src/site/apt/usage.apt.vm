@@ -40,7 +40,7 @@
 ~~ https://maven.apache.org/doxia/references/apt-format.html
 
 Usage
-<version>${projectVersion}</version>
+<version>${project.version}</version>
  The following examples describe the basic usage of the SpotBugs plugin.
 
 * Generate SpotBugs Report As Part of the Project Reports
@@ -58,7 +58,7 @@ Usage
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${projectVersion}</version>
+        <version>${project.version}</version>
       </plugin>
     </plugins>
   </reporting>
@@ -91,7 +91,7 @@ mvn site
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${projectVersion}</version>
+        <version>${project.version}</version>
         <configuration>
           <xmlOutput>true</xmlOutput>
           <!-- Optional directory to put spotbugs xdoc xml report -->
@@ -128,7 +128,7 @@ mvn site
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${projectVersion}</version>
+        <version>${project.version}</version>
         <configuration>
           <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
           <includeFilterFile>spotbugs-include.xml</includeFilterFile>
@@ -162,7 +162,7 @@ mvn site
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${projectVersion}</version>
+        <version>${project.version}</version>
         <configuration>
           <visitors>FindDeadLocalStores,UnreadFields</visitors>
         </configuration>
@@ -193,7 +193,7 @@ mvn site
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${projectVersion}</version>
+        <version>${project.version}</version>
         <configuration>
           <omitVisitors>FindDeadLocalStores,UnreadFields</omitVisitors>
         </configuration>
@@ -224,7 +224,7 @@ mvn site
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${projectVersion}</version>
+        <version>${project.version}</version>
         <configuration>
          <onlyAnalyze>com.github.spotbugs.spotbugs.*</onlyAnalyze>
         </configuration>
@@ -255,7 +255,7 @@ mvn site
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${projectVersion}</version>
+        <version>${project.version}</version>
         <configuration>
           <pluginList>myDetectors.jar, yourDetectors.jar</pluginList>
         </configuration>
@@ -285,7 +285,7 @@ mvn site
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${projectVersion}</version>
+        <version>${project.version}</version>
         <configuration>
           <plugins>
             <plugin>
@@ -324,7 +324,7 @@ mvn site
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${projectVersion}</version>
+        <version>${project.version}</version>
         <configuration>
           <!-- Optional directory to put spotbugs xml report -->
         </configuration>
