@@ -258,7 +258,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- bom control -->
+            <!-- Ensure we use latest version regardless of spotbugs version -->
             <dependency>
                 <groupId>org.ow2.asm</groupId>
                 <artifactId>asm-bom</artifactId>
@@ -266,6 +266,8 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- Ensure we use latest version regardless of spotbugs version -->
             <dependency>
                 <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy-bom</artifactId>
@@ -273,6 +275,8 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- Ensure we use latest version regardless of spotbugs version -->
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-bom</artifactId>
@@ -281,7 +285,7 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- individual control -->
+            <!-- Ensure we use latest version regardless of spotbugs version -->
             <dependency>
                 <groupId>org.apache.bcel</groupId>
                 <artifactId>bcel</artifactId>
