@@ -167,8 +167,6 @@
 
         <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
 
-        <projectVersion>${project.version}</projectVersion>
-
         <!-- Reproducible Builds: override timestamp value from parent -->
         <project.build.outputTimestamp>1731432691</project.build.outputTimestamp>
 

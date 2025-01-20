@@ -56,7 +56,7 @@ Violation Checking
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${projectVersion}</version>
+        <version>${project.version}</version>
         <configuration>
           <effort>Max</effort>
           <threshold>Low</threshold>
