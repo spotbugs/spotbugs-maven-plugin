@@ -286,6 +286,13 @@
                 <artifactId>bcel</artifactId>
                 <version>${bcel.version}</version>
             </dependency>
+
+            <!-- Ensure we use latest version regardless of spotbugs version -->
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -318,13 +325,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-        </dependency>
-
-        <!-- gson -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${gson.version}</version>
         </dependency>
 
         <!-- gmaven -->
