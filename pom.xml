@@ -224,9 +224,9 @@
         <skipSurefireReport>true</skipSurefireReport>
 
         <!-- Used by Integration tests -->
-        <findsecbugsVersion>1.13.0</findsecbugsVersion>
+        <findsecbugs.version>1.13.0</findsecbugs.version>
         <servletApiVersion>6.0.0</servletApiVersion>
-        <sb-contribVersion>7.6.6</sb-contribVersion>
+        <sb-contrib.version>7.6.8</sb-contrib.version>
 
         <jgit.version>7.1.0.202411261347-r</jgit.version>
 
