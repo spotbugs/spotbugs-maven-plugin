@@ -246,6 +246,7 @@
         <jaxen.version>2.0.0</jaxen.version>
         <lang2.version>2.6</lang2.version>
         <lang3.version>3.17.0</lang3.version>
+        <saxon.he.version>12.5</saxon.he.version>
 
         <!-- Automatic Module Name -->
         <module.name>com.github.spotbugs.maven</module.name>
@@ -292,6 +293,13 @@
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${gson.version}</version>
+            </dependency>
+
+            <!-- Ensure we use latest version regardless of spotbugs version -->
+            <dependency>
+                <groupId>net.sf.saxon</groupId>
+                <artifactId>Saxon-HE</artifactId>
+                <version>${saxon.he.version}</version>
             </dependency>
 
             <!-- Commons -->
