@@ -173,7 +173,7 @@
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.9.0</spotbugs.version>
 
-        <junitVersion>5.11.3</junitVersion>
+        <junitVersion>5.11.4</junitVersion>
         <spotbugsTag>4.9.0</spotbugsTag>
         <slf4jVersion>2.0.16</slf4jVersion>
 
