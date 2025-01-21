@@ -41,7 +41,7 @@
         <configuration>
           <xmlOutput>true</xmlOutput>
           <pluginList>
-            https://repo1.maven.org/maven2/com/mebigfatguy/sb-contrib/sb-contrib/@sb-contrib-version@/sb-contrib-@sb-contrib.version@.jar,
+            https://repo1.maven.org/maven2/com/mebigfatguy/sb-contrib/sb-contrib/@sb-contrib.version@/sb-contrib-@sb-contrib.version@.jar,
             https://repo1.maven.org/maven2/com/h3xstream/findsecbugs/findsecbugs-plugin/@findsecbugs.version@/findsecbugs-plugin-@findsecbugs.version@.jar
           </pluginList>
         </configuration>
