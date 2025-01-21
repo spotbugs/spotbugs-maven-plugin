@@ -174,7 +174,6 @@
         <spotbugs.version>4.9.0</spotbugs.version>
 
         <junitVersion>5.11.3</junitVersion>
-        <spotbugsVersion>4.9.0</spotbugsVersion>
         <spotbugsTag>4.8.6</spotbugsTag>
         <slf4jVersion>2.0.16</slf4jVersion>
 
@@ -366,7 +365,7 @@
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs</artifactId>
-            <version>${spotbugsVersion}</version>
+            <version>${spotbugs.version}</version>
             <exclusions>
                 <!-- We neither maven uses log4j2 so exclude it as we use slf4j -->
                 <exclusion>

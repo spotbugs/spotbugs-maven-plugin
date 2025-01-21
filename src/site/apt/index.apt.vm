@@ -23,7 +23,7 @@
 
 SpotBugs Maven Plugin
 
-*Please Note - This version is using Spotbugs ${spotbugsVersion}.
+*Please Note - This version is using Spotbugs ${spotbugs.version}.
   
  SpotBugs looks for bugs in Java programs. It is based on the concept of bug patterns. A bug pattern is a code idiom that is often an error. Bug patterns arise for a variety of reasons:
   
