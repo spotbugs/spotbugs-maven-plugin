@@ -208,7 +208,6 @@
         <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
         <gmavenPluginVersion>4.1.1</gmavenPluginVersion>
         <invokerPluginVersion>3.9.0</invokerPluginVersion>
-        <javadocPluginVersion>3.11.2</javadocPluginVersion>
         <pluginPluginVersion>3.14.0</pluginPluginVersion>
         <scmPluginVersion>2.1.0</scmPluginVersion>
 
@@ -763,11 +762,6 @@
     <reporting>
         <excludeDefaults>true</excludeDefaults>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${javadocPluginVersion}</version>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-report-plugin</artifactId>
