@@ -297,6 +297,7 @@
             <artifactId>spotbugs</artifactId>
             <version>${spotbugsVersion}</version>
             <exclusions>
+                <!-- We neither maven uses log4j2 so exclude it as we use slf4j -->
                 <exclusion>
                     <groupId>org.apache.logging.log4j</groupId>
                     <artifactId>log4j-core</artifactId>
@@ -304,7 +305,7 @@
             </exclusions>
         </dependency>
 
-        <!-- Logging -->
+        <!-- Logging forced to slf4j due to spotbugs using log4j2 -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-to-slf4j</artifactId>
@@ -343,6 +344,7 @@
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-ant</artifactId>
             <exclusions>
+                <!-- We do not need these items from groovy ant -->
                 <exclusion>
                     <groupId>org.apache.ant</groupId>
                     <artifactId>ant-antlr</artifactId>
@@ -456,6 +458,7 @@
             <version>${mavenVersion}</version>
             <scope>provided</scope>
             <exclusions>
+                <!-- We prefer to use supported software -->
                 <exclusion>
                     <groupId>javax.inject</groupId>
                     <artifactId>javax.inject</artifactId>
@@ -486,10 +489,12 @@
             <artifactId>doxia-core</artifactId>
             <version>${doxiaVersion}</version>
             <exclusions>
+                <!-- We use jcl-over-sfl4j -->
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
+                <!-- We don't need the plexus container default -->
                 <exclusion>
                     <groupId>org.codehaus.plexus</groupId>
                     <artifactId>plexus-container-default</artifactId>
@@ -511,18 +516,22 @@
             <artifactId>doxia-site-renderer</artifactId>
             <version>${doxiaSiteToolsVersion}</version>
             <exclusions>
+                <!-- We use jcl-over-sfl4j -->
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
+                <!-- We don't need dom4j -->
                 <exclusion>
                     <groupId>dom4j</groupId>
                     <artifactId>dom4j</artifactId>
                 </exclusion>
+                <!-- We don't need the plexus container default -->
                 <exclusion>
                     <groupId>org.codehaus.plexus</groupId>
                     <artifactId>plexus-container-default</artifactId>
                 </exclusion>
+                <!-- We don't need doxia html (using html5) -->
                 <exclusion>
                     <groupId>org.apache.maven.doxia</groupId>
                     <artifactId>doxia-module-xhtml</artifactId>
@@ -534,6 +543,7 @@
             <artifactId>doxia-integration-tools</artifactId>
             <version>${doxiaSiteToolsVersion}</version>
             <exclusions>
+                <!-- We don't need the plexus container default -->
                 <exclusion>
                     <groupId>org.codehaus.plexus</groupId>
                     <artifactId>plexus-container-default</artifactId>
@@ -601,6 +611,7 @@
             <artifactId>plexus-resources</artifactId>
             <version>${plexusResourcesVersion}</version>
             <exclusions>
+                <!-- We prefer to use supported software -->
                 <exclusion>
                     <groupId>javax.inject</groupId>
                     <artifactId>javax.inject</artifactId>
