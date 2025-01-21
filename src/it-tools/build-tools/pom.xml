@@ -89,7 +89,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>@compilerPluginVersion@</version>
+        <version>@compiler.plugin@</version>
         <configuration>
           <debug>false</debug>
           <release>8</release>
@@ -107,7 +107,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>@mavenSurefireVersion@</version>
+        <version>@surefire.plugin@</version>
         <configuration>
           <skipTests>true</skipTests>
         </configuration>

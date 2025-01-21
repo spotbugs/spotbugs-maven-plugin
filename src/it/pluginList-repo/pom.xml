@@ -43,12 +43,12 @@
             <plugin>
               <groupId>com.mebigfatguy.sb-contrib</groupId>
               <artifactId>sb-contrib</artifactId>
-              <version>@sb-contribVersion@</version>
+              <version>@sb-contrib.version@</version>
             </plugin>
             <plugin>
               <groupId>com.h3xstream.findsecbugs</groupId>
               <artifactId>findsecbugs-plugin</artifactId>
-              <version>@findsecbugsVersion@</version>
+              <version>@findsecbugs.version@</version>
             </plugin>
           </plugins>
         </configuration>

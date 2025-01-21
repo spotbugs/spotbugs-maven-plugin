@@ -173,9 +173,7 @@
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.9.0</spotbugs.version>
 
-        <junitVersion>5.11.3</junitVersion>
-        <spotbugsVersion>4.9.0</spotbugsVersion>
-        <spotbugsTag>4.8.6</spotbugsTag>
+        <junitVersion>5.11.4</junitVersion>
         <slf4jVersion>2.0.16</slf4jVersion>
 
         <antVersion>1.10.15</antVersion>
@@ -197,19 +195,17 @@
         <plexusUtilsVersion>4.0.2</plexusUtilsVersion>
         <plexusXmlVersion>3.0.1</plexusXmlVersion>
 
-        <!-- Required for doxia 1 -->
-        <dependency-check.plugin>10.0.4</dependency-check.plugin>
-        <fluido.version>1.12.0</fluido.version>
-        <project-info.plugin>3.6.2</project-info.plugin>
-        <site.plugin>3.12.1</site.plugin>
-        <versions.plugin>2.17.1</versions.plugin>
+        <dependency-check.plugin note="11.0.0+ requires doxia 2">10.0.4</dependency-check.plugin>
+        <fluido.version note="2.0.0+ requires doxia 2">1.12.0</fluido.version>
+        <pluginPluginVersion note="3.15.0 requires doxia 2">3.14.0</pluginPluginVersion>
+        <project-info.plugin note="3.7.0+ requires doxia 2">3.6.2</project-info.plugin>
+        <site.plugin note="3.20.0+ requires doxia 2">3.12.1</site.plugin>
+        <versions.plugin note="2.18.0+ requires doxia 2">2.17.1</versions.plugin>
 
         <l10nPluginVersion>1.1.0</l10nPluginVersion>
         <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
         <gmavenPluginVersion>4.1.1</gmavenPluginVersion>
         <invokerPluginVersion>3.9.0</invokerPluginVersion>
-        <javadocPluginVersion>3.11.2</javadocPluginVersion>
-        <pluginPluginVersion>3.14.0</pluginPluginVersion>
         <scmPluginVersion>2.1.0</scmPluginVersion>
 
         <spotbugsTestDebug>false</spotbugsTestDebug>
@@ -225,11 +221,9 @@
         <skipSurefireReport>true</skipSurefireReport>
 
         <!-- Used by Integration tests -->
-        <compilerPluginVersion>3.13.0</compilerPluginVersion>
-        <findsecbugsVersion>1.13.0</findsecbugsVersion>
-        <mavenSurefireVersion>3.5.2</mavenSurefireVersion>
+        <findsecbugs.version>1.13.0</findsecbugs.version>
         <servletApiVersion>6.0.0</servletApiVersion>
-        <sb-contribVersion>7.6.6</sb-contribVersion>
+        <sb-contrib.version>7.6.9</sb-contrib.version>
 
         <jgit.version>7.1.0.202411261347-r</jgit.version>
 
@@ -249,6 +243,7 @@
         <jaxen.version>2.0.0</jaxen.version>
         <lang2.version>2.6</lang2.version>
         <lang3.version>3.17.0</lang3.version>
+        <saxon.he.version>12.5</saxon.he.version>
 
         <!-- Automatic Module Name -->
         <module.name>com.github.spotbugs.maven</module.name>
@@ -289,6 +284,76 @@
                 <artifactId>bcel</artifactId>
                 <version>${bcel.version}</version>
             </dependency>
+
+            <!-- Ensure we use latest version regardless of spotbugs version -->
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
+
+            <!-- Ensure we use latest version regardless of spotbugs version -->
+            <dependency>
+                <groupId>net.sf.saxon</groupId>
+                <artifactId>Saxon-HE</artifactId>
+                <version>${saxon.he.version}</version>
+            </dependency>
+
+            <!-- Commons -->
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${beanutils.version}</version>
+                <exclusions>
+                    <!-- We use jcl-over-sfl4j -->
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>commons-chain</groupId>
+                <artifactId>commons-chain</artifactId>
+                <version>${chain.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${collections.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-digester</groupId>
+                <artifactId>commons-digester</artifactId>
+                <version>${digester.version}</version>
+                <exclusions>
+                    <!-- We use jcl-over-sfl4j -->
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${lang2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${lang3.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -298,8 +363,9 @@
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs</artifactId>
-            <version>${spotbugsVersion}</version>
+            <version>${spotbugs.version}</version>
             <exclusions>
+                <!-- We neither maven uses log4j2 so exclude it as we use slf4j -->
                 <exclusion>
                     <groupId>org.apache.logging.log4j</groupId>
                     <artifactId>log4j-core</artifactId>
@@ -307,7 +373,7 @@
             </exclusions>
         </dependency>
 
-        <!-- Logging -->
+        <!-- Logging forced to slf4j due to spotbugs using log4j2 -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-to-slf4j</artifactId>
@@ -320,13 +386,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-        </dependency>
-
-        <!-- gson -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${gson.version}</version>
         </dependency>
 
         <!-- gmaven -->
@@ -346,6 +405,7 @@
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-ant</artifactId>
             <exclusions>
+                <!-- We do not need these items from groovy ant -->
                 <exclusion>
                     <groupId>org.apache.ant</groupId>
                     <artifactId>ant-antlr</artifactId>
@@ -459,6 +519,7 @@
             <version>${mavenVersion}</version>
             <scope>provided</scope>
             <exclusions>
+                <!-- We prefer to use supported software -->
                 <exclusion>
                     <groupId>javax.inject</groupId>
                     <artifactId>javax.inject</artifactId>
@@ -489,10 +550,12 @@
             <artifactId>doxia-core</artifactId>
             <version>${doxiaVersion}</version>
             <exclusions>
+                <!-- We use jcl-over-sfl4j -->
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
+                <!-- We don't need the plexus container default -->
                 <exclusion>
                     <groupId>org.codehaus.plexus</groupId>
                     <artifactId>plexus-container-default</artifactId>
@@ -514,18 +577,22 @@
             <artifactId>doxia-site-renderer</artifactId>
             <version>${doxiaSiteToolsVersion}</version>
             <exclusions>
+                <!-- We use jcl-over-sfl4j -->
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
+                <!-- We don't need dom4j -->
                 <exclusion>
                     <groupId>dom4j</groupId>
                     <artifactId>dom4j</artifactId>
                 </exclusion>
+                <!-- We don't need the plexus container default -->
                 <exclusion>
                     <groupId>org.codehaus.plexus</groupId>
                     <artifactId>plexus-container-default</artifactId>
                 </exclusion>
+                <!-- We don't need doxia html (using html5) -->
                 <exclusion>
                     <groupId>org.apache.maven.doxia</groupId>
                     <artifactId>doxia-module-xhtml</artifactId>
@@ -537,65 +604,12 @@
             <artifactId>doxia-integration-tools</artifactId>
             <version>${doxiaSiteToolsVersion}</version>
             <exclusions>
+                <!-- We don't need the plexus container default -->
                 <exclusion>
                     <groupId>org.codehaus.plexus</groupId>
                     <artifactId>plexus-container-default</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
-        <!-- Commons -->
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>${beanutils.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>commons-chain</groupId>
-            <artifactId>commons-chain</artifactId>
-            <version>${chain.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>${codec.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>${collections.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-digester</groupId>
-            <artifactId>commons-digester</artifactId>
-            <version>${digester.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${io.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>${lang2.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${lang3.version}</version>
         </dependency>
 
         <!-- plexus -->
@@ -604,6 +618,7 @@
             <artifactId>plexus-resources</artifactId>
             <version>${plexusResourcesVersion}</version>
             <exclusions>
+                <!-- We prefer to use supported software -->
                 <exclusion>
                     <groupId>javax.inject</groupId>
                     <artifactId>javax.inject</artifactId>
@@ -767,11 +782,6 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${javadocPluginVersion}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-report-plugin</artifactId>
                 <version>${pluginPluginVersion}</version>
                 <configuration>
@@ -779,10 +789,6 @@
                         <jdk>${project.build.java.target}</jdk>
                     </requirements>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -816,42 +822,6 @@
                 <configuration>
                     <excludeFilterFile>${project.basedir}/src/main/tools/spotbugs-exclude-filters.xml</excludeFilterFile>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>ci-management</report>
-                            <report>dependency-info</report>
-                            <report>dependencies</report>
-                            <report>dependency-convergence</report>
-                            <report>dependency-management</report>
-                            <report>index</report>
-                            <report>issue-management</report>
-                            <report>licenses</report>
-                            <report>mailing-lists</report>
-                            <report>plugin-management</report>
-                            <report>team</report>
-                            <report>scm</report>
-                            <report>summary</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>dependency-updates-report</report>
-                            <report>plugin-updates-report</report>
-                            <report>property-updates-report</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
             </plugin>
         </plugins>
     </reporting>
@@ -986,7 +956,7 @@
                                         <git>jgit</git>
                                     </providerImplementations>
                                     <includes>${includesTestSrcPattern}</includes>
-                                    <scmVersion>${spotbugsTag}</scmVersion>
+                                    <scmVersion>${spotbugs.version}</scmVersion>
                                     <scmVersionType>tag</scmVersionType>
                                 </configuration>
                             </execution>
