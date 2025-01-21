@@ -89,7 +89,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>@compilerPluginVersion@</version>
+        <version>@compiler.plugin@</version>
         <configuration>
           <debug>false</debug>
           <release>8</release>

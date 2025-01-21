@@ -225,7 +225,6 @@
         <skipSurefireReport>true</skipSurefireReport>
 
         <!-- Used by Integration tests -->
-        <compilerPluginVersion>3.13.0</compilerPluginVersion>
         <findsecbugsVersion>1.13.0</findsecbugsVersion>
         <mavenSurefireVersion>3.5.2</mavenSurefireVersion>
         <servletApiVersion>6.0.0</servletApiVersion>
