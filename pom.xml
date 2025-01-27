@@ -232,7 +232,7 @@
         <bcel.version>6.10.0</bcel.version>
         <beanutils.version>1.10.0</beanutils.version>
         <chain.version>1.2</chain.version>
-        <codec.version>1.17.2</codec.version>
+        <codec.version>1.18.0</codec.version>
         <codenarc.version>3.5.0-groovy-4.0</codenarc.version>
         <collections.version>3.2.2</collections.version>
         <digester.version>2.1</digester.version>
