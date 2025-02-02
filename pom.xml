@@ -370,6 +370,13 @@
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
+
+            <!-- Ensure plexus xml maven 3 compatibility -->
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-xml</artifactId>
+                <version>${plexusXmlVersion}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -632,11 +639,6 @@
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
             <version>${plexusUtilsVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-xml</artifactId>
-            <version>${plexusXmlVersion}</version>
         </dependency>
     </dependencies>
 
