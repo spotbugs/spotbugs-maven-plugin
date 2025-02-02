@@ -294,6 +294,13 @@
 
             <!-- Ensure we use latest version regardless of spotbugs version -->
             <dependency>
+                <groupId>jaxen</groupId>
+                <artifactId>jaxen</artifactId>
+                <version>${jaxen.version}</version>
+            </dependency>
+
+            <!-- Ensure we use latest version regardless of spotbugs version -->
+            <dependency>
                 <groupId>net.sf.saxon</groupId>
                 <artifactId>Saxon-HE</artifactId>
                 <version>${saxon.he.version}</version>
@@ -450,12 +457,6 @@
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-core</artifactId>
             <version>${javaparserVersion}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>jaxen</groupId>
-            <artifactId>jaxen</artifactId>
-            <version>${jaxen.version}</version>
         </dependency>
 
         <!-- Maven -->
