@@ -189,7 +189,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     /**
      * The file encoding to use when creating the HTML reports. If the property <code>project.reporting.outputEncoding</code>
-     * is not set, the platform default encoding is used.
+     * is not set, utf-8 is used.
      *
      * @since 2.2
      */
