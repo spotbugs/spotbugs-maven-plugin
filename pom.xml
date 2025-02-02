@@ -306,6 +306,13 @@
                 <version>${saxon.he.version}</version>
             </dependency>
 
+            <!-- Override 'ant' used in groovy to latest -->
+            <dependency>
+                <groupId>org.apache.ant</groupId>
+                <artifactId>ant</artifactId>
+                <version>${antVersion}</version>
+            </dependency>
+
             <!-- Commons -->
             <dependency>
                 <groupId>commons-beanutils</groupId>
@@ -401,13 +408,6 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${io.version}</version>
-        </dependency>
-
-        <!-- gmaven -->
-        <dependency>
-            <groupId>org.apache.ant</groupId>
-            <artifactId>ant</artifactId>
-            <version>${antVersion}</version>
         </dependency>
 
         <!-- Groovy -->
