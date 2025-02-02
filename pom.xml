@@ -461,6 +461,7 @@
             <artifactId>groovy-xml</artifactId>
         </dependency>
 
+        <!-- Required by groovy but not shown as required -->
         <dependency>
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-core</artifactId>
