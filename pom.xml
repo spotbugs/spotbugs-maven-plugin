@@ -371,6 +371,13 @@
                 <version>${guava.version}</version>
             </dependency>
 
+            <!-- Force control of artifact filters -->
+            <dependency>
+                <groupId>org.apache.maven.shared</groupId>
+                <artifactId>maven-common-artifact-filters</artifactId>
+                <version>${mavenCommonArtifactFilters}</version>
+            </dependency>
+
             <!-- Force control of reporting api -->
             <dependency>
                 <groupId>org.apache.maven.reporting</groupId>
@@ -531,11 +538,6 @@
                     <artifactId>sisu-guice</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.shared</groupId>
-            <artifactId>maven-common-artifact-filters</artifactId>
-            <version>${mavenCommonArtifactFilters}</version>
         </dependency>
 
         <dependency>
