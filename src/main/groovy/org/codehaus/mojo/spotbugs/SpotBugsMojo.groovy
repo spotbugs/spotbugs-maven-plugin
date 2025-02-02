@@ -39,7 +39,7 @@ import org.codehaus.plexus.resource.loader.FileResourceLoader
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.Path
 import java.util.stream.Collectors
 
 import javax.inject.Inject
@@ -710,7 +710,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
 
             XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
-            xDocsReporter.setOutputWriter(Files.newBufferedWriter(Paths.get("${xmlOutputDirectory}/spotbugs.xml"), Charset.forName(outputEncoding)))
+            xDocsReporter.setOutputWriter(Files.newBufferedWriter(Path.of("${xmlOutputDirectory}/spotbugs.xml"), Charset.forName(outputEncoding)))
             xDocsReporter.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
             xDocsReporter.setCompileSourceRoots(session.getCurrentProject().compileSourceRoots)
             xDocsReporter.setTestSourceRoots(session.getCurrentProject().testCompileSourceRoots)
