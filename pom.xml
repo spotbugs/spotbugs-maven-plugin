@@ -371,6 +371,13 @@
                 <version>${guava.version}</version>
             </dependency>
 
+            <!-- Ensure latest maven shared utils shows up -->
+            <dependency>
+                <groupId>org.apache.maven.shared</groupId>
+                <artifactId>maven-shared-utils</artifactId>
+                <version>${mavenSharedUtilsVersion}</version>
+            </dependency>
+
             <!-- Ensure plexus xml maven 3 compatibility -->
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
@@ -547,11 +554,6 @@
             <artifactId>maven-model</artifactId>
             <version>${mavenVersion}</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.shared</groupId>
-            <artifactId>maven-shared-utils</artifactId>
-            <version>${mavenSharedUtilsVersion}</version>
         </dependency>
 
         <dependency>
