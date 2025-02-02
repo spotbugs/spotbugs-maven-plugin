@@ -18,7 +18,7 @@ package org.codehaus.mojo.spotbugs
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.model.Resource
 
-import java.nio.file.Paths
+import java.nio.file.Path
 
 /**
  * Utility class used to transform path relative to the <b>source directory</b>
@@ -90,7 +90,7 @@ class SourceFileIndexer {
                     // It will most likely be stored in a work directory.
                     // Example: /work/project-code-to-scan/src/main/java/File.java => src/main/java/File.java
                     //   (Here baseDirectory is /work/project-code-to-scan/)
-                    String relativePath = Paths.get(baseDirectory).relativize(Paths.get(newSourceFile))
+                    String relativePath = Path.of(baseDirectory).relativize(Path.of(newSourceFile))
                     files.add(normalizePath(relativePath))
                 } else {
                     // Use the full path instead:
