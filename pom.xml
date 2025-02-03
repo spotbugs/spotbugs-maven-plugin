@@ -583,11 +583,6 @@
         </dependency>
         <dependency>
             <groupId>org.apache.maven.doxia</groupId>
-            <artifactId>doxia-decoration-model</artifactId>
-            <version>${doxiaSiteToolsVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-site-renderer</artifactId>
             <version>${doxiaSiteToolsVersion}</version>
             <exclusions>
