@@ -237,7 +237,6 @@
         <collections.version>3.2.2</collections.version>
         <digester.version>2.1</digester.version>
         <gson.version>2.12.1</gson.version>
-        <guava.version>33.4.0-jre</guava.version>
         <inject.version>1.0.5</inject.version>
         <io.version>2.18.0</io.version>
         <jaxen.version>2.0.0</jaxen.version>
@@ -362,13 +361,6 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${lang3.version}</version>
-            </dependency>
-
-            <!-- Override guava version used by maven -->
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
             </dependency>
 
             <!-- Force control of artifact filters -->
