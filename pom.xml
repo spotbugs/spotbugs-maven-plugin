@@ -585,7 +585,7 @@
             <artifactId>doxia-site-renderer</artifactId>
             <version>${doxiaSiteToolsVersion}</version>
             <exclusions>
-                <!-- We don't need dom4j -->
+                <!-- Using org.dom4j instead -->
                 <exclusion>
                     <groupId>dom4j</groupId>
                     <artifactId>dom4j</artifactId>
