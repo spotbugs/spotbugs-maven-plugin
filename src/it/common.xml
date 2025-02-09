@@ -152,7 +152,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <debug>false</debug>
-          <release>8</release>
+          <release>11</release>
           <excludes>
             <exclude>*fakeAnnotations/**</exclude>
             <exclude>jsr305/**</exclude>
