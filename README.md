@@ -62,7 +62,7 @@ mvn -Dmaven.surefire.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspe
 
 Run gui with a specific version 
 ```
-mvn com.github.spotbugs:spotbugs-maven-plugin:4.8.6.6:gui
+mvn com.github.spotbugs:spotbugs-maven-plugin:4.9.0.0:gui
 ```
 
 ## Creating new site examples ##
@@ -93,7 +93,7 @@ If using groovy with same group id (```org.codehaus.groovy 3.x``` or before or `
 
 ## Eclipse m2e Integration ##
 
-The plugin cycles controlled by Eclipse require compilation phase for m2e without further help.  This plugin runs verify and during site generation.  Therefore Eclipse m2e will show up but not do anything with this plugin alone.  In order to have proper execution within Ecipse m2e, use [m2e-code-quality](https://github.com/m2e-code-quality/m2e-code-quality) plugin for spotbugs.
+The plugin cycles controlled by Eclipse require compilation phase for m2e without further help.  This plugin runs verify only during site generation.  Therefore Eclipse m2e will show up but not do anything with this plugin alone.  In order to have proper execution within Ecipse m2e, use [m2e-code-quality](https://github.com/m2e-code-quality/m2e-code-quality) plugin for spotbugs.
 
 ## Analysis Properties ##
 
