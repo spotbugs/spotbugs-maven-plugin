@@ -843,6 +843,55 @@
 
     <profiles>
         <profile>
+            <id>eclipse</id>
+            <activation>
+                <property>
+                    <name>m2e.version</name>
+                </property>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                        <plugin>
+                            <groupId>org.eclipse.m2e</groupId>
+                            <artifactId>lifecycle-mapping</artifactId>
+                            <!-- Keep version here as fake version and maven report info has problems defining it in dependency management -->
+                            <version>${lifecycle.plugin}</version>
+                            <configuration>
+                                <lifecycleMappingMetadata>
+                                    <pluginExecutions combine.children="append">
+                                        <!-- gmavenplus m2e in plugin states to ignore, we will process -->
+                                        <pluginExecution>
+                                            <pluginExecutionFilter>
+                                                <groupId>org.codehaus.gmavenplus</groupId>
+                                                <artifactId>gmavenplus-plugin</artifactId>
+                                                <versionRange>[${gmavenPluginVersion},)</versionRange>
+                                                <goals>
+                                                    <goal>addSources</goal>
+                                                    <goal>addTestSources</goal>
+                                                    <goal>generateStubs</goal>
+                                                    <goal>compile</goal>
+                                                    <goal>generateTestStubs</goal>
+                                                    <goal>compileTests</goal>
+                                                    <goal>removeStubs</goal>
+                                                    <goal>removeTestStubs</goal>
+                                                </goals>
+                                            </pluginExecutionFilter>
+                                            <action>
+                                                <ignore />
+                                            </action>
+                                        </pluginExecution>
+                                    </pluginExecutions>
+                                </lifecycleMappingMetadata>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+
+        <profile>
             <id>run-its</id>
             <properties>
                 <spotbug.debug>false</spotbug.debug>
