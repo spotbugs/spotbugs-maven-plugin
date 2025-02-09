@@ -12,7 +12,7 @@ Please download latest snapshots from [here](https://oss.sonatype.org/content/re
 Building spotbugs-maven-plugin Requirements
 ===========================================
 
-Java 17+ is required to build the project.  Java 8+ is required for spotbugs analysis.
+Java 17+ is required to build the project.  Java 11+ is required for spotbugs analysis.
 Maven 3.9.9 is required to build the project.  It can be used as low as maven 3.6.3 in usage.
 
 spotbugs-maven-plugin
@@ -62,7 +62,7 @@ mvn -Dmaven.surefire.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspe
 
 Run gui with a specific version 
 ```
-mvn com.github.spotbugs:spotbugs-maven-plugin:4.8.6.6:gui
+mvn com.github.spotbugs:spotbugs-maven-plugin:4.9.0.0:gui
 ```
 
 ## Creating new site examples ##
@@ -93,7 +93,7 @@ If using groovy with same group id (```org.codehaus.groovy 3.x``` or before or `
 
 ## Eclipse m2e Integration ##
 
-The plugin cycles controlled by Eclipse require compilation phase for m2e without further help.  This plugin runs verify and during site generation.  Therefore Eclipse m2e will show up but not do anything with this plugin alone.  In order to have proper execution within Ecipse m2e, use [m2e-code-quality](https://github.com/m2e-code-quality/m2e-code-quality) plugin for spotbugs.
+The plugin cycles controlled by Eclipse require compilation phase for m2e without further help.  This plugin runs verify only during site generation.  Therefore Eclipse m2e will show up but not do anything with this plugin alone.  In order to have proper execution within Ecipse m2e, use [m2e-code-quality](https://github.com/m2e-code-quality/m2e-code-quality) plugin for spotbugs.
 
 ## Analysis Properties ##
 
@@ -111,4 +111,23 @@ E.g. to set the findbugs.assertionmethods analyzer property:
         <jvmArgs>-Dfindbugs.assertionmethods=org.apache.commons.lang3.Validate.notNull</jvmArgs>
     </configuration?
 </plugin>
+```
+
+## Override Spotbugs Version ##
+
+Spotbugs aligns with spotbugs releases but normally does not have a hard requirement on this, therefore you can override the spotbugs version as follows.
+
+```
+    <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs.plugin}</version>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs</artifactId>
+                <version>${spotbugs.version}</version>
+            </dependency>
+        </dependencies>
+    </plugin>
 ```
