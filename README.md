@@ -112,3 +112,22 @@ E.g. to set the findbugs.assertionmethods analyzer property:
     </configuration?
 </plugin>
 ```
+
+## Override Spotbugs Version ##
+
+Spotbugs aligns with spotbugs releases but normally does not have a hard requirement on this, therefore you can override the spotbugs version as follows.
+
+```
+    <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs.plugin}</version>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs</artifactId>
+                <version>${spotbugs.version}</version>
+            </dependency>
+        </dependencies>
+    </plugin>
+```
