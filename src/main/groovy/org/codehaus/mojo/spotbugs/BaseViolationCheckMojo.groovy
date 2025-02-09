@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2024 the original author or authors.
+ * Copyright 2005-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -383,7 +383,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
         if (outputFile.exists()) {
 
-            def xml = new XmlParser().parse(outputFile)
+            Node xml = new XmlParser().parse(outputFile)
 
             def bugs = xml.BugInstance
             int bugCount = bugs.size()
@@ -452,7 +452,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         !sourceFiles.isEmpty()
     }
 
-    private void printBugs(total, bugs) {
+    private void printBugs(int total, def bugs) {
         for (i in 0..total - 1) {
             def bug = bugs[i]
             log.error(bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK + bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
