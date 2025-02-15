@@ -715,7 +715,7 @@
                     <configuration>
                         <!-- Repo https://github.com/gleclaire/codenarc-maven-plugin has been forked and will need major upgrades to use this. -->
                         <skip>true</skip>
-        
+
                         <codeNarcVersion>${codenarc.version}</codeNarcVersion>
                         <groovyVersion>${groovyVersion}</groovyVersion>
                         <maxPriority1Violations>0</maxPriority1Violations>
