@@ -29,7 +29,7 @@
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.9.0.1-SNAPSHOT</version>
+    <version>4.9.2.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
@@ -168,7 +168,7 @@
         <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
 
         <!-- Reproducible Builds: override timestamp value from parent -->
-        <project.build.outputTimestamp>1739649724</project.build.outputTimestamp>
+        <project.build.outputTimestamp>1739650580</project.build.outputTimestamp>
 
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.9.1</spotbugs.version>
@@ -715,7 +715,7 @@
                     <configuration>
                         <!-- Repo https://github.com/gleclaire/codenarc-maven-plugin has been forked and will need major upgrades to use this. -->
                         <skip>true</skip>
-        
+
                         <codeNarcVersion>${codenarc.version}</codeNarcVersion>
                         <groovyVersion>${groovyVersion}</groovyVersion>
                         <maxPriority1Violations>0</maxPriority1Violations>
