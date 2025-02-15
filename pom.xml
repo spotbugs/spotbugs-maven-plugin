@@ -29,7 +29,7 @@
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.9.1.0</version>
+    <version>4.9.2.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
@@ -141,7 +141,7 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</developerConnection>
-        <tag>spotbugs-maven-plugin-4.9.1.0</tag>
+        <tag>HEAD</tag>
         <url>https://github.com/spotbugs/spotbugs-maven-plugin</url>
     </scm>
     <issueManagement>
@@ -168,7 +168,7 @@
         <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
 
         <!-- Reproducible Builds: override timestamp value from parent -->
-        <project.build.outputTimestamp>1739650528</project.build.outputTimestamp>
+        <project.build.outputTimestamp>1739650580</project.build.outputTimestamp>
 
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.9.1</spotbugs.version>
