@@ -33,7 +33,7 @@
       <li><a href="index.html" title="SpotBugs Maven Plugin">SpotBugs Maven Plugin</a><span class="divider">»</span></li>
     <li class="active ">Usage</li>
         <li id="publishDate" class="pull-right"><span class="divider">|</span> Last Published: 2025-02-15</li>
-          <li id="projectVersion" class="pull-right"><span class="divider">|</span>Version: 4.9.0.0</li>
+          <li id="projectVersion" class="pull-right"><span class="divider">|</span>Version: 4.9.1.0</li>
         <li class="pull-right"><a href="https://github.com/spotbugs/" class="externalLink" title="SpotBugs">SpotBugs</a></li>
           </ul>
         </div>
@@ -70,7 +70,7 @@
         </header>
         <main id="bodyColumn"  class="span10" >
 <p>------</p><section>
-<h2><a name="Usage_version4.9.0.0.2Fversion_The_following_examples_describe_the_basic_usage_of_the_SpotBugs_plugin."></a>Usage <i>version</i>4.9.0.0<i>/version</i> The following examples describe the basic usage of the SpotBugs plugin.</h2><section>
+<h2><a name="Usage_version4.9.1.0.2Fversion_The_following_examples_describe_the_basic_usage_of_the_SpotBugs_plugin."></a>Usage <i>version</i>4.9.1.0<i>/version</i> The following examples describe the basic usage of the SpotBugs plugin.</h2><section>
 <h3><a name="Generate_SpotBugs_Report_As_Part_of_the_Project_Reports"></a>Generate SpotBugs Report As Part of the Project Reports</h3>
 <p>To generate the SpotBugs report as part of the Project Reports, add the SpotBugs plugin in the <code>&lt;reporting&gt;</code> section of your <code>pom.xml</code>.</p>
 <div class="source"><pre class="prettyprint">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -81,7 +81,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.0.0&lt;/version&gt;
+        &lt;version&gt;4.9.1.0&lt;/version&gt;
       &lt;/plugin&gt;
     &lt;/plugins&gt;
   &lt;/reporting&gt;
@@ -101,7 +101,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.0.0&lt;/version&gt;
+        &lt;version&gt;4.9.1.0&lt;/version&gt;
         &lt;configuration&gt;
           &lt;xmlOutput&gt;true&lt;/xmlOutput&gt;
           &lt;!-- Optional directory to put spotbugs xdoc xml report --&gt;
@@ -126,7 +126,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.0.0&lt;/version&gt;
+        &lt;version&gt;4.9.1.0&lt;/version&gt;
         &lt;configuration&gt;
           &lt;excludeFilterFile&gt;spotbugs-exclude.xml&lt;/excludeFilterFile&gt;
           &lt;includeFilterFile&gt;spotbugs-include.xml&lt;/includeFilterFile&gt;
@@ -150,7 +150,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.0.0&lt;/version&gt;
+        &lt;version&gt;4.9.1.0&lt;/version&gt;
         &lt;configuration&gt;
           &lt;visitors&gt;FindDeadLocalStores,UnreadFields&lt;/visitors&gt;
         &lt;/configuration&gt;
@@ -173,7 +173,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.0.0&lt;/version&gt;
+        &lt;version&gt;4.9.1.0&lt;/version&gt;
         &lt;configuration&gt;
           &lt;omitVisitors&gt;FindDeadLocalStores,UnreadFields&lt;/omitVisitors&gt;
         &lt;/configuration&gt;
@@ -196,7 +196,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.0.0&lt;/version&gt;
+        &lt;version&gt;4.9.1.0&lt;/version&gt;
         &lt;configuration&gt;
          &lt;onlyAnalyze&gt;com.github.spotbugs.spotbugs.*&lt;/onlyAnalyze&gt;
         &lt;/configuration&gt;
@@ -219,7 +219,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.0.0&lt;/version&gt;
+        &lt;version&gt;4.9.1.0&lt;/version&gt;
         &lt;configuration&gt;
           &lt;pluginList&gt;myDetectors.jar, yourDetectors.jar&lt;/pluginList&gt;
         &lt;/configuration&gt;
@@ -242,7 +242,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.0.0&lt;/version&gt;
+        &lt;version&gt;4.9.1.0&lt;/version&gt;
         &lt;configuration&gt;
           &lt;plugins&gt;
             &lt;plugin&gt;
@@ -271,7 +271,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.0.0&lt;/version&gt;
+        &lt;version&gt;4.9.1.0&lt;/version&gt;
         &lt;configuration&gt;
           &lt;!-- Optional directory to put spotbugs xml report --&gt;
         &lt;/configuration&gt;
