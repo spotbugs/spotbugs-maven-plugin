@@ -645,6 +645,30 @@
                     <artifactId>maven-plugin-plugin</artifactId>
                     <version>${pluginPluginVersion}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-plugin-reporting-plugin</artifactId>
+                    <version>${pluginPluginVersion}</version>
+                    <configuration>
+                        <requirements>
+                            <jdk>${project.build.java.target}</jdk>
+                        </requirements>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>l10n-maven-plugin</artifactId>
+                    <version>${l10nPluginVersion}</version>
+                    <configuration>
+                        <locales>
+                            <locale>es</locale>
+                            <locale>fr</locale>
+                            <locale>no_NO</locale>
+                            <locale>pt_BR</locale>
+                        </locales>
+                    </configuration>
+                </plugin>
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -662,6 +686,9 @@
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
                     <version>${project.version}</version>
+                    <configuration>
+                        <excludeFilterFile>${project.basedir}/src/main/tools/spotbugs-exclude-filters.xml</excludeFilterFile>
+                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -688,6 +715,13 @@
                     <configuration>
                         <!-- Repo https://github.com/gleclaire/codenarc-maven-plugin has been forked and will need major upgrades to use this. -->
                         <skip>true</skip>
+        
+                        <codeNarcVersion>${codenarc.version}</codeNarcVersion>
+                        <groovyVersion>${groovyVersion}</groovyVersion>
+                        <maxPriority1Violations>0</maxPriority1Violations>
+                        <maxPriority2Violations>0</maxPriority2Violations>
+                        <maxPriority3Violations>5</maxPriority3Violations>
+                        <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
                     </configuration>
                     <dependencies>
                         <dependency>
@@ -798,45 +832,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-report-plugin</artifactId>
-                <version>${pluginPluginVersion}</version>
-                <configuration>
-                    <requirements>
-                        <jdk>${project.build.java.target}</jdk>
-                    </requirements>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>l10n-maven-plugin</artifactId>
-                <version>${l10nPluginVersion}</version>
-                <configuration>
-                    <locales>
-                        <locale>es</locale>
-                        <locale>fr</locale>
-                        <locale>no_NO</locale>
-                        <locale>pt_BR</locale>
-                    </locales>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>codenarc-maven-plugin</artifactId>
-                <configuration>
-                    <codeNarcVersion>${codenarc.version}</codeNarcVersion>
-                    <groovyVersion>${groovyVersion}</groovyVersion>
-                    <maxPriority1Violations>0</maxPriority1Violations>
-                    <maxPriority2Violations>0</maxPriority2Violations>
-                    <maxPriority3Violations>5</maxPriority3Violations>
-                    <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>${project.version}</version>
-                <configuration>
-                    <excludeFilterFile>${project.basedir}/src/main/tools/spotbugs-exclude-filters.xml</excludeFilterFile>
-                </configuration>
             </plugin>
         </plugins>
     </reporting>
