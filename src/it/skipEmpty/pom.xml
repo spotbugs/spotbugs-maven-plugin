@@ -43,6 +43,14 @@
     <maven.compiler.release>8</maven.compiler.release>
   </properties>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>@slf4jVersion@</version>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
       <plugin>
