@@ -235,7 +235,7 @@
         <beanutils.version>1.10.1</beanutils.version>
         <chain.version>1.2</chain.version>
         <codec.version>1.18.0</codec.version>
-        <codenarc.version>3.5.0-groovy-4.0</codenarc.version>
+        <codenarc.version>3.6.0-groovy-4.0</codenarc.version>
         <collections.version>3.2.2</collections.version>
         <digester.version>2.1</digester.version>
         <gson.version>2.12.1</gson.version>
