@@ -633,7 +633,7 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-plugin-reporting-plugin</artifactId>
+                    <artifactId>maven-plugin-report-plugin</artifactId>
                     <version>${pluginPluginVersion}</version>
                     <configuration>
                         <requirements>
