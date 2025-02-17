@@ -28,7 +28,7 @@ public class App implements Cloneable {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
-        Objects.assertNull(args);
+        Objects.isNull(args);
         logger.info("Hello World!");
     }
 
