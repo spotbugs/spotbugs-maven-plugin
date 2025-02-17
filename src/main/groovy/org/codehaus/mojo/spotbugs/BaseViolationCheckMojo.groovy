@@ -21,16 +21,9 @@ import groovy.xml.XmlSlurper
 import javax.inject.Inject
 
 import org.apache.commons.io.FileUtils
-import org.apache.maven.doxia.siterenderer.Renderer
-import org.apache.maven.doxia.tools.SiteTool
-import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
-import org.apache.maven.plugins.annotations.Execute
-import org.apache.maven.plugins.annotations.LifecyclePhase
-import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
-import org.apache.maven.plugins.annotations.ResolutionScope
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 import org.codehaus.plexus.resource.ResourceManager
 
@@ -72,10 +65,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     @Parameter(defaultValue = 'spotbugsXml.xml', property = 'spotbugs.outputXmlFilename')
     String spotbugsXmlOutputFilename
 
-    /** Doxia Site Renderer. */
-    @Inject
-    Renderer siteRenderer
-
     /** Directory containing the class files for Spotbugs to analyze. */
     @Parameter(defaultValue = '${project.build.outputDirectory}', required = true)
     File classFilesDirectory
@@ -103,10 +92,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     /** List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin. */
     @Parameter(property = 'plugin.artifacts', readonly = true, required = true)
     List pluginArtifacts
-
-    /** Maven Session. */
-    @Parameter (defaultValue = '${session}', readonly = true, required = true)
-    MavenSession session
 
     /**
      * The file encoding to use when reading the source files. If the property <code>project.build.sourceEncoding</code>
@@ -287,14 +272,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      */
     @Inject
     ResourceManager resourceManager
-
-    /**
-     * SiteTool.
-     *
-     * @since 2.1
-     */
-    @Inject
-    SiteTool siteTool
 
     /**
      * Fail the build on an error.
