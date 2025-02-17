@@ -111,7 +111,7 @@ class SourceFileIndexer {
      * @return Path safe to use for comparison
      */
     private String normalizePath(String path) {
-        return path.replaceAll("\\\\","/")
+        return path.replace("\\\\","/")
     }
 
     /**
