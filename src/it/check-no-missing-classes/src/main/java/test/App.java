@@ -27,6 +27,10 @@ public class App {
 
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
+    private App() {
+        // Do not allow instantiation
+    }
+
     public static void main(String[] args) {
         Objects.isNull(args);
         logger.info("Hello World!");
