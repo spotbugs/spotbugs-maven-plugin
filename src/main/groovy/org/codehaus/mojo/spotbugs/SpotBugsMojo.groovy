@@ -22,6 +22,14 @@ import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.StreamingMarkupBuilder
 
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.stream.Collectors
+
+import javax.inject.Inject
+
 import org.apache.maven.doxia.siterenderer.Renderer
 import org.apache.maven.doxia.tools.SiteTool
 import org.apache.maven.execution.MavenSession
@@ -35,14 +43,6 @@ import org.apache.maven.repository.RepositorySystem
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceLoader
-
-import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
-import java.nio.file.Path
-import java.util.stream.Collectors
-
-import javax.inject.Inject
 
 /**
  * Generates a SpotBugs Report when the site plugin is run.
