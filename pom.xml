@@ -171,7 +171,7 @@
         <project.build.outputTimestamp>1739650580</project.build.outputTimestamp>
 
         <!-- Override spotbugs to this version from base-parent -->
-        <spotbugs.version>4.9.1</spotbugs.version>
+        <spotbugs.version>4.9.2</spotbugs.version>
 
         <junitVersion>5.11.4</junitVersion>
         <slf4jVersion>2.0.17</slf4jVersion>
