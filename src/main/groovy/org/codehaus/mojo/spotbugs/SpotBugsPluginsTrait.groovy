@@ -24,7 +24,6 @@ import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.repository.RepositorySystem
 
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResult
 import org.codehaus.plexus.resource.ResourceManager
 
 /**
