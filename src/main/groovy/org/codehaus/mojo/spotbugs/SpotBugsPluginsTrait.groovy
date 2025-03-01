@@ -99,7 +99,7 @@ trait SpotBugsPluginsTrait {
                     log.debug("pomArtifact is ${pomArtifact} ****** groupId is ${pomArtifact['groupId']} ****** artifactId is ${pomArtifact['artifactId']} ****** version is ${pomArtifact['version']} ****** type is ${pomArtifact['type']}")
                 } else {
                     log.debug("groupId is ${plugin['groupId']} ****** artifactId is ${plugin['artifactId']} ****** version is ${plugin['version']} ****** type is ${plugin['type']} ****** classifier is ${plugin['classifier']}")
-                    pomArtifact = this.factory.createArtifactWithClassifier(plugin['groupId'], plugin['artifactId'], plugin['version'], "", plugin['type'], plugin['classifier'])
+                    pomArtifact = this.factory.createArtifactWithClassifier(plugin['groupId'], plugin['artifactId'], plugin['version'], plugin['type'], plugin['classifier'])
                     log.debug("pomArtifact is ${pomArtifact} ****** groupId is ${pomArtifact['groupId']} ****** artifactId is ${pomArtifact['artifactId']} ****** version is ${pomArtifact['version']} ****** type is ${pomArtifact['type']} ****** classfier is ${pomArtifact['classifier']}")
                 }
 
