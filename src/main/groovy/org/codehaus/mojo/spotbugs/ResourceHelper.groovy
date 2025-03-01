@@ -16,6 +16,7 @@
 package org.codehaus.mojo.spotbugs
 
 import java.nio.file.Files
+
 import org.apache.maven.plugin.logging.Log
 import org.codehaus.plexus.resource.loader.FileResourceCreationException
 import org.codehaus.plexus.resource.loader.FileResourceLoader
@@ -108,7 +109,7 @@ final class ResourceHelper {
         try (InputStream is = new BufferedInputStream(resourceManager.getResourceAsInputStream(name))) {
 
             if (!outputResourceFile.getParentFile().exists()) {
-                outputResourceFile.getParentFile().mkdirs()
+                Files.createDirectories(outputResourceFile.getParentFile().toPath())
             }
 
             FileOutputStream os = new FileOutputStream(outputResourceFile)
