@@ -21,7 +21,7 @@ import groovy.xml.XmlSlurper
 import javax.inject.Inject
 
 import org.apache.commons.io.FileUtils
-import org.apache.maven.doxia.siterenderer.Renderer
+import org.apache.maven.doxia.siterenderer.SiteRenderer
 import org.apache.maven.doxia.tools.SiteTool
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.AbstractMojo
@@ -74,7 +74,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     /** Doxia Site Renderer. */
     @Inject
-    Renderer siteRenderer
+    SiteRenderer siteRenderer
 
     /** Directory containing the class files for Spotbugs to analyze. */
     @Parameter(defaultValue = '${project.build.outputDirectory}', required = true)
