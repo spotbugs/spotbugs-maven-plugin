@@ -136,8 +136,8 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             log.info('No errors/warnings found')
             return
         } else if (maxAllowedViolations > 0 && bugCount <= maxAllowedViolations) {
-            log.info("Total ${bugCount} violations are found as acceptable using configured property maxAllowedViolations "
-                + ":${maxAllowedViolations}.${SpotBugsInfo.EOL}Below are list of bugs ignored :${SpotBugsInfo.EOL}")
+            log.info("Total ${bugCount} violations are found as acceptable using configured property maxAllowedViolations " +
+                ":${maxAllowedViolations}.${SpotBugsInfo.EOL}Below are list of bugs ignored :${SpotBugsInfo.EOL}")
             printBugs(bugCount, bugs)
             return
         }
@@ -154,9 +154,9 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             def bug = bugs[i]
             int priorityNum = bug.'@priority' as Integer
             String priorityName = SpotBugsInfo.spotbugsPriority[priorityNum]
-            String logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK
-                    + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK + bug.SourceLine.Message.text()
-                    + SpotBugsInfo.BLANK + bug.'@type'
+            String logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK +
+                bug.SourceLine.'@classname' + SpotBugsInfo.BLANK + bug.SourceLine.Message.text() +
+                SpotBugsInfo.BLANK + bug.'@type'
 
             // lower is more severe
             if (priorityNum <= priorityThresholdNum) {
@@ -169,9 +169,9 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             }
         }
 
-        log.info(SpotBugsInfo.EOL + SpotBugsInfo.EOL + SpotBugsInfo.EOL
-            + 'To see bug detail using the Spotbugs GUI, use the following command "mvn spotbugs:gui"'
-            + SpotBugsInfo.EOL + SpotBugsInfo.EOL + SpotBugsInfo.EOL)
+        log.info(SpotBugsInfo.EOL + SpotBugsInfo.EOL + SpotBugsInfo.EOL +
+            'To see bug detail using the Spotbugs GUI, use the following command "mvn spotbugs:gui"' +
+            SpotBugsInfo.EOL + SpotBugsInfo.EOL + SpotBugsInfo.EOL)
 
         if ((bugCountAboveThreshold || errorCount) && failOnError) {
             throw new MojoExecutionException("failed with ${bugCountAboveThreshold} bugs and ${errorCount} errors")
@@ -198,8 +198,8 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     private void printBugs(int total, def bugs) {
         for (i in 0..total - 1) {
             def bug = bugs[i]
-            log.error(bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK
-                + bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
+            log.error(bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
+                bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
         }
     }
 }
