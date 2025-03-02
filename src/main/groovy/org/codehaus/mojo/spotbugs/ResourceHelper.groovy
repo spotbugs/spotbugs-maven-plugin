@@ -99,7 +99,7 @@ final class ResourceHelper {
         File outputResourceFile
 
         if (outputPath == null) {
-            outputResourceFile = Files.createTempFile('plexus-resources', 'tmp')
+            outputResourceFile = Files.createTempFile('plexus-resources', 'tmp').toFile()
         } else if (outputDirectory != null) {
             outputResourceFile = new File(outputDirectory, outputPath)
         } else {
