@@ -31,7 +31,6 @@ import java.util.stream.Collectors
 import javax.inject.Inject
 
 import org.apache.maven.doxia.siterenderer.Renderer
-import org.apache.maven.doxia.tools.SiteTool
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugins.annotations.Mojo
@@ -420,14 +419,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     ResourceManager resourceManager
 
     /**
-     * SiteTool.
-     *
-     * @since 2.1
-     */
-    @Inject
-    SiteTool siteTool
-
-    /**
      * Fail the build on an error.
      *
      * @since 2.0
@@ -643,7 +634,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             } else {
                 log.debug('Generating Spotbugs HTML')
 
-                SpotbugsReportGenerator generator = new SpotbugsReportGenerator(getSink(), getBundle(locale), this.session.getCurrentProject().getBasedir(), siteTool)
+                SpotbugsReportGenerator generator = new SpotbugsReportGenerator(getSink(), getBundle(locale))
 
                 boolean isJxrPluginEnabled = isJxrPluginEnabled()
 
