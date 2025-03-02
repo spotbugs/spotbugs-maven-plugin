@@ -21,7 +21,6 @@ import org.apache.maven.doxia.markup.HtmlMarkup
 import org.apache.maven.doxia.sink.Sink
 import org.apache.maven.doxia.sink.SinkEventAttributes
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet
-import org.apache.maven.doxia.tools.SiteTool
 import org.apache.maven.plugin.logging.Log
 
 import org.codehaus.plexus.util.PathTool
@@ -153,12 +152,6 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
     /** Run Spotbugs on the tests. */
     boolean includeTests
 
-    /** Doxia site tool. */
-    SiteTool siteTool
-
-    /** Base directory. */
-    File basedir
-
     /** Spotbugs results. */
     GPathResult spotbugsResults
 
@@ -172,22 +165,14 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      *            The sink to generate the report.
      * @param bundle
      *            The resource bundle to get the messages from.
-     * @param basedir
-     *            The project base directory.
-     * @param siteTool
-     *            Doxia SiteTool Handle.
      */
-    SpotbugsReportGenerator(Sink sink, ResourceBundle bundle, File basedir, SiteTool siteTool) {
+    SpotbugsReportGenerator(Sink sink, ResourceBundle bundle) {
 
         assert sink
         assert bundle
-        assert basedir
-        assert siteTool
 
         this.sink = sink
         this.bundle = bundle
-        this.basedir = basedir
-        this.siteTool = siteTool
 
         this.bugClasses = []
 
