@@ -139,7 +139,8 @@ class XDocsReporter {
             mkp.xmlDeclaration()
             log.debug("generateReport spotbugsResults is ${spotbugsResults}")
 
-            BugCollection(version: getSpotBugsVersion(), threshold: SpotBugsInfo.spotbugsThresholds.get(threshold), effort: SpotBugsInfo.spotbugsEfforts.get(effort)) {
+            BugCollection(version: getSpotBugsVersion(), threshold: SpotBugsInfo.spotbugsThresholds.get(threshold),
+                    effort: SpotBugsInfo.spotbugsEfforts.get(effort)) {
 
                 log.debug("spotbugsResults.FindBugsSummary total_bugs is ${spotbugsResults.FindBugsSummary.@total_bugs.text()}")
 
@@ -173,7 +174,8 @@ class XDocsReporter {
                             String line = bugInstance.SourceLine.@start[0].text()
                             log.debug("BugInstance message is ${message}")
 
-                            BugInstance(type: type, priority: priority, category: category, message: message, lineNumber: ((line) ? line: "-1"))
+                            BugInstance(type: type, priority: priority, category: category, message: message,
+                                    lineNumber: ((line) ? line: "-1"))
                         }
                     }
                 }
