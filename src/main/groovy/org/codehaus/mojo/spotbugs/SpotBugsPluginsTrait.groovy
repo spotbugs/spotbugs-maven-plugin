@@ -15,16 +15,13 @@
  */
 package org.codehaus.mojo.spotbugs
 
+import org.apache.maven.RepositoryUtils
 import org.apache.maven.artifact.Artifact
-
 import org.apache.maven.plugin.logging.Log
-import org.apache.maven.project.ProjectBuildingRequest
 import org.apache.maven.plugin.MojoExecutionException
-
-import org.apache.maven.repository.RepositorySystem
-
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 import org.codehaus.plexus.resource.ResourceManager
+import org.eclipse.aether.resolution.ArtifactRequest
+import org.eclipse.aether.resolution.ArtifactResult
 
 /**
  * SpotBugs plugin support for Mojos.
@@ -33,8 +30,8 @@ trait SpotBugsPluginsTrait {
 
     // the trait needs certain objects to work, this need is expressed as abstract getters
     // classes implement them with implicitly generated property getters
-    abstract ArtifactResolver getArtifactResolver()
-    abstract RepositorySystem getFactory()
+    abstract org.eclipse.aether.RepositorySystem getRepositorySystem()
+    abstract org.apache.maven.repository.RepositorySystem getFactory()
     abstract File getSpotbugsXmlOutputDirectory()
     abstract Log getLog()
     abstract ResourceManager getResourceManager()
@@ -85,10 +82,7 @@ trait SpotBugsPluginsTrait {
 
             Artifact pomArtifact
 
-            ProjectBuildingRequest projectBuildingRequest = session.getProjectBuildingRequest()
             log.debug('  Session is: ' + session.toString())
-            projectBuildingRequest.setRemoteRepositories(session.getCurrentProject().getRemoteArtifactRepositories())
-            projectBuildingRequest.setLocalRepository(session.getLocalRepository())
 
             plugins.each() { plugin ->
 
@@ -103,7 +97,10 @@ trait SpotBugsPluginsTrait {
                     log.debug("pomArtifact is ${pomArtifact} ****** groupId is ${pomArtifact['groupId']} ****** artifactId is ${pomArtifact['artifactId']} ****** version is ${pomArtifact['version']} ****** type is ${pomArtifact['type']} ****** classfier is ${pomArtifact['classifier']}")
                 }
 
-                pomArtifact = artifactResolver.resolveArtifact(projectBuildingRequest, pomArtifact).getArtifact()
+                ArtifactRequest request = new ArtifactRequest(RepositoryUtils.toArtifact(pomArtifact), session.getCurrentProject().getRemoteProjectRepositories(), null);
+                ArtifactResult result = this.repositorySystem.resolveArtifact(session.getRepositorySession(), request);
+
+                pomArtifact.setFile(result.getArtifact().getFile())
 
                 urlPlugins += resourceHelper.getResourceFile(pomArtifact.file.absolutePath).absolutePath + ((plugin == plugins[plugins.size() - 1]) ? "" : File.pathSeparator)
             }
