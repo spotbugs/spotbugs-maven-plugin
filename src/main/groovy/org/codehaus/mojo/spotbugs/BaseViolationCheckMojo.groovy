@@ -22,7 +22,6 @@ import javax.inject.Inject
 
 import org.apache.commons.io.FileUtils
 import org.apache.maven.doxia.siterenderer.Renderer
-import org.apache.maven.doxia.tools.SiteTool
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
@@ -282,14 +281,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
      */
     @Inject
     ResourceManager resourceManager
-
-    /**
-     * SiteTool.
-     *
-     * @since 2.1
-     */
-    @Inject
-    SiteTool siteTool
 
     /**
      * Fail the build on an error.
