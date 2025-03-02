@@ -27,8 +27,6 @@ import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
-import org.apache.maven.repository.RepositorySystem
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 import org.codehaus.plexus.resource.ResourceManager
 
 /**
@@ -75,13 +73,13 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     @Parameter
     PluginArtifact[] plugins
 
-    /** Artifact resolver, needed to download the coreplugin jar. */
+    /** Artifact resolver, needed to download the plugin jars. */
     @Inject
-    ArtifactResolver artifactResolver
+    org.eclipse.aether.RepositorySystem repositorySystem
 
     /** Used to look up Artifacts in the remote repository. */
     @Inject
-    RepositorySystem factory
+    org.apache.maven.repository.RepositorySystem factory
 
     /** Maven Session. */
     @Parameter (defaultValue = '${session}', readonly = true, required = true)

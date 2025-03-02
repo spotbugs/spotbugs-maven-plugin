@@ -39,8 +39,6 @@ import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
 import org.apache.maven.reporting.AbstractMavenReport
 import org.apache.maven.reporting.MavenReport
-import org.apache.maven.repository.RepositorySystem
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceLoader
 
@@ -200,13 +198,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Parameter(defaultValue = 'Default', property = 'spotbugs.threshold')
     String threshold
 
-    /** Artifact resolver, needed to download the coreplugin jar. */
+    /** Artifact resolver, needed to download the plugin jars. */
     @Inject
-    ArtifactResolver artifactResolver
+    org.eclipse.aether.RepositorySystem repositorySystem
 
     /** Used to look up Artifacts in the remote repository. */
     @Inject
-    RepositorySystem factory
+    org.apache.maven.repository.RepositorySystem factory
 
     /**
      * File name of the include filter. Only bugs in matching the filters are reported.

@@ -184,14 +184,11 @@
         <doxiaSiteToolsVersion>1.11.1</doxiaSiteToolsVersion>
 
         <mavenSharedUtilsVersion>3.4.2</mavenSharedUtilsVersion>
-        <mavenTransferVersion>0.13.1</mavenTransferVersion>
-        <mavenCommonArtifactFilters>3.4.0</mavenCommonArtifactFilters>
         <mavenReportingApiVersion>3.1.1</mavenReportingApiVersion>
         <mavenReportingVersion>3.2.0</mavenReportingVersion>
         <mavenVersion>3.9.9</mavenVersion>
 
         <plexusComponentAnnotationsVersion>2.2.0</plexusComponentAnnotationsVersion>
-        <plexusContainerVersion>2.1.1</plexusContainerVersion>
         <plexusResourcesVersion>1.3.0</plexusResourcesVersion>
         <plexusUtilsVersion>4.0.2</plexusUtilsVersion>
         <plexusVelocityVersion>2.2.0</plexusVelocityVersion>
@@ -357,13 +354,6 @@
                 <version>${logging.version}</version>
             </dependency>
 
-            <!-- Force control of artifact filters -->
-            <dependency>
-                <groupId>org.apache.maven.shared</groupId>
-                <artifactId>maven-common-artifact-filters</artifactId>
-                <version>${mavenCommonArtifactFilters}</version>
-            </dependency>
-
             <!-- Force control of reporting api -->
             <dependency>
                 <groupId>org.apache.maven.reporting</groupId>
@@ -522,18 +512,6 @@
             <artifactId>maven-artifact</artifactId>
             <version>${mavenVersion}</version>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.maven.shared</groupId>
-            <artifactId>maven-artifact-transfer</artifactId>
-            <version>${mavenTransferVersion}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.sonatype.sisu</groupId>
-                    <artifactId>sisu-guice</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
