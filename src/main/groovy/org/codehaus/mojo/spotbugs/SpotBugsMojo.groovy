@@ -699,7 +699,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
 
             XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
-            xDocsReporter.setOutputWriter(Files.newBufferedWriter(Path.of("${xmlOutputDirectory}/spotbugs.xml"), Charset.forName(outputEncoding)))
+            xDocsReporter.setOutputWriter(Files.newBufferedWriter(Path.of("${xmlOutputDirectory}/spotbugs.xml"),
+                Charset.forName(outputEncoding)))
             xDocsReporter.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
             xDocsReporter.setCompileSourceRoots(session.getCurrentProject().compileSourceRoots)
             xDocsReporter.setTestSourceRoots(session.getCurrentProject().testCompileSourceRoots)
@@ -845,7 +846,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (onlyAnalyze) {
             args << '-onlyAnalyze'
             args << Arrays.stream(onlyAnalyze.split(SpotBugsInfo.COMMA)).map {
-                it.startsWith("file:") ? Files.lines(resourceHelper.getResourceFile(it.substring(5)).toPath()).collect(Collectors.joining(SpotBugsInfo.COMMA)) : it
+                it.startsWith("file:") ? Files.lines(resourceHelper.getResourceFile(it.substring(5)).toPath())
+                    .collect(Collectors.joining(SpotBugsInfo.COMMA)) : it
             }.collect(Collectors.joining(","))
         }
 
@@ -961,7 +963,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             auxClasspathFile.deleteOnExit()
             log.debug('  AuxClasspath Elements -> ' + auxClasspathElements)
 
-            List<String> auxClasspathList = auxClasspathElements.findAll { session.getCurrentProject().getBuild().outputDirectory != it.toString() }
+            List<String> auxClasspathList = auxClasspathElements.findAll {
+                session.getCurrentProject().getBuild().outputDirectory != it.toString()
+            }
             if (auxClasspathList.size() > 0) {
                 log.debug('  Last AuxClasspath is -> ' + auxClasspathList[auxClasspathList.size() - 1])
 
@@ -1018,7 +1022,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         log.debug('****** Executing SpotBugsMojo *******')
 
-        resourceManager.addSearchPath(FileResourceLoader.ID, session.getCurrentProject().getFile().getParentFile().getAbsolutePath())
+        resourceManager.addSearchPath(FileResourceLoader.ID, session.getCurrentProject().getFile()
+            .getParentFile().getAbsolutePath())
         resourceManager.addSearchPath(SpotBugsInfo.URL, "")
 
         resourceManager.setOutputDirectory(new File(session.getCurrentProject().getBuild().directory))
@@ -1054,7 +1059,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             effectiveEncoding = Charset.forName(sourceEncoding)
         }
 
-        ant.java(classname: 'edu.umd.cs.findbugs.FindBugs2', fork: "${fork}", failonerror: 'true', clonevm: 'false', timeout: "${timeout}", maxmemory: "${maxHeap}m") {
+        ant.java(classname: 'edu.umd.cs.findbugs.FindBugs2', fork: "${fork}", failonerror: 'true',
+                clonevm: 'false', timeout: "${timeout}", maxmemory: "${maxHeap}m") {
 
             log.debug('File Encoding is ' + effectiveEncoding.name())
 
@@ -1152,7 +1158,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 if (effectiveEncoding.name().equalsIgnoreCase("Cp1252")) {
                     writer.write '<?xml version="1.0" encoding="windows-1252"?>'
                 } else {
-                    writer.write '<?xml version="1.0" encoding="' + effectiveEncoding.name().toLowerCase(Locale.ENGLISH) + '"?>'
+                    writer.write '<?xml version="1.0" encoding="' +
+                        effectiveEncoding.name().toLowerCase(Locale.ENGLISH) + '"?>'
                 }
 
                 writer.write SpotBugsInfo.EOL

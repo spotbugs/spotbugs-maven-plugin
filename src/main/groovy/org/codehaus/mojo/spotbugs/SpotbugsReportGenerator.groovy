@@ -346,7 +346,8 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
                 return
             }
             prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefLocation.getAbsolutePath())
-            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefLocation.getName() +
+                SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
         }
 
         if (includeTests && !prefix) {
@@ -355,7 +356,8 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
                     return
                 }
                 prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefTestLocation.getAbsolutePath())
-                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefTestLocation.getName() + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefTestLocation.getName() +
+                    SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
             }
         }
 
@@ -398,7 +400,8 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         // Dollar '$' for nested classes is not valid character in sink.anchor() and therefore it is ignored
         // https://github.com/spotbugs/spotbugs-maven-plugin/issues/236
-        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_START] as Object[], new SinkEventAttributeSet(SinkEventAttributes.NAME, bugClass))
+        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_START] as Object[],
+            new SinkEventAttributeSet(SinkEventAttributes.NAME, bugClass))
         sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_END] as Object[], null)
 
         sink.section2()
