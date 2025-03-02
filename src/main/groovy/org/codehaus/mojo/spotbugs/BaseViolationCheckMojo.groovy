@@ -368,7 +368,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             return
         }
 
-        log.debug('Here goes...............Executing spotbugs:check')
+        log.debug('Executing spotbugs:check')
 
         if (!spotbugsXmlOutputDirectory.exists() && !spotbugsXmlOutputDirectory.mkdirs()) {
             throw new MojoExecutionException('Cannot create xml output directory')
@@ -391,7 +391,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
                 log.info('No errors/warnings found')
                 return
             } else if (maxAllowedViolations > 0 && bugCount <= maxAllowedViolations) {
-                log.info("total ${bugCount} violations are found which is set to be acceptable using configured property maxAllowedViolations :${maxAllowedViolations}.${SpotBugsInfo.EOL}Below are list of bugs ignored :${SpotBugsInfo.EOL}")
+                log.info("Total ${bugCount} violations are found as acceptable using configured property maxAllowedViolations :${maxAllowedViolations}.${SpotBugsInfo.EOL}Below are list of bugs ignored :${SpotBugsInfo.EOL}")
                 printBugs(bugCount, bugs)
                 return
             }
