@@ -20,6 +20,7 @@ import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.NodeChildren
 import groovy.xml.StreamingMarkupBuilder
 
 import java.nio.charset.Charset
@@ -1125,7 +1126,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 errorCount = allNodes.findAll { it.name() == 'Error' }.size()
                 log.debug("Error size is ${errorCount}")
 
-                def xmlProject = path.Project
+                NodeChildren xmlProject = path.Project
 
                 session.getCurrentProject().compileSourceRoots.each() { compileSourceRoot ->
                     xmlProject.appendNode { SrcDir(compileSourceRoot) }
