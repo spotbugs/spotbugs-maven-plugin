@@ -92,6 +92,7 @@ final class ResourceHelper {
         // Optimization for File to File fetches
         File f = FileResourceLoader.getResourceAsFile(name, outputPath, outputDirectory)
         if (f != null) {
+            log.debug('optimized file ' + name)
             return f
         }
         // End optimization
