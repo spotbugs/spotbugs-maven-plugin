@@ -196,12 +196,13 @@
         <plexusVelocityVersion>2.2.0</plexusVelocityVersion>
         <plexusXmlVersion>3.0.1</plexusXmlVersion>
 
-        <dependency-check.plugin note="11.0.0+ requires doxia 2">10.0.4</dependency-check.plugin>
-        <fluido.version note="2.0.0+ requires doxia 2">1.12.0</fluido.version>
-        <pluginPluginVersion note="3.15.0+ requires doxia 2">3.14.0</pluginPluginVersion>
-        <project-info.plugin note="3.7.0+ requires doxia 2">3.6.2</project-info.plugin>
-        <site.plugin note="3.20.0+ requires doxia 2">3.12.1</site.plugin>
-        <versions.plugin note="2.18.0+ requires doxia 2">2.17.1</versions.plugin>
+        <!-- TODO: Run latest dependency check as prior is throwing errors. Remove after next parent update. -->
+        <dependency-check.plugin>12.1.0</dependency-check.plugin>
+
+        <!-- TODO: For running plugin, continue to use site plugin 3.12.1 -->
+        <site.doxia1.plugin note="3.21.0+ requires doxia 2">3.12.1</site.doxia1.plugin>
+
+        <pluginPluginVersion>3.15.1</pluginPluginVersion>
 
         <l10nPluginVersion>1.1.0</l10nPluginVersion>
         <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
@@ -642,18 +643,6 @@
                             <locale>pt_BR</locale>
                         </locales>
                     </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.apache.maven.doxia</groupId>
-                            <artifactId>doxia-sink-api</artifactId>
-                            <version>${doxiaVersion}</version>
-                        </dependency>
-                    </dependencies>
                 </plugin>
 
                 <plugin>
