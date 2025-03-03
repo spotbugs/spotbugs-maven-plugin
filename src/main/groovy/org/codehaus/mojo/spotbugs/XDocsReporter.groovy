@@ -135,7 +135,7 @@ class XDocsReporter {
         StreamingMarkupBuilder xmlBuilder = new StreamingMarkupBuilder()
         xmlBuilder.encoding = StandardCharsets.UTF_8.name()
 
-        def xdoc = {
+        Closure xdoc = {
             mkp.xmlDeclaration()
             log.debug("generateReport spotbugsResults is ${spotbugsResults}")
 
