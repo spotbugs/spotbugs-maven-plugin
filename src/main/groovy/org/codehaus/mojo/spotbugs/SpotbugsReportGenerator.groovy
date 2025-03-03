@@ -275,7 +275,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             String category = bugInstance.@category.text()
             String message = bugInstance.LongMessage.text()
             String priority = bugInstance.@priority.text()
-            def line = bugInstance.SourceLine[0]
+            GPathResult line = bugInstance.SourceLine[0]
             log.debug("BugInstance message is ${message}")
 
             sink.tableRow()
