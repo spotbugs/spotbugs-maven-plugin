@@ -1,4 +1,4 @@
-name: Java Integration Tests Maven 4.0.0-beta-4
+name: Java Integration Tests Maven 4.0.0-rc-4
 
 on: [push, pull_request]
 
@@ -12,7 +12,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    name: Integration Tests Maven 4.0.0-beta-4
+    name: Integration Tests Maven 4.0.0-rc-4
 
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
@@ -22,7 +22,7 @@ jobs:
           cache: maven
           distribution: zulu
           java-version: 21
-      - name: Load Maven 4.0.0-beta-4
-        run: mvn -B -V org.apache.maven.plugins:maven-wrapper-plugin:3.3.2:wrapper -Dmaven=4.0.0-beta-4 --no-transfer-progress
+      - name: Set Maven Wrapper version
+        run: sed -i "s|^distributionUrl=.*|distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/4.0.0-rc-4/apache-maven-4.0.0-rc-4-bin.zip|" .mvn/wrapper/maven-wrapper.properties
       - name: Integration Test with Maven
-        run: ./mvnw -B -V -DtestSrc=remote -Prun-its verify -Dinvoker.parallelThreads=8 -Dlicense.skip=true -Dmaven.min-version=4.0.0-beta-4 --no-transfer-progress
+        run: ./mvnw -B -V -DtestSrc=remote -Prun-its verify -Dinvoker.parallelThreads=8 -Dlicense.skip=true -Dmaven.min-version=4.0.0-rc-4 -Dmaven=4.0.0-rc-4 --no-transfer-progress
