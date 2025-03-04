@@ -756,68 +756,84 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     private ArrayList<String> getSpotbugsArgs(File htmlTempFile, File xmlTempFile, File sarifTempFile) {
         ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)
         List<String> args = new ArrayList<>()
-        File auxClasspathFile = createSpotbugsAuxClasspathFile()
 
         if (userPrefs) {
-            log.debug(" Adding User Preferences File -> ${userPrefs}")
+            log.debug("  Adding User Preferences File -> ${userPrefs}")
 
             args << '-userPrefs'
             args << resourceHelper.getResourceFile(userPrefs.trim())
         }
 
         if (htmlOutput) {
+            log.debug("  Adding 'htmlOutput'")
             args << '-html=' + htmlTempFile.getAbsolutePath()
         }
 
+        log.debug("  Adding 'xml:withMessages'")
         args << '-xml:withMessages=' + xmlTempFile.getAbsolutePath()
 
         if (sarifOutput) {
+            log.debug("  Adding 'sarifOutput'")
             args << '-sarif=' + sarifTempFile.getAbsolutePath()
         }
 
+        File auxClasspathFile = createSpotbugsAuxClasspathFile()
+
         if (auxClasspathFile) {
+          log.debug("  Adding 'auxclasspathFromFile'")
             args << '-auxclasspathFromFile'
             args << auxClasspathFile.getAbsolutePath()
         }
 
+        log.debug("  Adding 'projectName'")
         args << '-projectName'
         args << "${project.name}"
 
+        log.debug("  Adding 'effortParameter'")
         args << getEffortParameter()
+
+        log.debug("  Adding 'thresholdParameter'")
         args << getThresholdParameter()
 
         if (debug) {
-            log.debug('progress on')
+            log.debug("  Adding 'progress'")
             args << '-progress'
         }
 
         if (pluginList || plugins) {
+            log.debug("  Adding 'pluginList'")
             args << '-pluginList'
             args << getSpotbugsPlugins()
         }
 
 
         if (visitors) {
+            log.debug("  Adding 'visitors'")
             args << '-visitors'
             args << visitors
         }
 
         if (omitVisitors) {
+            log.debug("  Adding 'omitVisitors'")
             args << '-omitVisitors'
             args << omitVisitors
         }
 
         if (relaxed) {
+            log.debug("  Adding 'relaxed'")
             args << '-relaxed'
         }
 
         if (nested) {
+            log.debug("  Adding 'nested:true'")
             args << '-nested:true'
         } else {
+            log.debug("  Adding 'nested:false'")
             args << '-nested:false'
         }
 
         if (onlyAnalyze) {
+            log.debug("  Adding 'onlyAnalyze'")
             args << '-onlyAnalyze'
             args << Arrays.stream(onlyAnalyze.split(SpotBugsInfo.COMMA)).map {
                 it.startsWith("file:") ? Files.lines(resourceHelper.getResourceFile(it.substring(5)).toPath())
@@ -826,7 +842,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (includeFilterFile) {
-            log.debug('  Adding Include Filter File ')
+            log.debug('  Adding Include Filter File')
 
             String[] includefilters = includeFilterFile.split(SpotBugsInfo.COMMA)
 
@@ -895,6 +911,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (maxRank) {
+            log.debug("  Adding 'maxRank'")
             args << '-maxRank'
             args << maxRank
         }
@@ -910,7 +927,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (noClassOk) {
-            log.debug('  Adding no class ok')
+            log.debug("  Adding 'noClassOk'")
             args << '-noClassOk'
         }
 
