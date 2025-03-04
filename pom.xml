@@ -707,6 +707,19 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.openrewrite.maven</groupId>
+                <artifactId>rewrite-maven-plugin</artifactId>
+                <configuration>
+                    <exclusions>
+                        <!-- Open rewrite cannot handle non packaged groovy files used by maven invoker. -->
+                        <exclusion>**/*verify.groovy</exclusion>
+                        <!-- Open rewrite cannot handle groovy traits. -->
+                        <exclusion>**/*SpotBugsPluginsTrait.groovy</exclusion>
+                    </exclusions>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
