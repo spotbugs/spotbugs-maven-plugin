@@ -98,8 +98,8 @@ trait SpotBugsPluginsTrait {
                     log.debug("pomArtifact is ${pomArtifact} ****** groupId is ${pomArtifact['groupId']} ****** artifactId is ${pomArtifact['artifactId']} ****** version is ${pomArtifact['version']} ****** type is ${pomArtifact['type']} ****** classfier is ${pomArtifact['classifier']}")
                 }
 
-                ArtifactRequest request = new ArtifactRequest(RepositoryUtils.toArtifact(pomArtifact), session.getCurrentProject().getRemoteProjectRepositories(), null);
-                ArtifactResult result = this.repositorySystem.resolveArtifact(session.getRepositorySession(), request);
+                ArtifactRequest request = new ArtifactRequest(RepositoryUtils.toArtifact(pomArtifact), session.getCurrentProject().getRemoteProjectRepositories(), null)
+                ArtifactResult result = this.repositorySystem.resolveArtifact(session.getRepositorySession(), request)
 
                 pomArtifact.setFile(result.getArtifact().getFile())
 
