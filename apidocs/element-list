@@ -1,1 +1,2 @@
+module:com.github.spotbugs.maven
 com.github.spotbugs.spotbugs_maven_plugin

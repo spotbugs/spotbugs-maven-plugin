@@ -30,8 +30,8 @@
           <ul class="breadcrumb">
       <li><a href="index.html">SpotBugs Maven Plugin</a><span class="divider">»</span></li>
     <li class="active">Usage</li>
-        <li id="publishDate" class="pull-right"><span class="divider">|</span> Last Published: 2025-02-15</li>
-          <li id="projectVersion" class="pull-right"><span class="divider">|</span>Version: 4.9.2.0-SNAPSHOT</li>
+        <li id="publishDate" class="pull-right"><span class="divider">|</span> Last Published: 2025-03-04</li>
+          <li id="projectVersion" class="pull-right"><span class="divider">|</span>Version: 4.9.2.0</li>
         <li class="pull-right"><a href="https://github.com/spotbugs/" class="externalLink">SpotBugs</a></li>
           </ul>
         </div>
@@ -66,8 +66,8 @@
           </div>
         </header>
         <main id="bodyColumn" class="span10">
-<p>------</p><section><a id="Usage_version4.9.2.0-SNAPSHOT.2Fversion_The_following_examples_describe_the_basic_usage_of_the_SpotBugs_plugin."></a>
-<h1>Usage <i>version</i>4.9.2.0-SNAPSHOT<i>/version</i> The following examples describe the basic usage of the SpotBugs plugin.</h1><section><a id="Generate_SpotBugs_Report_As_Part_of_the_Project_Reports"></a>
+<p>------</p><section><a id="Usage_version4.9.2.0.2Fversion_The_following_examples_describe_the_basic_usage_of_the_SpotBugs_plugin."></a>
+<h1>Usage <i>version</i>4.9.2.0<i>/version</i> The following examples describe the basic usage of the SpotBugs plugin.</h1><section><a id="Generate_SpotBugs_Report_As_Part_of_the_Project_Reports"></a>
 <h2>Generate SpotBugs Report As Part of the Project Reports</h2>
 <p>To generate the SpotBugs report as part of the Project Reports, add the SpotBugs plugin in the <code>&lt;reporting&gt;</code> section of your <code>pom.xml</code>.</p>
 <pre class="prettyprint"><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -78,14 +78,16 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.2.0-SNAPSHOT&lt;/version&gt;
+        &lt;version&gt;4.9.2.0&lt;/version&gt;
       &lt;/plugin&gt;
     &lt;/plugins&gt;
   &lt;/reporting&gt;
   ...
-&lt;/project&gt;</code></pre>
+&lt;/project&gt;
+</code></pre>
 <p>Then, execute the site plugin to generate the report.</p>
-<pre class="prettyprint"><code>mvn site</code></pre></section><section><a id="Generate_SpotBugs_xdoc_Report_As_Part_of_the_Project_Reports"></a>
+<pre class="prettyprint"><code>mvn site
+</code></pre></section><section><a id="Generate_SpotBugs_xdoc_Report_As_Part_of_the_Project_Reports"></a>
 <h2>Generate SpotBugs xdoc Report As Part of the Project Reports</h2>
 <p>To generate the SpotBugs xdoc report as part of the Project Reports, add the SpotBugs plugin in the <code>&lt;reporting&gt;</code> section of your <code>pom.xml</code>. This will be the same report as that of the Maven 1 SpotBugs report. It is also the format used by Hudson. The output file will be written as <code>spotbugs.xml</code> to either the default output directory of ${project.build.directory} or by that started in the <code>&lt;xmlOutputDirectory&gt;</code> option.</p>
 <pre class="prettyprint"><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -96,7 +98,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.2.0-SNAPSHOT&lt;/version&gt;
+        &lt;version&gt;4.9.2.0&lt;/version&gt;
         &lt;configuration&gt;
           &lt;xmlOutput&gt;true&lt;/xmlOutput&gt;
           &lt;!-- Optional directory to put spotbugs xdoc xml report --&gt;
@@ -106,9 +108,11 @@
     &lt;/plugins&gt;
   &lt;/reporting&gt;
   ...
-&lt;/project&gt;</code></pre>
+&lt;/project&gt;
+</code></pre>
 <p>Then, execute the site plugin to generate the report.</p>
-<pre class="prettyprint"><code>mvn site</code></pre></section><section><a id="Specifying_which_bug_filters_to_run"></a>
+<pre class="prettyprint"><code>mvn site
+</code></pre></section><section><a id="Specifying_which_bug_filters_to_run"></a>
 <h2>Specifying which bug filters to run</h2>
 <p>To filter the classes and methods which are analyzed or omitted from analysis you can use filters. The filters allow specifying by class and method which bug categories to include/exclude in/from the reports. The <a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/filter.html">filter format specification</a> also contains useful examples.</p>
 <pre class="prettyprint"><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -119,7 +123,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.2.0-SNAPSHOT&lt;/version&gt;
+        &lt;version&gt;4.9.2.0&lt;/version&gt;
         &lt;configuration&gt;
           &lt;excludeFilterFile&gt;spotbugs-exclude.xml&lt;/excludeFilterFile&gt;
           &lt;includeFilterFile&gt;spotbugs-include.xml&lt;/includeFilterFile&gt;
@@ -128,9 +132,11 @@
     &lt;/plugins&gt;
   &lt;/reporting&gt;
   ...
-&lt;/project&gt;</code></pre>
+&lt;/project&gt;
+</code></pre>
 <p>Then, execute the site plugin to generate the report.</p>
-<pre class="prettyprint"><code>mvn site</code></pre></section><section><a id="Specifying_which_bug_detectors_to_run"></a>
+<pre class="prettyprint"><code>mvn site
+</code></pre></section><section><a id="Specifying_which_bug_detectors_to_run"></a>
 <h2>Specifying which bug detectors to run</h2>
 <p>The <code>visitors</code> option specifies a comma-separated list of bug detectors which should be run. The bug detectors are specified by their class names, without any package qualification. By default, all detectors which are not disabled are run.</p>
 <pre class="prettyprint"><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -141,7 +147,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.2.0-SNAPSHOT&lt;/version&gt;
+        &lt;version&gt;4.9.2.0&lt;/version&gt;
         &lt;configuration&gt;
           &lt;visitors&gt;FindDeadLocalStores,UnreadFields&lt;/visitors&gt;
         &lt;/configuration&gt;
@@ -149,9 +155,11 @@
     &lt;/plugins&gt;
   &lt;/reporting&gt;
   ...
-&lt;/project&gt;</code></pre>
+&lt;/project&gt;
+</code></pre>
 <p>Then, execute the site plugin to generate the report.</p>
-<pre class="prettyprint"><code>mvn site</code></pre></section><section><a id="Specifying_which_bug_detectors_to_skip"></a>
+<pre class="prettyprint"><code>mvn site
+</code></pre></section><section><a id="Specifying_which_bug_detectors_to_skip"></a>
 <h2>Specifying which bug detectors to skip</h2>
 <p>The <code>omitVisitors</code> option is like the visitors attribute, except it specifies detectors which will not be run.</p>
 <pre class="prettyprint"><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -162,7 +170,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.2.0-SNAPSHOT&lt;/version&gt;
+        &lt;version&gt;4.9.2.0&lt;/version&gt;
         &lt;configuration&gt;
           &lt;omitVisitors&gt;FindDeadLocalStores,UnreadFields&lt;/omitVisitors&gt;
         &lt;/configuration&gt;
@@ -170,9 +178,11 @@
     &lt;/plugins&gt;
   &lt;/reporting&gt;
   ...
-&lt;/project&gt;</code></pre>
+&lt;/project&gt;
+</code></pre>
 <p>Then, execute the site plugin to generate the report.</p>
-<pre class="prettyprint"><code>mvn site</code></pre></section><section><a id="Specifying_which_classes_to_analyze"></a>
+<pre class="prettyprint"><code>mvn site
+</code></pre></section><section><a id="Specifying_which_classes_to_analyze"></a>
 <h2>Specifying which classes to analyze</h2>
 <p>The <code>onlyAnalyze</code> option restricts analysis to the given comma-separated list of classes and packages.</p>
 <pre class="prettyprint"><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -183,7 +193,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.2.0-SNAPSHOT&lt;/version&gt;
+        &lt;version&gt;4.9.2.0&lt;/version&gt;
         &lt;configuration&gt;
          &lt;onlyAnalyze&gt;com.github.spotbugs.spotbugs.*&lt;/onlyAnalyze&gt;
         &lt;/configuration&gt;
@@ -191,9 +201,11 @@
     &lt;/plugins&gt;
   &lt;/reporting&gt;
   ...
-&lt;/project&gt;</code></pre>
+&lt;/project&gt;
+</code></pre>
 <p>Then, execute the site plugin to generate the report.</p>
-<pre class="prettyprint"><code>mvn site</code></pre></section><section><a id="Using_Third_party_or_your_own_detectors"></a>
+<pre class="prettyprint"><code>mvn site
+</code></pre></section><section><a id="Using_Third_party_or_your_own_detectors"></a>
 <h2>Using Third party or your own detectors</h2>
 <p>The <code>pluginList</code> option specifies a comma-separated list of optional BugDetector Jar files to add.</p>
 <pre class="prettyprint"><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -204,7 +216,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.2.0-SNAPSHOT&lt;/version&gt;
+        &lt;version&gt;4.9.2.0&lt;/version&gt;
         &lt;configuration&gt;
           &lt;pluginList&gt;myDetectors.jar, yourDetectors.jar&lt;/pluginList&gt;
         &lt;/configuration&gt;
@@ -212,9 +224,11 @@
     &lt;/plugins&gt;
   &lt;/reporting&gt;
   ...
-&lt;/project&gt;</code></pre>
+&lt;/project&gt;
+</code></pre>
 <p>Then, execute the site plugin to generate the report.</p>
-<pre class="prettyprint"><code>mvn site</code></pre></section><section><a id="Using_Detectors_from_a_Repository"></a>
+<pre class="prettyprint"><code>mvn site
+</code></pre></section><section><a id="Using_Detectors_from_a_Repository"></a>
 <h2>Using Detectors from a Repository</h2>
 <p>The <code>plugins</code> option defines a collection of PluginArtifact to work on. (PluginArtifact contains groupId, artifactId, version, type.) </p>
 <pre class="prettyprint"><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -225,7 +239,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.2.0-SNAPSHOT&lt;/version&gt;
+        &lt;version&gt;4.9.2.0&lt;/version&gt;
         &lt;configuration&gt;
           &lt;plugins&gt;
             &lt;plugin&gt;
@@ -239,9 +253,11 @@
     &lt;/plugins&gt;
   &lt;/reporting&gt;
   ...
-&lt;/project&gt;</code></pre>
+&lt;/project&gt;
+</code></pre>
 <p>Then, execute the site plugin to generate the report.</p>
-<pre class="prettyprint"><code>mvn site</code></pre></section><section><a id="Launch_the_Spotbugs_GUI"></a>
+<pre class="prettyprint"><code>mvn site
+</code></pre></section><section><a id="Launch_the_Spotbugs_GUI"></a>
 <h2>Launch the Spotbugs GUI</h2>
 <p>This will launch the SpotBugs GUI configured for this project and will open the spotbugsXml.xml file if present. It therefore assumes a pom.xml with the minimum as follows.</p>
 <pre class="prettyprint"><code>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -252,7 +268,7 @@
       &lt;plugin&gt;
         &lt;groupId&gt;com.github.spotbugs&lt;/groupId&gt;
         &lt;artifactId&gt;spotbugs-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;4.9.2.0-SNAPSHOT&lt;/version&gt;
+        &lt;version&gt;4.9.2.0&lt;/version&gt;
         &lt;configuration&gt;
           &lt;!-- Optional directory to put spotbugs xml report --&gt;
         &lt;/configuration&gt;
@@ -260,9 +276,11 @@
     &lt;/plugins&gt;
   &lt;/reporting&gt;
   ...
-&lt;/project&gt;</code></pre>
+&lt;/project&gt;
+</code></pre>
 <p>Then, execute the spotbugs plugin with the gui option.</p>
-<pre class="prettyprint"><code>mvn spotbugs:gui</code></pre></section></section>        </main>
+<pre class="prettyprint"><code>mvn spotbugs:gui
+</code></pre></section></section>        </main>
       </div>
     </div>
     <hr/>
