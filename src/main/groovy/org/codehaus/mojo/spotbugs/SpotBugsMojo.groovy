@@ -780,7 +780,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         File auxClasspathFile = createSpotbugsAuxClasspathFile()
 
         if (auxClasspathFile) {
-          log.debug("  Adding 'auxclasspathFromFile'")
+            log.debug("  Adding 'auxclasspathFromFile'")
             args << '-auxclasspathFromFile'
             args << auxClasspathFile.getAbsolutePath()
         }
@@ -836,9 +836,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug("  Adding 'onlyAnalyze'")
             args << '-onlyAnalyze'
             args << Arrays.stream(onlyAnalyze.split(SpotBugsInfo.COMMA)).map {
-                it.startsWith("file:") ? Files.lines(resourceHelper.getResourceFile(it.substring(5)).toPath())
+                it.startsWith('file:') ? Files.lines(resourceHelper.getResourceFile(it.substring(5)).toPath())
                     .collect(Collectors.joining(SpotBugsInfo.COMMA)) : it
-            }.collect(Collectors.joining(","))
+            }.collect(Collectors.joining(','))
         }
 
         if (includeFilterFile) {
@@ -902,7 +902,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (addSourceDirs) {
             log.debug('  Adding Source directories (To process source exclusions)')
             args << '-sourcepath'
-            String sourceRoots = ""
+            String sourceRoots = ''
             session.getCurrentProject().compileSourceRoots.each() { sourceRoots += it + File.pathSeparator }
             if (includeTests) {
                 session.getCurrentProject().testCompileSourceRoots.each() { sourceRoots + it + File.pathSeparator }
@@ -1015,7 +1015,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         resourceManager.addSearchPath(FileResourceLoader.ID, session.getCurrentProject().getFile()
             .getParentFile().getAbsolutePath())
-        resourceManager.addSearchPath(SpotBugsInfo.URL, "")
+        resourceManager.addSearchPath(SpotBugsInfo.URL, '')
 
         resourceManager.setOutputDirectory(new File(session.getCurrentProject().getBuild().directory))
 
@@ -1051,7 +1051,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         ant.java(classname: 'edu.umd.cs.findbugs.FindBugs2', fork: "${fork}", failonerror: 'true',
-                clonevm: 'false', timeout: "${timeout}", maxmemory: "${maxHeap}m") {
+                clonevm: 'false', timeout: timeout, maxmemory: "${maxHeap}m") {
 
             log.debug('File Encoding is ' + effectiveEncoding.name())
 
@@ -1146,7 +1146,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                 BufferedWriter writer = Files.newBufferedWriter(outputFile.toPath(), effectiveEncoding)
 
-                if (effectiveEncoding.name().equalsIgnoreCase("Cp1252")) {
+                if (effectiveEncoding.name().equalsIgnoreCase('Cp1252')) {
                     writer.write '<?xml version="1.0" encoding="windows-1252"?>'
                 } else {
                     writer.write '<?xml version="1.0" encoding="' +
@@ -1190,7 +1190,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                         if (newFileName != null) {
                             if (log.isDebugEnabled()) {
-                                log.info("$originalFullPath modified to $newFileName")
+                                log.info("${originalFullPath} modified to ${newFileName}")
                             }
                             loc.physicalLocation.artifactLocation.uri = newFileName
                         } else {
