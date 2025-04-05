@@ -193,7 +193,7 @@
         <plexusComponentAnnotationsVersion>2.2.0</plexusComponentAnnotationsVersion>
         <plexusResourcesVersion>1.3.0</plexusResourcesVersion>
         <plexusUtilsVersion>4.0.2</plexusUtilsVersion>
-        <plexusVelocityVersion>2.2.0</plexusVelocityVersion>
+        <plexusVelocityVersion>2.2.1</plexusVelocityVersion>
         <plexusXmlVersion>3.0.2</plexusXmlVersion>
 
         <!-- TODO: Run latest dependency check as prior is throwing errors. Remove after next parent update. -->
