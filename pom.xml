@@ -64,27 +64,6 @@
                 <picUrl>https://avatars0.githubusercontent.com/u/975267</picUrl>
             </properties>
         </developer>
-        <developer>
-            <id>cr</id>
-            <name>Cyrill Ruettimann</name>
-            <email>mypublicaddress@mac.com</email>
-            <roles>
-                <role>Documentation</role>
-                <role>Java Developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>gl</id>
-            <name>Garvin LeClaire</name>
-            <email>gleclaire@codehaus.org</email>
-            <url>https://gdleclaire.blogspot.com</url>
-            <roles>
-                <role>Documentation</role>
-                <role>Java Developer</role>
-            </roles>
-            <timezone>-5</timezone>
-        </developer>
     </developers>
     <contributors>
         <contributor>
@@ -100,37 +79,6 @@
             <properties>
                 <picUrl>https://avatars0.githubusercontent.com/u/975267</picUrl>
             </properties>
-        </contributor>
-        <contributor>
-            <name>Olivier Lamy</name>
-            <email>olamy@apache.org</email>
-            <organization />
-            <organizationUrl>https://olamy.blogspot.com/</organizationUrl>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </contributor>
-        <contributor>
-            <name>Detlef Pleiss</name>
-            <email>d.pleiss@comundus.com</email>
-            <organization>comundus GmbH</organization>
-            <organizationUrl>https://www.comundus.com</organizationUrl>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </contributor>
-        <contributor>
-            <name>Rolf Kulemann</name>
-            <email>roku@apache.org</email>
-            <url>https://www.xing.com/profile/Rolf_Kulemann</url>
-            <organization>NEO Business Partners</organization>
-            <organizationUrl>https://www.axians.de/de/portfolio/sap-solutions-technology/</organizationUrl>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-            <timezone>+1</timezone>
         </contributor>
     </contributors>
 
