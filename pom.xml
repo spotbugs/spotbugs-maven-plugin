@@ -681,7 +681,7 @@
                 <artifactId>l10n-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>io.github.crizzis</groupId>
                 <artifactId>codenarc-maven-plugin</artifactId>
             </plugin>
             <plugin>
