@@ -144,9 +144,6 @@
         <plexusVelocityVersion>2.2.1</plexusVelocityVersion>
         <plexusXmlVersion>3.0.2</plexusXmlVersion>
 
-        <!-- TODO: Run latest dependency check as prior is throwing errors. Remove after next parent update. -->
-        <dependency-check.plugin>12.1.0</dependency-check.plugin>
-
         <pluginPluginVersion>3.15.1</pluginPluginVersion>
         <l10nPluginVersion>1.1.0</l10nPluginVersion>
         <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
