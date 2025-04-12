@@ -18,7 +18,7 @@ package org.codehaus.mojo.spotbugs
 import java.nio.file.Files
 
 import org.apache.maven.plugin.logging.Log
-import org.codehaus.plexus.resource.loader.FileResourceCreationException
+import org.apache.maven.plugin.MojoExecutionException
 import org.codehaus.plexus.resource.loader.FileResourceLoader
 import org.codehaus.plexus.resource.ResourceManager
 
@@ -117,7 +117,7 @@ final class ResourceHelper {
 
             os << is
         } catch (IOException e) {
-            throw new FileResourceCreationException('Cannot create file-based resource.', e)
+            throw new MojoExecutionException('Cannot create file-based resource.', e)
         }
 
         return outputResourceFile

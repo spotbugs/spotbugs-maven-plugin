@@ -64,27 +64,6 @@
                 <picUrl>https://avatars0.githubusercontent.com/u/975267</picUrl>
             </properties>
         </developer>
-        <developer>
-            <id>cr</id>
-            <name>Cyrill Ruettimann</name>
-            <email>mypublicaddress@mac.com</email>
-            <roles>
-                <role>Documentation</role>
-                <role>Java Developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-        <developer>
-            <id>gl</id>
-            <name>Garvin LeClaire</name>
-            <email>gleclaire@codehaus.org</email>
-            <url>https://gdleclaire.blogspot.com</url>
-            <roles>
-                <role>Documentation</role>
-                <role>Java Developer</role>
-            </roles>
-            <timezone>-5</timezone>
-        </developer>
     </developers>
     <contributors>
         <contributor>
@@ -100,37 +79,6 @@
             <properties>
                 <picUrl>https://avatars0.githubusercontent.com/u/975267</picUrl>
             </properties>
-        </contributor>
-        <contributor>
-            <name>Olivier Lamy</name>
-            <email>olamy@apache.org</email>
-            <organization />
-            <organizationUrl>https://olamy.blogspot.com/</organizationUrl>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </contributor>
-        <contributor>
-            <name>Detlef Pleiss</name>
-            <email>d.pleiss@comundus.com</email>
-            <organization>comundus GmbH</organization>
-            <organizationUrl>https://www.comundus.com</organizationUrl>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </contributor>
-        <contributor>
-            <name>Rolf Kulemann</name>
-            <email>roku@apache.org</email>
-            <url>https://www.xing.com/profile/Rolf_Kulemann</url>
-            <organization>NEO Business Partners</organization>
-            <organizationUrl>https://www.axians.de/de/portfolio/sap-solutions-technology/</organizationUrl>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-            <timezone>+1</timezone>
         </contributor>
     </contributors>
 
@@ -173,7 +121,7 @@
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.9.3</spotbugs.version>
 
-        <junitVersion>5.12.1</junitVersion>
+        <junitVersion>5.12.2</junitVersion>
         <slf4jVersion>2.0.17</slf4jVersion>
 
         <antVersion>1.10.15</antVersion>
@@ -196,12 +144,9 @@
         <plexusVelocityVersion>2.2.1</plexusVelocityVersion>
         <plexusXmlVersion>3.0.2</plexusXmlVersion>
 
-        <!-- TODO: Run latest dependency check as prior is throwing errors. Remove after next parent update. -->
-        <dependency-check.plugin>12.1.0</dependency-check.plugin>
-
         <pluginPluginVersion>3.15.1</pluginPluginVersion>
         <l10nPluginVersion>1.1.0</l10nPluginVersion>
-        <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
+        <codenarcPluginVersion>0.1</codenarcPluginVersion>
         <gmavenPluginVersion>4.1.1</gmavenPluginVersion>
         <invokerPluginVersion>3.9.0</invokerPluginVersion>
         <scmPluginVersion>2.1.0</scmPluginVersion>
@@ -213,14 +158,13 @@
         <includesTestSrcPattern>**spotbugsTestCases/src/java/A*.java, **spotbugsTestCases/src/java/Use*.java, **spotbugsTestCases/src/java/annotations/*.java</includesTestSrcPattern>
         <testSrc>remote</testSrc>
 
-        <pmd.skip>true</pmd.skip>
-        <cpd.skip>true</cpd.skip>
-        <checkstyle.skip>true</checkstyle.skip>
+        <!-- There are no direct tests in project so skip tests (integration tests instead) -->
+        <skipTests>true</skipTests>
         <skipSurefireReport>true</skipSurefireReport>
 
         <!-- Used by Integration tests -->
         <findsecbugs.version>1.13.0</findsecbugs.version>
-        <servletApiVersion>6.0.0</servletApiVersion>
+        <servletApiVersion>6.1.0</servletApiVersion>
         <sb-contrib.version>7.6.9</sb-contrib.version>
 
         <jgit.version>7.2.0.202503040940-r</jgit.version>
@@ -619,20 +563,15 @@
                         </mapping>
                     </configuration>
                 </plugin>
+
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
+                    <groupId>io.github.crizzis</groupId>
                     <artifactId>codenarc-maven-plugin</artifactId>
                     <version>${codenarcPluginVersion}</version>
                     <configuration>
-                        <!-- Repo https://github.com/gleclaire/codenarc-maven-plugin has been forked and will need major upgrades to use this. -->
-                        <skip>true</skip>
-
-                        <codeNarcVersion>${codenarc.version}</codeNarcVersion>
-                        <groovyVersion>${groovyVersion}</groovyVersion>
                         <maxPriority1Violations>0</maxPriority1Violations>
                         <maxPriority2Violations>0</maxPriority2Violations>
                         <maxPriority3Violations>5</maxPriority3Violations>
-                        <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
                     </configuration>
                     <dependencies>
                         <dependency>
@@ -710,29 +649,18 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
 
-            <!-- Override enforcer to allow commons-logging (remove after next parent release as commons-logging is good again) -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <configuration>
-                    <rules>
-                        <bannedDependencies>
-                            <message>Do not use obsolete logging libraries.  Prefer slf4j/logback and override slf4j libraries for replacements</message>
-                            <excludes>
-                                <exclude>log4j:log4j</exclude>
-                                <exclude>org.slf4j:slf4j-log4j12</exclude>
-                            </excludes>
-                        </bannedDependencies>
-                    </rules>
-                </configuration>
+                <groupId>io.github.crizzis</groupId>
+                <artifactId>codenarc-maven-plugin</artifactId>
+                <version>${codenarcPluginVersion}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -749,7 +677,7 @@
                 <artifactId>l10n-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>io.github.crizzis</groupId>
                 <artifactId>codenarc-maven-plugin</artifactId>
             </plugin>
             <plugin>

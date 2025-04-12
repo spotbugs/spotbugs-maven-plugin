@@ -17,6 +17,7 @@ package org.codehaus.mojo.spotbugs
 
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.model.Resource
+import org.apache.maven.plugin.MojoExecutionException
 
 import java.nio.file.Path
 
@@ -123,7 +124,7 @@ class SourceFileIndexer {
     protected String searchActualFilesLocation(String filename) {
 
         if (allSourceFiles == null) {
-            throw new RuntimeException('Source files cache must be built prior to searches.')
+            throw new MojoExecutionException('Source files cache must be built prior to searches.')
         }
 
         for (String fileFound in allSourceFiles) {
