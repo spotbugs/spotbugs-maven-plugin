@@ -60,7 +60,7 @@ trait SpotBugsPluginsTrait {
                 String pluginFileName = pluginJar.trim()
 
                 if (!pluginFileName.endsWith('.jar')) {
-                    throw new IllegalArgumentException("Plugin File is not a Jar file: " + pluginFileName)
+                    throw new MojoExecutionException("Plugin File is not a Jar file: " + pluginFileName)
                 }
 
                 try {
