@@ -158,10 +158,6 @@
         <includesTestSrcPattern>**spotbugsTestCases/src/java/A*.java, **spotbugsTestCases/src/java/Use*.java, **spotbugsTestCases/src/java/annotations/*.java</includesTestSrcPattern>
         <testSrc>remote</testSrc>
 
-        <pmd.skip>true</pmd.skip>
-        <cpd.skip>true</cpd.skip>
-        <checkstyle.skip>true</checkstyle.skip>
-
         <!-- There are no direct tests in project so skip tests (integration tests instead) -->
         <skipTests>true</skipTests>
         <skipSurefireReport>true</skipSurefireReport>
