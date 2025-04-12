@@ -1102,6 +1102,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (htmlTempFile.exists() && htmlOutput && htmlTempFile.size() > 0) {
             // Do nothing more at this time
+            log.debug('Html temp file exixts with content....')
         }
 
         if (xmlTempFile.exists()) {
