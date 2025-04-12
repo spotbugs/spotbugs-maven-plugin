@@ -161,6 +161,9 @@
         <pmd.skip>true</pmd.skip>
         <cpd.skip>true</cpd.skip>
         <checkstyle.skip>true</checkstyle.skip>
+
+        <!-- There are no direct tests in project so skip tests (integration tests instead) -->
+        <skipTests>true</skipTests>
         <skipSurefireReport>true</skipSurefireReport>
 
         <!-- Used by Integration tests -->
@@ -654,13 +657,6 @@
                         <phase>site</phase>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
             </plugin>
         </plugins>
     </build>
