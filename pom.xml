@@ -146,7 +146,7 @@
 
         <pluginPluginVersion>3.15.1</pluginPluginVersion>
         <l10nPluginVersion>1.1.0</l10nPluginVersion>
-        <codenarcPluginVersion>0.22-1</codenarcPluginVersion>
+        <codenarcPluginVersion>0.1</codenarcPluginVersion>
         <gmavenPluginVersion>4.1.1</gmavenPluginVersion>
         <invokerPluginVersion>3.9.0</invokerPluginVersion>
         <scmPluginVersion>2.1.0</scmPluginVersion>
@@ -567,20 +567,15 @@
                         </mapping>
                     </configuration>
                 </plugin>
+
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
+                    <groupId>io.github.crizzis</groupId>
                     <artifactId>codenarc-maven-plugin</artifactId>
                     <version>${codenarcPluginVersion}</version>
                     <configuration>
-                        <!-- Repo https://github.com/gleclaire/codenarc-maven-plugin has been forked and will need major upgrades to use this. -->
-                        <skip>true</skip>
-
-                        <codeNarcVersion>${codenarc.version}</codeNarcVersion>
-                        <groovyVersion>${groovyVersion}</groovyVersion>
                         <maxPriority1Violations>0</maxPriority1Violations>
                         <maxPriority2Violations>0</maxPriority2Violations>
                         <maxPriority3Violations>5</maxPriority3Violations>
-                        <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
                     </configuration>
                     <dependencies>
                         <dependency>
@@ -655,6 +650,19 @@
                             <goal>groovydocTests-jar</goal>
                         </goals>
                         <phase>site</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>io.github.crizzis</groupId>
+                <artifactId>codenarc-maven-plugin</artifactId>
+                <version>${codenarcPluginVersion}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
