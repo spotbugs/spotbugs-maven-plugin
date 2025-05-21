@@ -126,14 +126,13 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     @Override
     void execute() {
 
-        AntBuilder ant = new AntBuilder()
-
         List<String> auxClasspathElements = session.getCurrentProject().compileClasspathElements
 
         if (debug) {
             log.debug('  Plugin Artifacts to be added -> ' + pluginArtifacts.toString())
         }
 
+        AntBuilder ant = new AntBuilder()
         ant.project.setProperty('basedir', spotbugsXmlOutputDirectory.getAbsolutePath())
         ant.project.setProperty('verbose', 'true')
 

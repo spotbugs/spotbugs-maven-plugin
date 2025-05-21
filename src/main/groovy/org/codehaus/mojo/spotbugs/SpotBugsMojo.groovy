@@ -1033,7 +1033,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
         }
 
-        AntBuilder ant = new AntBuilder()
 
         log.info("Fork Value is ${fork}")
 
@@ -1050,6 +1049,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             effectiveEncoding = Charset.forName(sourceEncoding)
         }
 
+        AntBuilder ant = new AntBuilder()
         ant.java(classname: 'edu.umd.cs.findbugs.FindBugs2', fork: "${fork}", failonerror: 'true',
                 clonevm: 'false', timeout: timeout, maxmemory: "${maxHeap}m") {
 
