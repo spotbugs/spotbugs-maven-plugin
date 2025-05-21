@@ -126,26 +126,25 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     @Override
     void execute() {
 
-        AntBuilder ant = new AntBuilder()
-
         List<String> auxClasspathElements = session.getCurrentProject().compileClasspathElements
 
         if (debug) {
             log.debug('  Plugin Artifacts to be added -> ' + pluginArtifacts.toString())
         }
 
+        Charset effectiveEncoding
+        if (encoding) {
+            effectiveEncoding = Charset.forName(encoding)
+        } else {
+            effectiveEncoding = Charset.defaultCharset() ?: StandardCharsets.UTF_8
+        }
+        log.info('File Encoding is ' + effectiveEncoding.name())
+
+        AntBuilder ant = new AntBuilder()
         ant.project.setProperty('basedir', spotbugsXmlOutputDirectory.getAbsolutePath())
         ant.project.setProperty('verbose', 'true')
 
         ant.java(classname: 'edu.umd.cs.findbugs.LaunchAppropriateUI', fork: 'true', failonerror: 'true', clonevm: 'true', maxmemory: "${maxHeap}m") {
-
-            Charset effectiveEncoding = Charset.defaultCharset() ?: StandardCharsets.UTF_8
-
-            if (encoding) {
-                effectiveEncoding = Charset.forName(encoding)
-            }
-
-            log.info('File Encoding is ' + effectiveEncoding.name())
 
             sysproperty(key: 'file.encoding' , value: effectiveEncoding.name())
 

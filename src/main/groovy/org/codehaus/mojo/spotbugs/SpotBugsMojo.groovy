@@ -1033,8 +1033,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
         }
 
-        AntBuilder ant = new AntBuilder()
-
         log.info("Fork Value is ${fork}")
 
         long startTime
@@ -1044,16 +1042,17 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         List<String> spotbugsArgs = getSpotbugsArgs(htmlTempFile, xmlTempFile, sarifTempFile)
 
-        Charset effectiveEncoding = Charset.defaultCharset() ?: StandardCharsets.UTF_8
-
+        Charset effectiveEncoding
         if (sourceEncoding) {
             effectiveEncoding = Charset.forName(sourceEncoding)
+        } else {
+            effectiveEncoding = Charset.defaultCharset() ?: StandardCharsets.UTF_8
         }
+        log.debug('File Encoding is ' + effectiveEncoding.name())
 
+        AntBuilder ant = new AntBuilder()
         ant.java(classname: 'edu.umd.cs.findbugs.FindBugs2', fork: "${fork}", failonerror: 'true',
                 clonevm: 'false', timeout: timeout, maxmemory: "${maxHeap}m") {
-
-            log.debug('File Encoding is ' + effectiveEncoding.name())
 
             sysproperty(key: 'file.encoding', value: effectiveEncoding.name())
 
