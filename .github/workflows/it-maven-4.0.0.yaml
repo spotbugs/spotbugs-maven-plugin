@@ -2,6 +2,8 @@ name: Java Integration Tests Maven 4.0.0-beta-4
 
 on: [push, pull_request]
 
+permissions: read-all
+
 jobs:
   test:
     runs-on: ubuntu-latest
