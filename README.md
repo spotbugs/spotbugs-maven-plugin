@@ -83,18 +83,24 @@ mvn clean install -P run-its -DtestSrc=remote
 
 ## Groovy ##
 
-This plugin is written entirey in groovy.  It does have limitations when it comes to groovy in relation to java releases.  Every attempt is made to ensure fast releases to pick up groovy changes related to java.
+This plugin is written entirely in Groovy.  It does have limitations when it comes to Groovy in relation to java releases.  Every attempt is made to ensure fast releases to pick up Groovy changes related to java.
 
 Known issues
 
-The security manager is turned off by default in jdk 18 and scheduled from removal in a future java release, therefore to use this plugin with jdk 18+, the security manager may need turned back on using ```JAVA_OPTS``` to ```-Djava.security.manager=allow```.  See [groovy](https://groovy-lang.org/releasenotes/groovy-4.0.html) for more details.
+The security manager is turned off by default in jdk 18 and scheduled from removal in a future java release, therefore to use this plugin with jdk 18+,
+the security manager may need turned back on using ```JAVA_OPTS``` to ```-Djava.security.manager=allow```.
+See [groovy](https://groovy-lang.org/releasenotes/groovy-4.0.html) for more details.
 
-If using groovy with same group id (```org.codehaus.groovy 3.x``` or before or ```org.apache.groovy 4.x or above```), an error may occur if not on same version. To alleviate that, make sure groovy artifacts are defined in ```dependency management``` in order to force the loaded version correctly on your usage.
+If using Groovy with same group id (```org.codehaus.groovy 3.x``` and before; or ```org.apache.groovy 4.x and above```),
+an error may occur if not on same version. To alleviate that, make sure groovy artifacts are defined in ```dependency management```
+in order to force the loaded version correctly on your usage.
 
 
 ## Eclipse m2e Integration ##
 
-The plugin cycles controlled by Eclipse require compilation phase for m2e without further help.  This plugin runs verify only during site generation.  Therefore Eclipse m2e will show up but not do anything with this plugin alone.  In order to have proper execution within Ecipse m2e, use [m2e-code-quality](https://github.com/m2e-code-quality/m2e-code-quality) plugin for spotbugs.
+The plugin cycles controlled by Eclipse require compilation phase for m2e without further help.  This plugin runs verify only during site generation.
+Therefore Eclipse m2e will show up but not do anything with this plugin alone.  In order to have proper execution within Eclipse m2e,
+use [m2e-code-quality](https://github.com/m2e-code-quality/m2e-code-quality) plugin for spotbugs.
 
 ## Analysis Properties ##
 
