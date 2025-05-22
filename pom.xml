@@ -653,7 +653,6 @@
             <plugin>
                 <groupId>io.github.crizzis</groupId>
                 <artifactId>codenarc-maven-plugin</artifactId>
-                <version>${codenarcPluginVersion}</version>
                 <executions>
                     <execution>
                         <goals>
