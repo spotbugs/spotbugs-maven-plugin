@@ -17,6 +17,9 @@ package org.codehaus.mojo.spotbugs
 
 import groovy.xml.XmlParser
 
+import java.nio.file.Files
+import java.nio.file.Path
+
 import org.apache.commons.io.FileUtils
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
@@ -116,14 +119,14 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             throw new MojoExecutionException('Cannot create xml output directory')
         }
 
-        File outputFile = new File("${spotbugsXmlOutputDirectory}/${spotbugsXmlOutputFilename}")
+        Path outputFile = Path.of("${spotbugsXmlOutputDirectory}/${spotbugsXmlOutputFilename}")
 
-        if (!outputFile.exists()) {
+        if (Files.notExists(outputFile)) {
             log.debug('Output directory does not exist!')
             return
         }
 
-        Node xml = new XmlParser().parse(outputFile)
+        Node xml = new XmlParser().parse(outputFile.toFile())
 
         NodeList bugs = xml.BugInstance
         int bugCount = bugs.size()
