@@ -13,23 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import groovy.xml.XmlSlurper
-import groovy.xml.slurpersupport.GPathResult;
+import groovy.xml.slurpersupport.GPathResult
 
-File spotbugsHtml =  new File(basedir, 'target/site/spotbugs.html')
-assert !spotbugsHtml.exists()
+import java.nio.file.Files
+import java.nio.file.Path
 
-File spotbugXdoc = new File(basedir, 'target/spotbugs.xml')
-assert !spotbugXdoc.exists()
+Path spotbugsHtml =  basedir.toPath().resolve('target/site/spotbugs.html')
+assert Files.notExists(spotbugsHtml)
 
-File spotbugXml = new File(basedir, 'target/spotbugsXml.xml')
-assert spotbugXml.exists()
+Path spotbugXdoc = basedir.toPath().resolve('target/spotbugs.xml')
+assert Files.notExists(spotbugXdoc)
+
+Path spotbugXml = basedir.toPath().resolve('target/spotbugsXml.xml')
+assert Files.exists(spotbugXml)
 
 println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-GPathResult path = new XmlSlurper().parse(spotbugXml)
+GPathResult path = new XmlSlurper().parse(spotbugXml.toFile())
 
 List<Node> allNodes = path.depthFirst().collect{ it }
 int spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()

@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import groovy.json.JsonSlurper
 
-File spotbugSarifFile = new File(basedir, 'target/spotbugsSarif.json')
-assert spotbugSarifFile.exists()
+import java.nio.file.Files
+import java.nio.file.Path
+
+Path spotbugSarifFile = basedir.toPath().resolve('target/spotbugsSarif.json')
+assert Files.exists(spotbugSarifFile)
 
 println '*******************'
 println 'Checking SARIF file'
@@ -26,7 +30,7 @@ String normalizePath(String path) {
     return path.replace("\\\\","/");
 }
 
-Map slurpedResult = new JsonSlurper().parse(spotbugSarifFile)
+Map slurpedResult = new JsonSlurper().parse(spotbugSarifFile.toFile())
 
 List results = slurpedResult.runs.results[0]
 

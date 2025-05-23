@@ -13,14 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-//  check module 1
+
 import groovy.xml.XmlSlurper
-import groovy.xml.slurpersupport.GPathResult;
+import groovy.xml.slurpersupport.GPathResult
 
-File spotbugXml = new File(basedir, "modules/module-1/target/spotbugsXml.xml")
-assert spotbugXml.exists()
+import java.nio.file.Files
+import java.nio.file.Path
 
-GPathResult path = new XmlSlurper().parse(spotbugXml)
+//  check module 1
+
+Path spotbugXml = basedir.toPath().resolve("modules/module-1/target/spotbugsXml.xml")
+assert Files.exists(spotbugXml)
+
+GPathResult path = new XmlSlurper().parse(spotbugXml.toFile())
 
 println '*********************************'
 println 'Checking Spotbugs Native XML file'
@@ -35,9 +40,9 @@ assert spotbugsErrors > 0
 //  check module 2
 
 spotbugXml = new File(basedir, "modules/module-2/target/spotbugsXml.xml")
-assert spotbugXml.exists()
+assert Files.exists(spotbugXml)
 
-path = new XmlSlurper().parse(spotbugXml)
+path = new XmlSlurper().parse(spotbugXml.toFile())
 
 println '*********************************'
 println 'Checking Spotbugs Native XML file'

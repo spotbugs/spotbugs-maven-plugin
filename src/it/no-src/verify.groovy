@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-assert (new File(basedir, 'target/site/index.html').exists())
-assert (new File(basedir, 'target/spotbugs.xml').exists())
-assert (new File(basedir, 'target/spotbugsXml.xml').exists())
+
+import java.nio.file.Files
+
+assert Files.exists(basedir.toPath().resolve('target/site/index.html'))
+assert Files.exists(basedir.toPath().resolve('target/spotbugs.xml'))
+assert Files.exists(basedir.toPath().resolve('target/spotbugsXml.xml'))
