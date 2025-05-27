@@ -125,7 +125,7 @@
         <slf4jVersion>2.0.17</slf4jVersion>
 
         <antVersion>1.10.15</antVersion>
-        <groovyVersion>4.0.26</groovyVersion>
+        <groovyVersion>4.0.27</groovyVersion>
         <javaparserVersion>3.26.4</javaparserVersion>
 
         <doxiaVersion>2.0.0</doxiaVersion>
