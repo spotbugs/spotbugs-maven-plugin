@@ -516,11 +516,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-plugin-report-plugin</artifactId>
                     <version>${pluginPluginVersion}</version>
-                    <configuration>
-                        <requirements>
-                            <jdk>${project.build.java.target}</jdk>
-                        </requirements>
-                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -540,7 +535,7 @@
                 <plugin>
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
-                    <version>${project.version}</version>
+                    <version>4.9.3.0</version>
                     <configuration>
                         <excludeFilterFile>${project.basedir}/src/main/tools/spotbugs-exclude-filters.xml</excludeFilterFile>
                     </configuration>
@@ -571,7 +566,7 @@
                     <configuration>
                         <maxPriority1Violations>0</maxPriority1Violations>
                         <maxPriority2Violations>0</maxPriority2Violations>
-                        <maxPriority3Violations>5</maxPriority3Violations>
+                        <maxPriority3Violations>0</maxPriority3Violations>
                     </configuration>
                     <dependencies>
                         <dependency>
