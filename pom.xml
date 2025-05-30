@@ -114,12 +114,16 @@
         <javadoc.java.release.version>11</javadoc.java.release.version>
 
         <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
+        <testSourceDirectory>${project.basedir}src/test/groovy</testSourceDirectory>
 
         <!-- Reproducible Builds: override timestamp value from parent -->
         <project.build.outputTimestamp>1742066584</project.build.outputTimestamp>
 
+        <jacoco.minimum.coverage>0.00</jacoco.minimum.coverage>
+
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.9.3</spotbugs.version>
+        <spotbugs.plugin>4.9.3.0</spotbugs.plugin>
 
         <junitVersion>5.12.2</junitVersion>
         <slf4jVersion>2.0.17</slf4jVersion>
@@ -158,9 +162,8 @@
         <includesTestSrcPattern>**spotbugsTestCases/src/java/A*.java, **spotbugsTestCases/src/java/Use*.java, **spotbugsTestCases/src/java/annotations/*.java</includesTestSrcPattern>
         <testSrc>remote</testSrc>
 
-        <!-- There are no direct tests in project so skip tests (integration tests instead) -->
-        <skipTests>true</skipTests>
-        <skipSurefireReport>true</skipSurefireReport>
+        <!-- Tests -->
+        <spock.version>2.4-M6-groovy-4.0</spock.version>
 
         <!-- Used by Integration tests -->
         <findsecbugs.version>1.13.0</findsecbugs.version>
@@ -500,6 +503,19 @@
             <artifactId>plexus-utils</artifactId>
             <version>${plexusUtilsVersion}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junitVersion}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <version>${spock.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -535,7 +551,6 @@
                 <plugin>
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
-                    <version>4.9.3.0</version>
                     <configuration>
                         <excludeFilterFile>${project.basedir}/src/main/tools/spotbugs-exclude-filters.xml</excludeFilterFile>
                     </configuration>
@@ -652,6 +667,19 @@
                     <execution>
                         <goals>
                             <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>check</id>
+                        <goals>
+                            <goal>check</goal>
                         </goals>
                     </execution>
                 </executions>
