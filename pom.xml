@@ -120,6 +120,7 @@
 
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.9.3</spotbugs.version>
+        <spotbugs.plugin>4.9.3.0</spotbugs.plugin>
 
         <junitVersion>5.12.2</junitVersion>
         <slf4jVersion>2.0.17</slf4jVersion>
@@ -535,7 +536,6 @@
                 <plugin>
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
-                    <version>4.9.3.0</version>
                     <configuration>
                         <excludeFilterFile>${project.basedir}/src/main/tools/spotbugs-exclude-filters.xml</excludeFilterFile>
                     </configuration>
