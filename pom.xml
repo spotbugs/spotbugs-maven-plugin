@@ -566,7 +566,7 @@
                     <configuration>
                         <maxPriority1Violations>0</maxPriority1Violations>
                         <maxPriority2Violations>0</maxPriority2Violations>
-                        <maxPriority3Violations>5</maxPriority3Violations>
+                        <maxPriority3Violations>0</maxPriority3Violations>
                     </configuration>
                     <dependencies>
                         <dependency>
