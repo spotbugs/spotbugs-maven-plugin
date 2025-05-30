@@ -2,6 +2,7 @@
 
 [![Java CI](https://github.com/spotbugs/spotbugs-maven-plugin/workflows/Java%20CI/badge.svg)](https://github.com/spotbugs/spotbugs-maven-plugin/actions?query=workflow%3A%22Java+CI%22)
 [![Java Integration Tests](https://github.com/spotbugs/spotbugs-maven-plugin/workflows/Java%20Integration%20Tests/badge.svg)](https://github.com/spotbugs/spotbugs-maven-plugin/actions?query=workflow%3A%22Java+Integration+Tests%22)
+[![Coverage Status](https://coveralls.io/repos/spotbugs/spotbugs-maven-plugin/badge.svg?branch=master&service=github)](https://coveralls.io/github/spotbugs/spotbugs-maven-plugin?branch=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=spotbugs_spotbugs-maven-plugin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=spotbugs_spotbugs-maven-plugin)
 [![Maven central](https://maven-badges.herokuapp.com/maven-central/com.github.spotbugs/spotbugs-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.spotbugs/spotbugs-maven-plugin)
 [![Apache 2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
