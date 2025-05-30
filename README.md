@@ -13,8 +13,8 @@ Please download latest snapshots from [here](https://oss.sonatype.org/content/re
 Building spotbugs-maven-plugin Requirements
 ===========================================
 
-Java 17+ is required to build the project.  Java 11+ is required for spotbugs analysis.
-Maven 3.9.9 is required to build the project.  It can be used as low as maven 3.6.3 in usage.
+Java 17+ is required to build the project.  Java 11 or better is required for spotbugs analysis.
+Maven 3.9.9 is required to build the project.  Maven 3.6.3 or better is required for usage.
 
 spotbugs-maven-plugin
 =====================
