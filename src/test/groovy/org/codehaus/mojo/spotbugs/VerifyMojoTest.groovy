@@ -16,7 +16,6 @@
 package org.codehaus.mojo.spotbugs
 
 import org.apache.maven.plugin.logging.Log
-import org.apache.maven.plugins.annotations.Mojo
 
 import spock.lang.Specification
 
