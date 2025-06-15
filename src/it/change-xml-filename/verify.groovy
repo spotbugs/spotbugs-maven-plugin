@@ -27,7 +27,7 @@ println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-GPathResult path = new XmlSlurper().parse(spotbugXml.toFile())
+GPathResult path = new XmlSlurper().parse(spotbugXml)
 
 List<Node> allNodes = path.depthFirst().collect{ it }
 int spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()

@@ -33,7 +33,7 @@ println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-GPathResult path = new XmlSlurper().parse(spotbugXml.toFile())
+GPathResult path = new XmlSlurper().parse(spotbugXml)
 
 List<Node> allNodes = path.depthFirst().collect{ it }
 int spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
@@ -43,7 +43,7 @@ println '******************'
 println 'Checking xDoc file'
 println '******************'
 
-path = new XmlSlurper().parse(spotbugXdoc.toFile())
+path = new XmlSlurper().parse(spotbugXdoc)
 
 List<Node> xNodes = path.depthFirst().collect{ it }
 int xdocErrors = xNodes.findAll {it.name() == 'BugInstance'}.size()

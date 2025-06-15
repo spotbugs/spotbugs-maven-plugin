@@ -25,7 +25,7 @@ import java.nio.file.Path
 Path spotbugXml = basedir.toPath().resolve("module1/target/spotbugsXml.xml")
 assert Files.exists(spotbugXml)
 
-GPathResult path = new XmlSlurper().parse(spotbugXml.toFile())
+GPathResult path = new XmlSlurper().parse(spotbugXml)
 
 println '*********************************'
 println 'Checking Spotbugs Native XML file'
@@ -43,7 +43,7 @@ assert spotbugsErrors > 0
 spotbugXml = new File(basedir, "module2/target/spotbugsXml.xml")
 assert Files.exists(spotbugXml)
 
-path = new XmlSlurper().parse(spotbugXml.toFile())
+path = new XmlSlurper().parse(spotbugXml)
 
 println '*********************************'
 println 'Checking Spotbugs Native XML file'

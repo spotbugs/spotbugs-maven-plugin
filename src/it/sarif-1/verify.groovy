@@ -26,7 +26,7 @@ println '*******************'
 println 'Checking SARIF file'
 println '*******************'
 
-Map path = new JsonSlurper().parse(spotbugSarifFile.toFile())
+Map path = new JsonSlurper().parse(spotbugSarifFile)
 
 List results = path.runs.results[0]
 println "BugInstance size is ${results.size()}"

@@ -40,7 +40,7 @@ assert spotbugsHtml.text.contains("<i>" + effortLevel + "</i>")
 XmlSlurper xhtmlParser = new XmlSlurper();
 xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
 xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
-GPathResult path = xhtmlParser.parse(spotbugsHtml.toFile())
+GPathResult path = xhtmlParser.parse(spotbugsHtml)
 
 int spotbugsErrors = path.body.'**'.find {main -> main.@id == 'bodyColumn'}.section[1].table.tr[1].td[1].toInteger()
 println "Error Count is ${spotbugsErrors}"
@@ -49,7 +49,7 @@ println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-path = new XmlSlurper().parse(spotbugXml.toFile())
+path = new XmlSlurper().parse(spotbugXml)
 
 List<Node> allNodes = path.depthFirst().collect{ it }
 int spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
@@ -61,7 +61,7 @@ println '******************'
 println 'Checking xDoc file'
 println '******************'
 
-path = new XmlSlurper().parse(spotbugXdoc.toFile())
+path = new XmlSlurper().parse(spotbugXdoc)
 
 allNodes = path.depthFirst().collect{ it }
 int xdocErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
