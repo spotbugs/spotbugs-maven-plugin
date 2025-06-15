@@ -19,6 +19,7 @@ import org.apache.maven.execution.MavenSession
 import org.apache.maven.model.Resource
 import org.apache.maven.plugin.MojoExecutionException
 
+import java.nio.file.Files
 import java.nio.file.Path
 
 /**
@@ -44,25 +45,25 @@ class SourceFileIndexer {
 
         // Resource
         for (Resource r in session.getCurrentProject().getResources()) {
-            scanDirectory(new File(r.directory), allSourceFiles, basePath)
+            scanDirectory(Path.of(r.directory), allSourceFiles, basePath)
         }
 
         for (Resource r in session.getCurrentProject().getTestResources()) {
-            scanDirectory(new File(r.directory), allSourceFiles, basePath)
+            scanDirectory(Path.of(r.directory), allSourceFiles, basePath)
         }
 
         // Source files
         for (String sourceRoot in session.getCurrentProject().getCompileSourceRoots()) {
-            scanDirectory(new File(sourceRoot), allSourceFiles, basePath)
+            scanDirectory(Path.of(sourceRoot), allSourceFiles, basePath)
         }
         for (String sourceRoot in session.getCurrentProject().getTestCompileSourceRoots()) {
-            scanDirectory(new File(sourceRoot), allSourceFiles, basePath)
+            scanDirectory(Path.of(sourceRoot), allSourceFiles, basePath)
         }
 
         //While not perfect, add the following paths will add basic support for Kotlin and Groovy
-        scanDirectory(new File(session.getCurrentProject().getBasedir(), 'src/main/groovy'), allSourceFiles, basePath)
-        scanDirectory(new File(session.getCurrentProject().getBasedir(), 'src/main/kotlin'), allSourceFiles, basePath)
-        scanDirectory(new File(session.getCurrentProject().getBasedir(), 'src/main/webapp'), allSourceFiles, basePath)
+        scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/groovy'), allSourceFiles, basePath)
+        scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/kotlin'), allSourceFiles, basePath)
+        scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/webapp'), allSourceFiles, basePath)
 
         this.allSourceFiles = allSourceFiles
     }
@@ -75,15 +76,15 @@ class SourceFileIndexer {
      * @param files ArrayList where files found will be stored
      * @param baseDirectory This part will be truncated from path stored
      */
-    private void scanDirectory(File directory, List<String> files, String baseDirectory) {
+    private void scanDirectory(Path directory, List<String> files, String baseDirectory) {
 
-        if (!directory.exists()) {
+        if (Files.notExists(directory)) {
             return
         }
 
-        for (File child : directory.listFiles()) {
+        for (File child : directory.toFile().listFiles()) {
             if (child.isDirectory()) {
-                scanDirectory(child, files, baseDirectory)
+                scanDirectory(child.toPath(), files, baseDirectory)
             } else {
                 String newSourceFile = normalizePath(child.getCanonicalPath())
                 if (newSourceFile.startsWith(baseDirectory)) {

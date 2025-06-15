@@ -981,7 +981,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             file.delete()
         }
 
-        Files.createDirectories(file.getParentFile().toPath())
+        Files.createDirectories(file.toPath().getParent())
         file.createNewFile()
     }
 
@@ -1141,7 +1141,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                     outputFile.delete()
                 }
 
-                Files.createDirectories(outputFile.getParentFile().toPath())
+                Files.createDirectories(outputFile.toPath().getParent())
                 outputFile.createNewFile()
 
                 BufferedWriter writer = Files.newBufferedWriter(outputFile.toPath(), effectiveEncoding)

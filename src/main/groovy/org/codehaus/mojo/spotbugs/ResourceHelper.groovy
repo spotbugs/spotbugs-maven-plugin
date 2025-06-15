@@ -16,6 +16,7 @@
 package org.codehaus.mojo.spotbugs
 
 import java.nio.file.Files
+import java.nio.file.Path
 
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugin.MojoExecutionException
@@ -97,29 +98,29 @@ final class ResourceHelper {
         }
         // End optimization
 
-        File outputResourceFile
+        Path outputResourcePath
 
         if (outputPath == null) {
-            outputResourceFile = Files.createTempFile('plexus-resources', 'tmp').toFile()
+            outputResourcePath = Files.createTempFile('plexus-resources', 'tmp')
         } else if (outputDirectory != null) {
-            outputResourceFile = new File(outputDirectory, outputPath)
+            outputResourcePath = outputDirectory.toPath().resolve(outputPath)
         } else {
-            outputResourceFile = new File(outputPath)
+            outputResourcePath = Path.of(outputPath)
         }
 
         try (InputStream is = new BufferedInputStream(resourceManager.getResourceAsInputStream(name))) {
 
-            if (!outputResourceFile.getParentFile().exists()) {
-                Files.createDirectories(outputResourceFile.getParentFile().toPath())
+            if (Files.notExists(outputResourcePath.getParent())) {
+                Files.createDirectories(outputResourcePath.getParent())
             }
 
-            OutputStream os = Files.newOutputStream(outputResourceFile.toPath())
+            OutputStream os = Files.newOutputStream(outputResourcePath)
 
             os << is
         } catch (IOException e) {
             throw new MojoExecutionException('Cannot create file-based resource.', e)
         }
 
-        return outputResourceFile
+        return outputResourcePath.toFile()
     }
 }

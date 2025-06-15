@@ -13,4 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-assert new File(basedir, 'target/build-tools-testing.jar').exists()
+
+import java.nio.file.Files
+
+assert Files.exists(basedir.toPath().resolve('target/build-tools-testing.jar'))

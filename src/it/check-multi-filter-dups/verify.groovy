@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import java.nio.file.Files
+import java.nio.file.Path
+
 //  check module 1
 
-File spotbugXmlInModule = new File(basedir, 'module1/src/main/config/spotbugs-exclude-filters.xml')
-assert !spotbugXmlInModule.exists()
+Path spotbugXmlInModule = basedir.toPath().resolve('module1/src/main/config/spotbugs-exclude-filters.xml')
+assert Files.notExists(spotbugXmlInModule)
 
 //  check module 2
 
-spotbugXmlInModule = new File(basedir, 'module2/src/main/config/spotbugs-exclude-filters.xml')
-assert !spotbugXmlInModule.exists()
+spotbugXmlInModule = basedir.toPath().resolve('module2/src/main/config/spotbugs-exclude-filters.xml')
+assert Files.notExists(spotbugXmlInModule)

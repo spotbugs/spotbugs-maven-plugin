@@ -13,5 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-File spotbugsHtml =  new File(basedir, 'target/test-output-directory/spotbugs.html')
-assert spotbugsHtml.exists()
+
+import java.nio.file.Files
+import java.nio.file.Path
+
+Path spotbugsHtml = basedir.toPath().resolve('target/test-output-directory/spotbugs.html')
+assert Files.exists(spotbugsHtml)

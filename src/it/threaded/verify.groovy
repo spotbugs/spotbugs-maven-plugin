@@ -13,17 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import groovy.xml.XmlSlurper
-import groovy.xml.slurpersupport.GPathResult;
+import groovy.xml.slurpersupport.GPathResult
 
-File spotbugsHtml =  new File(basedir, 'target/site/spotbugs.html')
-assert spotbugsHtml.exists()
+import java.nio.file.Files
+import java.nio.file.Path
 
-File spotbugXdoc = new File(basedir, 'target/spotbugs.xml')
-assert spotbugXdoc.exists()
+Path spotbugsHtml =  basedir.toPath().resolve('target/site/spotbugs.html')
+assert Files.exists(spotbugsHtml)
 
-File spotbugXml = new File(basedir, 'target/spotbugsXml.xml')
-assert spotbugXml.exists()
+Path spotbugXdoc = basedir.toPath().resolve('target/spotbugs.xml')
+assert Files.exists(spotbugXdoc)
+
+Path spotbugXml = basedir.toPath().resolve('target/spotbugsXml.xml')
+assert Files.exists(spotbugXml)
 
 println '******************'
 println 'Checking HTML file'
@@ -36,7 +40,7 @@ assert spotbugsHtml.text.contains("<i>" + effortLevel + "</i>")
 XmlSlurper xhtmlParser = new XmlSlurper();
 xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
 xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
-GPathResult path = xhtmlParser.parse(spotbugsHtml)
+GPathResult path = xhtmlParser.parse(spotbugsHtml.toFile())
 
 int spotbugsErrors = path.body.'**'.find {main -> main.@id == 'bodyColumn'}.section[1].table.tr[1].td[1].toInteger()
 println "Error Count is ${spotbugsErrors}"
@@ -45,7 +49,7 @@ println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-path = new XmlSlurper().parse(spotbugXml)
+path = new XmlSlurper().parse(spotbugXml.toFile())
 
 List<Node> allNodes = path.depthFirst().collect{ it }
 int spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
@@ -57,7 +61,7 @@ println '***************************'
 println 'Checking xDoc file'
 println '***************************'
 
-path = new XmlSlurper().parse(spotbugXdoc)
+path = new XmlSlurper().parse(spotbugXdoc.toFile())
 
 allNodes = path.depthFirst().collect{ it }
 int xdocErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()

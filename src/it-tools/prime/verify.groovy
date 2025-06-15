@@ -13,4 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-assert new File(basedir, 'target/prime-testing.jar').exists()
+
+import java.nio.file.Files
+
+assert Files.exists(basedir.toPath().resolve('target/prime-testing.jar'))
