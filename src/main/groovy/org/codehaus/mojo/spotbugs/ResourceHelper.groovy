@@ -108,15 +108,16 @@ final class ResourceHelper {
             outputResourcePath = Path.of(outputPath)
         }
 
-        try (InputStream is = new BufferedInputStream(resourceManager.getResourceAsInputStream(name))) {
-
+        try {
             if (Files.notExists(outputResourcePath.getParent())) {
                 Files.createDirectories(outputResourcePath.getParent())
             }
 
-            OutputStream os = Files.newOutputStream(outputResourcePath)
-
-            os << is
+            resourceManager.getResourceAsInputStream(name).withCloseable { is ->
+                Files.newOutputStream(outputResourcePath).withCloseable { os ->
+                    os << new BufferedInputStream(is)
+                }
+            }
         } catch (IOException e) {
             throw new MojoExecutionException('Cannot create file-based resource.', e)
         }
