@@ -50,7 +50,7 @@ public class StubOverrideFixer {
 
             cu.findAll(MethodDeclaration.class).forEach(method -> {
                 if (shouldHaveOverride(method)) {
-                    method.addAnnotation("Override");
+                    method.addAnnotation("java.lang.Override");
                 }
             });
 
