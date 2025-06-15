@@ -15,30 +15,39 @@
  */
 package org.codehaus.mojo.spotbugs
 
+import org.apache.maven.model.Plugin
+import org.apache.maven.plugin.AbstractMojo
+import org.apache.maven.plugin.MojoExecution
 import org.apache.maven.plugin.logging.Log
 
 import spock.lang.Specification
 
-class CheckMojoTest extends Specification {
+class SpotBugsMojoTest extends Specification {
 
-    void 'should extend BaseViolationCheckMojo'() {
+    void 'should extend AbstractMojo'() {
         expect:
-        BaseViolationCheckMojo.isAssignableFrom(CheckMojo.class)
+        AbstractMojo.isAssignableFrom(SpotBugsMojo)
     }
 
-    void 'should skip execution'() {
+    void 'should skip generate report'() {
         given:
         Log log = Mock(Log)
-        CheckMojo mojo = new CheckMojo()
+        MojoExecution mojoExecution = Mock(MojoExecution)
+        Plugin plugin = Mock(Plugin)
+        SpotBugsMojo mojo = new SpotBugsMojo()
         mojo.skip = true
         mojo.log = log
+        mojo.mojoExecution = mojoExecution
+
+        // Set plugin in mojoExecution
+        mojoExecution.getPlugin() >> plugin
 
         when:
         mojo.execute()
 
         then:
-        1 * log.debug('Executing spotbugs:check')
-        1 * log.info('Spotbugs plugin skipped')
+        1 * log.debug('****** SpotBugsMojo canGenerateReport *******')
+        1 * log.debug('canGenerate is false')
     }
 
 }
