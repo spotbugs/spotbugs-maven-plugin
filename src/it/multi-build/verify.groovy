@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import groovy.xml.XmlSlurper
-import groovy.xml.slurpersupport.GPathResult;
+import groovy.xml.slurpersupport.GPathResult
+
+import java.nio.file.Files
+import java.nio.file.Path
 
 //  check module 1
 
@@ -24,14 +28,14 @@ println '*****************'
 
 String module = 'module-1'
 
-File spotbugsHtml =  new File(basedir, "modules/${module}/target/site/spotbugs.html")
-assert spotbugsHtml.exists()
+Path spotbugsHtml =  basedir.toPath().resolve("modules/${module}/target/site/spotbugs.html")
+assert Files.exists(spotbugsHtml)
 
-File spotbugXdoc = new File(basedir, "modules/${module}/target/spotbugs.xml")
-assert spotbugXdoc.exists()
+Path spotbugXdoc = basedir.toPath().resolve("modules/${module}/target/spotbugs.xml")
+assert Files.exists(spotbugXdoc)
 
-File spotbugXml = new File(basedir, "modules/${module}/target/spotbugsXml.xml")
-assert spotbugXml.exists()
+Path spotbugXml = basedir.toPath().resolve("modules/${module}/target/spotbugsXml.xml")
+assert Files.exists(spotbugXml)
 
 println '******************'
 println 'Checking HTML file'
@@ -92,13 +96,13 @@ println '*****************'
 module = "module-2"
 
 spotbugsHtml =  new File(basedir, "modules/${module}/target/site/spotbugs.html")
-assert spotbugsHtml.exists()
+assert Files.exists(spotbugsHtml)
 
 spotbugXdoc = new File(basedir, "modules/${module}/target/spotbugs.xml")
-assert spotbugXdoc.exists()
+assert Files.exists(spotbugXdoc)
 
 spotbugXml = new File(basedir, "modules/${module}/target/spotbugsXml.xml")
-assert spotbugXml.exists()
+assert Files.exists(spotbugXml)
 
 println '******************'
 println 'Checking HTML file'

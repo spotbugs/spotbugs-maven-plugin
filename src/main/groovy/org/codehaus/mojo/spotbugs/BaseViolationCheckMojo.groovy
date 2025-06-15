@@ -115,7 +115,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
         log.debug('Executing spotbugs:check')
 
-        if (!spotbugsXmlOutputDirectory.exists() && !spotbugsXmlOutputDirectory.mkdirs()) {
+        if (Files.notExists(spotbugsXmlOutputDirectory.toPath()) && !Files.createDirectories(spotbugsXmlOutputDirectory.toPath())) {
             throw new MojoExecutionException('Cannot create xml output directory')
         }
 

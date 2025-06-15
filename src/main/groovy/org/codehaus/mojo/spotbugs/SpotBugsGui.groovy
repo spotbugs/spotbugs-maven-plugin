@@ -19,7 +19,8 @@ import groovy.ant.AntBuilder
 
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
-
+import java.nio.file.Files
+import java.nio.file.Path
 import javax.inject.Inject
 
 import org.apache.maven.execution.MavenSession
@@ -166,9 +167,9 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
             }
 
             String spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + SpotBugsInfo.FORWARD_SLASH + spotbugsXmlOutputFilename
-            File spotbugsXml = new File(spotbugsXmlName)
+            Path spotbugsXml = Path.of(spotbugsXmlName)
 
-            if (spotbugsXml.exists()) {
+            if (Files.exists(spotbugsXml)) {
                 log.debug('  Found an SpotBugs XML at -> ' + spotbugsXml.toString())
                 arg(value: spotbugsXml)
             }

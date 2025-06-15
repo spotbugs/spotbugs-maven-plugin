@@ -13,19 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import groovy.xml.XmlSlurper
-import groovy.xml.slurpersupport.GPathResult;
+import groovy.xml.slurpersupport.GPathResult
+
+import java.nio.file.Files
+import java.nio.file.Path
 
 String thresholdLevel = 'experimental'
 
-File spotbugsHtml =  new File(basedir, 'target/site/spotbugs.html')
-assert spotbugsHtml.exists()
+Path spotbugsHtml =  basedir.toPath().resolve('target/site/spotbugs.html')
+assert Files.exists(spotbugsHtml)
 
-File spotbugXdoc = new File(basedir, 'target/spotbugs.xml')
-assert spotbugXdoc.exists()
+Path spotbugXdoc = basedir.toPath().resolve('target/spotbugs.xml')
+assert Files.exists(spotbugXdoc)
 
-File spotbugXml = new File(basedir, 'target/spotbugsXml.xml')
-assert spotbugXml.exists()
+Path spotbugXml = basedir.toPath().resolve('target/spotbugsXml.xml')
+assert Files.exists(spotbugXml)
 
 println '******************'
 println 'Checking HTML file'

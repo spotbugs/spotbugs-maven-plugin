@@ -17,6 +17,9 @@ package org.codehaus.mojo.spotbugs
 
 import groovy.xml.slurpersupport.GPathResult
 
+import java.nio.file.Files
+import java.nio.file.Path
+
 import org.apache.maven.doxia.markup.HtmlMarkup
 import org.apache.maven.doxia.sink.Sink
 import org.apache.maven.doxia.sink.SinkEventAttributes
@@ -342,7 +345,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         String prefix
         compileSourceRoots.each { compileSourceRoot ->
-            if (!new File(compileSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
+            if (Files.notExists(Path.of(compileSourceRoot + File.separator + line.@sourcepath.text()))) {
                 return
             }
             prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefLocation.getAbsolutePath())
@@ -352,7 +355,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         if (includeTests && !prefix) {
             testSourceRoots.each { testSourceRoot ->
-                if (!new File(testSourceRoot + File.separator + line.@sourcepath.text()).exists()) {
+                if (Files.notExists(Path.of(testSourceRoot + File.separator + line.@sourcepath.text()))) {
                     return
                 }
                 prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefTestLocation.getAbsolutePath())

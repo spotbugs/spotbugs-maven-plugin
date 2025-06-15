@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import java.nio.file.Path
+
 // Check no missing classes
 
-File buildLog = new File(basedir, 'build.log')
+Path buildLog = basedir.toPath().resolve('build.log')
 assert buildLog.text.contains('Error size is 0')
