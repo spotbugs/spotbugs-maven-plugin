@@ -166,9 +166,9 @@
         <spock.version>2.4-M6-groovy-4.0</spock.version>
 
         <!-- Used by Integration tests -->
-        <findsecbugs.version>1.13.0</findsecbugs.version>
+        <findsecbugs.version>1.14.0</findsecbugs.version>
         <servletApiVersion>6.1.0</servletApiVersion>
-        <sb-contrib.version>7.6.9</sb-contrib.version>
+        <sb-contrib.version>7.6.10</sb-contrib.version>
 
         <jgit.version>7.3.0.202506031305-r</jgit.version>
 
