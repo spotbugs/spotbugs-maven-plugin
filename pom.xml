@@ -620,6 +620,46 @@
 
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-stubfixer-sources</id>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/stubfixer/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Compile stubfixer. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>compile-stubfixer</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <compileSourceRoots>
+                                <compileSourceRoot>${project.basedir}/src/stubfixer/java</compileSourceRoot>
+                            </compileSourceRoots>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
                 <executions>
@@ -639,6 +679,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
@@ -684,46 +725,6 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>add-stubfixer-sources</id>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <phase>generate-sources</phase>
-                        <configuration>
-                            <sources>
-                                <source>${project.basedir}/src/stubfixer/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Compile stubfixer. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>compile-stubfixer</id>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <phase>generate-sources</phase>
-                        <configuration>
-                            <compileSourceRoots>
-                                <compileSourceRoot>${project.basedir}/src/stubfixer/java</compileSourceRoot>
-                            </compileSourceRoots>
-                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Add missing @Override to stubs fixing codeql issues that groovy doesn't care about. -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -731,7 +732,7 @@
                 <version>${execPluginVersion}</version>
                 <executions>
                     <execution>
-                        <id>run-stubfixer</id>
+                        <id>run-stubfixer-main</id>
                         <goals>
                             <goal>java</goal>
                         </goals>
@@ -741,6 +742,20 @@
                             <classpathScope>compile</classpathScope>
                             <arguments>
                                 <argument>${project.build.directory}/generated-sources/groovy-stubs/main</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>run-stubfixer-test</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <phase>generate-test-sources</phase>
+                        <configuration>
+                            <mainClass>com.github.spotbugs.StubOverrideFixer</mainClass>
+                            <classpathScope>compile</classpathScope>
+                            <arguments>
+                                <argument>${project.build.directory}/generated-sources/groovy-stubs/test</argument>
                             </arguments>
                         </configuration>
                     </execution>
