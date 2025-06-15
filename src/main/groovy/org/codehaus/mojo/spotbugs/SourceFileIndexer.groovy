@@ -85,7 +85,7 @@ class SourceFileIndexer {
             if (child.isDirectory()) {
                 scanDirectory(child, files, baseDirectory)
             } else {
-                String newSourceFile = normalizePath(child.canonicalPath)
+                String newSourceFile = normalizePath(child.getCanonicalPath())
                 if (newSourceFile.startsWith(baseDirectory)) {
                     // The project will not be at the root of our file system.
                     // It will most likely be stored in a work directory.
