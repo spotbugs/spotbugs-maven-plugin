@@ -581,10 +581,27 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * Called by AbstractMavenReport.execute() for creating the sink.
      *
      * @return name of the generated page
-     * @see MavenReport#getOutputName()
+     * @see (@link MavenReport#getOutputName()}
+     *
+     * @deprecated Method name does not properly reflect its purpose. Implement and use
+     * {@link #getOutputPath()} instead.
      */
     @Override
+    @Deprecated
     String getOutputName() {
+        return SpotBugsInfo.PLUGIN_NAME
+    }
+
+    /**
+     * Returns report output file name, without the extension.
+     *
+     * Called by AbstractMavenReport.execute() for creating the sink.
+     *
+     * @return name of the generated page
+     * @see {@link MavenReport#getOutputPath()}
+     */
+    @Override
+    String getOutputPath() {
         return SpotBugsInfo.PLUGIN_NAME
     }
 
