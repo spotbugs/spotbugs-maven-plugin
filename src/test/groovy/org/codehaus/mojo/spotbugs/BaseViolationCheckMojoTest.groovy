@@ -16,6 +16,7 @@
 package org.codehaus.mojo.spotbugs
 
 import org.apache.maven.plugin.AbstractMojo
+
 import spock.lang.Specification
 
 class BaseViolationCheckMojoTest extends Specification {

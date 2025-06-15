@@ -119,13 +119,15 @@
         <!-- Reproducible Builds: override timestamp value from parent -->
         <project.build.outputTimestamp>1742066584</project.build.outputTimestamp>
 
-        <jacoco.minimum.coverage>0.00</jacoco.minimum.coverage>
+        <jacoco.minimum.coverage>0.09</jacoco.minimum.coverage>
 
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.9.3</spotbugs.version>
         <spotbugs.plugin>4.9.3.0</spotbugs.plugin>
 
+        <byte-buddy.version>1.17.5</byte-buddy.version>
         <junitVersion>5.13.1</junitVersion>
+        <mockito.version>5.18.0</mockito.version>
         <slf4jVersion>2.0.17</slf4jVersion>
 
         <antVersion>1.10.15</antVersion>
@@ -189,10 +191,25 @@
 
         <!-- Automatic Module Name -->
         <module.name>com.github.spotbugs.maven</module.name>
+
+        <!-- Surefire Setup -->
+        <argLine>-javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar</argLine>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- Ensure we use latest version of byte buddy and further allow argLine to properly work! -->
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${byte-buddy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy-agent</artifactId>
+                <version>${byte-buddy.version}</version>
+            </dependency>
+
             <!-- Ensure we use latest version regardless of spotbugs version -->
             <dependency>
                 <groupId>org.ow2.asm</groupId>
@@ -508,6 +525,12 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junitVersion}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
