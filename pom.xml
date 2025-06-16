@@ -125,7 +125,7 @@
         <spotbugs.version>4.9.3</spotbugs.version>
         <spotbugs.plugin>4.9.3.0</spotbugs.plugin>
 
-        <byte-buddy.version>1.17.5</byte-buddy.version>
+        <byte-buddy.version>1.17.6</byte-buddy.version>
         <junitVersion>5.13.1</junitVersion>
         <mockito.version>5.18.0</mockito.version>
         <slf4jVersion>2.0.17</slf4jVersion>
