@@ -15,8 +15,11 @@
  */
 package org.codehaus.mojo.spotbugs
 
+import groovy.transform.CompileStatic
+
 import org.apache.maven.RepositoryUtils
 import org.apache.maven.artifact.Artifact
+import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugin.MojoExecutionException
 import org.codehaus.plexus.resource.ResourceManager
@@ -26,6 +29,7 @@ import org.eclipse.aether.resolution.ArtifactResult
 /**
  * SpotBugs plugin support for Mojos.
  */
+@CompileStatic
 trait SpotBugsPluginsTrait {
 
     // the trait needs certain objects to work, this need is expressed as abstract getters
@@ -42,6 +46,8 @@ trait SpotBugsPluginsTrait {
     // when fixed, should move pluginList and plugins properties here
     abstract String getPluginList()
     abstract PluginArtifact[] getPlugins()
+    abstract String getEffort()
+    abstract MavenSession getSession()
 
     /**
      * Adds the specified plugins to spotbugs. The coreplugin is always added first.
@@ -50,24 +56,22 @@ trait SpotBugsPluginsTrait {
     String getSpotbugsPlugins() {
         ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)
 
-        String urlPlugins = ""
+        List<String> urlPlugins = []
 
         if (pluginList) {
             log.debug('  Adding Plugins ')
-            String[] pluginJars = pluginList.split(SpotBugsInfo.COMMA)
 
-            pluginJars.each() { pluginJar ->
+            pluginList.split(SpotBugsInfo.COMMA).each { String pluginJar ->
                 String pluginFileName = pluginJar.trim()
 
                 if (!pluginFileName.endsWith('.jar')) {
-                    throw new MojoExecutionException("Plugin File is not a Jar file: " + pluginFileName)
+                    throw new MojoExecutionException("Plugin File is not a Jar file: ${pluginFileName}")
                 }
 
                 try {
-                    log.debug('  Processing Plugin: ' + pluginFileName.toString())
+                    log.debug("  Processing Plugin: ${pluginFileName}")
 
-                    urlPlugins += resourceHelper.getResourceFile(pluginFileName.toString()).absolutePath +
-                        ((pluginJar == pluginJars[pluginJars.size() - 1]) ? '' : File.pathSeparator)
+                    urlPlugins << resourceHelper.getResourceFile(pluginFileName).absolutePath
                 } catch (MalformedURLException e) {
                     throw new MojoExecutionException('The addin plugin has an invalid URL', e)
                 }
@@ -76,40 +80,29 @@ trait SpotBugsPluginsTrait {
 
         if (plugins) {
             log.debug('  Adding Plugins from a repository')
+            log.debug("  Session is: ${session}")
 
-            if (urlPlugins.size() > 0) {
-                urlPlugins += File.pathSeparator
-            }
+            plugins.each { PluginArtifact plugin ->
 
-            Artifact pomArtifact
-
-            log.debug('  Session is: ' + session.toString())
-
-            plugins.each() { plugin ->
-
-                log.debug('  Processing Plugin: ' + plugin.toString())
-                if (plugin['classifier'] == null) {
-                    log.debug("groupId is ${plugin['groupId']} ****** artifactId is ${plugin['artifactId']} ****** version is ${plugin['version']} ****** type is ${plugin['type']}")
-                    pomArtifact = this.factory.createArtifact(plugin['groupId'], plugin['artifactId'], plugin['version'], "", plugin['type'])
-                    log.debug("pomArtifact is ${pomArtifact} ****** groupId is ${pomArtifact['groupId']} ****** artifactId is ${pomArtifact['artifactId']} ****** version is ${pomArtifact['version']} ****** type is ${pomArtifact['type']}")
-                } else {
-                    log.debug("groupId is ${plugin['groupId']} ****** artifactId is ${plugin['artifactId']} ****** version is ${plugin['version']} ****** type is ${plugin['type']} ****** classifier is ${plugin['classifier']}")
-                    pomArtifact = this.factory.createArtifactWithClassifier(plugin['groupId'], plugin['artifactId'], plugin['version'], plugin['type'], plugin['classifier'])
-                    log.debug("pomArtifact is ${pomArtifact} ****** groupId is ${pomArtifact['groupId']} ****** artifactId is ${pomArtifact['artifactId']} ****** version is ${pomArtifact['version']} ****** type is ${pomArtifact['type']} ****** classfier is ${pomArtifact['classifier']}")
-                }
+                log.debug("  Processing Plugin: ${plugin}")
+                Artifact pomArtifact = plugin.classifier == null ?
+                    this.factory.createArtifact(plugin.groupId, plugin.artifactId, plugin.version, "", plugin.type) :
+                    this.factory.createArtifactWithClassifier(plugin.groupId, plugin.artifactId, plugin.version, plugin.type, plugin.classifier)
+                log.debug("  Added Artifact: ${pomArtifact}")
 
                 ArtifactRequest request = new ArtifactRequest(RepositoryUtils.toArtifact(pomArtifact), session.getCurrentProject().getRemoteProjectRepositories(), null)
                 ArtifactResult result = this.repositorySystem.resolveArtifact(session.getRepositorySession(), request)
 
                 pomArtifact.setFile(result.getArtifact().getFile())
 
-                urlPlugins += resourceHelper.getResourceFile(pomArtifact.file.absolutePath).absolutePath + ((plugin == plugins[plugins.size() - 1]) ? "" : File.pathSeparator)
+                urlPlugins << resourceHelper.getResourceFile(pomArtifact.file.absolutePath).absolutePath
             }
         }
 
-        log.debug("  Plugin list is: ${urlPlugins}")
+        String pluginListStr = urlPlugins.join(File.pathSeparator)
+        log.debug("  Plugin list is: ${pluginListStr}")
 
-        return urlPlugins
+        return pluginListStr
     }
 
     /**
@@ -121,24 +114,10 @@ trait SpotBugsPluginsTrait {
     String getEffortParameter() {
         log.debug("effort is ${effort}")
 
-        String effortParameter
-
-        switch (effort) {
-            case 'Max':
-                effortParameter = 'max'
-                break
-
-            case 'Min':
-                effortParameter = 'min'
-                break
-
-            default:
-                effortParameter = 'default'
-                break
-        }
+        String effortParameter = (effort == 'Max') ? 'max' : (effort == 'Min') ? 'min' : 'default'
 
         log.debug("effortParameter is ${effortParameter}")
 
-        return "-effort:" + effortParameter
+        return "-effort:${effortParameter}"
     }
 }
