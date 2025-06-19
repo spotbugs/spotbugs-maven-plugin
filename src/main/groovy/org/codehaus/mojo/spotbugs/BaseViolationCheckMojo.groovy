@@ -153,8 +153,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         }
 
         int bugCountAboveThreshold = 0
-        for (i in 0..bugCount-1) {
-            Node bug = bugs[i]
+        bugs.eachWithIndex { Node bug, int i ->
             int priorityNum = bug.'@priority' as Integer
             String priorityName = SpotBugsInfo.spotbugsPriority[priorityNum]
             String logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK +
