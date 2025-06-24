@@ -166,8 +166,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
                 arg(value: spotbugsArg)
             }
 
-            String spotbugsXmlName = spotbugsXmlOutputDirectory.toString() + SpotBugsInfo.FORWARD_SLASH + spotbugsXmlOutputFilename
-            Path spotbugsXml = Path.of(spotbugsXmlName)
+            Path spotbugsXml = spotbugsXmlOutputDirectory.toPath().resolve(spotbugsXmlOutputFilename)
 
             if (Files.exists(spotbugsXml)) {
                 log.debug('  Found an SpotBugs XML at -> ' + spotbugsXml.toString())
