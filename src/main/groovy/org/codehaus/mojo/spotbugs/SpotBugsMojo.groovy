@@ -922,7 +922,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             String sourceRoots = ''
             session.getCurrentProject().compileSourceRoots.each() { sourceRoots += it + File.pathSeparator }
             if (includeTests) {
-                session.getCurrentProject().testCompileSourceRoots.each() { sourceRoots + it + File.pathSeparator }
+                session.getCurrentProject().testCompileSourceRoots.each() { sourceRoots += it + File.pathSeparator }
             }
             args << sourceRoots.substring(0, sourceRoots.length() -1)
         }
