@@ -45,4 +45,38 @@ class BaseViolationCheckMojoTest extends Specification {
         mojo.quiet == false
     }
 
+    void 'should allow setting properties'() {
+        given:
+        TestMojo mojo = new TestMojo()
+
+        when:
+        mojo.spotbugsXmlOutputFilename = 'output.xml'
+        mojo.includeTests = true
+        mojo.debug = true
+        mojo.skip = true
+        mojo.failOnError = true
+        mojo.maxAllowedViolations = 5
+        mojo.quiet = true
+
+        then:
+        mojo.spotbugsXmlOutputFilename == 'output.xml'
+        mojo.includeTests
+        mojo.debug
+        mojo.skip
+        mojo.failOnError
+        mojo.maxAllowedViolations == 5
+        mojo.quiet
+    }
+
+    void 'should not throw when execute is called'() {
+        given:
+        TestMojo mojo = new TestMojo()
+
+        when:
+        mojo.execute()
+
+        then:
+        notThrown(Exception)
+    }
+
 }
