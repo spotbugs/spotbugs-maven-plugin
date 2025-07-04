@@ -37,7 +37,7 @@ String effortLevel = 'max'
 
 assert spotbugsHtml.text.contains("<i>" + effortLevel + "</i>")
 
-XmlSlurper xhtmlParser = new XmlSlurper();
+XmlSlurper xhtmlParser = new XmlSlurper()
 xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
 xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
 GPathResult path = xhtmlParser.parse(spotbugsHtml)

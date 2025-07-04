@@ -114,18 +114,19 @@
         <javadoc.java.release.version>11</javadoc.java.release.version>
 
         <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
-        <testSourceDirectory>${project.basedir}src/test/groovy</testSourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/groovy</testSourceDirectory>
 
         <!-- Reproducible Builds: override timestamp value from parent -->
         <project.build.outputTimestamp>1750986753</project.build.outputTimestamp>
 
-        <jacoco.minimum.coverage>0.09</jacoco.minimum.coverage>
+        <jacoco.minimum.coverage>0.12</jacoco.minimum.coverage>
 
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.9.3</spotbugs.version>
         <spotbugs.plugin>4.9.3.0</spotbugs.plugin>
 
         <byte-buddy.version>1.17.6</byte-buddy.version>
+        <javabean-tester.version>2.10.0</javabean-tester.version>
         <junitVersion>5.13.2</junitVersion>
         <mockito.version>5.18.0</mockito.version>
         <slf4jVersion>2.0.17</slf4jVersion>
@@ -522,6 +523,12 @@
             <version>${plexusUtilsVersion}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.hazendaz</groupId>
+            <artifactId>javabean-tester</artifactId>
+            <version>${javabean-tester.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>

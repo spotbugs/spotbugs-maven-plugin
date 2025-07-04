@@ -12,3 +12,5 @@ target/
 release.properties
 .mvn/wrapper/maven-wrapper.jar
 .factorypath
+.groovy
+.pmd
