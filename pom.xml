@@ -114,7 +114,7 @@
         <javadoc.java.release.version>11</javadoc.java.release.version>
 
         <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
-        <testSourceDirectory>${project.basedir}src/test/groovy</testSourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/groovy</testSourceDirectory>
 
         <!-- Reproducible Builds: override timestamp value from parent -->
         <project.build.outputTimestamp>1750986753</project.build.outputTimestamp>
