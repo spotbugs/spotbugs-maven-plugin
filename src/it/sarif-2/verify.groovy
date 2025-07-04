@@ -27,7 +27,7 @@ println 'Checking SARIF file'
 println '*******************'
 
 String normalizePath(String path) {
-    return path.replace("\\\\","/");
+    return path.replace("\\\\","/")
 }
 
 Map slurpedResult = new JsonSlurper().parse(spotbugSarifFile)
