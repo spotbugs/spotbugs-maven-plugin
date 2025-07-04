@@ -108,18 +108,22 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         if (skip) {
             log.info('Spotbugs plugin skipped')
             return
-        } else if (!doSourceFilesExist()) {
+        }
+
+        if (!doSourceFilesExist()) {
             log.debug('Nothing for SpotBugs to do here.')
             return
         }
 
         log.debug('Executing spotbugs:check')
 
-        if (Files.notExists(spotbugsXmlOutputDirectory.toPath()) && !Files.createDirectories(spotbugsXmlOutputDirectory.toPath())) {
+        Path outputDir = spotbugsXmlOutputDirectory.toPath()
+
+        if (Files.notExists(outputDir) && !Files.createDirectories(outputDir)) {
             throw new MojoExecutionException('Cannot create xml output directory')
         }
 
-        Path outputFile = Path.of("${spotbugsXmlOutputDirectory}/${spotbugsXmlOutputFilename}")
+        Path outputFile = outputDir.resolve(spotbugsXmlOutputFilename)
 
         if (Files.notExists(outputFile)) {
             log.debug('Output directory does not exist!')
@@ -141,7 +145,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         } else if (maxAllowedViolations > 0 && bugCount <= maxAllowedViolations) {
             log.info("Total ${bugCount} violations are found as acceptable using configured property maxAllowedViolations " +
                 ":${maxAllowedViolations}.${SpotBugsInfo.EOL}Below are list of bugs ignored :${SpotBugsInfo.EOL}")
-            printBugs(bugCount, bugs)
+            printBugs(bugs)
             return
         }
 
@@ -153,7 +157,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         }
 
         int bugCountAboveThreshold = 0
-        bugs.eachWithIndex { Node bug, int i ->
+        bugs.each { Node bug ->
             int priorityNum = bug.'@priority' as Integer
             String priorityName = SpotBugsInfo.spotbugsPriority[priorityNum]
             String logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK +
@@ -162,7 +166,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
             // lower is more severe
             if (priorityNum <= priorityThresholdNum) {
-                bugCountAboveThreshold += 1
+                bugCountAboveThreshold++
                 if (!quiet) {
                     log.error(logMsg)
                 }
@@ -197,9 +201,8 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         !sourceFiles.isEmpty()
     }
 
-    private void printBugs(int total, NodeList bugs) {
-        for (i in 0..total - 1) {
-            Node bug = bugs[i]
+    private void printBugs(NodeList bugs) {
+        bugs.forEach{ Node bug ->
             log.error(bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
                 bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
         }
