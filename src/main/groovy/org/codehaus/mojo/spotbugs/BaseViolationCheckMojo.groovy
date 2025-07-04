@@ -88,7 +88,6 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     @Parameter(property = 'spotbugs.failThreshold')
     String failThreshold
 
-
     /**
      * specified max number of violations which can be ignored by the spotbugs.
      *
@@ -126,7 +125,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         Path outputFile = outputDir.resolve(spotbugsXmlOutputFilename)
 
         if (Files.notExists(outputFile)) {
-            log.debug('Output directory does not exist!')
+            log.debug('Output file does not exist!')
             return
         }
 
