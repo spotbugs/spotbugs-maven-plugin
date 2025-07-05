@@ -18,8 +18,10 @@ package org.codehaus.mojo.spotbugs
 import edu.umd.cs.findbugs.Version
 
 import groovy.xml.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.NodeChild
+import groovy.xml.MarkupBuilderHelper
 import groovy.xml.StreamingMarkupBuilder
-
+import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 
 import org.apache.maven.plugin.logging.Log
@@ -51,16 +53,16 @@ class XDocsReporter {
     GPathResult spotbugsResults
 
     /** Bug Classes. */
-    List bugClasses
+    List<String> bugClasses = []
 
     /** The directories containing the sources to be compiled. */
-    List compileSourceRoots
+    List<String> compileSourceRoots = []
 
     /** The directories containing the test sources to be compiled. */
-    List testSourceRoots
+    List<String> testSourceRoots = []
 
     /** The output encoding. */
-    String outputEncoding
+    Charset outputEncoding
 
     /**
      * Default constructor.
@@ -69,24 +71,15 @@ class XDocsReporter {
      *            The Resource Bundle to use
      */
     XDocsReporter(ResourceBundle bundle, Log log, String threshold, String effort, String outputEncoding) {
-        assert bundle
-        assert log
-        assert threshold
-        assert effort
-        assert outputEncoding
+        if (!bundle || !log || !threshold || !effort || !outputEncoding) {
+            throw new IllegalArgumentException('All constructor arguments must be provided')
+        }
 
         this.bundle = bundle
         this.log = log
         this.threshold = threshold
         this.effort = effort
-        this.outputEncoding = outputEncoding
-
-        this.outputWriter = null
-        this.spotbugsResults = null
-
-        this.compileSourceRoots = []
-        this.testSourceRoots = []
-        this.bugClasses = []
+        this.outputEncoding = Charset.forName(outputEncoding)
     }
 
     /**
@@ -97,29 +90,14 @@ class XDocsReporter {
      * @return The string valueof the Threshold object.
      */
     protected String evaluateThresholdParameter(String thresholdValue) {
-        String thresholdName
-
         switch (thresholdValue) {
-            case '1':
-                thresholdName = 'High'
-                break
-            case '2':
-                thresholdName = 'Normal'
-                break
-            case '3':
-                thresholdName = 'Low'
-                break
-            case '4':
-                thresholdName = 'Exp'
-                break
-            case '5':
-                thresholdName = 'Ignore'
-                break
-            default:
-                thresholdName = 'Invalid Priority'
+            case '1': return 'High'
+            case '2': return 'Normal'
+            case '3': return 'Low'
+            case '4': return 'Exp'
+            case '5': return 'Ignore'
+            default: return 'Invalid Priority'
         }
-
-        return thresholdName
     }
 
     /**
@@ -133,18 +111,18 @@ class XDocsReporter {
 
     public void generateReport() {
         StreamingMarkupBuilder xmlBuilder = new StreamingMarkupBuilder()
-        xmlBuilder.encoding = StandardCharsets.UTF_8.name()
+        xmlBuilder.encoding = outputEncoding.name()
 
-        Closure xdoc = {
+        outputWriter << xmlBuilder.bind {
             mkp.xmlDeclaration()
             log.debug("generateReport spotbugsResults is ${spotbugsResults}")
 
-            BugCollection(version: getSpotBugsVersion(), threshold: SpotBugsInfo.spotbugsThresholds.get(threshold),
-                    effort: SpotBugsInfo.spotbugsEfforts.get(effort)) {
+            BugCollection(version: getSpotBugsVersion(), threshold: SpotBugsInfo.spotbugsThresholds[threshold],
+                    effort: SpotBugsInfo.spotbugsEfforts[effort]) {
 
                 log.debug("spotbugsResults.FindBugsSummary total_bugs is ${spotbugsResults.FindBugsSummary.@total_bugs.text()}")
 
-                spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() {classStats ->
+                spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() { NodeChild classStats ->
 
                     String classStatsValue = classStats.'@class'.text()
                     String classStatsBugCount = classStats.'@bugs'.text()
@@ -158,10 +136,10 @@ class XDocsReporter {
                     }
                 }
 
-                bugClasses.each() { bugClass ->
+                bugClasses.each() { String bugClass ->
                     log.debug("finish bugClass is ${bugClass}")
                     file(classname: bugClass) {
-                        spotbugsResults.BugInstance.each() { bugInstance ->
+                        spotbugsResults.BugInstance.each() { NodeChild bugInstance ->
 
                             if (bugInstance.Class.find{ it.@primary == "true" }.@classname.text() != bugClass) {
                                 return
@@ -183,13 +161,13 @@ class XDocsReporter {
                 log.debug("Printing Errors")
 
                 Error() {
-                    spotbugsResults.Error.analysisError.each() {analysisError ->
+                    spotbugsResults.Error.analysisError.each() { NodeChild analysisError ->
                         AnalysisError(analysisError.message.text())
                     }
 
                     log.debug("Printing Missing classes")
 
-                    spotbugsResults.Error.MissingClass.each() {missingClass ->
+                    spotbugsResults.Error.MissingClass.each() { NodeChild missingClass ->
                         MissingClass(missingClass.text)
                     }
                 }
@@ -198,14 +176,14 @@ class XDocsReporter {
                     log.debug("Printing Source Roots")
 
                     if (!compileSourceRoots.isEmpty()) {
-                        compileSourceRoots.each() { srcDir ->
+                        compileSourceRoots.each() { String srcDir ->
                             log.debug("SrcDir is ${srcDir}")
                             SrcDir(srcDir)
                         }
                     }
 
                     if (!testSourceRoots.isEmpty()) {
-                        testSourceRoots.each() { srcDir ->
+                        testSourceRoots.each() { String srcDir ->
                             log.debug("SrcDir is ${srcDir}")
                             SrcDir(srcDir)
                         }
@@ -214,7 +192,6 @@ class XDocsReporter {
             }
         }
 
-        outputWriter << xmlBuilder.bind(xdoc)
         outputWriter.close()
     }
 }
