@@ -142,6 +142,14 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
         }
         log.info('File Encoding is ' + effectiveEncoding.name())
 
+        // options must be added before the spotbugsXml path
+        List<String> spotbugsArgs = new ArrayList<>()
+        spotbugsArgs << getEffortParameter()
+        if (pluginList || plugins) {
+            spotbugsArgs << '-pluginList'
+            spotbugsArgs << getSpotbugsPlugins()
+        }
+
         AntBuilder ant = new AntBuilder()
         ant.project.setProperty('basedir', spotbugsXmlOutputDirectory.getAbsolutePath())
         ant.project.setProperty('verbose', 'true')
@@ -153,15 +161,6 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
             // spotbugs assumes that multiple arguments (because of options) means text mode, so need to request gui explicitly
             jvmarg(value: '-Dfindbugs.launchUI=gui2')
 
-            // options must be added before the spotbugsXml path
-            List<String> spotbugsArgs = new ArrayList<>()
-
-            spotbugsArgs << getEffortParameter()
-
-            if (pluginList || plugins) {
-                spotbugsArgs << '-pluginList'
-                spotbugsArgs << getSpotbugsPlugins()
-            }
             spotbugsArgs.each { String spotbugsArg ->
                 log.debug("Spotbugs arg is ${spotbugsArg}")
                 arg(value: spotbugsArg)
