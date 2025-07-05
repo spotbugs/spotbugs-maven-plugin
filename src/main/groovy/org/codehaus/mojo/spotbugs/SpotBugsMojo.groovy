@@ -30,8 +30,9 @@ import java.nio.file.Path
 import java.util.stream.Collectors
 
 import javax.inject.Inject
-
+import org.apache.maven.artifact.Artifact
 import org.apache.maven.execution.MavenSession
+import org.apache.maven.model.ReportPlugin
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
@@ -165,7 +166,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
     /** List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin. */
     @Parameter(property = 'plugin.artifacts', readonly = true, required = true)
-    List pluginArtifacts
+    List<Artifact> pluginArtifacts
 
     /** Maven Session. */
     @Parameter (defaultValue = '${session}', readonly = true, required = true)
@@ -233,7 +234,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @since 4.7.1.0
      */
     @Parameter(property = 'spotbugs.includeFilterFiles')
-    List includeFilterFiles
+    List<String> includeFilterFiles
 
     /**
      * File name of the exclude filter. Bugs matching the filters are not reported.
@@ -265,7 +266,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @since 4.7.1.0
      */
     @Parameter(property = 'spotbugs.excludeFilterFiles')
-    List excludeFilterFiles
+    List<String> excludeFilterFiles
 
     /**
      * File names of the baseline files. Bugs found in the baseline files won't be reported.
@@ -300,7 +301,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @since 4.7.1.0
      */
     @Parameter(property = 'spotbugs.excludeBugsFiles')
-    List excludeBugsFiles
+    List<String> excludeBugsFiles
 
     /**
      * Effort of the bug finders. Valid values are Min, Default and Max.
@@ -514,8 +515,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (!skip && classFilesDirectory.exists()) {
 
-            classFilesDirectory.eachFileRecurse {
-                if (it.name.contains(SpotBugsInfo.CLASS_SUFFIX)) {
+            classFilesDirectory.eachFileRecurse { File file ->
+                if (file.name.contains(SpotBugsInfo.CLASS_SUFFIX)) {
                     canGenerate = true
                 }
             }
@@ -524,8 +525,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (!skip && testClassFilesDirectory.exists() && includeTests) {
 
-            testClassFilesDirectory.eachFileRecurse {
-                if (it.name.contains(SpotBugsInfo.CLASS_SUFFIX)) {
+            testClassFilesDirectory.eachFileRecurse { File file ->
+                if (file.name.contains(SpotBugsInfo.CLASS_SUFFIX)) {
                     canGenerate = true
                 }
             }
@@ -735,11 +736,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             return true
         }
 
-        List reportPlugins = session.getCurrentProject().getModel().getReporting().getPlugins()
+        List<ReportPlugin> reportPlugins = session.getCurrentProject().getModel().getReporting().getPlugins()
 
         boolean isEnabled
 
-        reportPlugins.each() { reportPlugin ->
+        reportPlugins.each() { ReportPlugin reportPlugin ->
 
             log.debug("report plugin -> ${reportPlugin.getArtifactId()}")
             if ('maven-jxr-plugin'.equals(reportPlugin.getArtifactId())) {
@@ -852,9 +853,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (onlyAnalyze) {
             log.debug("  Adding 'onlyAnalyze'")
             args << '-onlyAnalyze'
-            args << Arrays.stream(onlyAnalyze.split(SpotBugsInfo.COMMA)).map {
-                it.startsWith('file:') ? Files.lines(resourceHelper.getResourceFile(it.substring(5)).toPath())
-                    .collect(Collectors.joining(SpotBugsInfo.COMMA)) : it
+            args << Arrays.stream(onlyAnalyze.split(SpotBugsInfo.COMMA)).map { String string ->
+                string.startsWith('file:') ? Files.lines(resourceHelper.getResourceFile(string.substring(5)).toPath())
+                    .collect(Collectors.joining(SpotBugsInfo.COMMA)) : string
             }.collect(Collectors.joining(','))
         }
 
@@ -863,7 +864,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             String[] includefilters = includeFilterFile.split(SpotBugsInfo.COMMA)
 
-            includefilters.each { includefilter ->
+            includefilters.each { String includefilter ->
                 args << '-include'
                 args << resourceHelper.getResourceFile(includefilter.trim())
             }
@@ -872,7 +873,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (includeFilterFiles) {
             log.debug('  Adding Include Filter Files')
 
-            includeFilterFiles.each { includefilter ->
+            includeFilterFiles.each { String includefilter ->
                 args << '-include'
                 args << resourceHelper.getResourceFile(includefilter.trim())
             }
@@ -882,7 +883,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug('  Adding Exclude Filter File')
             String[] excludefilters = excludeFilterFile.split(SpotBugsInfo.COMMA)
 
-            excludefilters.each { excludeFilter ->
+            excludefilters.each { String excludeFilter ->
                 args << '-exclude'
                 args << resourceHelper.getResourceFile(excludeFilter.trim())
             }
@@ -891,7 +892,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (excludeFilterFiles) {
             log.debug('  Adding Exclude Filter Files')
 
-            excludeFilterFiles.each { excludeFilter ->
+            excludeFilterFiles.each { String excludeFilter ->
                 args << '-exclude'
                 args << resourceHelper.getResourceFile(excludeFilter.trim())
             }
@@ -901,7 +902,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug('  Adding Exclude Bug File (Baselines)')
             String[] excludeFiles = excludeBugsFile.split(SpotBugsInfo.COMMA)
 
-            excludeFiles.each() { excludeFile ->
+            excludeFiles.each() { String excludeFile ->
                 args << '-excludeBugs'
                 args << resourceHelper.getResourceFile(excludeFile.trim())
             }
@@ -910,7 +911,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (excludeBugsFiles) {
             log.debug('  Adding Exclude Bug Files (Baselines)')
 
-            excludeBugsFiles.each() { excludeFile ->
+            excludeBugsFiles.each() { String excludeFile ->
                 args << '-excludeBugs'
                 args << resourceHelper.getResourceFile(excludeFile.trim())
             }
@@ -971,15 +972,15 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             auxClasspathFile.deleteOnExit()
             log.debug('  AuxClasspath Elements -> ' + auxClasspathElements)
 
-            List<String> auxClasspathList = auxClasspathElements.findAll {
-                session.getCurrentProject().getBuild().outputDirectory != it.toString()
+            List<String> auxClasspathList = auxClasspathElements.findAll { String auxClasspath ->
+                session.getCurrentProject().getBuild().outputDirectory != auxClasspath
             }
             if (auxClasspathList.size() > 0) {
                 log.debug('  Last AuxClasspath is -> ' + auxClasspathList[auxClasspathList.size() - 1])
 
-                auxClasspathList.each() { auxClasspathElement ->
-                    log.debug('  Adding to AuxClasspath -> ' + auxClasspathElement.toString())
-                    auxClasspathFile << auxClasspathElement.toString() + SpotBugsInfo.EOL
+                auxClasspathList.each() { String auxClasspathElement ->
+                    log.debug('  Adding to AuxClasspath -> ' + auxClasspathElement)
+                    auxClasspathFile << auxClasspathElement + SpotBugsInfo.EOL
                 }
             }
         }
@@ -1090,7 +1091,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             classpath() {
 
-                pluginArtifacts.each() { pluginArtifact ->
+                pluginArtifacts.each() { Artifact pluginArtifact ->
                     log.debug('  Adding to pluginArtifact -> ' + pluginArtifact.file.toString())
 
                     pathelement(location: pluginArtifact.file)

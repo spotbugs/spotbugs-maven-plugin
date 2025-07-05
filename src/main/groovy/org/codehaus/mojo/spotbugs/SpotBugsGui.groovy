@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import javax.inject.Inject
-
+import org.apache.maven.artifact.Artifact
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.Mojo
@@ -54,7 +54,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
     /** List of artifacts this plugin depends on. Used for resolving the Spotbugs core plugin. */
     @Parameter(property = 'plugin.artifacts', readonly = true, required = true)
-    List pluginArtifacts
+    List<Artifact> pluginArtifacts
 
     /** Effort of the bug finders. Valid values are Min, Default and Max. */
     @Parameter(defaultValue = 'Default', property = 'spotbugs.effort')
@@ -161,7 +161,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
                 spotbugsArgs << '-pluginList'
                 spotbugsArgs << getSpotbugsPlugins()
             }
-            spotbugsArgs.each { spotbugsArg ->
+            spotbugsArgs.each { String spotbugsArg ->
                 log.debug("Spotbugs arg is ${spotbugsArg}")
                 arg(value: spotbugsArg)
             }
@@ -175,7 +175,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
             classpath() {
 
-                pluginArtifacts.each() { pluginArtifact ->
+                pluginArtifacts.each() { Artifact pluginArtifact ->
                     if (debug) {
                         log.debug('  Trying to Add to pluginArtifact -> ' + pluginArtifact.file.toString())
                     }
