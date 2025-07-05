@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import javax.inject.Inject
+
 import org.apache.maven.artifact.Artifact
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.AbstractMojo
@@ -69,7 +70,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      * See <a href="./usage.html#Using Detectors from a Repository">Usage</a> for details.
      *
      * @since 2.4.1
-     * @since 4.8.3.0 includes classfier
+     * @since 4.8.3.0 includes classifier
      */
     @Parameter
     PluginArtifact[] plugins
