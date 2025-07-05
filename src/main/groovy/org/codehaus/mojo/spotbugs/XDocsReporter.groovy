@@ -19,10 +19,8 @@ import edu.umd.cs.findbugs.Version
 
 import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.slurpersupport.NodeChild
-import groovy.xml.MarkupBuilderHelper
 import groovy.xml.StreamingMarkupBuilder
 import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 
 import org.apache.maven.plugin.logging.Log
 
