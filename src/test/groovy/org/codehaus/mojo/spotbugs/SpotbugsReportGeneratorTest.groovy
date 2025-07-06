@@ -28,10 +28,12 @@ class SpotbugsReportGeneratorTest extends Specification {
         protected Object handleGetObject(String key) {
             return key
         }
+
         @Override
         Enumeration<String> getKeys() {
             return Collections.enumeration([])
         }
+
         @Override
         Locale getLocale() {
             return Locale.ENGLISH

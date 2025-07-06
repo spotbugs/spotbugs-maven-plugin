@@ -45,7 +45,7 @@ trait SpotBugsPluginsTrait {
     // https://issues.apache.org/jira/browse/GROOVY-7536
     // when fixed, should move pluginList and plugins properties here
     abstract String getPluginList()
-    abstract PluginArtifact[] getPlugins()
+    abstract List<PluginArtifact> getPlugins()
     abstract String getEffort()
     abstract MavenSession getSession()
 

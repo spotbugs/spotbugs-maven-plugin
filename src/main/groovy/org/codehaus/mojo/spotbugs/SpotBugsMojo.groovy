@@ -363,7 +363,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @since 4.8.3.0 includes classifier
      */
     @Parameter
-    PluginArtifact[] plugins
+    List<PluginArtifact> plugins
 
     /**
      * Restrict analysis to the given comma-separated list of classes and packages.

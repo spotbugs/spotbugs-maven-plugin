@@ -40,7 +40,7 @@ class SpotBugsGuiTest extends Specification {
         ResourceManager resourceManager = Mock(ResourceManager)
         File outputDir = File.createTempDir()
         File classFilesDir = File.createTempDir()
-        List pluginArtifacts = []
+        List<PluginArtifact> pluginArtifacts = []
         SpotBugsGui gui = new SpotBugsGui()
         gui.metaClass.log = log
         gui.session = session
@@ -77,7 +77,7 @@ class SpotBugsGuiTest extends Specification {
         ResourceManager resourceManager = Mock(ResourceManager)
         File outputDir = File.createTempDir()
         File classFilesDir = File.createTempDir()
-        List pluginArtifacts = []
+        List<PluginArtifact> pluginArtifacts = []
         SpotBugsGui gui = new SpotBugsGui()
         gui.metaClass.log = log
         gui.session = session
