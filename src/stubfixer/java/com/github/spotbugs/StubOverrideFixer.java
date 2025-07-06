@@ -30,13 +30,24 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The Class StubOverrideFixer.
+ */
 public class StubOverrideFixer {
 
+    /** The logger. */
     private static Logger logger = LoggerFactory.getLogger(StubOverrideFixer.class);
 
+    /** The Constant GROOVY_METHODS. */
     private static final Set<String> GROOVY_METHODS = Set.of("getMetaClass", "setMetaClass", "invokeMethod",
             "getProperty", "setProperty");
 
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static void main(String[] args) throws IOException {
         Path stubsDir = Path.of(args[0]);
         try (Stream<Path> stream = Files.walk(stubsDir)) {
@@ -44,6 +55,11 @@ public class StubOverrideFixer {
         }
     }
 
+    /**
+     * Process stub.
+     *
+     * @param filePath the file path
+     */
     private static void processStub(Path filePath) {
         try {
             CompilationUnit cu = StaticJavaParser.parse(filePath);
@@ -60,7 +76,14 @@ public class StubOverrideFixer {
         }
     }
 
+    /**
+     * Should have override.
+     *
+     * @param method the method
+     * @return true, if successful
+     */
     private static boolean shouldHaveOverride(MethodDeclaration method) {
         return GROOVY_METHODS.contains(method.getNameAsString());
     }
+
 }
