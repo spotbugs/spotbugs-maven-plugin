@@ -107,8 +107,8 @@ final class ResourceHelper {
                 Files.createDirectories(outputResourcePath.getParent())
             }
 
-            resourceManager.getResourceAsInputStream(name).withCloseable { is ->
-                Files.newOutputStream(outputResourcePath).withCloseable { os ->
+            resourceManager.getResourceAsInputStream(name).withCloseable { InputStream is ->
+                Files.newOutputStream(outputResourcePath).withCloseable { OutputStream os ->
                     os << new BufferedInputStream(is)
                 }
             }
