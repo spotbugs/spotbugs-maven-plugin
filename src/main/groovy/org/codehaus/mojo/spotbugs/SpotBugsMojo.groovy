@@ -862,7 +862,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (includeFilterFile) {
             log.debug('  Adding Include Filter File')
 
-            String[] includefilters = includeFilterFile.split(SpotBugsInfo.COMMA)
+            List<String> includefilters = Arrays.asList(includeFilterFile.split(SpotBugsInfo.COMMA))
 
             includefilters.each { String includefilter ->
                 args << '-include'
@@ -881,7 +881,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (excludeFilterFile) {
             log.debug('  Adding Exclude Filter File')
-            String[] excludefilters = excludeFilterFile.split(SpotBugsInfo.COMMA)
+            List<String> excludefilters = Arrays.asList(excludeFilterFile.split(SpotBugsInfo.COMMA))
 
             excludefilters.each { String excludeFilter ->
                 args << '-exclude'
@@ -900,7 +900,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (excludeBugsFile) {
             log.debug('  Adding Exclude Bug File (Baselines)')
-            String[] excludeFiles = excludeBugsFile.split(SpotBugsInfo.COMMA)
+            List<String> excludeFiles = Arrays.asList(excludeBugsFile.split(SpotBugsInfo.COMMA))
 
             excludeFiles.each() { String excludeFile ->
                 args << '-excludeBugs'
@@ -1077,7 +1077,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             if (jvmArgs && fork) {
                 log.debug("Adding JVM Args => ${jvmArgs}")
 
-                String[] args = jvmArgs.split(SpotBugsInfo.BLANK)
+                List<String> args = Arrays.asList(jvmArgs.split(SpotBugsInfo.BLANK))
 
                 args.each() { jvmArg ->
                     log.debug("Adding JVM Arg => ${jvmArg}")
