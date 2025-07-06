@@ -143,7 +143,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
         log.info('File Encoding is ' + effectiveEncoding.name())
 
         // options must be added before the spotbugsXml path
-        List<String> spotbugsArgs = new ArrayList<>()
+        List<String> spotbugsArgs = []
         spotbugsArgs << getEffortParameter()
         if (pluginList || plugins) {
             spotbugsArgs << '-pluginList'

@@ -59,18 +59,12 @@ final class ResourceHelper {
         // Linux Checks
         if (resource.indexOf(SpotBugsInfo.FORWARD_SLASH) != -1) {
             artifact = resource.substring(resource.lastIndexOf(SpotBugsInfo.FORWARD_SLASH) + 1)
-        }
-
-        if (resource.indexOf(SpotBugsInfo.FORWARD_SLASH) != -1) {
             location = resource.substring(0, resource.lastIndexOf(SpotBugsInfo.FORWARD_SLASH))
         }
 
         // Windows Checks
         if (resource.indexOf(SpotBugsInfo.BACKWARD_SLASH) != -1) {
             artifact = resource.substring(resource.lastIndexOf(SpotBugsInfo.BACKWARD_SLASH) + 1)
-        }
-
-        if (resource.indexOf(SpotBugsInfo.BACKWARD_SLASH) != -1) {
             location = resource.substring(0, resource.lastIndexOf(SpotBugsInfo.BACKWARD_SLASH))
         }
 
@@ -113,8 +107,8 @@ final class ResourceHelper {
                 Files.createDirectories(outputResourcePath.getParent())
             }
 
-            resourceManager.getResourceAsInputStream(name).withCloseable { is ->
-                Files.newOutputStream(outputResourcePath).withCloseable { os ->
+            resourceManager.getResourceAsInputStream(name).withCloseable { InputStream is ->
+                Files.newOutputStream(outputResourcePath).withCloseable { OutputStream os ->
                     os << new BufferedInputStream(is)
                 }
             }
