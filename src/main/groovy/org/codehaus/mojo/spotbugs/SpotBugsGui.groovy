@@ -73,7 +73,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
      * @since 4.8.3.0 includes classifier
      */
     @Parameter
-    PluginArtifact[] plugins
+    List<PluginArtifact> plugins
 
     /** Artifact resolver, needed to download the plugin jars. */
     @Inject

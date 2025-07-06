@@ -52,7 +52,7 @@ class SpotBugsPluginsTraitTest extends Specification {
     static class SpotBugsPluginsTraitImpl implements SpotBugsPluginsTrait {
         String effort
         String pluginList = ""
-        PluginArtifact[] plugins = []
+        List<PluginArtifact> plugins = []
         Log log
         File spotbugsXmlOutputDirectory = new File(".")
         ResourceManager resourceManager

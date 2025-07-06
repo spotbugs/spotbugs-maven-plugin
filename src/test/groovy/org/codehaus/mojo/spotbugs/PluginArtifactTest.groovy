@@ -20,8 +20,10 @@ import com.codebox.bean.JavaBeanTester
 import spock.lang.Specification
 
 class PluginArtifactTest extends Specification {
+
     void "should satisfy JavaBean contract"() {
         expect:
         JavaBeanTester.builder(PluginArtifact.class).skip("metaClass").test()
     }
+
 }
