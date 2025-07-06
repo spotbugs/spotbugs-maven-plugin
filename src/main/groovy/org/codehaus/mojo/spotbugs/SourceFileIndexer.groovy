@@ -41,7 +41,7 @@ class SourceFileIndexer {
 
         String basePath = normalizePath(session.getExecutionRootDirectory())
 
-        List<File> allSourceFiles = new ArrayList<>()
+        List<File> allSourceFiles = []
 
         // Resource
         for (Resource r in session.getCurrentProject().getResources()) {

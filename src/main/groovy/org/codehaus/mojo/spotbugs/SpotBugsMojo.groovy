@@ -773,7 +773,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     private ArrayList<String> getSpotbugsArgs(File htmlTempFile, File xmlTempFile, File sarifTempFile) {
         ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)
-        List<String> args = new ArrayList<>()
+        List<String> args = []
 
         if (userPrefs) {
             log.debug("  Adding User Preferences File -> ${userPrefs}")

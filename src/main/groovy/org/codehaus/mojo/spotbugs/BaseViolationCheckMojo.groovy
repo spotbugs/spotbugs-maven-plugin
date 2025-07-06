@@ -184,7 +184,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     }
 
     private boolean doSourceFilesExist() {
-        Collection<File> sourceFiles = new ArrayList<>()
+        Collection<File> sourceFiles = []
 
         if (this.classFilesDirectory.isDirectory()) {
             log.debug('looking for class files with extensions: ' + SpotBugsInfo.EXTENSIONS)
