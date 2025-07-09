@@ -16,7 +16,7 @@
 package org.codehaus.mojo.spotbugs
 
 import groovy.xml.slurpersupport.GPathResult
-
+import groovy.xml.slurpersupport.NodeChild
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -117,7 +117,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
     String effort
 
     /** The name of the current class which is analysed by SpotBugs. */
-    String currentClassName
+    String currentClassName = ''
 
     /** Signals if the jxr report plugin is enabled. */
     boolean isJXRReportEnabled
@@ -147,10 +147,10 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
     File xrefTestLocation
 
     /** The directories containing the sources to be compiled. */
-    List compileSourceRoots
+    List<String> compileSourceRoots
 
     /** The directories containing the test-sources to be compiled. */
-    List testSourceRoots
+    List<String> testSourceRoots
 
     /** Run Spotbugs on the tests. */
     boolean includeTests
@@ -159,7 +159,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
     GPathResult spotbugsResults
 
     /** Bug classes. */
-    List bugClasses
+    List<String> bugClasses = []
 
     /**
      * Default constructor.
@@ -170,21 +170,12 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      *            The resource bundle to get the messages from.
      */
     SpotbugsReportGenerator(Sink sink, ResourceBundle bundle) {
-
-        assert sink
-        assert bundle
+        if (!sink || !bundle) {
+            throw new IllegalArgumentException('All constructor arguments must be provided')
+        }
 
         this.sink = sink
         this.bundle = bundle
-
-        this.bugClasses = []
-
-        this.currentClassName = ''
-
-        this.bugCount = 0
-        this.missingClassCount = 0
-        this.errorCount = 0
-        this.fileCount = 0
     }
 
     /**
@@ -194,7 +185,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         log.debug('Finished searching for bugs!...')
         log.debug('sink is ' + sink)
 
-        bugClasses.each() { bugClass ->
+        bugClasses.each() { String bugClass ->
             log.debug("finish bugClass is ${bugClass}")
 
             printBug(bugClass)
@@ -266,7 +257,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         log.debug("printBug spotbugsResults is ${spotbugsResults}")
 
-        spotbugsResults.BugInstance.each() { bugInstance ->
+        spotbugsResults.BugInstance.each() { GPathResult bugInstance ->
 
             log.debug("bugInstance --->  ${bugInstance}")
 
@@ -545,7 +536,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         sink.tableRow_()
 
-        spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() { classStats ->
+        spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() { NodeChild classStats ->
 
             String classStatsValue = classStats.'@class'.text()
             String classStatsBugCount = classStats.'@bugs'.text()
