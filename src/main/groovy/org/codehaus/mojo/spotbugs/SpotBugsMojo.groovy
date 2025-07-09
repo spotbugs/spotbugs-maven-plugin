@@ -1098,7 +1098,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 }
             }
 
-            spotbugsArgs.each { spotbugsArg ->
+            spotbugsArgs.each { String spotbugsArg ->
                 log.debug("Spotbugs arg is ${spotbugsArg}")
                 arg(value: spotbugsArg)
             }
