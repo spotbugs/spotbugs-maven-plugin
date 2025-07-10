@@ -534,7 +534,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (canGenerate && outputSpotbugsFile == null) {
-            outputSpotbugsFile = new File("${spotbugsXmlOutputDirectory}/${spotbugsXmlOutputFilename}")
+            outputSpotbugsFile = spotbugsXmlOutputDirectory.toPath().resolve(spotbugsXmlOutputFilename).toFile()
 
             executeSpotbugs(outputSpotbugsFile)
 
