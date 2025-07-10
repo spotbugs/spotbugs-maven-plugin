@@ -196,7 +196,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             sourceFiles.addAll(FileUtils.listFiles(testClassFilesDirectory, SpotBugsInfo.EXTENSIONS, true))
         }
 
-        log.debug('SourceFiles: ' + Arrays.toString(sourceFiles))
+        log.debug("SourceFiles: ${sourceFiles}")
         !sourceFiles.isEmpty()
     }
 
