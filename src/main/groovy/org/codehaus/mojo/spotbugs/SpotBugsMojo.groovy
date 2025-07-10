@@ -805,7 +805,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         log.debug("  Adding 'projectName'")
         args << '-projectName'
-        args << "${project.name}"
+        args << project.name
 
         log.debug("  Adding 'effortParameter'")
         args << getEffortParameter()
