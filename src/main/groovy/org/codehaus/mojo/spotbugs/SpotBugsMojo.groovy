@@ -1222,8 +1222,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             File sarifFinalFile = new File(sarifOutputDirectory, sarifOutputFilename)
             forceFileCreation(sarifFinalFile)
 
-            sarifFinalFile.withWriter {
-                builder.writeTo(it)
+            sarifFinalFile.withWriter { BufferedWriter writer ->
+                builder.writeTo(writer)
             }
 
             if (!log.isDebugEnabled()) {
