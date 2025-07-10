@@ -1103,7 +1103,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 arg(value: spotbugsArg)
             }
 
-            systemPropertyVariables.each { sysProp ->
+            systemPropertyVariables.each { Map.Entry<String, String> sysProp ->
                 log.debug("System property ${sysProp.key} is ${sysProp.value}")
                 sysproperty(key: sysProp.key, value: sysProp.value)
             }
@@ -1136,12 +1136,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                 NodeChildren xmlProject = path.Project
 
-                session.getCurrentProject().compileSourceRoots.each() { compileSourceRoot ->
+                session.getCurrentProject().compileSourceRoots.each() { String compileSourceRoot ->
                     xmlProject.appendNode { SrcDir(compileSourceRoot) }
                 }
 
                 if (testClassFilesDirectory.isDirectory() && includeTests) {
-                    session.getCurrentProject().testCompileSourceRoots.each() { testSourceRoot ->
+                    session.getCurrentProject().testCompileSourceRoots.each() { String testSourceRoot ->
                         xmlProject.appendNode { SrcDir(testSourceRoot) }
                     }
                 }
