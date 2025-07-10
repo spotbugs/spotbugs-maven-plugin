@@ -865,7 +865,7 @@
                             <configuration>
                                 <lifecycleMappingMetadata>
                                     <pluginExecutions combine.children="append">
-                                        <!-- gmavenplus m2e in plugin states to ignore, we will process -->
+                                        <!-- Ignore gmavenplusin m2e -->
                                         <pluginExecution>
                                             <pluginExecutionFilter>
                                                 <groupId>org.codehaus.gmavenplus</groupId>
@@ -880,6 +880,21 @@
                                                     <goal>compileTests</goal>
                                                     <goal>removeStubs</goal>
                                                     <goal>removeTestStubs</goal>
+                                                </goals>
+                                            </pluginExecutionFilter>
+                                            <action>
+                                                <ignore />
+                                            </action>
+                                        </pluginExecution>
+
+                                        <!-- Ignore exec maven plugin in m2e -->
+                                        <pluginExecution>
+                                            <pluginExecutionFilter>
+                                                <groupId>org.apache.maven.plugins</groupId>
+                                                <artifactId>exec-maven-plugin</artifactId>
+                                                <versionRange>[${execPluginVersion},)</versionRange>
+                                                <goals>
+                                                    <goal>java</goal>
                                                 </goals>
                                             </pluginExecutionFilter>
                                             <action>
