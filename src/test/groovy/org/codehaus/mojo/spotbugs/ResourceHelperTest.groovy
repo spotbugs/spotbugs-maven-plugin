@@ -24,7 +24,9 @@ class ResourceHelperTest extends Specification {
 
     void "getResourceFile returns a file and logs debug info"() {
         given:
-        Log log = Mock(Log)
+        Log log = Mock(Log) {
+            isDebugEnabled() >> true
+        }
         File outputDirectory = File.createTempDir()
         ResourceManager resourceManager = Mock(ResourceManager) {
             getResourceAsInputStream(_) >> new ByteArrayInputStream("test".bytes)
@@ -37,8 +39,8 @@ class ResourceHelperTest extends Specification {
 
         then:
         result.exists()
-        1 * log.debug('location is test/path')
         1 * log.debug('resource is test/path/resource.txt')
+        1 * log.debug('location is test/path')
 
         cleanup:
         result?.delete()

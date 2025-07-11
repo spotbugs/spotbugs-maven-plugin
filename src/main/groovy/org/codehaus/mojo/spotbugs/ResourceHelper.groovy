@@ -17,28 +17,27 @@ package org.codehaus.mojo.spotbugs
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.Objects
 
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugin.MojoExecutionException
-import org.codehaus.plexus.resource.loader.FileResourceLoader
 import org.codehaus.plexus.resource.ResourceManager
 
 final class ResourceHelper {
 
     /** The log. */
-    Log log
+    private final Log log
 
     /** The output directory. */
-    File outputDirectory
+    private final File outputDirectory
 
     /** The resource manager. */
-    ResourceManager resourceManager
+    private final ResourceManager resourceManager
 
-    ResourceHelper(Log log, File outputDirectory, ResourceManager resourceManager) {
-        assert log
-        this.log = log
+    ResourceHelper(final Log log, final File outputDirectory, final ResourceManager resourceManager) {
+        this.log = Objects.requireNonNull(log, "log must not be null")
         this.outputDirectory = outputDirectory
-        this.resourceManager = resourceManager
+        this.resourceManager = Objects.requireNonNull(resourceManager, "resourceManager must not be null")
     }
 
     /**
@@ -49,9 +48,8 @@ final class ResourceHelper {
      * @return The File of the resource
      *
      */
-    File getResourceFile(String resource) {
-
-        assert resource
+    File getResourceFile(final String resource) {
+        Objects.requireNonNull(resource, "resource must not be null")
 
         String location = null
         String artifact = resource
@@ -72,44 +70,50 @@ final class ResourceHelper {
         location = location?.replaceAll("[\\?\\:\\&\\=\\%]", "_")
         artifact = artifact?.replaceAll("[\\?\\:\\&\\=\\%]", "_")
 
-        log.debug('resource is ' + resource)
-        log.debug('location is ' + location)
-        log.debug('artifact is ' + artifact)
+        if (log.isDebugEnabled()) {
+            log.debug("resource is ${resource}")
+            log.debug("location is ${location}")
+            log.debug("artifact is ${artifact}")
+        }
 
         File resourceFile = getResourceAsFile(resource, artifact)
 
-        log.debug('location of resourceFile file is ' + resourceFile.absolutePath)
+        if (log.isDebugEnabled()) {
+            log.debug("location of resourceFile file is ${resourceFile.absolutePath}")
+        }
 
         return resourceFile
     }
 
-    private File getResourceAsFile(String name, String outputPath) {
+    private File getResourceAsFile(final String name, final String outputPath) {
         // Optimization for File to File fetches
-        File f = FileResourceLoader.getResourceAsFile(name, outputPath, outputDirectory)
-        if (f != null) {
-            log.debug('optimized file ' + name)
-            return f
+        File file = new File(name);
+        if (file.exists() && outputPath == null) {
+            if (log.isDebugEnabled()) {
+                log.debug("optimized file ${name}")
+            }
+            return file
         }
         // End optimization
 
         Path outputResourcePath
-
-        if (outputPath == null) {
-            outputResourcePath = Files.createTempFile('plexus-resources', 'tmp')
-        } else if (outputDirectory != null) {
+        if (outputDirectory != null) {
             outputResourcePath = outputDirectory.toPath().resolve(outputPath)
         } else {
             outputResourcePath = Path.of(outputPath)
         }
 
         try {
-            if (Files.notExists(outputResourcePath.getParent())) {
-                Files.createDirectories(outputResourcePath.getParent())
+            Path parent = outputResourcePath.getParent()
+            if (parent != null && Files.notExists(parent)) {
+                Files.createDirectories(parent)
             }
 
             resourceManager.getResourceAsInputStream(name).withCloseable { InputStream is ->
-                Files.newOutputStream(outputResourcePath).withCloseable { OutputStream os ->
-                    os << new BufferedInputStream(is)
+                new BufferedInputStream(is).withCloseable { BufferedInputStream bis ->
+                    Files.newOutputStream(outputResourcePath).withCloseable { OutputStream os ->
+                        os << bis
+                    }
                 }
             }
         } catch (IOException e) {
