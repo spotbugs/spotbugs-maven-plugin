@@ -534,7 +534,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (canGenerate && outputSpotbugsFile == null) {
-            outputSpotbugsFile = new File("${spotbugsXmlOutputDirectory}/${spotbugsXmlOutputFilename}")
+            outputSpotbugsFile = spotbugsXmlOutputDirectory.toPath().resolve(spotbugsXmlOutputFilename).toFile()
 
             executeSpotbugs(outputSpotbugsFile)
 
@@ -805,7 +805,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         log.debug("  Adding 'projectName'")
         args << '-projectName'
-        args << "${project.name}"
+        args << project.name
 
         log.debug("  Adding 'effortParameter'")
         args << getEffortParameter()
@@ -1103,7 +1103,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 arg(value: spotbugsArg)
             }
 
-            systemPropertyVariables.each { sysProp ->
+            systemPropertyVariables.each { Map.Entry<String, String> sysProp ->
                 log.debug("System property ${sysProp.key} is ${sysProp.value}")
                 sysproperty(key: sysProp.key, value: sysProp.value)
             }
@@ -1136,12 +1136,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                 NodeChildren xmlProject = path.Project
 
-                session.getCurrentProject().compileSourceRoots.each() { compileSourceRoot ->
+                session.getCurrentProject().compileSourceRoots.each() { String compileSourceRoot ->
                     xmlProject.appendNode { SrcDir(compileSourceRoot) }
                 }
 
                 if (testClassFilesDirectory.isDirectory() && includeTests) {
-                    session.getCurrentProject().testCompileSourceRoots.each() { testSourceRoot ->
+                    session.getCurrentProject().testCompileSourceRoots.each() { String testSourceRoot ->
                         xmlProject.appendNode { SrcDir(testSourceRoot) }
                     }
                 }
@@ -1222,8 +1222,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             File sarifFinalFile = new File(sarifOutputDirectory, sarifOutputFilename)
             forceFileCreation(sarifFinalFile)
 
-            sarifFinalFile.withWriter {
-                builder.writeTo(it)
+            sarifFinalFile.withWriter { BufferedWriter writer ->
+                builder.writeTo(writer)
             }
 
             if (!log.isDebugEnabled()) {
