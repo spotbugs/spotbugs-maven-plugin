@@ -16,6 +16,7 @@
 package org.codehaus.mojo.spotbugs
 
 class PluginArtifact {
+
     /** The group id. */
     String groupId
 
@@ -30,4 +31,5 @@ class PluginArtifact {
 
     /** The classifier. */
     String classifier
+
 }
