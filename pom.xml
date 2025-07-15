@@ -141,7 +141,7 @@
         <mavenSharedUtilsVersion>3.4.2</mavenSharedUtilsVersion>
         <mavenReportingApiVersion>4.0.0</mavenReportingApiVersion>
         <mavenReportingVersion>4.0.0</mavenReportingVersion>
-        <mavenVersion>3.9.10</mavenVersion>
+        <mavenVersion>3.9.11</mavenVersion>
 
         <resolver.version>1.9.24</resolver.version>
 
