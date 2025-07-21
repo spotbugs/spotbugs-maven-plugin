@@ -127,7 +127,7 @@
 
         <byte-buddy.version>1.17.6</byte-buddy.version>
         <javabean-tester.version>2.10.0</javabean-tester.version>
-        <junitVersion>5.13.3</junitVersion>
+        <junitVersion>5.13.4</junitVersion>
         <mockito.version>5.18.0</mockito.version>
         <slf4jVersion>2.0.17</slf4jVersion>
 
