@@ -865,7 +865,7 @@
                             <configuration>
                                 <lifecycleMappingMetadata>
                                     <pluginExecutions combine.children="append">
-                                        <!-- Ignore gmavenplusin m2e -->
+                                        <!-- Ignore gmavenplus in m2e -->
                                         <pluginExecution>
                                             <pluginExecutionFilter>
                                                 <groupId>org.codehaus.gmavenplus</groupId>
