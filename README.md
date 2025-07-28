@@ -134,7 +134,7 @@ Spotbugs aligns with spotbugs releases but normally does not have a hard require
             <dependency>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs</artifactId>
-                <version>${spotbugs.version}</version>
+                <version><!-- latest version --></version>
             </dependency>
         </dependencies>
     </plugin>
