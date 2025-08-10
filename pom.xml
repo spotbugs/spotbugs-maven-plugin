@@ -122,7 +122,7 @@
         <jacoco.minimum.coverage>0.12</jacoco.minimum.coverage>
 
         <!-- Override spotbugs to this version from base-parent -->
-        <spotbugs.version>4.9.3</spotbugs.version>
+        <spotbugs.version>4.9.4</spotbugs.version>
         <spotbugs.plugin>4.9.3.0</spotbugs.plugin>
 
         <byte-buddy.version>1.17.6</byte-buddy.version>
