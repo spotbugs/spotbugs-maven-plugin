@@ -941,9 +941,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug('  Adding Source directories (To process source exclusions)')
             args << '-sourcepath'
             String sourceRoots = ''
-            session.getCurrentProject().compileSourceRoots.each() { sourceRoots += it + File.pathSeparator }
+            session.getCurrentProject().compileSourceRoots.each { String sourceRoot ->
+                sourceRoots += sourceRoot + File.pathSeparator
+            }
             if (includeTests) {
-                session.getCurrentProject().testCompileSourceRoots.each() { sourceRoots += it + File.pathSeparator }
+                session.getCurrentProject().testCompileSourceRoots.each { String testSourceRoot ->
+                    sourceRoots += testSourceRoot + File.pathSeparator
+                }
             }
             args << sourceRoots.substring(0, sourceRoots.length() -1)
         }
