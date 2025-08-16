@@ -125,13 +125,10 @@ trait SpotBugsPluginsTrait {
      *
      */
     String getEffortParameter() {
-        if (log.isDebugEnabled()) {
-            log.debug("effort is ${effort}")
-        }
-
         String effortParameter = (effort == 'Max') ? 'max' : (effort == 'Min') ? 'min' : 'default'
 
         if (log.isDebugEnabled()) {
+            log.debug("effort is ${effort}")
             log.debug("effortParameter is ${effortParameter}")
         }
 

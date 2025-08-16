@@ -1226,6 +1226,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 log.info('No bugs found')
             }
 
+            // Do not delete file when running under debug mode
             if (!log.isDebugEnabled()) {
                 xmlTempFile.delete()
             }
@@ -1259,11 +1260,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                                 log.debug("${originalFullPath} modified to ${newFileName}")
                             }
                             loc.physicalLocation.artifactLocation.uri = newFileName
-                        } else {
-                            if (log.isWarnEnabled()) {
-                                log.warn("No source file found for ${originalFullPath}. "
-                                    + 'The path include in the SARIF report could be incomplete.')
-                            }
+                        } else if (log.isWarnEnabled()) {
+                            log.warn("No source file found for ${originalFullPath}. "
+                                + 'The path include in the SARIF report could be incomplete.')
                         }
                     }
                 }
@@ -1276,6 +1275,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 builder.writeTo(writer)
             }
 
+            // Do not delete file when running under debug mode
             if (!log.isDebugEnabled()) {
                 sarifTempFile.delete()
             }

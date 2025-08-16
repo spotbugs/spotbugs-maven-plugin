@@ -133,12 +133,9 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
         NodeList bugs = xml.BugInstance
         int bugCount = bugs.size()
-        if (log.isInfoEnabled()) {
-            log.info("BugInstance size is ${bugCount}")
-        }
-
         int errorCount = xml.Error.size()
         if (log.isInfoEnabled()) {
+            log.info("BugInstance size is ${bugCount}")
             log.info("Error size is ${errorCount}")
         }
 
@@ -179,7 +176,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
                 // lower is more severe
                 if (priorityNum <= priorityThresholdNum) {
-                    if (log.isErrorEnabled()) { 
+                    if (log.isErrorEnabled()) {
                         log.error(logMsg)
                     }
                 } else if (log.isInfoEnabled()) {
@@ -223,8 +220,8 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     }
 
     private void printBugs(NodeList bugs) {
-        bugs.forEach{ Node bug ->
-            if (log.isErrorEnabled()) {
+        if (log.isErrorEnabled()) {
+            bugs.forEach{ Node bug ->
                 log.error(bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
                     bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
             }
