@@ -31,7 +31,9 @@ class SpotBugsMojoTest extends Specification {
 
     void 'should skip generate report'() {
         given:
-        Log log = Mock(Log)
+        Log log = Mock(Log) {
+            isDebugEnabled() >> true
+        }
         MojoExecution mojoExecution = Mock(MojoExecution)
         Plugin plugin = Mock(Plugin)
         SpotBugsMojo mojo = new SpotBugsMojo()

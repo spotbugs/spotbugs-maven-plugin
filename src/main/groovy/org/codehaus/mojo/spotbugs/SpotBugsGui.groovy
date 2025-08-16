@@ -130,8 +130,8 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
         List<String> auxClasspathElements = session.getCurrentProject().compileClasspathElements
 
-        if (debug) {
-            log.debug('  Plugin Artifacts to be added -> ' + pluginArtifacts.toString())
+        if (debug || log.isDebugEnabled()) {
+            log.debug("  Plugin Artifacts to be added -> ${pluginArtifacts}")
         }
 
         Charset effectiveEncoding
@@ -140,7 +140,9 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
         } else {
             effectiveEncoding = Charset.defaultCharset() ?: StandardCharsets.UTF_8
         }
-        log.info('File Encoding is ' + effectiveEncoding.name())
+        if (log.isInfoEnabled()) {
+            log.info('File Encoding is ' + effectiveEncoding.name())
+        }
 
         // options must be added before the spotbugsXml path
         List<String> spotbugsArgs = []
@@ -162,22 +164,26 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
             jvmarg(value: '-Dfindbugs.launchUI=gui2')
 
             spotbugsArgs.each { String spotbugsArg ->
-                log.debug("Spotbugs arg is ${spotbugsArg}")
+                if (log.isDebugEnabled()) {
+                    log.debug("Spotbugs arg is ${spotbugsArg}")
+                }
                 arg(value: spotbugsArg)
             }
 
             Path spotbugsXml = spotbugsXmlOutputDirectory.toPath().resolve(spotbugsXmlOutputFilename)
 
             if (Files.exists(spotbugsXml)) {
-                log.debug('  Found an SpotBugs XML at -> ' + spotbugsXml.toString())
+                if (log.isDebugEnabled()) {
+                    log.debug("  Found an SpotBugs XML at -> ${spotbugsXml}")
+                }
                 arg(value: spotbugsXml)
             }
 
             classpath() {
 
                 pluginArtifacts.each() { Artifact pluginArtifact ->
-                    if (debug) {
-                        log.debug('  Trying to Add to pluginArtifact -> ' + pluginArtifact.file.toString())
+                    if (debug || log.isDebugEnabled()) {
+                        log.debug("  Trying to Add to pluginArtifact -> ${pluginArtifact.file}")
                     }
 
                     pathelement(location: pluginArtifact.file)
