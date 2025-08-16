@@ -69,7 +69,9 @@ trait SpotBugsPluginsTrait {
                 }
 
                 try {
-                    log.debug("  Processing Plugin: ${pluginFileName}")
+                    if (log.isDebugEnabled()) {
+                        log.debug("  Processing Plugin: ${pluginFileName}")
+                    }
 
                     urlPlugins << resourceHelper.getResourceFile(pluginFileName).absolutePath
                 } catch (MalformedURLException e) {
@@ -79,16 +81,24 @@ trait SpotBugsPluginsTrait {
         }
 
         if (plugins) {
-            log.debug('  Adding Plugins from a repository')
-            log.debug("  Session is: ${session}")
+            if (log.isDebugEnabled()) {
+                log.debug('  Adding Plugins from a repository')
+                log.debug("  Session is: ${session}")
+            }
 
             plugins.each { PluginArtifact plugin ->
 
-                log.debug("  Processing Plugin: ${plugin}")
+                if (log.isDebugEnabled()) {
+                    log.debug("  Processing Plugin: ${plugin}")
+                }
+
                 Artifact pomArtifact = plugin.classifier == null ?
                     this.factory.createArtifact(plugin.groupId, plugin.artifactId, plugin.version, "", plugin.type) :
                     this.factory.createArtifactWithClassifier(plugin.groupId, plugin.artifactId, plugin.version, plugin.type, plugin.classifier)
-                log.debug("  Added Artifact: ${pomArtifact}")
+
+                if (log.isDebugEnabled()) {
+                    log.debug("  Added Artifact: ${pomArtifact}")
+                }
 
                 ArtifactRequest request = new ArtifactRequest(RepositoryUtils.toArtifact(pomArtifact), session.getCurrentProject().getRemoteProjectRepositories(), null)
                 ArtifactResult result = this.repositorySystem.resolveArtifact(session.getRepositorySession(), request)
@@ -100,7 +110,10 @@ trait SpotBugsPluginsTrait {
         }
 
         String pluginListStr = urlPlugins.join(File.pathSeparator)
-        log.debug("  Plugin list is: ${pluginListStr}")
+
+        if (log.isDebugEnabled()) {
+            log.debug("  Plugin list is: ${pluginListStr}")
+        }
 
         return pluginListStr
     }
@@ -112,11 +125,12 @@ trait SpotBugsPluginsTrait {
      *
      */
     String getEffortParameter() {
-        log.debug("effort is ${effort}")
-
         String effortParameter = (effort == 'Max') ? 'max' : (effort == 'Min') ? 'min' : 'default'
 
-        log.debug("effortParameter is ${effortParameter}")
+        if (log.isDebugEnabled()) {
+            log.debug("effort is ${effort}")
+            log.debug("effortParameter is ${effortParameter}")
+        }
 
         return "-effort:${effortParameter}"
     }

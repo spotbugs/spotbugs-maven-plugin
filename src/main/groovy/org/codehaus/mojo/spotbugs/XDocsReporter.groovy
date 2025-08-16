@@ -113,21 +113,27 @@ class XDocsReporter {
 
         outputWriter << xmlBuilder.bind {
             mkp.xmlDeclaration()
-            log.debug("generateReport spotbugsResults is ${spotbugsResults}")
+            if (log.isDebugEnabled()) {
+                log.debug("generateReport spotbugsResults is ${spotbugsResults}")
+            }
 
             BugCollection(version: getSpotBugsVersion(), threshold: SpotBugsInfo.spotbugsThresholds[threshold],
                     effort: SpotBugsInfo.spotbugsEfforts[effort]) {
 
-                log.debug("spotbugsResults.FindBugsSummary total_bugs is ${spotbugsResults.FindBugsSummary.@total_bugs.text()}")
+                if (log.isDebugEnabled()) {
+                    log.debug("spotbugsResults.FindBugsSummary total_bugs is ${spotbugsResults.FindBugsSummary.@total_bugs.text()}")
+                }
 
                 spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() { NodeChild classStats ->
 
                     String classStatsValue = classStats.'@class'.text()
                     String classStatsBugCount = classStats.'@bugs'.text()
 
-                    log.debug('classStats...')
-                    log.debug("classStatsValue is ${classStatsValue}")
-                    log.debug("classStatsBugCount is ${classStatsBugCount}")
+                    if (log.isDebugEnabled()) {
+                        log.debug('classStats...')
+                        log.debug("classStatsValue is ${classStatsValue}")
+                        log.debug("classStatsBugCount is ${classStatsBugCount}")
+                    }
 
                     if (Integer.parseInt(classStatsBugCount) > 0) {
                         bugClasses << classStatsValue
@@ -135,7 +141,9 @@ class XDocsReporter {
                 }
 
                 bugClasses.each() { String bugClass ->
-                    log.debug("finish bugClass is ${bugClass}")
+                    if (log.isDebugEnabled()) {
+                        log.debug("finish bugClass is ${bugClass}")
+                    }
                     file(classname: bugClass) {
                         spotbugsResults.BugInstance.each() { NodeChild bugInstance ->
 
@@ -148,7 +156,9 @@ class XDocsReporter {
                             String message = bugInstance.LongMessage.text()
                             String priority = evaluateThresholdParameter(bugInstance.@priority.text())
                             String line = bugInstance.SourceLine.@start[0].text()
-                            log.debug("BugInstance message is ${message}")
+                            if (log.isDebugEnabled()) {
+                                log.debug("BugInstance message is ${message}")
+                            }
 
                             BugInstance(type: type, priority: priority, category: category, message: message,
                                     lineNumber: ((line) ? line: "-1"))
@@ -175,14 +185,18 @@ class XDocsReporter {
 
                     if (!compileSourceRoots.isEmpty()) {
                         compileSourceRoots.each() { String srcDir ->
-                            log.debug("SrcDir is ${srcDir}")
+                            if (log.isDebugEnabled()) {
+                                log.debug("SrcDir is ${srcDir}")
+                            }
                             SrcDir(srcDir)
                         }
                     }
 
                     if (!testSourceRoots.isEmpty()) {
                         testSourceRoots.each() { String srcDir ->
-                            log.debug("SrcDir is ${srcDir}")
+                            if (log.isDebugEnabled()) {
+                                log.debug("SrcDir is ${srcDir}")
+                            }
                             SrcDir(srcDir)
                         }
                     }

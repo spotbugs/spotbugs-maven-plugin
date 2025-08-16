@@ -520,7 +520,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                     canGenerate = true
                 }
             }
-            log.debug("canGenerate Src is ${canGenerate}")
+            if (log.isDebugEnabled()) {
+                log.debug("canGenerate Src is ${canGenerate}")
+            }
         }
 
         if (!skip && testClassFilesDirectory.exists() && includeTests) {
@@ -530,7 +532,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                     canGenerate = true
                 }
             }
-            log.debug("canGenerate Test Src is ${canGenerate}")
+            if (log.isDebugEnabled()) {
+                log.debug("canGenerate Test Src is ${canGenerate}")
+            }
         }
 
         if (canGenerate && outputSpotbugsFile == null) {
@@ -543,7 +547,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
         }
 
-        log.debug("canGenerate is ${canGenerate}")
+        if (log.isDebugEnabled()) {
+            log.debug("canGenerate is ${canGenerate}")
+        }
 
         return canGenerate
     }
@@ -632,7 +638,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug('report Output Directory is ' + getReportOutputDirectory())
             log.debug('Output Directory is ' + outputDirectory)
             log.debug('Classes Directory is ' + classFilesDirectory)
-            log.debug('  Plugin Artifacts to be added -> ' + pluginArtifacts.toString())
+            log.debug("  Plugin Artifacts to be added -> ${pluginArtifacts}")
         }
 
         generateXDoc(locale)
@@ -668,7 +674,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 generator.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
                 generator.setOutputDirectory(new File(outputDirectory.getAbsolutePath()))
                 generator.generateReport()
-                log.debug("xmlOutput is ${xmlOutput}")
+
+                if (log.isDebugEnabled()) {
+                    log.debug("xmlOutput is ${xmlOutput}")
+                }
             }
         }
     }
@@ -690,7 +699,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             return
         }
 
-        log.debug("xmlOutput is ${xmlOutput}")
+        if (log.isDebugEnabled()) {
+            log.debug("xmlOutput is ${xmlOutput}")
+        }
 
         if (xmlOutput) {
             log.debug('  Using the xdoc format')
@@ -742,13 +753,18 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         reportPlugins.each() { ReportPlugin reportPlugin ->
 
-            log.debug("report plugin -> ${reportPlugin.getArtifactId()}")
+            if (log.isDebugEnabled()) {
+                log.debug("report plugin -> ${reportPlugin.getArtifactId()}")
+            }
+
             if ('maven-jxr-plugin'.equals(reportPlugin.getArtifactId())) {
                 isEnabled = true
             }
         }
 
-        log.debug("jxr report links are ${isEnabled ? 'enabled' : 'disabled'}")
+        if (log.isDebugEnabled()) {
+            log.debug("jxr report links are ${isEnabled ? 'enabled' : 'disabled'}")
+        }
         return isEnabled
     }
 
@@ -756,7 +772,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         this.bundle = ResourceBundle.getBundle(SpotBugsInfo.BUNDLE_NAME, locale, SpotBugsMojo.class.getClassLoader())
 
-        log.debug('Mojo Locale is ' + this.bundle.getLocale().getLanguage())
+        if (log.isDebugEnabled()) {
+            log.debug('Mojo Locale is ' + this.bundle.getLocale().getLanguage())
+        }
 
         return bundle
     }
@@ -776,7 +794,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         List<String> args = []
 
         if (userPrefs) {
-            log.debug("  Adding User Preferences File -> ${userPrefs}")
+            if (log.isDebugEnabled()) {
+                log.debug("  Adding User Preferences File -> ${userPrefs}")
+            }
 
             args << '-userPrefs'
             args << resourceHelper.getResourceFile(userPrefs.trim())
@@ -935,12 +955,16 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (classFilesDirectory.isDirectory()) {
-            log.debug('  Adding to Source Directory -> ' + classFilesDirectory.absolutePath)
+            if (log.isDebugEnabled()) {
+                log.debug('  Adding to Source Directory -> ' + classFilesDirectory.absolutePath)
+            }
             args << classFilesDirectory.absolutePath
         }
 
         if (testClassFilesDirectory.isDirectory() && includeTests) {
-            log.debug('  Adding to Source Directory -> ' + testClassFilesDirectory.absolutePath)
+            if (log.isDebugEnabled()) {
+                log.debug('  Adding to Source Directory -> ' + testClassFilesDirectory.absolutePath)
+            }
             args << testClassFilesDirectory.absolutePath
         }
 
@@ -970,16 +994,22 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (auxClasspathElements) {
             auxClasspathFile = File.createTempFile('auxclasspath', '.tmp')
             auxClasspathFile.deleteOnExit()
-            log.debug('  AuxClasspath Elements -> ' + auxClasspathElements)
+            if (log.isDebugEnabled()) {
+                log.debug('  AuxClasspath Elements -> ' + auxClasspathElements)
+            }
 
             List<String> auxClasspathList = auxClasspathElements.findAll { String auxClasspath ->
                 session.getCurrentProject().getBuild().outputDirectory != auxClasspath
             }
             if (auxClasspathList.size() > 0) {
-                log.debug('  Last AuxClasspath is -> ' + auxClasspathList[auxClasspathList.size() - 1])
+                if (log.isDebugEnabled()) {
+                    log.debug('  Last AuxClasspath is -> ' + auxClasspathList[auxClasspathList.size() - 1])
+                }
 
                 auxClasspathList.each() { String auxClasspathElement ->
-                    log.debug('  Adding to AuxClasspath -> ' + auxClasspathElement)
+                    if (log.isDebugEnabled()) {
+                        log.debug('  Adding to AuxClasspath -> ' + auxClasspathElement)
+                    }
                     auxClasspathFile << auxClasspathElement + SpotBugsInfo.EOL
                 }
             }
@@ -1051,7 +1081,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
         }
 
-        log.info("Fork Value is ${fork}")
+        if (log.isInfoEnabled()) {
+            log.info("Fork Value is ${fork}")
+        }
 
         long startTime
         if (log.isDebugEnabled()) {
@@ -1066,7 +1098,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         } else {
             effectiveEncoding = Charset.defaultCharset() ?: StandardCharsets.UTF_8
         }
-        log.debug('File Encoding is ' + effectiveEncoding.name())
+        if (log.isDebugEnabled()) {
+            log.debug('File Encoding is ' + effectiveEncoding.name())
+        }
 
         AntBuilder ant = new AntBuilder()
         ant.java(classname: 'edu.umd.cs.findbugs.FindBugs2', fork: "${fork}", failonerror: 'true',
@@ -1075,12 +1109,16 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             sysproperty(key: 'file.encoding', value: effectiveEncoding.name())
 
             if (jvmArgs && fork) {
-                log.debug("Adding JVM Args => ${jvmArgs}")
+                if (log.isDebugEnabled()) {
+                    log.debug("Adding JVM Args => ${jvmArgs}")
+                }
 
                 List<String> args = Arrays.asList(jvmArgs.split(SpotBugsInfo.BLANK))
 
                 args.each() { jvmArg ->
-                    log.debug("Adding JVM Arg => ${jvmArg}")
+                    if (log.isDebugEnabled()) {
+                        log.debug("Adding JVM Arg => ${jvmArg}")
+                    }
                     jvmarg(value: jvmArg)
                 }
             }
@@ -1092,19 +1130,25 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             classpath() {
 
                 pluginArtifacts.each() { Artifact pluginArtifact ->
-                    log.debug('  Adding to pluginArtifact -> ' + pluginArtifact.file.toString())
+                    if (log.isDebugEnabled()) {
+                        log.debug('  Adding to pluginArtifact -> ' + pluginArtifact.file.toString())
+                    }
 
                     pathelement(location: pluginArtifact.file)
                 }
             }
 
             spotbugsArgs.each { spotbugsArg ->
-                log.debug("Spotbugs arg is ${spotbugsArg}")
+                if (log.isDebugEnabled()) {
+                    log.debug("Spotbugs arg is ${spotbugsArg}")
+                }
                 arg(value: spotbugsArg)
             }
 
             systemPropertyVariables.each { Map.Entry<String, String> sysProp ->
-                log.debug("System property ${sysProp.key} is ${sysProp.value}")
+                if (log.isDebugEnabled()) {
+                    log.debug("System property ${sysProp.key} is ${sysProp.value}")
+                }
                 sysproperty(key: sysProp.key, value: sysProp.value)
             }
         }
@@ -1129,10 +1173,14 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 List<Node> allNodes = path.depthFirst().collect { it }
 
                 bugCount = allNodes.findAll { it.name() == 'BugInstance' }.size()
-                log.debug("BugInstance size is ${bugCount}")
+                if (log.isDebugEnabled()) {
+                    log.debug("BugInstance size is ${bugCount}")
+                }
 
                 errorCount = allNodes.findAll { it.name() == 'Error' }.size()
-                log.debug("Error size is ${errorCount}")
+                if (log.isDebugEnabled()) {
+                    log.debug("Error size is ${errorCount}")
+                }
 
                 NodeChildren xmlProject = path.Project
 
@@ -1178,6 +1226,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 log.info('No bugs found')
             }
 
+            // Do not delete file when running under debug mode
             if (!log.isDebugEnabled()) {
                 xmlTempFile.delete()
             }
@@ -1208,12 +1257,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                         if (newFileName != null) {
                             if (log.isDebugEnabled()) {
-                                log.info("${originalFullPath} modified to ${newFileName}")
+                                log.debug("${originalFullPath} modified to ${newFileName}")
                             }
                             loc.physicalLocation.artifactLocation.uri = newFileName
-                        } else {
+                        } else if (log.isWarnEnabled()) {
                             log.warn("No source file found for ${originalFullPath}. "
-                                    + 'The path include in the SARIF report could be incomplete.')
+                                + 'The path include in the SARIF report could be incomplete.')
                         }
                     }
                 }
@@ -1226,6 +1275,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 builder.writeTo(writer)
             }
 
+            // Do not delete file when running under debug mode
             if (!log.isDebugEnabled()) {
                 sarifTempFile.delete()
             }
@@ -1240,10 +1290,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     protected String getThresholdParameter() {
 
-        log.debug("threshold is ${threshold}")
+        if (log.isDebugEnabled()) {
+            log.debug("threshold is ${threshold}")
+        }
 
         String thresholdParameter
-
         switch (threshold) {
             case 'High':
                 thresholdParameter = '-high'
@@ -1265,7 +1316,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 thresholdParameter = '-medium'
                 break
         }
-        log.debug("thresholdParameter is ${thresholdParameter}")
+
+        if (log.isDebugEnabled()) {
+            log.debug("thresholdParameter is ${thresholdParameter}")
+        }
 
         return thresholdParameter
     }

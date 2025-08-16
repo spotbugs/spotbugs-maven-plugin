@@ -182,11 +182,15 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      * @see edu.umd.cs.findbugs.BugReporter#finish()
      */
     void printBody() {
-        log.debug('Finished searching for bugs!...')
-        log.debug('sink is ' + sink)
+        if (log.isDebugEnabled()) {
+            log.debug('Finished searching for bugs!...')
+            log.debug('sink is ' + sink)
+        }
 
         bugClasses.each() { String bugClass ->
-            log.debug("finish bugClass is ${bugClass}")
+            if (log.isDebugEnabled()) {
+                log.debug("finish bugClass is ${bugClass}")
+            }
 
             printBug(bugClass)
         }
@@ -251,15 +255,21 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      *            the bug to print
      */
     protected void printBug(String bugClass) {
-        log.debug("printBug bugClass is ${bugClass}")
+        if (log.isDebugEnabled()) {
+            log.debug("printBug bugClass is ${bugClass}")
+        }
 
         openClassReportSection(bugClass)
 
-        log.debug("printBug spotbugsResults is ${spotbugsResults}")
+        if (log.isDebugEnabled()) {
+            log.debug("printBug spotbugsResults is ${spotbugsResults}")
+        }
 
         spotbugsResults.BugInstance.each() { GPathResult bugInstance ->
 
-            log.debug("bugInstance --->  ${bugInstance}")
+            if (log.isDebugEnabled()) {
+                log.debug("bugInstance --->  ${bugInstance}")
+            }
 
             if (bugInstance.Class[0].@classname.text() != bugClass) {
                 return
@@ -270,7 +280,9 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             String message = bugInstance.LongMessage.text()
             String priority = bugInstance.@priority.text()
             GPathResult line = bugInstance.SourceLine[0]
-            log.debug("BugInstance message is ${message}")
+            if (log.isDebugEnabled()) {
+                log.debug("BugInstance message is ${message}")
+            }
 
             sink.tableRow()
 
@@ -328,11 +340,13 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      *
      */
     protected String assembleJxrHyperlink(GPathResult line) {
-        log.debug('Inside assembleJxrHyperlink')
-        log.debug('line is ' + line.text())
-        log.debug('outputDirectory is ' + outputDirectory.getAbsolutePath())
-        log.debug('xrefLocation is ' + xrefLocation.getAbsolutePath())
-        log.debug('xrefTestLocation is ' + xrefTestLocation.getAbsolutePath())
+        if (log.isDebugEnabled()) {
+            log.debug('Inside assembleJxrHyperlink')
+            log.debug('line is ' + line.text())
+            log.debug('outputDirectory is ' + outputDirectory.getAbsolutePath())
+            log.debug('xrefLocation is ' + xrefLocation.getAbsolutePath())
+            log.debug('xrefTestLocation is ' + xrefTestLocation.getAbsolutePath())
+        }
 
         String prefix
         compileSourceRoots.each { compileSourceRoot ->
@@ -388,9 +402,10 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         String columnLineText = bundle.getString(COLUMN_LINE_KEY)
         String priorityText = bundle.getString(COLUMN_PRIORITY_KEY)
 
-        log.debug("openClassReportSection bugClass is ${bugClass}")
-
-        log.debug('Opening Class Report Section')
+        if (log.isDebugEnabled()) {
+            log.debug("openClassReportSection bugClass is ${bugClass}")
+            log.debug('Opening Class Report Section')
+        }
 
         // Dollar '$' for nested classes is not valid character in sink.anchor() and therefore it is ignored
         // https://github.com/spotbugs/spotbugs-maven-plugin/issues/236
@@ -573,7 +588,9 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
     }
 
     public void generateReport() {
-        log.debug('Reporter Locale is ' + this.bundle.getLocale().getLanguage())
+        if (log.isDebugEnabled()) {
+            log.debug('Reporter Locale is ' + this.bundle.getLocale().getLanguage())
+        }
 
         doHeading()
 
