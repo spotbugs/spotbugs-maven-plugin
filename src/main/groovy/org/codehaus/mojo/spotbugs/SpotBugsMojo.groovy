@@ -1086,7 +1086,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         long startTime
-        if (log.isDebugEnabled()) {
+        if (debug) {
             startTime = System.nanoTime()
         }
 
@@ -1154,7 +1154,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         long duration
-        if (log.isDebugEnabled()) {
+        if (debug) {
             duration = (System.nanoTime() - startTime) / 1000000000.00
             log.debug("SpotBugs duration is ${duration}")
         }
@@ -1227,7 +1227,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
 
             // Do not delete file when running under debug mode
-            if (!log.isDebugEnabled()) {
+            if (!debug) {
                 xmlTempFile.delete()
             }
         }
@@ -1276,7 +1276,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
 
             // Do not delete file when running under debug mode
-            if (!log.isDebugEnabled()) {
+            if (!debug) {
                 sarifTempFile.delete()
             }
         }
