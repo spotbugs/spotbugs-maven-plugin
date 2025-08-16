@@ -1119,7 +1119,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                 List<String> args = Arrays.asList(jvmArgs.split(SpotBugsInfo.BLANK))
 
-                args.each() { jvmArg ->
+                args.each() { String jvmArg ->
                     if (log.isDebugEnabled()) {
                         log.debug("Adding JVM Arg => ${jvmArg}")
                     }
