@@ -29,7 +29,7 @@
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.9.3.3-SNAPSHOT</version>
+    <version>4.9.4.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
@@ -708,6 +708,7 @@
                     <attachGroovyDocAnnotation>true</attachGroovyDocAnnotation>
                     <docTitle>${project.name} Groovy Documentation</docTitle>
                     <groovyDocOutputDirectory>${project.reporting.outputDirectory}/gapidocs</groovyDocOutputDirectory>
+                    <testGroovyDocOutputDirectory>${project.reporting.outputDirectory}/testgapidocs</testGroovyDocOutputDirectory>
                     <footer>${project.name} Groovy Documentation</footer>
                     <header>${project.name} Groovy Documentation</header>
                 </configuration>
