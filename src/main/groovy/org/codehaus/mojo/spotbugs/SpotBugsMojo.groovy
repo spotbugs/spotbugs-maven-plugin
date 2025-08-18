@@ -20,6 +20,7 @@ import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.NodeChild
 import groovy.xml.slurpersupport.NodeChildren
 import groovy.xml.StreamingMarkupBuilder
 
@@ -1174,14 +1175,14 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             if (xmlTempFile.size() > 0) {
                 GPathResult path = new XmlSlurper().parse(xmlTempFile)
 
-                List<Node> allNodes = path.depthFirst().collect { it }
+                List<NodeChild> allNodes = path.depthFirst().toList()
 
-                bugCount = allNodes.findAll { it.name() == 'BugInstance' }.size()
+                bugCount = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
                 if (log.isDebugEnabled()) {
                     log.debug("BugInstance size is ${bugCount}")
                 }
 
-                errorCount = allNodes.findAll { it.name() == 'Error' }.size()
+                errorCount = allNodes.count { NodeChild node -> node.name() == 'Error' }
                 if (log.isDebugEnabled()) {
                     log.debug("Error size is ${errorCount}")
                 }
