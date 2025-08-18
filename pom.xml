@@ -708,6 +708,7 @@
                     <attachGroovyDocAnnotation>true</attachGroovyDocAnnotation>
                     <docTitle>${project.name} Groovy Documentation</docTitle>
                     <groovyDocOutputDirectory>${project.reporting.outputDirectory}/gapidocs</groovyDocOutputDirectory>
+                    <testGroovyDocOutputDirectory>${project.reporting.outputDirectory}/testgapidocs</testGroovyDocOutputDirectory>
                     <footer>${project.name} Groovy Documentation</footer>
                     <header>${project.name} Groovy Documentation</header>
                 </configuration>
