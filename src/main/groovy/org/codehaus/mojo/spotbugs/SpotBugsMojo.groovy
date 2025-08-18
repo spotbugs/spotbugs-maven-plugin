@@ -800,7 +800,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
 
             args << '-userPrefs'
-            args << resourceHelper.getResourceFile(userPrefs.trim())
+            args << resourceHelper.getResourceFile(userPrefs.trim()).getAbsolutePath()
         }
 
         if (htmlOutput) {
@@ -887,7 +887,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             includefilters.each { String includefilter ->
                 args << '-include'
-                args << resourceHelper.getResourceFile(includefilter.trim())
+                args << resourceHelper.getResourceFile(includefilter.trim()).getAbsolutePath()
             }
         }
 
@@ -896,7 +896,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             includeFilterFiles.each { String includefilter ->
                 args << '-include'
-                args << resourceHelper.getResourceFile(includefilter.trim())
+                args << resourceHelper.getResourceFile(includefilter.trim()).getAbsolutePath()
             }
         }
 
@@ -906,7 +906,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             excludefilters.each { String excludeFilter ->
                 args << '-exclude'
-                args << resourceHelper.getResourceFile(excludeFilter.trim())
+                args << resourceHelper.getResourceFile(excludeFilter.trim()).getAbsolutePath()
             }
         }
 
@@ -915,7 +915,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             excludeFilterFiles.each { String excludeFilter ->
                 args << '-exclude'
-                args << resourceHelper.getResourceFile(excludeFilter.trim())
+                args << resourceHelper.getResourceFile(excludeFilter.trim()).getAbsolutePath()
             }
         }
 
@@ -925,7 +925,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             excludeFiles.each() { String excludeFile ->
                 args << '-excludeBugs'
-                args << resourceHelper.getResourceFile(excludeFile.trim())
+                args << resourceHelper.getResourceFile(excludeFile.trim()).getAbsolutePath()
             }
         }
 
@@ -934,7 +934,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             excludeBugsFiles.each() { String excludeFile ->
                 args << '-excludeBugs'
-                args << resourceHelper.getResourceFile(excludeFile.trim())
+                args << resourceHelper.getResourceFile(excludeFile.trim()).getAbsolutePath()
             }
         }
 
@@ -956,7 +956,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (maxRank) {
             log.debug("  Adding 'maxRank'")
             args << '-maxRank'
-            args << maxRank
+            args << String.valueOf(maxRank)
         }
 
         if (classFilesDirectory.isDirectory()) {
@@ -1143,7 +1143,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 }
             }
 
-            spotbugsArgs.each { spotbugsArg ->
+            spotbugsArgs.each { String spotbugsArg ->
                 if (log.isDebugEnabled()) {
                     log.debug("Spotbugs arg is ${spotbugsArg}")
                 }
