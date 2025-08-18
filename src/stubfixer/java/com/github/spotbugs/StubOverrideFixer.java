@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 public class StubOverrideFixer {
 
     /** The logger. */
-    private static Logger logger = LoggerFactory.getLogger(StubOverrideFixer.class);
+    private static final Logger logger = LoggerFactory.getLogger(StubOverrideFixer.class);
 
     /** The Constant GROOVY_METHODS. */
     private static final Set<String> GROOVY_METHODS = Set.of("getMetaClass", "setMetaClass", "invokeMethod",
