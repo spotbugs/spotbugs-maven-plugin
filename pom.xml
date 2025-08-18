@@ -734,6 +734,16 @@
                         </goals>
                     </execution>
                     <execution>
+                        <id>generate-groovydoc</id>
+                        <goals>
+                            <goal>groovydoc</goal>
+                            <goal>groovydoc-jar</goal>
+                            <goal>groovydocTests</goal>
+                            <goal>groovydocTests-jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                    <execution>
                         <id>site</id>
                         <goals>
                             <goal>generateStubs</goal>
