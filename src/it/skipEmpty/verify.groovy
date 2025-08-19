@@ -16,6 +16,7 @@
 
 import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.NodeChild
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -36,7 +37,7 @@ println '*********************************'
 GPathResult path = new XmlSlurper().parse(spotbugXml)
 
 List<Node> allNodes = path.depthFirst().toList()
-int spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+int spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${spotbugsXmlErrors}"
 
 assert spotbugsXmlErrors == 0

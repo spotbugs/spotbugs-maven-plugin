@@ -17,6 +17,7 @@
 import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
 
+
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -38,7 +39,7 @@ xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", f
 xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
 GPathResult path = xhtmlParser.parse(spotbugsHtml)
 
-int spotbugsErrors = path.body.'**'.find {main -> main.@id == 'bodyColumn'}.section[1].table.tr[1].td[1].toInteger()
+int spotbugsErrors = path.body.'**'.find { NodeChild main -> -> main.@id == 'bodyColumn' }.section[1].table.tr[1].td[1].toInteger()
 println "Error Count is ${spotbugsErrors}"
 
 println '*********************************'
@@ -48,7 +49,7 @@ println '*********************************'
 path = new XmlSlurper().parse(spotbugXml)
 
 List<Node> allNodes = path.depthFirst().toList()
-int spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+int spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
@@ -60,7 +61,7 @@ println '******************'
 path = new XmlSlurper().parse(spotbugXdoc)
 
 allNodes = path.depthFirst().toList()
-int xdocErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+int xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${xdocErrors}"
 
 assert xdocErrors == spotbugsXmlErrors
