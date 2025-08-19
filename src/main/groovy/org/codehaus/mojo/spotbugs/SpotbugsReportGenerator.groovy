@@ -349,7 +349,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         }
 
         String prefix
-        compileSourceRoots.each { compileSourceRoot ->
+        compileSourceRoots.each { String compileSourceRoot ->
             if (Files.notExists(Path.of(compileSourceRoot + File.separator + line.@sourcepath.text()))) {
                 return
             }
@@ -359,7 +359,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         }
 
         if (includeTests && !prefix) {
-            testSourceRoots.each { testSourceRoot ->
+            testSourceRoots.each { String testSourceRoot ->
                 if (Files.notExists(Path.of(testSourceRoot + File.separator + line.@sourcepath.text()))) {
                     return
                 }

@@ -147,7 +147,7 @@ class XDocsReporter {
                     file(classname: bugClass) {
                         spotbugsResults.BugInstance.each() { NodeChild bugInstance ->
 
-                            if (bugInstance.Class.find{ it.@primary == "true" }.@classname.text() != bugClass) {
+                            if (bugInstance.Class.find{ NodeChild classNode -> classNode.@primary == "true" }.@classname.text() != bugClass) {
                                 return
                             }
 
