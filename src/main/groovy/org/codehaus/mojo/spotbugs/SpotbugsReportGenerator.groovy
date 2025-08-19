@@ -19,6 +19,8 @@ import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.slurpersupport.NodeChild
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.regex.Pattern
+import java.util.regex.Matcher
 
 import org.apache.maven.doxia.markup.HtmlMarkup
 import org.apache.maven.doxia.sink.Sink
@@ -160,6 +162,9 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
     /** Bug classes. */
     List<String> bugClasses = []
+
+    /** Pre-compiled pattern for removing inner class suffixes. */
+    private static final Pattern INNER_CLASS_PATTERN = Pattern.compile('\$.*')
 
     /**
      * Default constructor.
@@ -369,7 +374,10 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             }
         }
 
-        String path = prefix + line.@classname.text().replaceAll('[.]', '/').replaceAll('[$].*', '')
+        String className = line.@classname.text().replace('.', '/')
+        Matcher matcher = INNER_CLASS_PATTERN.matcher(className)
+        String cleanClassName = matcher.replaceFirst('')
+        String path = prefix + cleanClassName
         String lineNumber = valueForLine(line)
 
         String hyperlink
