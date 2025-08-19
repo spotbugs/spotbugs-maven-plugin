@@ -51,7 +51,7 @@ println '*********************************'
 
 path = new XmlSlurper().parse(spotbugXml)
 
-List<Node> allNodes = path.depthFirst().collect{ it }
+List<Node> allNodes = path.depthFirst().toList()
 int spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${spotbugsXmlErrors}"
 
@@ -63,7 +63,7 @@ println '******************'
 
 path = new XmlSlurper().parse(spotbugXdoc)
 
-allNodes = path.depthFirst().collect{ it }
+allNodes = path.depthFirst().toList()
 int xdocErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${xdocErrors}"
 

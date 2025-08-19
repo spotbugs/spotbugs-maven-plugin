@@ -32,7 +32,7 @@ println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
 
-List<Node> allNodes = path.depthFirst().collect { it }
+List<Node> allNodes = path.depthFirst().toList()
 int spotbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${spotbugsErrors}"
 
@@ -49,7 +49,7 @@ println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-allNodes = path.depthFirst().collect { it }
+allNodes = path.depthFirst().toList()
 spotbugsErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${spotbugsErrors}"
 

@@ -59,7 +59,7 @@ println '******************'
 
 path = new XmlSlurper().parse(basedir.toPath().resolve("modules/${module}/target/spotbugs.xml"))
 
-List<Node> allNodes = path.depthFirst().collect{ it }
+List<Node> allNodes = path.depthFirst().toList()
 int xdocErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${xdocErrors}"
 
@@ -76,7 +76,7 @@ println '*********************************'
 
 path = new XmlSlurper().parse(basedir.toPath().resolve("modules/${module}/target/spotbugsXml.xml"))
 
-allNodes = path.depthFirst().collect{ it }
+allNodes = path.depthFirst().toList()
 int spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${spotbugsXmlErrors}"
 
@@ -124,7 +124,7 @@ println '******************'
 
 path = new XmlSlurper().parse(spotbugXdoc)
 
-allNodes = path.depthFirst().collect{ it }
+allNodes = path.depthFirst().toList()
 xdocErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${xdocErrors}"
 
@@ -141,7 +141,7 @@ println '*********************************'
 
 path = new XmlSlurper().parse(spotbugXml)
 
-allNodes = path.depthFirst().collect{ it }
+allNodes = path.depthFirst().toList()
 spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
 println "BugInstance size is ${spotbugsXmlErrors}"
 
