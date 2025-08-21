@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseViolationCheckMojo.groovy</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spotbugs-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.codehaus.mojo.spotbugs</a> &gt; <span class="el_source">BaseViolationCheckMojo.groovy</span></div><h1>BaseViolationCheckMojo.groovy</h1><pre class="source lang-java linenums">/*
+ * Copyright 2005-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.codehaus.mojo.spotbugs
+
+import groovy.xml.XmlParser
+
+import java.nio.file.Files
+import java.nio.file.Path
+
+import org.apache.commons.io.FileUtils
+import org.apache.maven.plugin.AbstractMojo
+import org.apache.maven.plugin.MojoExecutionException
+import org.apache.maven.plugins.annotations.Parameter
+
+abstract class BaseViolationCheckMojo extends AbstractMojo {
+
+    /**
+     * Specifies the directory where the Spotbugs native xml output will be generated.
+     *
+     * @since 1.2.0
+     */
+    @Parameter(defaultValue = '${project.build.directory}', required = true)
+    File spotbugsXmlOutputDirectory
+
+    /**
+     * Set the name of the output XML file produced
+     *
+     * @since 3.1.12.2
+     */
+    @Parameter(defaultValue = 'spotbugsXml.xml', property = 'spotbugs.outputXmlFilename')
+    String spotbugsXmlOutputFilename
+
+    /** Directory containing the class files for Spotbugs to analyze. */
+    @Parameter(defaultValue = '${project.build.outputDirectory}', required = true)
+    File classFilesDirectory
+
+    /** Directory containing the test class files for Spotbugs to analyze. */
+    @Parameter(defaultValue = '${project.build.testOutputDirectory}', required = true)
+    File testClassFilesDirectory
+
+    /**
+     * Run Spotbugs on the tests.
+     *
+     * @since 2.0
+     */
+    @Parameter(defaultValue = 'false', property = 'spotbugs.includeTests')
+    boolean includeTests
+
+    /** Turn on Spotbugs debugging. */
+    @Parameter(defaultValue = 'false', property = 'spotbugs.debug')
+    boolean debug
+
+    /**
+     * Skip entire check.
+     *
+     * @since 1.1
+     */
+    @Parameter(defaultValue = 'false', property = 'spotbugs.skip')
+    boolean skip
+
+    /**
+     * Fail the build on an error.
+     *
+     * @since 2.0
+     */
+    @Parameter(defaultValue = 'true', property = 'spotbugs.failOnError')
+    boolean failOnError
+
+    /**
+     * Priority threshold which bugs have to reach to cause a failure. Valid values are High, Medium or Low.
+     * Bugs below this threshold will just issue a warning log entry.
+     *
+     * @since 4.0.1
+     */
+    @Parameter(property = 'spotbugs.failThreshold')
+    String failThreshold
+
+    /**
+     * specified max number of violations which can be ignored by the spotbugs.
+     *
+     * @since 2.4.1
+     */
+    @Parameter(defaultValue = '0', property = 'spotbugs.maxAllowedViolations')
+    int maxAllowedViolations
+
+    /** Disable bugs log. */
+    @Parameter(defaultValue = 'false', property = 'spotbugs.quiet')
+    boolean quiet
+
+    @Override
+    void execute() {
+<span class="fc" id="L105">        log.debug('Executing spotbugs:check')</span>
+
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (skip) {</span>
+<span class="fc" id="L108">            log.info('Spotbugs plugin skipped')</span>
+<span class="fc" id="L109">            return</span>
+        }
+
+<span class="nc bnc" id="L112" title="All 4 branches missed.">        if (!doSourceFilesExist()) {</span>
+<span class="nc" id="L113">            log.debug('Nothing for SpotBugs to do here.')</span>
+<span class="nc" id="L114">            return</span>
+        }
+
+<span class="nc" id="L117">        log.debug('Executing spotbugs:check')</span>
+
+<span class="nc" id="L119">        Path outputDir = spotbugsXmlOutputDirectory.toPath()</span>
+
+<span class="nc bnc" id="L121" title="All 8 branches missed.">        if (Files.notExists(outputDir) &amp;&amp; !Files.createDirectories(outputDir)) {</span>
+<span class="nc" id="L122">            throw new MojoExecutionException('Cannot create xml output directory')</span>
+        }
+
+<span class="nc" id="L125">        Path outputFile = outputDir.resolve(spotbugsXmlOutputFilename)</span>
+
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        if (Files.notExists(outputFile)) {</span>
+<span class="nc" id="L128">            log.debug('Output file does not exist!')</span>
+<span class="nc" id="L129">            return</span>
+        }
+
+<span class="nc" id="L132">        Node xml = new XmlParser().parse(outputFile.toFile())</span>
+
+<span class="nc" id="L134">        NodeList bugs = xml.BugInstance</span>
+<span class="nc" id="L135">        int bugCount = bugs.size()</span>
+<span class="nc" id="L136">        int errorCount = xml.Error.size()</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (log.isInfoEnabled()) {</span>
+<span class="nc" id="L138">            log.info(&quot;BugInstance size is ${bugCount}&quot;)</span>
+<span class="nc" id="L139">            log.info(&quot;Error size is ${errorCount}&quot;)</span>
+        }
+
+<span class="nc bnc" id="L142" title="All 4 branches missed.">        if (bugCount &lt;= 0) {</span>
+<span class="nc" id="L143">            log.info('No errors/warnings found')</span>
+<span class="nc" id="L144">            return</span>
+<span class="nc bnc" id="L145" title="All 10 branches missed.">        } else if (maxAllowedViolations &gt; 0 &amp;&amp; bugCount &lt;= maxAllowedViolations) {</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">            if (log.isInfoEnabled()) {</span>
+<span class="nc" id="L147">                log.info(&quot;Total ${bugCount} violations are found as acceptable using configured property maxAllowedViolations &quot; +</span>
+                    &quot;:${maxAllowedViolations}.${SpotBugsInfo.EOL}Below are list of bugs ignored :${SpotBugsInfo.EOL}&quot;)
+            }
+<span class="nc" id="L150">            printBugs(bugs)</span>
+<span class="nc" id="L151">            return</span>
+        }
+
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        if (log.isInfoEnabled()) {</span>
+<span class="nc" id="L155">            log.info('Total bugs: ' + bugCount)</span>
+        }
+
+<span class="nc bnc" id="L158" title="All 2 branches missed.">        int priorityThresholdNum = failThreshold ? SpotBugsInfo.spotbugsPriority.indexOf(failThreshold) : Integer.MAX_VALUE</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">        if (priorityThresholdNum == -1) {</span>
+<span class="nc" id="L160">            throw new MojoExecutionException(&quot;Invalid value for failThreshold: ${failThreshold}&quot;)</span>
+        }
+
+<span class="nc" id="L163">        int bugCountAboveThreshold = 0</span>
+<span class="nc" id="L164">        bugs.each { Node bug -&gt;</span>
+<span class="nc" id="L165">            int priorityNum = bug.'@priority' as Integer</span>
+            // lower is more severe
+<span class="nc bnc" id="L167" title="All 2 branches missed.">            if (priorityNum &lt;= priorityThresholdNum) {</span>
+<span class="nc" id="L168">                bugCountAboveThreshold++</span>
+            }
+
+<span class="nc bnc" id="L171" title="All 12 branches missed.">            if (!quiet &amp;&amp; (log.isErrorEnabled() || log.isInfoEnabled())) {</span>
+<span class="nc" id="L172">                String priorityName = SpotBugsInfo.spotbugsPriority[priorityNum]</span>
+<span class="nc" id="L173">                String logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK +</span>
+<span class="nc" id="L174">                    bug.SourceLine.'@classname' + SpotBugsInfo.BLANK + bug.SourceLine.Message.text() +</span>
+                    SpotBugsInfo.BLANK + bug.'@type'
+
+                // lower is more severe
+<span class="nc bnc" id="L178" title="All 2 branches missed.">                if (priorityNum &lt;= priorityThresholdNum) {</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">                    if (log.isErrorEnabled()) {</span>
+<span class="nc" id="L180">                        log.error(logMsg)</span>
+                    }
+<span class="nc bnc" id="L182" title="All 2 branches missed.">                } else if (log.isInfoEnabled()) {</span>
+<span class="nc" id="L183">                    log.info(logMsg)</span>
+                }
+            }
+<span class="nc" id="L186">        }</span>
+
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        if (log.isInfoEnabled()) {</span>
+<span class="nc" id="L189">            log.info(SpotBugsInfo.EOL + SpotBugsInfo.EOL + SpotBugsInfo.EOL +</span>
+                'To see bug detail using the Spotbugs GUI, use the following command &quot;mvn spotbugs:gui&quot;' +
+                SpotBugsInfo.EOL + SpotBugsInfo.EOL + SpotBugsInfo.EOL)
+        }
+
+<span class="nc bnc" id="L194" title="All 10 branches missed.">        if ((bugCountAboveThreshold || errorCount) &amp;&amp; failOnError) {</span>
+<span class="nc" id="L195">            throw new MojoExecutionException(&quot;failed with ${bugCountAboveThreshold} bugs and ${errorCount} errors&quot;)</span>
+        }
+<span class="nc" id="L197">    }</span>
+
+    private boolean doSourceFilesExist() {
+<span class="nc" id="L200">        Collection&lt;File&gt; sourceFiles = []</span>
+
+<span class="nc bnc" id="L202" title="All 2 branches missed.">        if (this.classFilesDirectory.isDirectory()) {</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">            if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L204">                log.debug('looking for class files with extensions: ' + SpotBugsInfo.EXTENSIONS)</span>
+            }
+<span class="nc" id="L206">            sourceFiles.addAll(FileUtils.listFiles(classFilesDirectory, SpotBugsInfo.EXTENSIONS, true))</span>
+        }
+
+<span class="nc bnc" id="L209" title="All 6 branches missed.">        if (this.includeTests &amp;&amp; this.testClassFilesDirectory.isDirectory()) {</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">            if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L211">                log.debug('looking for test class files: ' + SpotBugsInfo.EXTENSIONS)</span>
+            }
+<span class="nc" id="L213">            sourceFiles.addAll(FileUtils.listFiles(testClassFilesDirectory, SpotBugsInfo.EXTENSIONS, true))</span>
+        }
+
+<span class="nc bnc" id="L216" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L217">            log.debug(&quot;SourceFiles: ${sourceFiles}&quot;)</span>
+        }
+<span class="nc bnc" id="L219" title="All 2 branches missed.">        !sourceFiles.isEmpty()</span>
+    }
+
+    private void printBugs(NodeList bugs) {
+<span class="nc bnc" id="L223" title="All 2 branches missed.">        if (log.isErrorEnabled()) {</span>
+<span class="nc" id="L224">            bugs.forEach{ Node bug -&gt;</span>
+<span class="nc" id="L225">                log.error(bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +</span>
+<span class="nc" id="L226">                    bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')</span>
+            }
+        }
+<span class="nc" id="L229">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

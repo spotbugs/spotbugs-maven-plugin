@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SourceFileIndexer.groovy</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spotbugs-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.codehaus.mojo.spotbugs</a> &gt; <span class="el_source">SourceFileIndexer.groovy</span></div><h1>SourceFileIndexer.groovy</h1><pre class="source lang-java linenums">/*
+ * Copyright 2005-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.codehaus.mojo.spotbugs
+
+import org.apache.maven.execution.MavenSession
+import org.apache.maven.model.Resource
+import org.apache.maven.plugin.MojoExecutionException
+
+import java.nio.file.Files
+import java.nio.file.Path
+
+/**
+ * Utility class used to transform path relative to the &lt;b&gt;source directory&lt;/b&gt;
+ * to their path relative to the &lt;b&gt;root directory&lt;/b&gt;.
+ */
+class SourceFileIndexer {
+
+    /** List of source files found in the current Maven project. */
+    private List&lt;String&gt; allSourceFiles
+
+    /**
+     * Initialize the complete list of source files with their
+     *
+     * @param project Reference to the Maven project to get the list of source directories
+     * @param session Reference to the Maven session used to get the location of the root directory
+     */
+    protected void buildListSourceFiles(MavenSession session) {
+
+<span class="fc" id="L42">        String basePath = normalizePath(session.getExecutionRootDirectory())</span>
+
+<span class="fc" id="L44">        List&lt;File&gt; allSourceFiles = []</span>
+
+        // Resource
+<span class="pc bpc" id="L47" title="1 of 4 branches missed.">        for (Resource r in session.getCurrentProject().getResources()) {</span>
+<span class="fc" id="L48">            scanDirectory(Path.of(r.directory), allSourceFiles, basePath)</span>
+        }
+
+<span class="pc bpc" id="L51" title="2 of 4 branches missed.">        for (Resource r in session.getCurrentProject().getTestResources()) {</span>
+<span class="nc" id="L52">            scanDirectory(Path.of(r.directory), allSourceFiles, basePath)</span>
+        }
+
+        // Source files
+<span class="pc bpc" id="L56" title="1 of 4 branches missed.">        for (String sourceRoot in session.getCurrentProject().getCompileSourceRoots()) {</span>
+<span class="fc" id="L57">            scanDirectory(Path.of(sourceRoot), allSourceFiles, basePath)</span>
+        }
+
+<span class="pc bpc" id="L60" title="2 of 4 branches missed.">        for (String sourceRoot in session.getCurrentProject().getTestCompileSourceRoots()) {</span>
+<span class="nc" id="L61">            scanDirectory(Path.of(sourceRoot), allSourceFiles, basePath)</span>
+        }
+
+        // While not perfect, add the following paths will add basic support for Groovy, Kotlin, and Webapp sources.
+<span class="fc" id="L65">        scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/groovy'), allSourceFiles, basePath)</span>
+<span class="fc" id="L66">        scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/kotlin'), allSourceFiles, basePath)</span>
+<span class="fc" id="L67">        scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/webapp'), allSourceFiles, basePath)</span>
+
+<span class="fc" id="L69">        this.allSourceFiles = allSourceFiles</span>
+<span class="fc" id="L70">    }</span>
+
+    /**
+     * Recursively scan the directory given and add all files found to the files array list.
+     * The base directory will be truncated from the path stored.
+     *
+     * @param directory Directory to scan
+     * @param files ArrayList where files found will be stored
+     * @param baseDirectory This part will be truncated from path stored
+     */
+    private void scanDirectory(Path directory, List&lt;String&gt; files, String baseDirectory) {
+
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (Files.notExists(directory)) {</span>
+<span class="fc" id="L83">            return</span>
+        }
+
+<span class="pc bpc" id="L86" title="1 of 4 branches missed.">        for (File child : directory.toFile().listFiles()) {</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">            if (child.isDirectory()) {</span>
+<span class="nc" id="L88">                scanDirectory(child.toPath(), files, baseDirectory)</span>
+            } else {
+<span class="fc" id="L90">                String newSourceFile = normalizePath(child.getCanonicalPath())</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">                if (newSourceFile.startsWith(baseDirectory)) {</span>
+                    // The project will not be at the root of our file system.
+                    // It will most likely be stored in a work directory.
+                    // Example: /work/project-code-to-scan/src/main/java/File.java =&gt; src/main/java/File.java
+                    //   (Here baseDirectory is /work/project-code-to-scan/)
+<span class="fc" id="L96">                    String relativePath = Path.of(baseDirectory).relativize(Path.of(newSourceFile))</span>
+<span class="fc" id="L97">                    files.add(normalizePath(relativePath))</span>
+                } else {
+                    // Use the full path instead:
+                    // This will occurs in many cases including when the pom.xml is
+                    // not in the same directory tree as the sources.
+<span class="pc" id="L102">                    files.add(newSourceFile)</span>
+                }
+            }
+        }
+<span class="fc" id="L106">    }</span>
+
+    /**
+     * Normalize path to use forward slash.
+     * &lt;p&gt;
+     * This will facilitate searches.
+     *
+     * @param path Path to clean up
+     * @return Path safe to use for comparison
+     */
+    private String normalizePath(String path) {
+<span class="fc" id="L117">        return path.replace('\\\\','/')</span>
+    }
+
+    /**
+     * Transform partial path to complete path
+     *
+     * @param filename Partial name to search
+     * @return Complete path found. Null is not found!
+     */
+    protected String searchActualFilesLocation(String filename) {
+
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (allSourceFiles == null) {</span>
+<span class="fc" id="L129">            throw new MojoExecutionException('Source files cache must be built prior to searches.')</span>
+        }
+
+<span class="pc bpc" id="L132" title="2 of 4 branches missed.">        for (String fileFound in allSourceFiles) {</span>
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">            if (fileFound.endsWith(filename)) {</span>
+<span class="pc" id="L134">                return fileFound</span>
+            }
+        }
+
+        // Not found
+<span class="nc" id="L139">        return null</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

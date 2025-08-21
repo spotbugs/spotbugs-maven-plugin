@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResourceHelper.groovy</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spotbugs-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.codehaus.mojo.spotbugs</a> &gt; <span class="el_source">ResourceHelper.groovy</span></div><h1>ResourceHelper.groovy</h1><pre class="source lang-java linenums">/*
+ * Copyright 2005-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.codehaus.mojo.spotbugs
+
+import java.nio.file.Files
+import java.nio.file.Path
+
+import org.apache.maven.plugin.logging.Log
+import org.apache.maven.plugin.MojoExecutionException
+import org.codehaus.plexus.resource.ResourceManager
+
+final class ResourceHelper {
+
+    /** The log. */
+    private final Log log
+
+    /** The output directory. */
+    private final File outputDirectory
+
+    /** The resource manager. */
+    private final ResourceManager resourceManager
+
+<span class="fc" id="L36">    ResourceHelper(final Log log, final File outputDirectory, final ResourceManager resourceManager) {</span>
+<span class="fc" id="L37">        this.log = Objects.requireNonNull(log, &quot;log must not be null&quot;)</span>
+<span class="fc" id="L38">        this.outputDirectory = outputDirectory</span>
+<span class="fc" id="L39">        this.resourceManager = Objects.requireNonNull(resourceManager, &quot;resourceManager must not be null&quot;)</span>
+<span class="fc" id="L40">    }</span>
+
+    /**
+     * Get the File reference for a File passed in as a string reference.
+     *
+     * @param resource
+     *            The file for the resource manager to locate
+     * @return The File of the resource
+     *
+     */
+    File getResourceFile(final String resource) {
+<span class="fc" id="L51">        Objects.requireNonNull(resource, &quot;resource must not be null&quot;)</span>
+
+<span class="fc" id="L53">        String location = null</span>
+<span class="fc" id="L54">        String artifact = resource</span>
+
+        // Linux Checks
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (resource.indexOf(SpotBugsInfo.FORWARD_SLASH) != -1) {</span>
+<span class="fc" id="L58">            artifact = resource.substring(resource.lastIndexOf(SpotBugsInfo.FORWARD_SLASH) + 1)</span>
+<span class="fc" id="L59">            location = resource.substring(0, resource.lastIndexOf(SpotBugsInfo.FORWARD_SLASH))</span>
+        }
+
+        // Windows Checks
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if (resource.indexOf(SpotBugsInfo.BACKWARD_SLASH) != -1) {</span>
+<span class="nc" id="L64">            artifact = resource.substring(resource.lastIndexOf(SpotBugsInfo.BACKWARD_SLASH) + 1)</span>
+<span class="nc" id="L65">            location = resource.substring(0, resource.lastIndexOf(SpotBugsInfo.BACKWARD_SLASH))</span>
+        }
+
+        // replace all occurrences of the following characters:  ? : &amp; =
+<span class="fc" id="L69">        location = location?.replaceAll(&quot;[\\?\\:\\&amp;\\=\\%]&quot;, &quot;_&quot;)</span>
+<span class="fc" id="L70">        artifact = artifact?.replaceAll(&quot;[\\?\\:\\&amp;\\=\\%]&quot;, &quot;_&quot;)</span>
+
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L73">            log.debug(&quot;resource is ${resource}&quot;)</span>
+<span class="fc" id="L74">            log.debug(&quot;location is ${location}&quot;)</span>
+<span class="fc" id="L75">            log.debug(&quot;artifact is ${artifact}&quot;)</span>
+        }
+
+<span class="fc" id="L78">        File resourceFile = getResourceAsFile(resource, artifact)</span>
+
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L81">            log.debug(&quot;location of resourceFile file is ${resourceFile.absolutePath}&quot;)</span>
+        }
+
+<span class="fc" id="L84">        return resourceFile</span>
+    }
+
+    private File getResourceAsFile(final String name, final String outputPath) {
+        // Optimization for File to File fetches
+<span class="fc" id="L89">        File file = new File(name)</span>
+<span class="pc bpc" id="L90" title="4 of 6 branches missed.">        if (file.exists() &amp;&amp; outputPath == null) {</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">            if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L92">                log.debug(&quot;optimized file ${name}&quot;)</span>
+            }
+<span class="nc" id="L94">            return file</span>
+        }
+        // End optimization
+
+<span class="fc" id="L98">        Path outputResourcePath</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if (outputDirectory != null) {</span>
+<span class="fc" id="L100">            outputResourcePath = outputDirectory.toPath().resolve(outputPath)</span>
+        } else {
+<span class="nc" id="L102">            outputResourcePath = Path.of(outputPath)</span>
+        }
+
+        try {
+<span class="fc" id="L106">            Path parent = outputResourcePath.getParent()</span>
+<span class="pc bpc" id="L107" title="3 of 6 branches missed.">            if (parent != null &amp;&amp; Files.notExists(parent)) {</span>
+<span class="nc" id="L108">                Files.createDirectories(parent)</span>
+            }
+
+<span class="pc" id="L111">            resourceManager.getResourceAsInputStream(name).withCloseable { InputStream is -&gt;</span>
+<span class="fc" id="L112">                new BufferedInputStream(is).withCloseable { BufferedInputStream bis -&gt;</span>
+<span class="fc" id="L113">                    Files.newOutputStream(outputResourcePath).withCloseable { OutputStream os -&gt;</span>
+<span class="fc" id="L114">                        os &lt;&lt; bis</span>
+                    }
+                }
+            }
+        } catch (IOException e) {
+<span class="pc" id="L119">            throw new MojoExecutionException('Cannot create file-based resource.', e)</span>
+        }
+
+<span class="fc" id="L122">        return outputResourcePath.toFile()</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
