@@ -4,18 +4,24 @@ on: [push, pull_request]
 
 permissions: read-all
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     name: Integration Tests Maven 4.0.0-beta-4
 
     steps:
       - uses: actions/checkout@v5
-      - name: Set up JDK
+      - name: Setup Java
         uses: actions/setup-java@v5
         with:
-          java-version: 21
+          cache: maven
           distribution: zulu
+          java-version: 21
       - name: Load Maven 4.0.0-beta-4
         run: mvn -B -V org.apache.maven.plugins:maven-wrapper-plugin:3.3.2:wrapper -Dmaven=4.0.0-beta-4 --no-transfer-progress
       - name: Integration Test with Maven
