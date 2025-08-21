@@ -7,14 +7,19 @@ permissions: read-all
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+      cancel-in-progress: true
     name: Integration Tests
 
     steps:
       - uses: actions/checkout@v5
-      - name: Set up JDK
+      - name: Setup Java
         uses: actions/setup-java@v5
         with:
-          java-version: 21
+          cache: maven
           distribution: zulu
+          java-version: 21
       - name: Integration Test with Maven
         run: ./mvnw -B -V -DtestSrc=remote -Prun-its verify -Dinvoker.parallelThreads=8 -Dlicense.skip=true --no-transfer-progress

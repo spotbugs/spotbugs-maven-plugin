@@ -7,15 +7,20 @@ permissions: read-all
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+      cancel-in-progress: true
     name: Integration Tests Maven 3.6.3
 
     steps:
       - uses: actions/checkout@v5
-      - name: Set up JDK
+      - name: Setup Javas
         uses: actions/setup-java@v5
         with:
-          java-version: 21
+          cache: maven
           distribution: zulu
+          java-version: 21
       - name: Load Maven 3.6.3
         run: mvn -B -V org.apache.maven.plugins:maven-wrapper-plugin:3.3.2:wrapper -Dmaven=3.6.3 --no-transfer-progress
       - name: Integration Test with Maven
