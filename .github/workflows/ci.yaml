@@ -4,13 +4,14 @@ on: [workflow_dispatch, push, pull_request]
 
 permissions: read-all
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
-      cancel-in-progress: true
     strategy:
       matrix:
         cache: [maven]

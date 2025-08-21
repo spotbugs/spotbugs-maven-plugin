@@ -7,14 +7,15 @@ on:
 
 permissions: read-all
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
 jobs:
   build:
     if: github.repository_owner == 'spotbugs' && ! contains(toJSON(github.event.head_commit.message), '[maven-release-plugin]')
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
-      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v5
       - name: Setup Java

@@ -8,14 +8,15 @@ on:
   schedule:
     - cron: '43 10 * * 2'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
 jobs:
   analyze:
     name: Analyze
     runs-on: 'ubuntu-latest'
     timeout-minutes: 30
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
-      cancel-in-progress: true
     permissions:
       actions: read
       contents: read
