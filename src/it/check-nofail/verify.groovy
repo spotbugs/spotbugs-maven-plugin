@@ -18,5 +18,5 @@ import java.nio.file.Path
 
 // Check no missing classes
 
-Path buildLog = Path.of(basedir.resolve('build.log')
+Path buildLog = basedir.resolve('build.log')
 assert buildLog.text.contains('BUILD SUCCESS')
