@@ -28,7 +28,7 @@ The [SpotBugs Maven documentation](https://spotbugs.github.io/spotbugs-maven-plu
 
 ### Latest Snapshot ###
 
-Please download latest snapshots from [here](https://oss.sonatype.org/content/repositories/snapshots/com/github/spotbugs/spotbugs-maven-plugin/).
+Please download latest [snapshot](https://oss.sonatype.org/content/repositories/snapshots/com/github/spotbugs/spotbugs-maven-plugin/).
 
 ### Override Spotbugs Version ###
 
