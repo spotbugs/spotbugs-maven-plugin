@@ -12,7 +12,7 @@ Maven Mojo Plug-In to generate reports based on the [SpotBugs](https://github.co
 
 ## Latest Snapshot ##
 
-Please download latest snapshots from [here](https://oss.sonatype.org/content/repositories/snapshots/com/github/spotbugs/spotbugs-maven-plugin/)
+Please download latest snapshots from [here](https://oss.sonatype.org/content/repositories/snapshots/com/github/spotbugs/spotbugs-maven-plugin/).
 
 ### Building spotbugs-maven-plugin Requirements ###
 
