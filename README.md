@@ -88,12 +88,12 @@ This plugin is written entirely in Groovy.  It does have limitations when it com
 Known issues
 
 The security manager is turned off by default in jdk 18 and scheduled from removal in a future java release, therefore to use this plugin with jdk 18+,
-the security manager may need turned back on using ```JAVA_OPTS``` to ```-Djava.security.manager=allow```.
+the security manager may need to be turned back on by setting `JAVA_OPTS` to `-Djava.security.manager=allow`.
 See [groovy](https://groovy-lang.org/releasenotes/groovy-4.0.html) for more details.
 
-If using Groovy with same group id (```org.codehaus.groovy 3.x``` and before; or ```org.apache.groovy 4.x and above```),
-an error may occur if not on same version. To alleviate that, make sure groovy artifacts are defined in ```dependency management```
-in order to force the loaded version correctly on your usage.
+If using Groovy with same group id (`org.codehaus.groovy 3.x` and before; or `org.apache.groovy 4.x and above`),
+an error may occur if not on same version. To alleviate that, make sure Groovy artifacts are defined in `dependencyManagement`
+to ensure the correct version is loaded.
 
 
 ## Eclipse m2e Integration ##
