@@ -355,7 +355,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         String prefix
         compileSourceRoots.each { String compileSourceRoot ->
-            Path sourcePath = Path.of(compileSourceRoot + File.separator + line.@sourcepath.text())
+            Path sourcePath = Path.of(compileSourceRoot).resolve(line.@sourcepath.text())
             if (Files.notExists(sourcePath)) {
                 return
             }
@@ -366,7 +366,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         if (includeTests && !prefix) {
             testSourceRoots.each { String testSourceRoot ->
-                Path testSourcePath = Path.of(testSourceRoot + File.separator + line.@sourcepath.text())
+                Path testSourcePath = Path.of(testSourceRoot).resolve(line.@sourcepath.text())
                 if (Files.notExists(testSourcePath)) {
                     return
                 }
