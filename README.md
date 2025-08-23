@@ -8,6 +8,8 @@
 [![Reproducible Builds](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jvm-repo-rebuild/reproducible-central/master/content/com/github/spotbugs/spotbugs-maven-plugin/badge.json)](https://github.com/jvm-repo-rebuild/reproducible-central/blob/master/content/com/github/spotbugs/spotbugs-maven-plugin/README.md)
 [![Apache 2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
+Maven Mojo Plug-In to generate reports based on the [SpotBugs](https://github.com/spotbugs/spotbugs) Analyzer.
+
 ## Latest Snapshot ##
 
 Please download latest snapshots from [here](https://oss.sonatype.org/content/repositories/snapshots/com/github/spotbugs/spotbugs-maven-plugin/)
@@ -24,7 +26,6 @@ Please download latest snapshots from [here](https://oss.sonatype.org/content/re
 
 ### spotbugs-maven-plugin ###
 
-Maven Mojo Plug-In to generate reports based on the SpotBugs Analyzer
 
 See site page for [usage](https://spotbugs.github.io/spotbugs-maven-plugin/)
 
