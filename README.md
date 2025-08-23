@@ -32,7 +32,8 @@ Please download latest [snapshot](https://oss.sonatype.org/content/repositories/
 
 ### Override Spotbugs Version ###
 
-Spotbugs aligns with spotbugs releases but normally does not have a hard requirement on this, therefore you can override the spotbugs version as follows.
+Spotbugs aligns with spotbugs releases but normally does not have a hard requirement on this, therefore you can override the spotbugs version as follows replacing
+the spotbugs plugin and spotbugs versions as you need.
 
 ```
     <plugin>
