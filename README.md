@@ -24,18 +24,14 @@ Please download latest snapshots from [here](https://oss.sonatype.org/content/re
 * Java 11 or better is required for spotbugs analysis.
 * Maven 3.6.3 or better is required for usage.
 
-### spotbugs-maven-plugin ###
+### Usage ###
 
+The [SpotBugs documentation](https://spotbugs.readthedocs.io/en/latest/maven.html) describes the pom.xml modifications and Maven goals.
 
-See site page for [usage](https://spotbugs.github.io/spotbugs-maven-plugin/)
 
 ## Special notice ##
 
 Continue to use `FindBugsFilter` when needed as the spotbugs project has not yet renamed that to reflect project.
-
-## Usage ##
-
-The [SpotBugs documentation](https://spotbugs.readthedocs.io/en/latest/maven.html) describes the pom.xml modifications and Maven goals.
 
 ## Running Tests ##
 
