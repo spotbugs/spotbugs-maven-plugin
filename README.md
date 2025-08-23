@@ -118,7 +118,7 @@ E.g. to set the findbugs.assertionmethods analyzer property:
     <artifactId>spotbugs-maven-plugin</artifactId>
     <configuration>
         <jvmArgs>-Dfindbugs.assertionmethods=org.apache.commons.lang3.Validate.notNull</jvmArgs>
-    </configuration?
+    </configuration>
 </plugin>
 ```
 
