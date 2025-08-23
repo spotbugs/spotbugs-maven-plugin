@@ -10,27 +10,46 @@
 
 Maven Mojo Plug-In to generate reports based on the [SpotBugs](https://github.com/spotbugs/spotbugs) Analyzer.
 
-## Latest Snapshot ##
-
-Please download latest snapshots from [here](https://oss.sonatype.org/content/repositories/snapshots/com/github/spotbugs/spotbugs-maven-plugin/).
-
-### Building spotbugs-maven-plugin Requirements ###
+## Building spotbugs-maven-plugin Requirements ##
 
 * Java 17+ is required to build the project.
 * Maven 3.9.11 is required to build the project.
 
-### Running spotbugs-maven-plugin Requirements ###
+## Running spotbugs-maven-plugin Requirements ##
 
 * Java 11 or better is required for spotbugs analysis.
 * Maven 3.6.3 or better is required for usage.
 
-### Usage ###
+## Usage ##
 
 The [SpotBugs documentation](https://spotbugs.readthedocs.io/en/latest/maven.html) describes the pom.xml modifications and Maven goals.
 
 The [SpotBugs Maven documentation](https://spotbugs.github.io/spotbugs-maven-plugin/) directly describes the pom.xml modifications and Maven goals along with project documentation.
 
-## Special notice ##
+### Latest Snapshot ###
+
+Please download latest snapshots from [here](https://oss.sonatype.org/content/repositories/snapshots/com/github/spotbugs/spotbugs-maven-plugin/).
+
+### Override Spotbugs Version ###
+
+Spotbugs aligns with spotbugs releases but normally does not have a hard requirement on this, therefore you can override the spotbugs version as follows.
+
+```
+    <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs.plugin}</version>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs</artifactId>
+                <version><!-- latest version --></version>
+            </dependency>
+        </dependencies>
+    </plugin>
+```
+
+### Special notice ###
 
 Continue to use `FindBugsFilter` when needed as the spotbugs project has not yet renamed that to reflect project.
 
@@ -121,23 +140,4 @@ E.g. to set the findbugs.assertionmethods analyzer property:
         <jvmArgs>-Dfindbugs.assertionmethods=org.apache.commons.lang3.Validate.notNull</jvmArgs>
     </configuration>
 </plugin>
-```
-
-## Override Spotbugs Version ##
-
-Spotbugs aligns with spotbugs releases but normally does not have a hard requirement on this, therefore you can override the spotbugs version as follows.
-
-```
-    <plugin>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${spotbugs.plugin}</version>
-        <dependencies>
-            <dependency>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs</artifactId>
-                <version><!-- latest version --></version>
-            </dependency>
-        </dependencies>
-    </plugin>
 ```
