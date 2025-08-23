@@ -61,9 +61,10 @@ class SourceFileIndexer {
             scanDirectory(Path.of(sourceRoot), allSourceFiles, basePath)
         }
 
-        // While not perfect, add the following paths will add basic support for Groovy, Kotlin, and Webapp sources.
+        // While not perfect, add the following paths will add basic support for Groovy, Kotlin, Scala and Webapp sources.
         scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/groovy'), allSourceFiles, basePath)
         scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/kotlin'), allSourceFiles, basePath)
+        scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/scala'), allSourceFiles, basePath)
         scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/webapp'), allSourceFiles, basePath)
 
         this.allSourceFiles = allSourceFiles
