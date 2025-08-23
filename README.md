@@ -38,12 +38,12 @@ Spotbugs aligns with spotbugs releases but normally does not have a hard require
     <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${spotbugs.plugin}</version>
+        <version>${spotbugs-maven-plugin.version}</version>
         <dependencies>
             <dependency>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs</artifactId>
-                <version><!-- latest version --></version>
+                <version>${spotbugs.version}</version>
             </dependency>
         </dependencies>
     </plugin>
