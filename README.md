@@ -30,7 +30,7 @@ See site page for [usage](https://spotbugs.github.io/spotbugs-maven-plugin/)
 
 ## Special notice ##
 
-Continue to use 'FindBugsFilter' when needed as the spotbugs project has not yet renamed that to reflect project.
+Continue to use `FindBugsFilter` when needed as the spotbugs project has not yet renamed that to reflect project.
 
 ## Usage ##
 
