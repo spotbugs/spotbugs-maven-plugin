@@ -1074,7 +1074,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (log.isDebugEnabled()) {
             log.debug("resourceManager.outputDirectory is ${resourceManager.outputDirectory}")
-            log.debug("Plugin Artifacts to be added -> ${pluginArtifacts.toString()}")
+            log.debug("Plugin Artifacts to be added -> ${pluginArtifacts}")
             log.debug("outputFile is ${outputFile.getCanonicalPath()}")
             log.debug("output Directory is ${spotbugsXmlOutputDirectory.getAbsolutePath()}")
             if (htmlOutput) {
@@ -1136,7 +1136,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                 pluginArtifacts.each() { Artifact pluginArtifact ->
                     if (log.isDebugEnabled()) {
-                        log.debug('  Adding to pluginArtifact -> ' + pluginArtifact.file.toString())
+                        log.debug("  Adding to pluginArtifact -> ${pluginArtifact.file}")
                     }
 
                     pathelement(location: pluginArtifact.file)
