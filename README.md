@@ -28,6 +28,7 @@ Please download latest snapshots from [here](https://oss.sonatype.org/content/re
 
 The [SpotBugs documentation](https://spotbugs.readthedocs.io/en/latest/maven.html) describes the pom.xml modifications and Maven goals.
 
+The [SpotBugs Maven documentation](https://spotbugs.github.io/spotbugs-maven-plugin/) directly describes the pom.xml modifications and Maven goals along with project documentation.
 
 ## Special notice ##
 
