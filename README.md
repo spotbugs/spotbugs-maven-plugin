@@ -68,11 +68,11 @@ mvn com.github.spotbugs:spotbugs-maven-plugin:${spotbugs.plugin}:gui
 
 ## Creating new site examples ##
 
-```
-mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=8"
+This product `site' contains a copy of an integration test result using spotbugs to show how it works.  To update that, use the following instructions.
 
-Then replace current src/site/resources entirely with any working example 'site' folder from there (Currently uses basic-1).  Also top files top level of the basic site folder 'spotbugs.xml' and 'spotbugsXml.xml'.
-```
+* Execute `mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=8"`
+* Then replace current `src/site/resources` entirely with any working example 'site' folder from there (Currently uses `basic-1`) and include the top files top level of the basic site folder `spotbugs.xml` and `spotbugsXml.xml`.
+* Commit results and submit a pull request to apply.
 
 ## Contributing ##
 
