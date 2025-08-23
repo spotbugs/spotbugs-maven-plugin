@@ -94,7 +94,7 @@ mvn com.github.spotbugs:spotbugs-maven-plugin:${spotbugs.plugin}:gui
 This product `site` contains a copy of an integration test result using spotbugs to show how it works.  To update that, use the following instructions.
 
 * Execute `mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=8"`
-* Then replace current `src/site/resources` entirely with any working example 'site' folder from there (Currently uses `basic-1`) and include the top files top level of the basic site folder `spotbugs.xml` and `spotbugsXml.xml`.
+* Then replace current `src/site/resources/examples` entirely with any working example 'site' folder (Currently uses `target/it/basic-1/target/site` and includes `spotbugs.xml` and `spotbugsXml.xml` from `target/it/basic-1/target`).
 * Commit results and submit a pull request to apply.
 
 ## Contributing ##
@@ -129,7 +129,7 @@ use [m2e-code-quality](https://github.com/m2e-code-quality/m2e-code-quality) plu
 
 Is there some way to set the [Analysis Properties](https://spotbugs.readthedocs.io/en/stable/analysisprops.html) when using the maven plugin?
 
-Analysis properties are passed as Java system properties, so they can be set in the <jvmArgs> configuration element.
+Analysis properties are passed as Java system properties, so they can be set in the `<jvmArgs>` in the `<configuration>` block of the plugin.
 
 E.g. to set the findbugs.assertionmethods analyzer property:
 
