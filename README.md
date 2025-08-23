@@ -5,32 +5,54 @@
 [![Coverage Status](https://coveralls.io/repos/github/spotbugs/spotbugs-maven-plugin/badge.svg?branch=master)](https://coveralls.io/github/spotbugs/spotbugs-maven-plugin?branch=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=spotbugs_spotbugs-maven-plugin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=spotbugs_spotbugs-maven-plugin)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.spotbugs/spotbugs-maven-plugin.svg)](https://search.maven.org/com.github.spotbugs/spotbugs-maven-plugin)
+[![Reproducible Builds](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jvm-repo-rebuild/reproducible-central/master/content/com/github/spotbugs/spotbugs-maven-plugin/badge.json)](https://github.com/jvm-repo-rebuild/reproducible-central/blob/master/content/com/github/spotbugs/spotbugs-maven-plugin/README.md)
 [![Apache 2](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
-## Latest Snapshot ##
+Maven Mojo Plug-In to generate reports based on the [SpotBugs](https://github.com/spotbugs/spotbugs) Analyzer.
 
-Please download latest snapshots from [here](https://oss.sonatype.org/content/repositories/snapshots/com/github/spotbugs/spotbugs-maven-plugin/)
+## Building spotbugs-maven-plugin Requirements ##
 
-Building spotbugs-maven-plugin Requirements
-===========================================
+* Java 17+ is required to build the spotbugs maven plugin.
+* Maven 3.9.11 is required to build the spotbugs maven plugin.
 
-Java 17+ is required to build the project.  Java 11 or better is required for spotbugs analysis.
-Maven 3.9.11 is required to build the project.  Maven 3.6.3 or better is required for usage.
+## Running spotbugs-maven-plugin Requirements ##
 
-spotbugs-maven-plugin
-=====================
-
-Maven Mojo Plug-In to generate reports based on the SpotBugs Analyzer
-
-See site page for [usage](https://spotbugs.github.io/spotbugs-maven-plugin/)
-
-## Special notice ##
-
-Continue to use 'FindBugsFilter' when needed as the spotbugs project has not yet renamed that to reflect project.
+* Java 11 or better is required for spotbugs analysis.
+* Maven 3.6.3 or better is required for spotbugs analysis.
 
 ## Usage ##
 
 The [SpotBugs documentation](https://spotbugs.readthedocs.io/en/latest/maven.html) describes the pom.xml modifications and Maven goals.
+
+The [SpotBugs Maven documentation](https://spotbugs.github.io/spotbugs-maven-plugin/) directly describes the pom.xml modifications and Maven goals along with project documentation.
+
+### Latest Snapshot ###
+
+Please download latest [snapshot](https://oss.sonatype.org/content/repositories/snapshots/com/github/spotbugs/spotbugs-maven-plugin/).
+
+### Override Spotbugs Version ###
+
+Spotbugs aligns with spotbugs releases but normally does not have a hard requirement on this, therefore you can override the spotbugs version as follows replacing
+the spotbugs plugin and spotbugs versions as you need.
+
+```
+    <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs-maven-plugin.version}</version>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs</artifactId>
+                <version>${spotbugs.version}</version>
+            </dependency>
+        </dependencies>
+    </plugin>
+```
+
+### Special notice ###
+
+Continue to use `FindBugsFilter` when needed as the spotbugs project has not yet renamed that to reflect project.
 
 ## Running Tests ##
 
@@ -69,11 +91,11 @@ mvn com.github.spotbugs:spotbugs-maven-plugin:${spotbugs.plugin}:gui
 
 ## Creating new site examples ##
 
-```
-mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=8"
+This product `site` contains a copy of an integration test result using spotbugs to show how it works.  To update that, use the following instructions.
 
-Then replace current src/site/resources entirely with any working example 'site' folder from there (Currently uses basic-1).  Also top files top level of the basic site folder 'spotbugs.xml' and 'spotbugsXml.xml'.
-```
+* Execute `mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=8"`
+* Then replace current `src/site/resources/examples` entirely with any working example 'site' folder (Currently uses `target/it/basic-1/target/site` and includes `spotbugs.xml` and `spotbugsXml.xml` from `target/it/basic-1/target`).
+* Commit results and submit a pull request to apply.
 
 ## Contributing ##
 
@@ -89,12 +111,12 @@ This plugin is written entirely in Groovy.  It does have limitations when it com
 Known issues
 
 The security manager is turned off by default in jdk 18 and scheduled from removal in a future java release, therefore to use this plugin with jdk 18+,
-the security manager may need turned back on using ```JAVA_OPTS``` to ```-Djava.security.manager=allow```.
+the security manager may need to be turned back on by setting `JAVA_OPTS` to `-Djava.security.manager=allow`.
 See [groovy](https://groovy-lang.org/releasenotes/groovy-4.0.html) for more details.
 
-If using Groovy with same group id (```org.codehaus.groovy 3.x``` and before; or ```org.apache.groovy 4.x and above```),
-an error may occur if not on same version. To alleviate that, make sure groovy artifacts are defined in ```dependency management```
-in order to force the loaded version correctly on your usage.
+If using Groovy with same group id (`org.codehaus.groovy 3.x` and before; or `org.apache.groovy 4.x and above`),
+an error may occur if not on same version. To alleviate that, make sure Groovy artifacts are defined in `dependencyManagement`
+to ensure the correct version is loaded.
 
 
 ## Eclipse m2e Integration ##
@@ -107,7 +129,7 @@ use [m2e-code-quality](https://github.com/m2e-code-quality/m2e-code-quality) plu
 
 Is there some way to set the [Analysis Properties](https://spotbugs.readthedocs.io/en/stable/analysisprops.html) when using the maven plugin?
 
-Analysis properties are passed as Java system properties, so they can be set in the <jvmArgs> configuration element.
+Analysis properties are passed as Java system properties, so they can be set in the `<jvmArgs>` in the `<configuration>` block of the plugin.
 
 E.g. to set the findbugs.assertionmethods analyzer property:
 
@@ -117,25 +139,6 @@ E.g. to set the findbugs.assertionmethods analyzer property:
     <artifactId>spotbugs-maven-plugin</artifactId>
     <configuration>
         <jvmArgs>-Dfindbugs.assertionmethods=org.apache.commons.lang3.Validate.notNull</jvmArgs>
-    </configuration?
+    </configuration>
 </plugin>
-```
-
-## Override Spotbugs Version ##
-
-Spotbugs aligns with spotbugs releases but normally does not have a hard requirement on this, therefore you can override the spotbugs version as follows.
-
-```
-    <plugin>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${spotbugs.plugin}</version>
-        <dependencies>
-            <dependency>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs</artifactId>
-                <version><!-- latest version --></version>
-            </dependency>
-        </dependencies>
-    </plugin>
 ```
