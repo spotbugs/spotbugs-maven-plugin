@@ -203,21 +203,29 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         if (this.classFilesDirectory.isDirectory()) {
             if (log.isDebugEnabled()) {
                 log.debug('looking for class files with extensions: ' + SpotBugsInfo.EXTENSIONS)
+                sourceFiles.addAll(FileUtils.listFiles(classFilesDirectory, SpotBugsInfo.EXTENSIONS, true))
             }
-            sourceFiles.addAll(FileUtils.listFiles(classFilesDirectory, SpotBugsInfo.EXTENSIONS, true))
+            Iterator<File> classFiles = FileUtils.iterateFiles(classFilesDirectory, SpotBugsInfo.EXTENSIONS, true)
+            if (classFiles.hasNext()) {
+                return true
+            }
         }
 
         if (this.includeTests && this.testClassFilesDirectory.isDirectory()) {
             if (log.isDebugEnabled()) {
                 log.debug('looking for test class files: ' + SpotBugsInfo.EXTENSIONS)
+                sourceFiles.addAll(FileUtils.listFiles(testClassFilesDirectory, SpotBugsInfo.EXTENSIONS, true))
             }
-            sourceFiles.addAll(FileUtils.listFiles(testClassFilesDirectory, SpotBugsInfo.EXTENSIONS, true))
+            Iterator<File> testFiles = FileUtils.iterateFiles(testClassFilesDirectory, SpotBugsInfo.EXTENSIONS, true)
+            if (testFiles.hasNext()) {
+                return true
+            }
         }
 
         if (log.isDebugEnabled()) {
             log.debug("SourceFiles: ${sourceFiles}")
         }
-        !sourceFiles.isEmpty()
+        return false
     }
 
     private void printBugs(NodeList bugs) {
