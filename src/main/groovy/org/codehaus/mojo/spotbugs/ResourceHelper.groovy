@@ -66,8 +66,8 @@ final class ResourceHelper {
         }
 
         // replace all occurrences of the following characters:  ? : & =
-        location = location?.replaceAll("[?:&=%]", "_")
-        artifact = artifact?.replaceAll("[?:&=%]", "_")
+        location = location?.replaceAll('[?:&=%]', '_')
+        artifact = artifact?.replaceAll('[?:&=%]', '_')
 
         if (log.isDebugEnabled()) {
             log.debug("resource is ${resource}")
