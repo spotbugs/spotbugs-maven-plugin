@@ -34,7 +34,6 @@ class SourceFileIndexer {
     /**
      * Initialize the complete list of source files with their
      *
-     * @param project Reference to the Maven project to get the list of source directories
      * @param session Reference to the Maven session used to get the location of the root directory
      */
     protected void buildListSourceFiles(MavenSession session) {
