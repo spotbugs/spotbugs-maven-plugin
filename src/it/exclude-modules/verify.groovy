@@ -41,7 +41,7 @@ assert spotbugsErrors > 0
 
 //  check module 2
 
-spotbugXml = new File(basedir, "module2/target/spotbugsXml.xml")
+spotbugXml = basedir.toPath().resolve("module2/target/spotbugsXml.xml")
 assert Files.exists(spotbugXml)
 
 path = new XmlSlurper().parse(spotbugXml)

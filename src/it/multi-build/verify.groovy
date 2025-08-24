@@ -96,13 +96,13 @@ println '*****************'
 
 module = "module-2"
 
-spotbugsHtml =  new File(basedir, "modules/${module}/target/site/spotbugs.html")
+spotbugsHtml =  basedir.toPath().resolve("modules/${module}/target/site/spotbugs.html")
 assert Files.exists(spotbugsHtml)
 
-spotbugXdoc = new File(basedir, "modules/${module}/target/spotbugs.xml")
+spotbugXdoc = basedir.toPath().resolve("modules/${module}/target/spotbugs.xml")
 assert Files.exists(spotbugXdoc)
 
-spotbugXml = new File(basedir, "modules/${module}/target/spotbugsXml.xml")
+spotbugXml = basedir.toPath().resolve("modules/${module}/target/spotbugsXml.xml")
 assert Files.exists(spotbugXml)
 
 println '******************'

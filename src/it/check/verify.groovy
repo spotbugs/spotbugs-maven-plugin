@@ -24,10 +24,10 @@ import java.nio.file.Path
 Path spotbugsHtml =  basedir.toPath().resolve('target/site/spotbugs.html')
 assert Files.notExists(spotbugsHtml)
 
-Path spotbugXdoc = new File(basedir, 'target/spotbugs.xml')
+Path spotbugXdoc = basedir.toPath().resolve('target/spotbugs.xml')
 assert Files.exists(spotbugXdoc)
 
-Path spotbugXml = new File(basedir, 'target/spotbugsXml.xml')
+Path spotbugXml = basedir.toPath().resolve('target/spotbugsXml.xml')
 assert Files.exists(spotbugXml)
 
 println '*********************************'
