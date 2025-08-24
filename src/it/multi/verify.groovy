@@ -60,7 +60,7 @@ println '******************'
 
 path = new XmlSlurper().parse(basedir.toPath().resolve("modules/${module}/target/spotbugs.xml"))
 
-List<Node> allNodes = path.depthFirst().toList()
+List<NodeChild> allNodes = path.depthFirst().toList()
 int xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${xdocErrors}"
 

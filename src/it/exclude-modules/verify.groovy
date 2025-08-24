@@ -33,7 +33,7 @@ println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
 
-List<Node> allNodes = path.depthFirst().toList()
+List<NodeChild> allNodes = path.depthFirst().toList()
 int spotbugsErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${spotbugsErrors}"
 
