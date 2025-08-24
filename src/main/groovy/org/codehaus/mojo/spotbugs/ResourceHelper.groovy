@@ -75,16 +75,16 @@ final class ResourceHelper {
             log.debug("artifact is ${artifact}")
         }
 
-        File resourceFile = getResourceAsFile(resource, artifact)
+        Path resourcePath = getResourceAsFile(resource, artifact)
 
         if (log.isDebugEnabled()) {
-            log.debug("location of resourceFile file is ${resourceFile.absolutePath}")
+            log.debug("location of resourceFile file is ${resourcePath.toAbsolutePath()}")
         }
 
-        return resourceFile
+        return resourcePath.toFile()
     }
 
-    private File getResourceAsFile(final String name, final String outputPath) {
+    private Path getResourceAsFile(final String name, final String outputPath) {
         Path outputResourcePath
         if (outputDirectory != null) {
             outputResourcePath = outputDirectory.toPath().resolve(outputPath)
@@ -109,6 +109,6 @@ final class ResourceHelper {
             throw new MojoExecutionException('Cannot create file-based resource.', e)
         }
 
-        return outputResourcePath.toFile()
+        return outputResourcePath
     }
 }
