@@ -162,7 +162,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
         int bugCountAboveThreshold = 0
         bugs.each { Node bug ->
-            int priorityNum = bug.'@priority' as Integer
+            int priorityNum = bug.'@priority'.toInteger()
             // lower is more severe
             if (priorityNum <= priorityThresholdNum) {
                 bugCountAboveThreshold++
