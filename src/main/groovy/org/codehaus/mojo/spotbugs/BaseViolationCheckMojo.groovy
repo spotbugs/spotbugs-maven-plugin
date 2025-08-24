@@ -218,9 +218,11 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     private void printBugs(NodeList bugs) {
         if (log.isErrorEnabled()) {
+            StringBuilder sb = new StringBuilder()
             bugs.each { Node bug ->
-                log.error(bugLog(bug))
+                sb.append(bugLog(bug)).append(SpotBugsInfo.EOF)
             }
+            log.error(sb.toString())
         }
     }
 
