@@ -85,16 +85,6 @@ final class ResourceHelper {
     }
 
     private File getResourceAsFile(final String name, final String outputPath) {
-        // Optimization for File to File fetches
-        File file = new File(name)
-        if (file.exists() && outputPath == null) {
-            if (log.isDebugEnabled()) {
-                log.debug("optimized file ${name}")
-            }
-            return file
-        }
-        // End optimization
-
         Path outputResourcePath
         if (outputDirectory != null) {
             outputResourcePath = outputDirectory.toPath().resolve(outputPath)
