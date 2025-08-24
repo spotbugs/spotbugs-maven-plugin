@@ -17,6 +17,7 @@ package org.codehaus.mojo.spotbugs
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.regex.Pattern
 
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugin.MojoExecutionException
@@ -32,6 +33,9 @@ final class ResourceHelper {
 
     /** The resource manager. */
     private final ResourceManager resourceManager
+
+    /** Precompiled regex pattern for resource name sanitization. */
+    private static final Pattern SANITIZE_PATTERN = Pattern.compile('[?:&=%]')
 
     ResourceHelper(final Log log, final File outputDirectory, final ResourceManager resourceManager) {
         this.log = Objects.requireNonNull(log, "log must not be null")
@@ -66,8 +70,8 @@ final class ResourceHelper {
         }
 
         // replace all occurrences of the following characters:  ? : & =
-        location = location?.replaceAll('[?:&=%]', '_')
-        artifact = artifact?.replaceAll('[?:&=%]', '_')
+        location = location != null ? SANITIZE_PATTERN.matcher(location).replaceAll('_') : null
+        artifact = SANITIZE_PATTERN.matcher(artifact).replaceAll('_')
 
         if (log.isDebugEnabled()) {
             log.debug("resource is ${resource}" + SpotBugsInfo.EOL + "location is ${location}" + SpotBugsInfo.EOL +
