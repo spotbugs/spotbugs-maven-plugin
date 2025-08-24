@@ -135,7 +135,7 @@ class SourceFileIndexer {
     protected String searchActualFilesLocation(String filename) {
         lock.lock()
         try {
-            if (allSourceFiles == null) {
+            if (allSourceFiles.isEmpty()) {
                 throw new MojoExecutionException('Source files cache must be built prior to searches.')
             }
 
