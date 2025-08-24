@@ -123,7 +123,7 @@
 
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.9.4</spotbugs.version>
-        <spotbugs.plugin>4.9.3.0</spotbugs.plugin>
+        <spotbugs.plugin>4.9.4.0</spotbugs.plugin>
 
         <byte-buddy.version>1.17.7</byte-buddy.version>
         <javabean-tester.version>2.11.0</javabean-tester.version>
