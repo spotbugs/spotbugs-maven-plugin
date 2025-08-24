@@ -118,8 +118,12 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
         Path outputDir = spotbugsXmlOutputDirectory.toPath()
 
-        if (Files.notExists(outputDir) && !Files.createDirectories(outputDir)) {
-            throw new MojoExecutionException('Cannot create xml output directory')
+        if (Files.notExists(outputDir)) {
+            try {
+                Files.createDirectories(outputDir)
+            } catch (IOException e) {
+                throw new MojoExecutionException('Cannot create xml output directory', e)
+            }
         }
 
         Path outputFile = outputDir.resolve(spotbugsXmlOutputFilename)
