@@ -102,7 +102,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     @Override
     void execute() {
-        log.debug('Executing spotbugs:check')
+        log.debug('Executing spotbugs mojo')
 
         if (skip) {
             log.info('Spotbugs plugin skipped')
@@ -114,7 +114,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             return
         }
 
-        log.debug('Executing spotbugs:check')
+        log.debug('Files found to process spotbugs')
 
         Path outputDir = spotbugsXmlOutputDirectory.toPath()
 
@@ -169,10 +169,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             }
 
             if (!quiet && (log.isErrorEnabled() || log.isInfoEnabled())) {
-                String priorityName = SpotBugsInfo.spotbugsPriority[priorityNum]
-                String logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK +
-                    bug.SourceLine.'@classname' + SpotBugsInfo.BLANK + bug.SourceLine.Message.text() +
-                    SpotBugsInfo.BLANK + bug.'@type'
+                String logMsg = SpotBugsInfo.spotbugsPriority[priorityNum] + ': ' + bugLog(bug)
 
                 // lower is more severe
                 if (priorityNum <= priorityThresholdNum) {
@@ -221,10 +218,18 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     private void printBugs(NodeList bugs) {
         if (log.isErrorEnabled()) {
-            bugs.forEach{ Node bug ->
-                log.error(bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
-                    bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
+            StringBuilder sb = new StringBuilder()
+            bugs.each { Node bug ->
+                sb.append(bugLog(bug)).append(SpotBugsInfo.EOF)
             }
+            log.error(sb.toString())
         }
     }
+
+    // Protected to allow groovy closure to see this method
+    protected static String bugLog(Node bug) {
+        return bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
+            bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type'
+    }
+
 }

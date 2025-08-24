@@ -16,6 +16,7 @@
 package org.codehaus.mojo.spotbugs
 
 import org.codehaus.mojo.spotbugs.ResourceHelper
+import org.codehaus.mojo.spotbugs.SpotBugsInfo
 import org.codehaus.plexus.resource.ResourceManager
 import org.apache.maven.plugin.logging.Log
 import spock.lang.Specification
@@ -39,8 +40,8 @@ class ResourceHelperTest extends Specification {
 
         then:
         result.exists()
-        1 * log.debug('resource is test/path/resource.txt')
-        1 * log.debug('location is test/path')
+        1 * log.debug('resource is test/path/resource.txt' + SpotBugsInfo.EOL + 'location is test/path' +
+            SpotBugsInfo.EOL + 'artifact is resource.txt')
 
         cleanup:
         result?.delete()

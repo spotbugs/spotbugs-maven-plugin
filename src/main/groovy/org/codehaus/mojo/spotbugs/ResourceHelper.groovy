@@ -70,9 +70,8 @@ final class ResourceHelper {
         artifact = artifact?.replaceAll('[?:&=%]', '_')
 
         if (log.isDebugEnabled()) {
-            log.debug("resource is ${resource}")
-            log.debug("location is ${location}")
-            log.debug("artifact is ${artifact}")
+            log.debug("resource is ${resource}" + SpotBugsInfo.EOL + "location is ${location}" + SpotBugsInfo.EOL +
+                "artifact is ${artifact}")
         }
 
         Path resourcePath = getResourceAsFile(resource, artifact)
