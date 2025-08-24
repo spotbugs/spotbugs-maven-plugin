@@ -322,7 +322,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
             // priority
             sink.tableCell()
-            sink.text(spotbugsPriority[priority as Integer])
+            sink.text(spotbugsPriority[priority.toInteger()])
             sink.tableCell_()
 
             sink.tableRow_()
@@ -419,9 +419,9 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         // Dollar '$' for nested classes is not valid character in sink.anchor() and therefore it is ignored
         // https://github.com/spotbugs/spotbugs-maven-plugin/issues/236
-        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_START] as Object[],
+        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_START].toArray(),
             new SinkEventAttributeSet(SinkEventAttributes.NAME, bugClass))
-        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_END] as Object[], null)
+        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_END].toArray(), null)
 
         sink.section2()
         sink.sectionTitle2()
