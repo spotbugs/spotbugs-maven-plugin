@@ -37,7 +37,7 @@ class VerifyMojoTest extends Specification {
         mojo.execute()
 
         then:
-        1 * log.debug('Executing spotbugs:check')
+        1 * log.debug('Executing spotbugs mojo')
         1 * log.info('Spotbugs plugin skipped')
     }
 

@@ -102,7 +102,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     @Override
     void execute() {
-        log.debug('Executing spotbugs:check')
+        log.debug('Executing spotbugs mojo')
 
         if (skip) {
             log.info('Spotbugs plugin skipped')
@@ -114,7 +114,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             return
         }
 
-        log.debug('Executing spotbugs:check')
+        log.debug('Files found to process spotbugs')
 
         Path outputDir = spotbugsXmlOutputDirectory.toPath()
 
