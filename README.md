@@ -1,7 +1,7 @@
 # Spotbugs Maven Plugin
 
-[![Java CI](https://github.com/spotbugs/spotbugs-maven-plugin/workflows/Java%20CI/badge.svg)](https://github.com/spotbugs/spotbugs-maven-plugin/actions?query=workflow%3A%22Java+CI%22)
-[![Java Integration Tests](https://github.com/spotbugs/spotbugs-maven-plugin/workflows/Java%20Integration%20Tests/badge.svg)](https://github.com/spotbugs/spotbugs-maven-plugin/actions?query=workflow%3A%22Java+Integration+Tests%22)
+[![Java CI](https://github.com/spotbugs/spotbugs-maven-plugin/actions/workflows/ci.yaml/badge.svg)](https://github.com/spotbugs/spotbugs-maven-plugin/actions/workflows/ci.yaml)
+[![Java Integration Tests](https://github.com/spotbugs/spotbugs-maven-plugin/actions/workflows/it.yaml/badge.svg)](https://github.com/spotbugs/spotbugs-maven-plugin/actions/workflows/it.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/spotbugs/spotbugs-maven-plugin/badge.svg?branch=master)](https://coveralls.io/github/spotbugs/spotbugs-maven-plugin?branch=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=spotbugs_spotbugs-maven-plugin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=spotbugs_spotbugs-maven-plugin)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.spotbugs/spotbugs-maven-plugin.svg)](https://search.maven.org/com.github.spotbugs/spotbugs-maven-plugin)
