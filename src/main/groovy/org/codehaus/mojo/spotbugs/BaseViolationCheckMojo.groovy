@@ -169,10 +169,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             }
 
             if (!quiet && (log.isErrorEnabled() || log.isInfoEnabled())) {
-                String priorityName = SpotBugsInfo.spotbugsPriority[priorityNum]
-                String logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK +
-                    bug.SourceLine.'@classname' + SpotBugsInfo.BLANK + bug.SourceLine.Message.text() +
-                    SpotBugsInfo.BLANK + bug.'@type'
+                String logMsg = SpotBugsInfo.spotbugsPriority[priorityNum] + ': ' + bugLog(bug)
 
                 // lower is more severe
                 if (priorityNum <= priorityThresholdNum) {
@@ -221,10 +218,16 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     private void printBugs(NodeList bugs) {
         if (log.isErrorEnabled()) {
-            bugs.forEach{ Node bug ->
-                log.error(bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
-                    bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
+            bugs.each { Node bug ->
+                log.error(bugLog(bug))
             }
         }
     }
+
+    // Protected to allow groovy closure to see this method
+    protected static String bugLog(Node bug) {
+        return bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
+            bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type'
+    }
+
 }
