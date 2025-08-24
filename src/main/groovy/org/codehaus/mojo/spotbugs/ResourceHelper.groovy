@@ -104,7 +104,9 @@ final class ResourceHelper {
             resourceManager.getResourceAsInputStream(name).withCloseable { InputStream is ->
                 new BufferedInputStream(is).withCloseable { BufferedInputStream bis ->
                     Files.newOutputStream(outputResourcePath).withCloseable { OutputStream os ->
-                        os << bis
+                        new BufferedOutputStream(os).withCloseable { BufferedOutputStream bos ->
+                            bos << bis
+                        }
                     }
                 }
             }
