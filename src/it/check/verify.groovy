@@ -24,19 +24,19 @@ import java.nio.file.Path
 Path spotbugsHtml =  basedir.toPath().resolve('target/site/spotbugs.html')
 assert Files.notExists(spotbugsHtml)
 
-Path spotbugXdoc = new File(basedir, 'target/spotbugs.xml')
+Path spotbugXdoc = basedir.toPath().resolve('target/spotbugs.xml')
 assert Files.exists(spotbugXdoc)
 
-Path spotbugXml = new File(basedir, 'target/spotbugsXml.xml')
+Path spotbugXml = basedir.toPath().resolve('target/spotbugsXml.xml')
 assert Files.exists(spotbugXml)
 
 println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-path = new XmlSlurper().parse(spotbugXml)
+GPathResult path = new XmlSlurper().parse(spotbugXml)
 
-List<Node> allNodes = path.depthFirst().toList()
+List<NodeChild> allNodes = path.depthFirst().toList()
 int spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${spotbugsXmlErrors}"
 
@@ -44,10 +44,10 @@ println '******************'
 println 'Checking xDoc file'
 println '******************'
 
-GPathResult path = new XmlSlurper().parse(spotbugXdoc)
+path = new XmlSlurper().parse(spotbugXdoc)
 
-List<Node> xNodes = path.depthFirst().toList()
-int xdocErrors = xNodes.findAll {NodeChild node -> node.name() == 'BugInstance' }.size()
+allNodes = path.depthFirst().toList()
+int xdocErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${xdocErrors}"
 
 assert xdocErrors == spotbugsXmlErrors

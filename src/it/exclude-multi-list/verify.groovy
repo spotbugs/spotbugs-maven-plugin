@@ -50,7 +50,7 @@ println '*********************************'
 
 path = new XmlSlurper().parse(spotbugXml)
 
-List<Node> allNodes = path.depthFirst().toList()
+List<NodeChild> allNodes = path.depthFirst().toList()
 int spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${spotbugsXmlErrors}"
 

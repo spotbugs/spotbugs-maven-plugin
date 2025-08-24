@@ -33,7 +33,7 @@ println '******************'
 
 GPathResult path = new XmlSlurper().parse(spotbugXdoc)
 
-List<Node> allNodes = path.depthFirst().toList()
+List<NodeChild> allNodes = path.depthFirst().toList()
 int xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${xdocErrors}"
 

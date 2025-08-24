@@ -32,7 +32,7 @@ println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-List<Node> allNodes = path.depthFirst().toList()
+List<NodeChild> allNodes = path.depthFirst().toList()
 int spotbugsErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${spotbugsErrors}"
 
@@ -40,7 +40,7 @@ assert spotbugsErrors > 0
 
 //  check module 2
 
-spotbugXml = new File(basedir, "modules/module-2/target/spotbugsXml.xml")
+spotbugXml = basedir.toPath().resolve("modules/module-2/target/spotbugsXml.xml")
 assert Files.exists(spotbugXml)
 
 path = new XmlSlurper().parse(spotbugXml)

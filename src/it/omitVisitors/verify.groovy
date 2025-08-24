@@ -52,15 +52,15 @@ println '*********************************'
 
 path = new XmlSlurper().parse(spotbugXml)
 
-List<Node> allNodes = path.depthFirst().toList()
+List<NodeChild> allNodes = path.depthFirst().toList()
 int spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${spotbugsXmlErrors}"
 
 assert spotbugsXmlErrors == spotbugsErrors
 
-spotbugsXmlErrors = allNodes.findAll {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "URF_UNREAD_FIELD" }.size()
-spotbugsXmlErrors += allNodes.findAll {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "UUF_UNUSED_FIELD"}.size()
-spotbugsXmlErrors += allNodes.findAll {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}.size()
+spotbugsXmlErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "URF_UNREAD_FIELD" }
+spotbugsXmlErrors += allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "UUF_UNUSED_FIELD"}
+spotbugsXmlErrors += allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}
 println "BugInstance with includes size is ${spotbugsXmlErrors}"
 
 assert 0 == spotbugsXmlErrors
@@ -77,9 +77,9 @@ println "BugInstance size is ${xdocErrors}"
 
 assert xdocErrors == spotbugsErrors
 
-xdocErrors = allNodes.findAll {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "URF_UNREAD_FIELD" }.size()
-xdocErrors += allNodes.findAll {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "UUF_UNUSED_FIELD"}.size()
-xdocErrors += allNodes.findAll {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}.size()
+xdocErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "URF_UNREAD_FIELD" }
+xdocErrors += allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "UUF_UNUSED_FIELD"}
+xdocErrors += allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}
 println "BugInstance with includes size is ${xdocErrors}"
 
 assert 0 == xdocErrors

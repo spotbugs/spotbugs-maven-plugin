@@ -60,13 +60,13 @@ println '******************'
 
 path = new XmlSlurper().parse(basedir.toPath().resolve("modules/${module}/target/spotbugs.xml"))
 
-List<Node> allNodes = path.depthFirst().toList()
+List<NodeChild> allNodes = path.depthFirst().toList()
 int xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${xdocErrors}"
 
 assert spotbugsErrors == xdocErrors
 
-xdocErrors = allNodes.findAll {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}.size()
+xdocErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}
 println "BugInstance with includes size is ${xdocErrors}"
 
 assert spotbugsErrors == xdocErrors
@@ -83,7 +83,7 @@ println "BugInstance size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
 
-spotbugsXmlErrors = allNodes.findAll {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}.size()
+spotbugsXmlErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}
 println "BugInstance with includes size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
@@ -96,13 +96,13 @@ println '*****************'
 
 module = "module-2"
 
-spotbugsHtml =  new File(basedir, "modules/${module}/target/site/spotbugs.html")
+spotbugsHtml =  basedir.toPath().resolve("modules/${module}/target/site/spotbugs.html")
 assert Files.exists(spotbugsHtml)
 
-spotbugXdoc = new File(basedir, "modules/${module}/target/spotbugs.xml")
+spotbugXdoc = basedir.toPath().resolve("modules/${module}/target/spotbugs.xml")
 assert Files.exists(spotbugXdoc)
 
-spotbugXml = new File(basedir, "modules/${module}/target/spotbugsXml.xml")
+spotbugXml = basedir.toPath().resolve("modules/${module}/target/spotbugsXml.xml")
 assert Files.exists(spotbugXml)
 
 println '******************'
@@ -131,7 +131,7 @@ println "BugInstance size is ${xdocErrors}"
 
 assert spotbugsErrors == xdocErrors
 
-xdocErrors = allNodes.findAll {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}.size()
+xdocErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}
 println "BugInstance with includes size is ${xdocErrors}"
 
 assert spotbugsErrors == xdocErrors
@@ -148,7 +148,7 @@ println "BugInstance size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
 
-spotbugsXmlErrors = allNodes.findAll {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}.size()
+spotbugsXmlErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}
 println "BugInstance with includes size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
