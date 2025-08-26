@@ -88,12 +88,7 @@ final class ResourceHelper {
     }
 
     private Path getResourceAsFile(final String name, final String outputPath) {
-        Path outputResourcePath
-        if (outputDirectory != null) {
-            outputResourcePath = outputDirectory.toPath().resolve(outputPath)
-        } else {
-            outputResourcePath = Path.of(outputPath)
-        }
+        Path outputResourcePath = outputDirectory == null ? Path.of(outputPath) : outputDirectory.toPath().resolve(outputPath)
 
         try {
             Path parent = outputResourcePath.getParent()
