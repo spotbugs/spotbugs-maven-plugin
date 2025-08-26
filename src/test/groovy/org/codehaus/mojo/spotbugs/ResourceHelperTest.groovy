@@ -15,8 +15,6 @@
  */
 package org.codehaus.mojo.spotbugs
 
-import java.nio.file.Path
-
 import org.codehaus.mojo.spotbugs.ResourceHelper
 import org.codehaus.mojo.spotbugs.SpotBugsInfo
 import org.codehaus.plexus.resource.ResourceManager
@@ -43,9 +41,8 @@ class ResourceHelperTest extends Specification {
 
         then:
         result.exists()
-        1 * log.debug('resource is ' + Path.of('test/path/resource.txt').toString() + SpotBugsInfo.EOL +
-            'location is ' + Path.of('test/path') + SpotBugsInfo.EOL +
-            'artifact is ' + Path.of('resource.txt'))
+        1 * log.debug('resource is test/path/resource.txt' + SpotBugsInfo.EOL + 'location is test/path' +
+            SpotBugsInfo.EOL + 'artifact is resource.txt')
 
         cleanup:
         result?.delete()
