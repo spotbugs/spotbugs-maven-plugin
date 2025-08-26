@@ -59,14 +59,14 @@ final class ResourceHelper {
 
         // Linux Checks
         if (resource.indexOf(SpotBugsInfo.FORWARD_SLASH) != -1) {
-            artifact = resource.substring(resource.lastIndexOf(SpotBugsInfo.FORWARD_SLASH) + 1)
             location = resource.substring(0, resource.lastIndexOf(SpotBugsInfo.FORWARD_SLASH))
+            artifact = resource.substring(resource.lastIndexOf(SpotBugsInfo.FORWARD_SLASH) + 1)
         }
 
         // Windows Checks
         if (resource.indexOf(SpotBugsInfo.BACKWARD_SLASH) != -1) {
-            artifact = resource.substring(resource.lastIndexOf(SpotBugsInfo.BACKWARD_SLASH) + 1)
             location = resource.substring(0, resource.lastIndexOf(SpotBugsInfo.BACKWARD_SLASH))
+            artifact = resource.substring(resource.lastIndexOf(SpotBugsInfo.BACKWARD_SLASH) + 1)
         }
 
         // replace all occurrences of the following characters:  ? : & =
