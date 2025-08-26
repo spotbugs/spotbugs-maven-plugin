@@ -88,7 +88,7 @@ final class ResourceHelper {
     private Path getResourceAsFile(final String name, final String outputPath) {
         Path outputResourcePath = outputDirectory == null ? Path.of(outputPath) : outputDirectory.toPath().resolve(outputPath)
 
-        // If the resource is already a file, just return it
+        // If the resource already exists, just return it
         if (Path.of(name).toAbsolutePath().normalize().equals(outputResourcePath.toAbsolutePath().normalize())) {
             return outputResourcePath;
         }
