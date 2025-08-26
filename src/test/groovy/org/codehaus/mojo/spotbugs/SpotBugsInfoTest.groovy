@@ -34,8 +34,6 @@ class SpotBugsInfoTest extends Specification {
         SpotBugsInfo.JAVA_SOURCES_KEY == 'report.spotbugs.javasources'
         SpotBugsInfo.EXTENSIONS == ['class'] as String[]
         SpotBugsInfo.COMMA == ','
-        SpotBugsInfo.FORWARD_SLASH == '/'
-        SpotBugsInfo.BACKWARD_SLASH == '\\'
         SpotBugsInfo.URL_SEPARATOR == '/'
         SpotBugsInfo.BLANK == ' '
         SpotBugsInfo.PERIOD == '.'

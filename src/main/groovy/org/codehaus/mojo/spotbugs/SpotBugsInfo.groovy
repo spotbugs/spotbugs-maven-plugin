@@ -51,12 +51,6 @@ interface SpotBugsInfo {
     /** The comma character. */
     static final String COMMA = ','
 
-    /** The forward slash character. */
-    static final String FORWARD_SLASH = '/'
-
-    /** The backward slash character. */
-    static final String BACKWARD_SLASH = '\\'
-
     /** The character to separate URL tokens. */
     static final String URL_SEPARATOR = '/'
 
