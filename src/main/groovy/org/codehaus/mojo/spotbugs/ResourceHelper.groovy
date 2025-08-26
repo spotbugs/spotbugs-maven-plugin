@@ -109,6 +109,7 @@ final class ResourceHelper {
                 }
             }
         } catch (IOException e) {
+            log.error('Unable to create file-based resource for ' + name + ' in ' + outputResourcePath, e)
             throw new MojoExecutionException('Cannot create file-based resource.', e)
         }
 
