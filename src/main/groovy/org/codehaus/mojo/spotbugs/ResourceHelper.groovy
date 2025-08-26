@@ -34,6 +34,9 @@ final class ResourceHelper {
     /** The resource manager. */
     private final ResourceManager resourceManager
 
+    /** Precompiled regex pattern for path separator normalization. */
+    private static final Pattern SEPARATOR_PATTERN = Pattern.compile('[\\\\]')
+
     /** Precompiled regex pattern for resource name sanitization. */
     private static final Pattern SANITIZE_PATTERN = Pattern.compile('[?:&=%]')
 
@@ -55,18 +58,16 @@ final class ResourceHelper {
         Objects.requireNonNull(resource, "resource must not be null")
 
         String location = null
-        String artifact = resource
+        String artifact = null
 
-        // Linux Checks
-        if (resource.indexOf(SpotBugsInfo.FORWARD_SLASH) != -1) {
-            artifact = resource.substring(resource.lastIndexOf(SpotBugsInfo.FORWARD_SLASH) + 1)
-            location = resource.substring(0, resource.lastIndexOf(SpotBugsInfo.FORWARD_SLASH))
-        }
-
-        // Windows Checks
-        if (resource.indexOf(SpotBugsInfo.BACKWARD_SLASH) != -1) {
-            artifact = resource.substring(resource.lastIndexOf(SpotBugsInfo.BACKWARD_SLASH) + 1)
-            location = resource.substring(0, resource.lastIndexOf(SpotBugsInfo.BACKWARD_SLASH))
+        // Normalize path separator to always use forward slash for resource lookup
+        String normalizedResource = SEPARATOR_PATTERN.matcher(resource).replaceAll('/')
+        int lastSeparatorIndex = normalizedResource.lastIndexOf('/')
+        if (lastSeparatorIndex != -1) {
+            location = normalizedResource.substring(0, lastSeparatorIndex)
+            artifact = normalizedResource.substring(lastSeparatorIndex + 1)
+        } else {
+            artifact = normalizedResource
         }
 
         // replace all occurrences of the following characters:  ? : & =
@@ -74,11 +75,11 @@ final class ResourceHelper {
         artifact = SANITIZE_PATTERN.matcher(artifact).replaceAll('_')
 
         if (log.isDebugEnabled()) {
-            log.debug("resource is ${resource}" + SpotBugsInfo.EOL + "location is ${location}" + SpotBugsInfo.EOL +
+            log.debug("resource is ${normalizedResource}" + SpotBugsInfo.EOL + "location is ${location}" + SpotBugsInfo.EOL +
                 "artifact is ${artifact}")
         }
 
-        Path resourcePath = getResourceAsFile(resource, artifact)
+        Path resourcePath = getResourceAsFile(normalizedResource, artifact)
 
         if (log.isDebugEnabled()) {
             log.debug("location of resourceFile file is ${resourcePath.toAbsolutePath()}")
@@ -88,11 +89,12 @@ final class ResourceHelper {
     }
 
     private Path getResourceAsFile(final String name, final String outputPath) {
-        Path outputResourcePath
-        if (outputDirectory != null) {
-            outputResourcePath = outputDirectory.toPath().resolve(outputPath)
-        } else {
-            outputResourcePath = Path.of(outputPath)
+        Path outputResourcePath = outputDirectory == null ? Path.of(outputPath) : outputDirectory.toPath().resolve(outputPath)
+
+        // If the resource already exists, just return it (note URL could occur here thus the file check for quickly confirming)
+        if (new File(name).exists() &&
+                Path.of(name).toAbsolutePath().normalize().equals(outputResourcePath.toAbsolutePath().normalize())) {
+            return outputResourcePath;
         }
 
         try {
@@ -111,9 +113,11 @@ final class ResourceHelper {
                 }
             }
         } catch (IOException e) {
+            log.error('Unable to create file-based resource for ' + name + ' in ' + outputResourcePath, e)
             throw new MojoExecutionException('Cannot create file-based resource.', e)
         }
 
         return outputResourcePath
     }
+
 }

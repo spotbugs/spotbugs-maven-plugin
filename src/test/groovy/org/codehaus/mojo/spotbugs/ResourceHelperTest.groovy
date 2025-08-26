@@ -19,6 +19,7 @@ import org.codehaus.mojo.spotbugs.ResourceHelper
 import org.codehaus.mojo.spotbugs.SpotBugsInfo
 import org.codehaus.plexus.resource.ResourceManager
 import org.apache.maven.plugin.logging.Log
+
 import spock.lang.Specification
 
 class ResourceHelperTest extends Specification {
