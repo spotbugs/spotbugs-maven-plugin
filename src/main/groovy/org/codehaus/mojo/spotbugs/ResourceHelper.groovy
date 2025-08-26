@@ -57,16 +57,12 @@ final class ResourceHelper {
         String location = null
         String artifact = resource
 
-        // Linux Checks
-        if (resource.indexOf(SpotBugsInfo.FORWARD_SLASH) != -1) {
-            location = resource.substring(0, resource.lastIndexOf(SpotBugsInfo.FORWARD_SLASH))
-            artifact = resource.substring(resource.lastIndexOf(SpotBugsInfo.FORWARD_SLASH) + 1)
-        }
-
-        // Windows Checks
-        if (resource.indexOf(SpotBugsInfo.BACKWARD_SLASH) != -1) {
-            location = resource.substring(0, resource.lastIndexOf(SpotBugsInfo.BACKWARD_SLASH))
-            artifact = resource.substring(resource.lastIndexOf(SpotBugsInfo.BACKWARD_SLASH) + 1)
+        // Normalize path separator for cross-platform compatibility
+        String normalizedResource = Path.of(resource).toString()
+        int lastSeparatorIndex = normalizedResource.lastIndexOf(File.separator)
+        if (lastSeparatorIndex != -1) {
+            location = normalizedResource.substring(0, lastSeparatorIndex)
+            artifact = normalizedResource.substring(lastSeparatorIndex + 1)
         }
 
         // replace all occurrences of the following characters:  ? : & =
