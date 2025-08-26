@@ -55,7 +55,7 @@ final class ResourceHelper {
         Objects.requireNonNull(resource, "resource must not be null")
 
         String location = null
-        String artifact = resource
+        String artifact = null
 
         // Normalize path separator for cross-platform compatibility
         String normalizedResource = Path.of(resource).toString()
@@ -63,6 +63,8 @@ final class ResourceHelper {
         if (lastSeparatorIndex != -1) {
             location = normalizedResource.substring(0, lastSeparatorIndex)
             artifact = normalizedResource.substring(lastSeparatorIndex + 1)
+        } else {
+            artifact = resource
         }
 
         // replace all occurrences of the following characters:  ? : & =
