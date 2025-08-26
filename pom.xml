@@ -993,7 +993,7 @@
                                     <pomIncludes>
                                         <pomInclude>*/pom.xml</pomInclude>
                                     </pomIncludes>
-                                    <postBuildHookScript>verify --no-transfer-progress</postBuildHookScript>
+                                    <postBuildHookScript>verify</postBuildHookScript>
                                     <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
                                     <goals>
                                         <goal>install</goal>
@@ -1014,7 +1014,7 @@
                                     <pomIncludes>
                                         <pomInclude>*/pom.xml</pomInclude>
                                     </pomIncludes>
-                                    <postBuildHookScript>verify --no-transfer-progress</postBuildHookScript>
+                                    <postBuildHookScript>verify</postBuildHookScript>
                                     <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
                                     <settingsFile>${project.basedir}/src/it/settings.xml</settingsFile>
                                     <streamLogsOnFailures>true</streamLogsOnFailures>
