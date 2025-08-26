@@ -15,6 +15,9 @@
  */
 package org.codehaus.mojo.spotbugs
 
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.StandardOpenOption
 import org.codehaus.mojo.spotbugs.ResourceHelper
 import org.codehaus.mojo.spotbugs.SpotBugsInfo
 import org.codehaus.plexus.resource.ResourceManager
@@ -24,16 +27,16 @@ import spock.lang.Specification
 
 class ResourceHelperTest extends Specification {
 
-    void "getResourceFile returns a file and logs debug info"() {
+    void "getResourceFile returns a file with content from resource and logs debug info"() {
         given:
         Log log = Mock(Log) {
             isDebugEnabled() >> true
         }
-        File outputDirectory = File.createTempDir()
+        Path outputDirectory = Files.createTempDirectory("ResourceHelperTest")
         ResourceManager resourceManager = Mock(ResourceManager) {
             getResourceAsInputStream(_) >> new ByteArrayInputStream("test".bytes)
         }
-        ResourceHelper helper = new ResourceHelper(log, outputDirectory, resourceManager)
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
         String resource = "test/path/resource.txt"
 
         when:
@@ -41,12 +44,42 @@ class ResourceHelperTest extends Specification {
 
         then:
         result.exists()
+        result.toPath() == outputDirectory.resolve("resource.txt")
+        Files.readString(result.toPath()) == "test"
         1 * log.debug('resource is test/path/resource.txt' + SpotBugsInfo.EOL + 'location is test/path' +
             SpotBugsInfo.EOL + 'artifact is resource.txt')
 
         cleanup:
         result?.delete()
-        outputDirectory?.deleteDir()
+        Files.deleteIfExists(outputDirectory)
+    }
+
+    void "getResourceFile returns an existing file in output directory"() {
+        // https://github.com/spotbugs/spotbugs-maven-plugin/issues/1163
+        given:
+        Log log = Mock(Log) {
+            isDebugEnabled() >> true
+        }
+        Path outputDirectory = Files.createTempDirectory("ResourceHelperTest")
+        Path existingFile = outputDirectory.resolve("resource.txt")
+        Files.writeString(existingFile, "originalContent", StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)
+        ResourceManager resourceManager = Mock(ResourceManager) {
+            getResourceAsInputStream(_) >> null
+        }
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
+        String resource = existingFile.toAbsolutePath().toString()
+
+        when:
+        File result = helper.getResourceFile(resource)
+
+        then:
+        result.exists()
+        result.toPath() == existingFile
+        Files.readString(result.toPath()) == "originalContent"
+
+        cleanup:
+        result?.delete()
+        Files.deleteIfExists(outputDirectory)
     }
 
 }
