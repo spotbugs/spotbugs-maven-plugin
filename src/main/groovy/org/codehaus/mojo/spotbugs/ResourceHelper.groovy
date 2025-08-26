@@ -64,7 +64,7 @@ final class ResourceHelper {
             location = normalizedResource.substring(0, lastSeparatorIndex)
             artifact = normalizedResource.substring(lastSeparatorIndex + 1)
         } else {
-            artifact = resource
+            artifact = normalizedResource
         }
 
         // replace all occurrences of the following characters:  ? : & =
@@ -72,11 +72,11 @@ final class ResourceHelper {
         artifact = SANITIZE_PATTERN.matcher(artifact).replaceAll('_')
 
         if (log.isDebugEnabled()) {
-            log.debug("resource is ${resource}" + SpotBugsInfo.EOL + "location is ${location}" + SpotBugsInfo.EOL +
+            log.debug("resource is ${normalizedResource}" + SpotBugsInfo.EOL + "location is ${location}" + SpotBugsInfo.EOL +
                 "artifact is ${artifact}")
         }
 
-        Path resourcePath = getResourceAsFile(resource, artifact)
+        Path resourcePath = getResourceAsFile(normalizedResource, artifact)
 
         if (log.isDebugEnabled()) {
             log.debug("location of resourceFile file is ${resourcePath.toAbsolutePath()}")
