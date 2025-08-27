@@ -68,6 +68,6 @@ allNodes = path.depthFirst().toList()
 int xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${xdocErrors}"
 
-assert  path.findAll { NodeChild node -> node.name() == 'BugCollection' }.@effort.text() == effortLevel
+assert path.@effort.text() == effortLevel
 
 assert xdocErrors == spotbugsXmlErrors
