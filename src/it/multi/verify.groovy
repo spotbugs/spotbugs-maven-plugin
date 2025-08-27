@@ -51,7 +51,7 @@ xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", f
 xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
 GPathResult path = xhtmlParser.parse(spotbugsHtml)
 
-int spotbugsErrors = path.body.'**'.find { NodeChild main -> -> main.@id == 'bodyColumn' }.section[1].table.tr[1].td[1].toInteger()
+int spotbugsErrors = path.body.'**'.find { NodeChild main -> main.@id == 'bodyColumn' }.section[1].table.tr[1].td[1].toInteger()
 println "Error Count is ${spotbugsErrors}"
 
 println '******************'
@@ -116,7 +116,7 @@ xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", f
 xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
 path = xhtmlParser.parse(spotbugsHtml)
 
-spotbugsErrors = path.body.'**'.find { NodeChild main -> -> main.@id == 'bodyColumn' }.section[1].table.tr[1].td[1].toInteger()
+spotbugsErrors = path.body.'**'.find { NodeChild main -> main.@id == 'bodyColumn' }.section[1].table.tr[1].td[1].toInteger()
 println "Error Count is ${spotbugsErrors}"
 
 println '******************'
