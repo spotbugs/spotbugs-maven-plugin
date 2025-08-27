@@ -19,6 +19,7 @@ import groovy.xml.slurpersupport.NodeChild
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.charset.StandardCharsets
 
 Path spotbugXml = basedir.toPath().resolve('target/findbugsXml.xml')
 assert Files.exists(spotbugXml)

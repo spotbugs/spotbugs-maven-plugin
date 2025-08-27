@@ -19,6 +19,7 @@ import groovy.xml.slurpersupport.NodeChild
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.charset.StandardCharsets
 
 Path spotbugsHtml =  basedir.toPath().resolve('target/site/spotbugs.html')
 assert Files.exists(spotbugsHtml)
@@ -35,7 +36,7 @@ println '******************'
 
 String thresholdLevel = 'experimental'
 
-assert spotbugsHtml.text.contains('<i>' + thresholdLevel + '</i>')
+assert spotbugsHtml.getText(StandardCharsets.UTF_8.name()).contains('<i>' + thresholdLevel + '</i>')
 
 XmlSlurper xmlSlurper = new XmlSlurper()
 xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)

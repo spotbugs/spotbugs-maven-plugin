@@ -19,6 +19,7 @@ import groovy.xml.slurpersupport.NodeChild
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.charset.StandardCharsets
 
 // Verify that spotbugsXml.xml was created - proving SpotBugs ran with noClassOk=true
 // even though the project has no Java class files (only resources)

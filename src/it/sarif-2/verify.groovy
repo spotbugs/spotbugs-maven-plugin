@@ -17,6 +17,7 @@ import groovy.json.JsonSlurper
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.charset.StandardCharsets
 
 String normalizePath(String path) {
     return path.replace('\\', '/')

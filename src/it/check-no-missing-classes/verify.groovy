@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 import java.nio.file.Path
+import java.nio.charset.StandardCharsets
 
 // Check no missing classes
 
 Path buildLog = basedir.toPath().resolve('build.log')
-assert !buildLog.text.contains('The following classes needed for analysis were missing')
+assert !buildLog.getText(StandardCharsets.UTF_8.name()).contains('The following classes needed for analysis were missing')

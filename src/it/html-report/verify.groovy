@@ -15,6 +15,7 @@
  */
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.charset.StandardCharsets
 
 Path spotbugsHtml = basedir.toPath().resolve('target/test-output-directory/spotbugs.html')
 assert Files.exists(spotbugsHtml)

@@ -15,6 +15,7 @@
  */
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.charset.StandardCharsets
 
 Path spotbugExclusionFile = basedir.toPath().resolve('module-1/target/spotbugs-exclude.xml')
 assert Files.exists(spotbugExclusionFile)

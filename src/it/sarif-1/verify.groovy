@@ -17,6 +17,7 @@ import groovy.json.JsonSlurper
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.charset.StandardCharsets
 
 Path spotbugSarifFile = basedir.toPath().resolve('target/spotbugsSarif.json')
 assert Files.exists(spotbugSarifFile)

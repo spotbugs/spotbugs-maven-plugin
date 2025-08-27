@@ -15,11 +15,12 @@
  */
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.charset.StandardCharsets
 
 Path buildLog = basedir.toPath().resolve('build.log')
 assert Files.exists(buildLog)
 
-String log = buildLog.text
+String log = buildLog.getText(StandardCharsets.UTF_8.name())
 assert log.contains('Toolchain in spotbugs-maven-plugin:')
 
 Path spotbugXml = basedir.toPath().resolve('target/spotbugsXml.xml')

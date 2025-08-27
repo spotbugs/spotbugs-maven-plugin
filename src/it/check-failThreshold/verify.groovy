@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 import java.nio.file.Path
+import java.nio.charset.StandardCharsets
 
 Path buildLog = basedir.toPath().resolve('build.log')
-assert buildLog.text.contains('[INFO] Medium: Unused public or protected field:')
-assert buildLog.text.contains('[ERROR] High: Found reliance on default encoding in UserMistakes')
+assert buildLog.getText(StandardCharsets.UTF_8.name()).contains('[INFO] Medium: Unused public or protected field:')
+assert buildLog.getText(StandardCharsets.UTF_8.name()).contains('[ERROR] High: Found reliance on default encoding in UserMistakes')
