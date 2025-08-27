@@ -58,9 +58,9 @@ println "BugInstance size is ${spotbugsXmlErrors}"
 
 assert spotbugsXmlErrors == spotbugsErrors
 
-spotbugsXmlErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "URF_UNREAD_FIELD" }
-spotbugsXmlErrors += allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "UUF_UNUSED_FIELD"}
-spotbugsXmlErrors += allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}
+spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'URF_UNREAD_FIELD' }
+spotbugsXmlErrors += allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'UUF_UNUSED_FIELD'}
+spotbugsXmlErrors += allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'DLS_DEAD_LOCAL_STORE'}
 println "BugInstance with includes size is ${spotbugsXmlErrors}"
 
 assert 0 == spotbugsXmlErrors
@@ -77,9 +77,9 @@ println "BugInstance size is ${xdocErrors}"
 
 assert xdocErrors == spotbugsErrors
 
-xdocErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "URF_UNREAD_FIELD" }
-xdocErrors += allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "UUF_UNUSED_FIELD"}
-xdocErrors += allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}
+xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'URF_UNREAD_FIELD' }
+xdocErrors += allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'UUF_UNUSED_FIELD'}
+xdocErrors += allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'DLS_DEAD_LOCAL_STORE'}
 println "BugInstance with includes size is ${xdocErrors}"
 
 assert 0 == xdocErrors

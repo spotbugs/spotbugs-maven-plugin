@@ -21,7 +21,7 @@ import groovy.xml.slurpersupport.NodeChild
 import java.nio.file.Files
 import java.nio.file.Path
 
-Path spotbugsHtml =  Path(basedir).resolve('target/site/spotbugs.html')
+Path spotbugsHtml =  basedir.toPath().resolve('target/site/spotbugs.html')
 assert Files.exists(spotbugsHtml)
 
 Path spotbugXdoc = basedir.toPath().resolve('target/spotbugs.xml')

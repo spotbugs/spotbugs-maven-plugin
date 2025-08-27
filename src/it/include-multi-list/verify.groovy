@@ -16,7 +16,7 @@
 
 import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
-
+import groovy.xml.slurpersupport.NodeChild
 
 import java.nio.file.Files
 import java.nio.file.Path

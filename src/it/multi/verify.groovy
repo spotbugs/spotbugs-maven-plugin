@@ -66,7 +66,7 @@ println "BugInstance size is ${xdocErrors}"
 
 assert spotbugsErrors == xdocErrors
 
-xdocErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}
+xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'DLS_DEAD_LOCAL_STORE'}
 println "BugInstance with includes size is ${xdocErrors}"
 
 assert spotbugsErrors == xdocErrors
@@ -83,7 +83,7 @@ println "BugInstance size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
 
-spotbugsXmlErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}
+spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'DLS_DEAD_LOCAL_STORE'}
 println "BugInstance with includes size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
@@ -131,7 +131,7 @@ println "BugInstance size is ${xdocErrors}"
 
 assert spotbugsErrors == xdocErrors
 
-xdocErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}
+xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'DLS_DEAD_LOCAL_STORE'}
 println "BugInstance with includes size is ${xdocErrors}"
 
 assert spotbugsErrors == xdocErrors
@@ -148,7 +148,7 @@ println "BugInstance size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
 
-spotbugsXmlErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}
+spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'DLS_DEAD_LOCAL_STORE'}
 println "BugInstance with includes size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
