@@ -23,7 +23,7 @@ import java.nio.file.Path
 
 //  check module 1
 
-Path spotbugXml = basedir.toPath().resolve("module1/target/spotbugsXml.xml")
+Path spotbugXml = basedir.toPath().resolve('module1/target/spotbugsXml.xml')
 assert Files.exists(spotbugXml)
 
 GPathResult path = new XmlSlurper().parse(spotbugXml)
@@ -41,7 +41,7 @@ assert spotbugsErrors > 0
 
 //  check module 2
 
-spotbugXml = basedir.toPath().resolve("module2/target/spotbugsXml.xml")
+spotbugXml = basedir.toPath().resolve('module2/target/spotbugsXml.xml')
 assert Files.exists(spotbugXml)
 
 path = new XmlSlurper().parse(spotbugXml)

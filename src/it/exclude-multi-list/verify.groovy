@@ -36,8 +36,8 @@ println 'Checking HTML file'
 println '******************'
 
 XmlSlurper xhtmlParser = new XmlSlurper()
-xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
-xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
+xhtmlParser.setFeature('http://apache.org/xml/features/disallow-doctype-decl', false)
+xhtmlParser.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
 GPathResult path = xhtmlParser.parse(spotbugsHtml)
 
 int spotbugsErrors = path.body.'**'.find { NodeChild main -> main.@id == 'bodyColumn' }.section[1].table.tr[1].td[1].toInteger()
