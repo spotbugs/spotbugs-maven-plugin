@@ -35,11 +35,11 @@ println '******************'
 
 String effortLevel = 'min'
 
-assert spotbugsHtml.text.contains("<i>" + effortLevel + "</i>")
+assert spotbugsHtml.text.contains('<i>' + effortLevel + '</i>')
 
 XmlSlurper xhtmlParser = new XmlSlurper()
-xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
-xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
+xhtmlParser.setFeature('http://apache.org/xml/features/disallow-doctype-decl', false)
+xhtmlParser.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
 GPathResult path = xhtmlParser.parse(spotbugsHtml)
 
 int spotbugsErrors = path.body.'**'.find { NodeChild main -> main.@id == 'bodyColumn' }.section[1].table.tr[1].td[1].toInteger()
@@ -67,6 +67,6 @@ allNodes = path.depthFirst().toList()
 int xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${xdocErrors}"
 
-assert  path.findAll {NodeChild node -> node.name() == 'BugCollection' }.@effort.text() == effortLevel
+assert  path.findAll { NodeChild node -> node.name() == 'BugCollection' }.@effort.text() == effortLevel
 
 assert xdocErrors == spotbugsXmlErrors

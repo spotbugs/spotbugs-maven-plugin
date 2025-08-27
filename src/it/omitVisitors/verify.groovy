@@ -36,11 +36,11 @@ println '******************'
 
 String effortLevel = 'default'
 
-assert spotbugsHtml.text.contains("<i>" + effortLevel + "</i>")
+assert spotbugsHtml.text.contains('<i>' + effortLevel + '</i>')
 
 XmlSlurper xhtmlParser = new XmlSlurper()
-xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
-xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
+xhtmlParser.setFeature('http://apache.org/xml/features/disallow-doctype-decl', false)
+xhtmlParser.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
 GPathResult path = xhtmlParser.parse(spotbugsHtml)
 
 int spotbugsErrors = path.body.'**'.find { NodeChild main -> main.@id == 'bodyColumn' }.section[1].table.tr[1].td[1].toInteger()
@@ -58,9 +58,9 @@ println "BugInstance size is ${spotbugsXmlErrors}"
 
 assert spotbugsXmlErrors == spotbugsErrors
 
-spotbugsXmlErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "URF_UNREAD_FIELD" }
-spotbugsXmlErrors += allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "UUF_UNUSED_FIELD"}
-spotbugsXmlErrors += allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}
+spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'URF_UNREAD_FIELD' }
+spotbugsXmlErrors += allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'UUF_UNUSED_FIELD'}
+spotbugsXmlErrors += allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'DLS_DEAD_LOCAL_STORE'}
 println "BugInstance with includes size is ${spotbugsXmlErrors}"
 
 assert 0 == spotbugsXmlErrors
@@ -77,9 +77,9 @@ println "BugInstance size is ${xdocErrors}"
 
 assert xdocErrors == spotbugsErrors
 
-xdocErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "URF_UNREAD_FIELD" }
-xdocErrors += allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "UUF_UNUSED_FIELD"}
-xdocErrors += allNodes.count {NodeChild node -> node.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}
+xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'URF_UNREAD_FIELD' }
+xdocErrors += allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'UUF_UNUSED_FIELD'}
+xdocErrors += allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'DLS_DEAD_LOCAL_STORE'}
 println "BugInstance with includes size is ${xdocErrors}"
 
 assert 0 == xdocErrors

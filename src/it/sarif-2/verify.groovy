@@ -27,7 +27,7 @@ println 'Checking SARIF file'
 println '*******************'
 
 String normalizePath(String path) {
-    return path.replace("\\\\","/")
+    return path.replace('\\\\', '/')
 }
 
 Map slurpedResult = new JsonSlurper().parse(spotbugSarifFile)
@@ -38,7 +38,7 @@ for (result in results) {
     for (loc in result.locations) {
         String location = normalizePath(loc.physicalLocation.artifactLocation.uri)
         //Making sure that the path was expanded
-        assert location.contains("src/it-src/test/java") || location.contains("src/java") : "${location} does not contain 'src/it-src/test/java'"
+        assert location.contains('src/it-src/test/java') || location.contains('src/java') : "${location} does not contain 'src/it-src/test/java'"
     }
 }
 

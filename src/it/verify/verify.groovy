@@ -47,7 +47,7 @@ println '******************'
 path = new XmlSlurper().parse(spotbugXdoc)
 
 allNodes = path.depthFirst().toList()
-int xdocErrors = allNodes.count {NodeChild node -> node.name() == 'BugInstance' }
+int xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${xdocErrors}"
 
 assert xdocErrors == spotbugsXmlErrors

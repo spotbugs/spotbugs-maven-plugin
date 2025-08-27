@@ -21,7 +21,7 @@ import groovy.xml.slurpersupport.NodeChild
 import java.nio.file.Files
 import java.nio.file.Path
 
-Path spotbugsHtml =  Path(basedir).resolve('target/site/spotbugs.html')
+Path spotbugsHtml =  basedir.toPath().resolve('target/site/spotbugs.html')
 assert Files.exists(spotbugsHtml)
 
 Path spotbugXdoc = basedir.toPath().resolve('target/spotbugs.xml')
@@ -36,16 +36,15 @@ println '******************'
 
 String effortLevel = 'default'
 
-assert spotbugsHtml.text.contains("<i>" + effortLevel + "</i>")
+assert spotbugsHtml.text.contains('<i>' + effortLevel + '</i>')
 
 XmlSlurper xhtmlParser = new XmlSlurper()
-xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
-xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
+xhtmlParser.setFeature('http://apache.org/xml/features/disallow-doctype-decl', false)
+xhtmlParser.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
 GPathResult path = xhtmlParser.parse(spotbugsHtml)
 
 int spotbugsErrors = path.body.'**'.find { NodeChild main -> main.@id == 'bodyColumn' }.section[1].table.tr[1].td[1].toInteger()
 println "Error Count is ${spotbugsErrors}"
-
 
 println '*********************************'
 println 'Checking Spotbugs Native XML file'
