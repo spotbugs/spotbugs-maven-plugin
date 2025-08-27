@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import java.nio.file.Path
+import java.nio.charset.StandardCharsets
 
 Path buildLog = basedir.toPath().resolve('build.log')
-assert buildLog.text.contains('[java] INFO: System variables are considered to be tainted')
+assert buildLog.getText(StandardCharsets.UTF_8.name()).contains('[java] INFO: System variables are considered to be tainted')
