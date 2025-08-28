@@ -34,9 +34,6 @@ final class ResourceHelper {
     /** The resource manager. */
     private final ResourceManager resourceManager
 
-    /** Precompiled regex pattern for path separator normalization. */
-    private static final Pattern SEPARATOR_PATTERN = Pattern.compile('[\\\\]')
-
     /** Precompiled regex pattern for resource name sanitization. */
     private static final Pattern SANITIZE_PATTERN = Pattern.compile('[?:&=%]')
 
@@ -61,7 +58,7 @@ final class ResourceHelper {
         String artifact = null
 
         // Normalize path separator to always use forward slash for resource lookup
-        String normalizedResource = SEPARATOR_PATTERN.matcher(resource).replaceAll('/')
+        String normalizedResource = resource.replace('\\', '/')
         int lastSeparatorIndex = normalizedResource.lastIndexOf('/')
         if (lastSeparatorIndex != -1) {
             location = normalizedResource.substring(0, lastSeparatorIndex)

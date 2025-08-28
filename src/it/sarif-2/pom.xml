@@ -44,8 +44,10 @@
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <configuration>
-          <sarifOutput>true</sarifOutput> <!-- SARIF is enabled here -->
-          <sarifFullPath>true</sarifFullPath> <!-- Full path expansion enabled -->
+          <!-- SARIF is enabled here -->
+          <sarifOutput>true</sarifOutput>
+          <!-- Full path expansion enabled -->
+          <sarifFullPath>true</sarifFullPath>
           <includeTests>true</includeTests>
         </configuration>
       </plugin>

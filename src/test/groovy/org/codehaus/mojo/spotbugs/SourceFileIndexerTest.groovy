@@ -57,7 +57,7 @@ class SourceFileIndexerTest extends Specification {
 
         then:
         found != null
-        found.endsWith("src${File.separator}main${File.separator}java${File.separator}Test.java")
+        found.endsWith("src/main/java/Test.java")
 
         cleanup:
         testFile.delete()
