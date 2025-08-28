@@ -33,7 +33,10 @@
   <groupId>spotbugs-maven-plugin.it</groupId>
   <artifactId>check-no-missing-classes</artifactId>
   <version>testing</version>
+
   <name>check-no-missing-classes</name>
+
+  <url>https://spotbugs.github.io/spotbugs-maven-plugin/</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
