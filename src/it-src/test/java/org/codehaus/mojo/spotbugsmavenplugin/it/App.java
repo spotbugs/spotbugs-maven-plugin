@@ -32,7 +32,9 @@ public class App implements Cloneable {
     }
 
     public static void main(String[] args) {
-        Objects.isNull(args);
+        if (Objects.isNull(args)) {
+            logger.warn("Input args is null");
+        }
         logger.info("Hello World!");
     }
 
