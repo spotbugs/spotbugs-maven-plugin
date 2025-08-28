@@ -28,6 +28,8 @@
   <version>testing</version>
   <packaging>pom</packaging>
 
+  <url>https://spotbugs.github.io/spotbugs-maven-plugin/</url>
+
   <dependencies>
     <dependency>
       <groupId>com.github.spotbugs</groupId>
