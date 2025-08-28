@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   test:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     name: Integration Tests Maven 4.0.0-rc-4
 
