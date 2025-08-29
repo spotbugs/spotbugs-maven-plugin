@@ -555,7 +555,21 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug("canGenerate is ${canGenerate}")
         }
 
-        return canGenerate
+        boolean isSiteLifecycle = false;
+        if (session != null && session.getRequest() != null) {
+            List<String> goals = session.getRequest().getGoals();
+            if (goals != null && goals.any { String goal -> goal == "site" || goal.startsWith("site:") }) {
+                isSiteLifecycle = true;
+            }
+        }
+
+        if (canGenerate && !isSiteLifecycle) {
+            // Only generate xdoc report, skip site pages
+            generateXDoc(locale)
+            return false;
+        }
+
+        return canGenerate;
     }
 
     /**
@@ -627,7 +641,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Override
     void executeReport(Locale locale) {
-
         log.debug('****** SpotBugsMojo executeReport *******')
         if (!canGenerateReport()) {
             return
