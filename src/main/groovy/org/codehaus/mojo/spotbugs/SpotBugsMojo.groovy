@@ -104,7 +104,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Parameter(defaultValue = '${project.build.directory}', property = 'spotbugs.sarifOutputDirectory', required = true)
     File sarifOutputDirectory
 
-
     /**
      * Set the name of the output SARIF file produced.
      *
@@ -510,28 +509,34 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Override
     boolean canGenerateReport() {
+        if (skip) {
+            log.info('Spotbugs plugin skipped')
+            return false
+        }
 
-        boolean canGenerate
+        executeCheck()
+
+        boolean canGenerate = false
         log.debug('****** SpotBugsMojo canGenerateReport *******')
 
-        if (!skip && classFilesDirectory.exists()) {
-
-            classFilesDirectory.eachFileRecurse { File file ->
-                if (file.name.contains(SpotBugsInfo.CLASS_SUFFIX)) {
-                    canGenerate = true
-                }
+        if (classFilesDirectory.exists()) {
+            try {
+                canGenerate = Files.walk(classFilesDirectory.toPath())
+                    .anyMatch { Path path -> path.toFile().name.contains(SpotBugsInfo.CLASS_SUFFIX) }
+            } catch (IOException e) {
+                log.warn("Error searching class files: ${e.message}")
             }
             if (log.isDebugEnabled()) {
                 log.debug("canGenerate Src is ${canGenerate}")
             }
         }
 
-        if (!skip && testClassFilesDirectory.exists() && includeTests) {
-
-            testClassFilesDirectory.eachFileRecurse { File file ->
-                if (file.name.contains(SpotBugsInfo.CLASS_SUFFIX)) {
-                    canGenerate = true
-                }
+        if (!canGenerate && testClassFilesDirectory.exists() && includeTests) {
+            try {
+                canGenerate = Files.walk(testClassFilesDirectory.toPath())
+                    .anyMatch { Path path -> path.toFile().name.contains(SpotBugsInfo.CLASS_SUFFIX) }
+            } catch (IOException e) {
+                log.warn("Error searching test class files: ${e.message}")
             }
             if (log.isDebugEnabled()) {
                 log.debug("canGenerate Test Src is ${canGenerate}")
@@ -540,9 +545,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (canGenerate && outputSpotbugsFile == null) {
             outputSpotbugsFile = spotbugsXmlOutputDirectory.toPath().resolve(spotbugsXmlOutputFilename).toFile()
-
             executeSpotbugs(outputSpotbugsFile)
-
             if (skipEmptyReport && bugCount == 0) {
                 canGenerate = false
             }
@@ -626,10 +629,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     void executeReport(Locale locale) {
 
         log.debug('****** SpotBugsMojo executeReport *******')
-        executeCheck()
-
-        if (skip || !canGenerateReport()) {
-            log.info('cannot generate report')
+        if (!canGenerateReport()) {
             return
         }
 
