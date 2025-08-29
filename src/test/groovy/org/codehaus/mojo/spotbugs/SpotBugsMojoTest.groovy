@@ -48,8 +48,7 @@ class SpotBugsMojoTest extends Specification {
         mojo.execute()
 
         then:
-        1 * log.debug('****** SpotBugsMojo canGenerateReport *******')
-        1 * log.debug('canGenerate is false')
+        1 * log.info('Spotbugs plugin skipped')
     }
 
 }
