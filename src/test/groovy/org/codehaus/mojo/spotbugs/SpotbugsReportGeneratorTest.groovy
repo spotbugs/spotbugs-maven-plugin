@@ -15,6 +15,8 @@
  */
 package org.codehaus.mojo.spotbugs
 
+import groovy.xml.XmlSlurper
+
 import org.apache.maven.doxia.sink.Sink
 import org.apache.maven.plugin.logging.Log
 
@@ -55,7 +57,12 @@ class SpotbugsReportGeneratorTest extends Specification {
         generator.outputDirectory = new File('.')
         generator.xrefLocation = new File('.')
         generator.xrefTestLocation = new File('.')
-        generator.spotbugsResults = new groovy.xml.XmlSlurper().parseText('''
+
+        XmlSlurper xmlSlurper = new XmlSlurper()
+        xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+        xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+
+        generator.spotbugsResults = xmlSlurper.parseText('''
             <BugCollection>
                 <FindBugsSummary total_classes='1' total_bugs='1'>
                     <PackageStats>

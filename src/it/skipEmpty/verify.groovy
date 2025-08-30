@@ -34,7 +34,11 @@ println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-GPathResult path = new XmlSlurper().parse(spotbugXml)
+XmlSlurper xmlSlurper = new XmlSlurper()
+xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+
+GPathResult path = xmlSlurper.parse(spotbugXml)
 
 List<NodeChild> allNodes = path.depthFirst().toList()
 int spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }

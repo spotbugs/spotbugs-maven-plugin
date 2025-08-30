@@ -34,10 +34,14 @@ println '******************'
 println 'Checking HTML file'
 println '******************'
 
-XmlSlurper xhtmlParser = new XmlSlurper()
-xhtmlParser.setFeature('http://apache.org/xml/features/disallow-doctype-decl', false)
-xhtmlParser.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
-GPathResult path = xhtmlParser.parse(spotbugsHtml)
+XmlSlurper xmlSlurper = new XmlSlurper()
+xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+
+// Temporarily allow DOCTYPE to parse the HTML file
+xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', false)
+GPathResult path = xmlSlurper.parse(spotbugsHtml)
+xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
 
 int spotbugsErrors = path.body.'**'.find { NodeChild main -> main.@id == 'bodyColumn' }.section[1].table.tr[1].td[1].toInteger()
 println "Error Count is ${spotbugsErrors}"
@@ -46,7 +50,7 @@ println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-path = new XmlSlurper().parse(spotbugXml)
+path = xmlSlurper.parse(spotbugXml)
 
 List<NodeChild> allNodes = path.depthFirst().toList()
 int spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
@@ -58,7 +62,7 @@ println '***************************'
 println 'Checking xDoc file'
 println '***************************'
 
-path = new XmlSlurper().parse(spotbugXdoc)
+path = xmlSlurper.parse(spotbugXdoc)
 
 allNodes = path.depthFirst().toList()
 int xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }

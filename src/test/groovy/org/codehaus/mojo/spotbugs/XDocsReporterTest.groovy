@@ -69,7 +69,12 @@ class XDocsReporterTest extends Specification {
                 </Error>
             </BugCollection>
         '''
-        reporter.spotbugsResults = new XmlSlurper().parseText(xml)
+
+        XmlSlurper xmlSlurper = new XmlSlurper()
+        xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+        xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+
+        reporter.spotbugsResults = xmlSlurper.parseText(xml)
 
         when:
         reporter.generateReport()
