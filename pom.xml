@@ -128,7 +128,6 @@
         <byte-buddy.version>1.17.7</byte-buddy.version>
         <javabean-tester.version>2.11.0</javabean-tester.version>
         <junitVersion>5.13.4</junitVersion>
-        <mockito.version>5.19.0</mockito.version>
         <slf4jVersion>2.0.17</slf4jVersion>
 
         <antVersion>1.10.15</antVersion>
@@ -294,6 +293,11 @@
                 <version>${collections.version}</version>
             </dependency>
             <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${io.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${lang3.version}</version>
@@ -318,6 +322,25 @@
                 <version>${mavenSharedUtilsVersion}</version>
             </dependency>
 
+            <!-- Use latest doxia for maven reporting -->
+            <dependency>
+                <groupId>org.apache.maven.doxia</groupId>
+                <artifactId>doxia-site-renderer</artifactId>
+                <version>${doxiaSiteToolsVersion}</version>
+                <exclusions>
+                    <!-- We don't need doxia html (using html5) -->
+                    <exclusion>
+                        <groupId>org.apache.maven.doxia</groupId>
+                        <artifactId>doxia-module-xhtml</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.doxia</groupId>
+                <artifactId>doxia-integration-tools</artifactId>
+                <version>${doxiaSiteToolsVersion}</version>
+            </dependency>
+
             <!-- Use latest plexus component annotations -->
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
@@ -332,11 +355,26 @@
                 <version>${plexusVelocityVersion}</version>
             </dependency>
 
+            <!-- Use latest plexus utils -->
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-utils</artifactId>
+                <version>${plexusUtilsVersion}</version>
+            </dependency>
+
             <!-- Ensure plexus xml maven 3 compatibility -->
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-xml</artifactId>
                 <version>${plexusXmlVersion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junitVersion}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -344,11 +382,6 @@
     <dependencies>
 
         <!-- Spotbugs -->
-        <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs-annotations</artifactId>
-            <version>${spotbugs.version}</version>
-        </dependency>
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs</artifactId>
@@ -370,13 +403,11 @@
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${io.version}</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
         </dependency>
 
         <!-- Groovy -->
@@ -505,23 +536,6 @@
             <artifactId>doxia-sink-api</artifactId>
             <version>${doxiaVersion}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.maven.doxia</groupId>
-            <artifactId>doxia-site-renderer</artifactId>
-            <version>${doxiaSiteToolsVersion}</version>
-            <exclusions>
-                <!-- We don't need doxia html (using html5) -->
-                <exclusion>
-                    <groupId>org.apache.maven.doxia</groupId>
-                    <artifactId>doxia-module-xhtml</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.doxia</groupId>
-            <artifactId>doxia-integration-tools</artifactId>
-            <version>${doxiaSiteToolsVersion}</version>
-        </dependency>
 
         <!-- plexus -->
         <dependency>
@@ -529,28 +543,11 @@
             <artifactId>plexus-resources</artifactId>
             <version>${plexusResourcesVersion}</version>
         </dependency>
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-            <version>${plexusUtilsVersion}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.github.hazendaz</groupId>
             <artifactId>javabean-tester</artifactId>
             <version>${javabean-tester.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junitVersion}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
-            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
