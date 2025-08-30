@@ -20,7 +20,6 @@ import groovy.xml.XmlParser
 import java.nio.file.Files
 import java.nio.file.Path
 
-import org.apache.commons.io.FileUtils
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugins.annotations.Parameter
@@ -198,34 +197,48 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     }
 
     private boolean doSourceFilesExist() {
-        Collection<File> sourceFiles = []
-
+        boolean foundClassFiles = false;
+        List<String> classFilesList = []
         if (this.classFilesDirectory.isDirectory()) {
-            if (log.isDebugEnabled()) {
-                log.debug('looking for class files with extensions: ' + SpotBugsInfo.EXTENSIONS)
-                sourceFiles.addAll(FileUtils.listFiles(classFilesDirectory, SpotBugsInfo.EXTENSIONS, true))
-            }
-            Iterator<File> classFiles = FileUtils.iterateFiles(classFilesDirectory, SpotBugsInfo.EXTENSIONS, true)
-            if (classFiles.hasNext()) {
-                return true
-            }
+            foundClassFiles = walkFiles(classFilesList, classFilesDirectory, foundClassFiles)
         }
 
+        boolean foundTestFiles = false;
+        List<String> testFilesList = []
         if (this.includeTests && this.testClassFilesDirectory.isDirectory()) {
-            if (log.isDebugEnabled()) {
-                log.debug('looking for test class files: ' + SpotBugsInfo.EXTENSIONS)
-                sourceFiles.addAll(FileUtils.listFiles(testClassFilesDirectory, SpotBugsInfo.EXTENSIONS, true))
+            foundTestFiles = walkFiles(testFilesList, testClassFilesDirectory, foundTestFiles)
+        }
+
+        return foundClassFiles || foundTestFiles;
+    }
+
+    private boolean walkFiles(List filesList, File filesDirectory, boolean foundFiles) {
+        if (log.isDebugEnabled()) {
+            log.debug('looking for files with extensions: ' + SpotBugsInfo.EXTENSIONS)
+            Files.walk(filesDirectory.toPath()).filter { Path path ->
+                SpotBugsInfo.EXTENSIONS.any { String ext ->
+                    path.toString().toLowerCase(Locale.getDefault()).endsWith(ext)
+                }
+            }.forEach { Path path ->
+                filesList.add(path.toString())
             }
-            Iterator<File> testFiles = FileUtils.iterateFiles(testClassFilesDirectory, SpotBugsInfo.EXTENSIONS, true)
-            if (testFiles.hasNext()) {
-                return true
+            foundFiles = !filesList.isEmpty()
+        } else {
+            foundFiles = Files.walk(filesDirectory.toPath()).anyMatch { Path path ->
+                SpotBugsInfo.EXTENSIONS.any { String ext ->
+                    path.toString().toLowerCase(Locale.getDefault()).endsWith(ext)
+                }
             }
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("SourceFiles: ${sourceFiles}")
+            log.debug("SourceFiles found flag: ${foundFiles} with count: ${filesList.size()}")
+            if (!filesList.isEmpty()) {
+                log.debug("Files found: " + filesList)
+            }
         }
-        return false
+
+        return foundFiles
     }
 
     private void printBugs(NodeList bugs) {
