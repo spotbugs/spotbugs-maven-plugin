@@ -28,8 +28,6 @@ import org.apache.maven.doxia.sink.SinkEventAttributes
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet
 import org.apache.maven.plugin.logging.Log
 
-import org.codehaus.plexus.util.PathTool
-
 /**
  * The reporter controls the generation of the SpotBugs report. It contains call back methods which gets called by
  * SpotBugs if a bug is found.
@@ -359,7 +357,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             if (Files.notExists(sourcePath)) {
                 return
             }
-            prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefLocation.getAbsolutePath())
+            prefix = outputDirectory.toPath().relativize(xrefLocation.toPath())
             prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefLocation.getName() +
                 SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
         }
@@ -370,7 +368,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
                 if (Files.notExists(testSourcePath)) {
                     return
                 }
-                prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefTestLocation.getAbsolutePath())
+                prefix = outputDirectory.toPath().relativize(xrefTestLocation.toPath())
                 prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefTestLocation.getName() +
                     SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
             }
