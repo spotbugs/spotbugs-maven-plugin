@@ -18,6 +18,7 @@ package org.codehaus.mojo.spotbugs
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.model.Resource
 import org.apache.maven.plugin.MojoExecutionException
+import org.apache.maven.project.MavenProject
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -29,7 +30,7 @@ import java.util.concurrent.locks.ReentrantLock
  */
 class SourceFileIndexer {
 
-	/** Reentrant lock to ensure class is thread safe. */
+    /** Reentrant lock to ensure class is thread safe. */
     private final ReentrantLock lock = new ReentrantLock()
 
     /** List of source files found in the current Maven project. */
@@ -43,32 +44,44 @@ class SourceFileIndexer {
     protected void buildListSourceFiles(MavenSession session) {
         lock.lock()
         try {
+            // All source files to load
             allSourceFiles.clear()
+
+            // Normalized base path
             String basePath = normalizePath(session.getExecutionRootDirectory())
 
+            // Get current project
+            MavenProject project = session.getCurrentProject()
+
             // Resource
-            for (Resource r in session.getCurrentProject().getResources()) {
-                scanDirectory(Path.of(r.directory), basePath)
+            for (Resource resource in project.getResources()) {
+                scanDirectory(Path.of(resource.directory), basePath)
             }
 
-            for (Resource r in session.getCurrentProject().getTestResources()) {
-                scanDirectory(Path.of(r.directory), basePath)
+            for (Resource resource in project.getTestResources()) {
+                scanDirectory(Path.of(resource.directory), basePath)
             }
 
             // Source files
-            for (String sourceRoot in session.getCurrentProject().getCompileSourceRoots()) {
+            for (String sourceRoot in project.getCompileSourceRoots()) {
                 scanDirectory(Path.of(sourceRoot), basePath)
             }
 
-            for (String sourceRoot in session.getCurrentProject().getTestCompileSourceRoots()) {
+            for (String sourceRoot in project.getTestCompileSourceRoots()) {
                 scanDirectory(Path.of(sourceRoot), basePath)
             }
 
             // While not perfect, add the following paths will add basic support for Groovy, Kotlin, Scala and Webapp sources.
-            scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/groovy'), basePath)
-            scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/kotlin'), basePath)
-            scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/scala'), basePath)
-            scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/webapp'), basePath)
+            scanDirectory(project.getBasedir().toPath().resolve('src/main/groovy'), basePath)
+            scanDirectory(project.getBasedir().toPath().resolve('src/main/kotlin'), basePath)
+            scanDirectory(project.getBasedir().toPath().resolve('src/main/scala'), basePath)
+            scanDirectory(project.getBasedir().toPath().resolve('src/main/webapp'), basePath)
+
+            scanDirectory(project.getBasedir().toPath().resolve('src/test/groovy'), basePath)
+            scanDirectory(project.getBasedir().toPath().resolve('src/test/kotlin'), basePath)
+            scanDirectory(project.getBasedir().toPath().resolve('src/test/scala'), basePath)
+            scanDirectory(project.getBasedir().toPath().resolve('src/test/webapp'), basePath)
+
         } finally {
             lock.unlock()
         }
