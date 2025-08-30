@@ -117,8 +117,9 @@ for /F "usebackq delims=" %%a in ("%MAVEN_PROJECTBASEDIR%\.mvn\jvm.config") do s
 
 SET MAVEN_JAVA_EXE="%JAVA_HOME%\bin\java.exe"
 set WRAPPER_JAR="%MAVEN_PROJECTBASEDIR%\.mvn\wrapper\maven-wrapper.jar"
-set WRAPPER_LAUNCHER=org.apache.maven.wrapper.MavenWrapperMain
+@REM Maven main class is here to fix maven 4.0.0-beta-5 through 4.0.0-rc-4
 set MAVEN_MAIN_CLASS=org.apache.maven.cling.MavenCling
+set WRAPPER_LAUNCHER=org.apache.maven.wrapper.MavenWrapperMain
 
 set WRAPPER_URL="https://repo.maven.apache.org/maven2/org/apache/maven/wrapper/maven-wrapper/3.3.3/maven-wrapper-3.3.3.jar"
 
