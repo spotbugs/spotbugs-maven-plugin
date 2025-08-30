@@ -232,7 +232,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("SourceFiles found flag: ${foundFiles}")
+            log.debug("SourceFiles found flag: ${foundFiles} with count: ${filesList.size()}")
             if (!filesList.isEmpty()) {
                 log.debug("Files found: " + filesList)
             }
