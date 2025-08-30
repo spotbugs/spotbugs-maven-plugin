@@ -1234,7 +1234,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                     writer.write '<?xml version="1.0" encoding="windows-1252"?>'
                 } else {
                     writer.write '<?xml version="1.0" encoding="' +
-                        effectiveEncoding.name().toLowerCase(Locale.ENGLISH) + '"?>'
+                        effectiveEncoding.name().toLowerCase(Locale.getDefault()) + '"?>'
                 }
 
                 writer.write SpotBugsInfo.EOL
