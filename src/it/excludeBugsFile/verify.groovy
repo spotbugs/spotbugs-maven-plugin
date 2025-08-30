@@ -31,7 +31,11 @@ println '******************'
 println 'Checking xDoc file'
 println '******************'
 
-GPathResult path = new XmlSlurper().parse(spotbugXdoc)
+XmlSlurper xmlSlurper = new XmlSlurper()
+xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+
+GPathResult path = xmlSlurper.parse(spotbugXdoc)
 
 List<NodeChild> allNodes = path.depthFirst().toList()
 int xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
@@ -41,7 +45,7 @@ println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-path = new XmlSlurper().parse(spotbugXml)
+path = xmlSlurper.parse(spotbugXml)
 
 allNodes = path.depthFirst().toList()
 int spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }

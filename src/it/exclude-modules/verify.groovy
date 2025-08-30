@@ -26,12 +26,15 @@ import java.nio.file.Path
 Path spotbugXml = basedir.toPath().resolve('module1/target/spotbugsXml.xml')
 assert Files.exists(spotbugXml)
 
-GPathResult path = new XmlSlurper().parse(spotbugXml)
+XmlSlurper xmlSlurper = new XmlSlurper()
+xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+
+GPathResult path = xmlSlurper.parse(spotbugXml)
 
 println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
-
 
 List<NodeChild> allNodes = path.depthFirst().toList()
 int spotbugsErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
@@ -44,7 +47,7 @@ assert spotbugsErrors > 0
 spotbugXml = basedir.toPath().resolve('module2/target/spotbugsXml.xml')
 assert Files.exists(spotbugXml)
 
-path = new XmlSlurper().parse(spotbugXml)
+path = xmlSlurper.parse(spotbugXml)
 
 println '*********************************'
 println 'Checking Spotbugs Native XML file'

@@ -685,7 +685,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 generator.setLog(log)
                 generator.threshold = threshold
                 generator.effort = effort
-                generator.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
+
+                XmlSlurper xmlSlurper = new XmlSlurper()
+                xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+                xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+
+                generator.setSpotbugsResults(xmlSlurper.parse(outputSpotbugsFile))
                 generator.setOutputDirectory(new File(outputDirectory.getAbsolutePath()))
                 generator.generateReport()
 
@@ -727,7 +732,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
             xDocsReporter.setOutputWriter(Files.newBufferedWriter(Path.of("${xmlOutputDirectory}/spotbugs.xml"),
                 Charset.forName(outputEncoding)))
-            xDocsReporter.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
+
+            XmlSlurper xmlSlurper = new XmlSlurper()
+            xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+            xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+
+            xDocsReporter.setSpotbugsResults(xmlSlurper.parse(outputSpotbugsFile))
             xDocsReporter.setCompileSourceRoots(session.getCurrentProject().compileSourceRoots)
             xDocsReporter.setTestSourceRoots(session.getCurrentProject().testCompileSourceRoots)
 
@@ -1186,7 +1196,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (xmlTempFile.exists()) {
             if (xmlTempFile.size() > 0) {
-                GPathResult path = new XmlSlurper().parse(xmlTempFile)
+                XmlSlurper xmlSlurper = new XmlSlurper()
+                xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+                xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+
+                GPathResult path = xmlSlurper.parse(xmlTempFile)
 
                 List<NodeChild> allNodes = path.depthFirst().toList()
 
