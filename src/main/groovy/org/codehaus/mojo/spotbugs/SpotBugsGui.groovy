@@ -43,7 +43,7 @@ import org.codehaus.plexus.resource.ResourceManager
 class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
     /** Locale to use for Resource bundle. */
-    static Locale locale = Locale.ENGLISH
+    static Locale locale = Locale.getDefault()
 
     /** Directory containing the class files for Spotbugs to analyze. */
     @Parameter(defaultValue = '${project.build.outputDirectory}', required = true)
