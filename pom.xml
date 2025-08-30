@@ -401,12 +401,14 @@
             </exclusions>
         </dependency>
 
+        <!-- Groovy quirk requires compile scope so optional makes it not show up in consumer builds. -->
         <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-docgenerator</artifactId>
             <optional>true</optional>
         </dependency>
 
+        <!-- Groovy quirk requires compile scope so optional makes it not show up in consumer builds. -->
         <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-groovydoc</artifactId>
@@ -418,6 +420,7 @@
             <artifactId>groovy-json</artifactId>
         </dependency>
 
+        <!-- Groovy quirk requires compile scope so optional makes it not show up in consumer builds. -->
         <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-templates</artifactId>
@@ -429,7 +432,7 @@
             <artifactId>groovy-xml</artifactId>
         </dependency>
 
-        <!-- Required by groovy but not shown as required -->
+        <!-- JavaParser -->
         <dependency>
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-core</artifactId>
