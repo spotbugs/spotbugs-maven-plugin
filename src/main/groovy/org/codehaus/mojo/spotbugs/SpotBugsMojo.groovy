@@ -563,10 +563,14 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
         }
 
-        if (canGenerate && !isSiteLifecycle) {
-            // Only generate xdoc report, skip site pages
-            generateXDoc(getLocale())
-            return false;
+        if (canGenerate) {
+            if (!isSiteLifecycle) {
+                // Only generate xdoc report, skip site pages
+                generateXDoc(getLocale())
+                return false;
+            }
+        } else {
+            log.info('No files found to run spotbugs, check compile phase has been run')
         }
 
         return canGenerate;
