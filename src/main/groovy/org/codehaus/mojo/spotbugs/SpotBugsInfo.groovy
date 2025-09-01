@@ -36,15 +36,6 @@ interface SpotBugsInfo {
     /** The key to get the description of the Plug-In from the bundle. */
     static final String DESCRIPTION_KEY = 'report.spotbugs.description'
 
-    /** The key to get the source directory message of the Plug-In from the bundle. */
-    static final String SOURCE_ROOT_KEY = 'report.spotbugs.sourceRoot'
-
-    /** The key to get the source directory message of the Plug-In from the bundle. */
-    static final String TEST_SOURCE_ROOT_KEY = 'report.spotbugs.testSourceRoot'
-
-    /** The key to get the java source message of the Plug-In from the bundle. */
-    static final String JAVA_SOURCES_KEY = 'report.spotbugs.javasources'
-
     /** The extensions to search files for. */
     static final String[] EXTENSIONS = ['class']
 

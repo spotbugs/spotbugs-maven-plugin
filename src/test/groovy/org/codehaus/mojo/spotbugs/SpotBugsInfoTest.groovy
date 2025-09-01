@@ -29,9 +29,6 @@ class SpotBugsInfoTest extends Specification {
         SpotBugsInfo.BUNDLE_NAME == 'spotbugs'
         SpotBugsInfo.NAME_KEY == 'report.spotbugs.name'
         SpotBugsInfo.DESCRIPTION_KEY == 'report.spotbugs.description'
-        SpotBugsInfo.SOURCE_ROOT_KEY == 'report.spotbugs.sourceRoot'
-        SpotBugsInfo.TEST_SOURCE_ROOT_KEY == 'report.spotbugs.testSourceRoot'
-        SpotBugsInfo.JAVA_SOURCES_KEY == 'report.spotbugs.javasources'
         SpotBugsInfo.EXTENSIONS == ['class'] as String[]
         SpotBugsInfo.COMMA == ','
         SpotBugsInfo.URL_SEPARATOR == '/'
