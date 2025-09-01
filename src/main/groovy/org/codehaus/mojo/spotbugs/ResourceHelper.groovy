@@ -72,8 +72,8 @@ final class ResourceHelper {
         artifact = SANITIZE_PATTERN.matcher(artifact).replaceAll('_')
 
         if (log.isDebugEnabled()) {
-            log.debug("resource is ${normalizedResource}" + SpotBugsInfo.EOL + "location is ${location}" + SpotBugsInfo.EOL +
-                "artifact is ${artifact}")
+            log.debug("resource is '${normalizedResource}'" + ", location is '${location}'" +
+                ", artifact is '${artifact}'")
         }
 
         Path resourcePath = getResourceAsFile(normalizedResource, artifact)
@@ -88,7 +88,7 @@ final class ResourceHelper {
     private Path getResourceAsFile(final String name, final String outputPath) {
         Path outputResourcePath = outputDirectory == null ? Path.of(outputPath) : outputDirectory.toPath().resolve(outputPath)
 
-        // If the resource already exists, just return it (note URL could occur here thus the file check for quickly confirming)
+        // If the resource already exists, return it (URL could be here thus the file check for quickly confirming)
         if (new File(name).exists() &&
                 Path.of(name).toAbsolutePath().normalize().equals(outputResourcePath.toAbsolutePath().normalize())) {
             return outputResourcePath;
