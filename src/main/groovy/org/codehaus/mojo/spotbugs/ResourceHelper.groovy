@@ -17,6 +17,7 @@ package org.codehaus.mojo.spotbugs
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.StandardCopyOption
 import java.util.regex.Pattern
 
 import org.apache.maven.plugin.logging.Log
@@ -73,7 +74,7 @@ final class ResourceHelper {
 
         if (log.isDebugEnabled()) {
             log.debug("resource is '${normalizedResource}'" + ", location is '${location}'" +
-                ", artifact is '${artifact}'")
+                ", artifact is '${artifact}'" + ", outputDirectory is '${outputDirectory}'")
         }
 
         Path resourcePath = getResourceAsFile(normalizedResource, artifact)
@@ -88,17 +89,23 @@ final class ResourceHelper {
     private Path getResourceAsFile(final String name, final String outputPath) {
         Path outputResourcePath = outputDirectory == null ? Path.of(outputPath) : outputDirectory.toPath().resolve(outputPath)
 
-        // If the resource already exists, return it (URL could be here thus the file check for quickly confirming)
-        if (new File(name).exists() &&
-                Path.of(name).toAbsolutePath().normalize().equals(outputResourcePath.toAbsolutePath().normalize())) {
-            return outputResourcePath;
+        // Checking if the resource is already a file
+        if (new File(name).exists()) {
+            // Avoid copying the file onto itself
+            if (Path.of(name).toAbsolutePath().normalize().equals(outputResourcePath.toAbsolutePath().normalize())) {
+                return outputResourcePath;
+            }
+
+            createParentDirectories(outputResourcePath)
+
+            // Copy existing file (not a URL)
+            return Files.copy(Path.of(name), outputResourcePath, StandardCopyOption.REPLACE_EXISTING,
+                StandardCopyOption.COPY_ATTRIBUTES);
         }
 
+        // Copying resource from classpath to a file
         try {
-            Path parent = outputResourcePath.getParent()
-            if (parent != null && Files.notExists(parent)) {
-                Files.createDirectories(parent)
-            }
+            createParentDirectories(outputResourcePath)
 
             resourceManager.getResourceAsInputStream(name).withCloseable { InputStream is ->
                 new BufferedInputStream(is).withCloseable { BufferedInputStream bis ->
@@ -115,6 +122,13 @@ final class ResourceHelper {
         }
 
         return outputResourcePath
+    }
+
+    private createParentDirectories(Path outputResourcePath) {
+        Path parent = outputResourcePath.getParent()
+        if (parent != null && Files.notExists(parent)) {
+            Files.createDirectories(parent)
+        }
     }
 
 }
