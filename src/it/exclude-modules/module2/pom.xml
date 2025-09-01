@@ -41,7 +41,7 @@
           <xmlOutput>true</xmlOutput>
           <failOnError>false</failOnError>
           <debug>@spotbugsTestDebug@</debug>
-          <excludeBugsFile>${project.basedir}/src/main/excludeBugs.xml</excludeBugsFile>
+          <excludeFilterFile>${project.basedir}/src/main/excludeBugs.xml</excludeFilterFile>
         </configuration>
       </plugin>
     </plugins>
