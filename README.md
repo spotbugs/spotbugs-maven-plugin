@@ -12,7 +12,7 @@ Maven Mojo Plug-In to generate reports based on the [SpotBugs](https://github.co
 
 ## Building spotbugs-maven-plugin Requirements ##
 
-* Java 17+ is required to build the spotbugs maven plugin.
+* Java 17+ is required to build the spotbugs maven plugin.  Usage allowed to currently supported jdks (ie 17, 21, 24, 25-ea).
 * Maven 3.9.11 is required to build the spotbugs maven plugin.
 
 ## Running spotbugs-maven-plugin Requirements ##
