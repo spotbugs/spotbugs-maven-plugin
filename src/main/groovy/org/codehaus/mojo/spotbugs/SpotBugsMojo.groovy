@@ -565,7 +565,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (canGenerate && !isSiteLifecycle) {
             // Only generate xdoc report, skip site pages
-            generateXDoc(locale)
+            generateXDoc(getLocale())
             return false;
         }
 
@@ -609,7 +609,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @see {@link MavenReport#getOutputName()}
      *
      * @deprecated Method name does not properly reflect its purpose. Implement and use
-     * {@link #getOutputPath()} instead.
+     * {@link #getOutputPath()} instead. This is waiting on maven to switch in report
+     * plugin before we can remove it.
      */
     @Override
     @Deprecated
@@ -792,7 +793,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         return isEnabled
     }
 
-    ResourceBundle getBundle(locale) {
+    ResourceBundle getBundle(Locale locale) {
 
         this.bundle = ResourceBundle.getBundle(SpotBugsInfo.BUNDLE_NAME, locale, SpotBugsMojo.class.getClassLoader())
 
