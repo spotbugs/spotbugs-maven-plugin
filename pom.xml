@@ -29,7 +29,7 @@
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.9.4.2-SNAPSHOT</version>
+    <version>4.8.6.7-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
@@ -109,9 +109,9 @@
 
     <properties>
         <!-- Align java runtime with spotbugs -->
-        <java.version>11</java.version>
-        <java.release.version>11</java.release.version>
-        <javadoc.java.release.version>11</javadoc.java.release.version>
+        <java.version>8</java.version>
+        <java.release.version>8</java.release.version>
+        <javadoc.java.release.version>8</javadoc.java.release.version>
 
         <sourceDirectory>${project.basedir}/src/main/groovy</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/groovy</testSourceDirectory>
@@ -122,8 +122,8 @@
         <jacoco.minimum.coverage>0.11</jacoco.minimum.coverage>
 
         <!-- Override spotbugs to this version from base-parent -->
-        <spotbugs.version>4.9.4</spotbugs.version>
-        <spotbugs.plugin>4.9.4.0</spotbugs.plugin>
+        <spotbugs.version>4.8.6</spotbugs.version>
+        <spotbugs.plugin>4.8.6.6</spotbugs.plugin>
 
         <byte-buddy.version>1.17.7</byte-buddy.version>
         <javabean-tester.version>2.11.0</javabean-tester.version>
@@ -131,7 +131,7 @@
         <slf4jVersion>2.0.17</slf4jVersion>
 
         <antVersion>1.10.15</antVersion>
-        <groovyVersion>5.0.0</groovyVersion>
+        <groovyVersion>4.0.28</groovyVersion>
         <javaparserVersion>3.27.0</javaparserVersion>
 
         <doxiaVersion>2.0.0</doxiaVersion>

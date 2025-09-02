@@ -24,6 +24,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -39,8 +42,16 @@ public class StubOverrideFixer {
     private static final Logger logger = LoggerFactory.getLogger(StubOverrideFixer.class);
 
     /** The Constant GROOVY_METHODS. */
-    private static final Set<String> GROOVY_METHODS = Set.of("getMetaClass", "setMetaClass", "invokeMethod",
-            "getProperty", "setProperty");
+    private static final Set<String> GROOVY_METHODS;
+    static {
+        Set<String> tempSet = new HashSet<>();
+        tempSet.add("getMetaClass");
+        tempSet.add("setMetaClass");
+        tempSet.add("invokeMethod");
+        tempSet.add("getProperty");
+        tempSet.add("setProperty");
+        GROOVY_METHODS = Collections.unmodifiableSet(tempSet);
+    }
 
     /**
      * The main method.
@@ -49,7 +60,7 @@ public class StubOverrideFixer {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static void main(String[] args) throws IOException {
-        Path stubsDir = Path.of(args[0]);
+        Path stubsDir = Paths.get(args[0]);
         try (Stream<Path> stream = Files.walk(stubsDir)) {
             stream.filter(p -> p.toString().endsWith(".java")).forEach(StubOverrideFixer::processStub);
         }
