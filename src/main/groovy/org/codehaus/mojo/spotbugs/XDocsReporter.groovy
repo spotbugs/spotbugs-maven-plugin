@@ -87,7 +87,7 @@ class XDocsReporter {
      *            The ThresholdValue integer to evaluate.
      * @return The string valueof the Threshold object.
      */
-    protected String evaluateThresholdParameter(String thresholdValue) {
+    protected static String evaluateThresholdParameter(String thresholdValue) {
         switch (thresholdValue) {
             case '1': return 'High'
             case '2': return 'Normal'
@@ -103,7 +103,7 @@ class XDocsReporter {
      *
      * @return The Spotbugs Version used on the report.
      */
-    protected String getSpotBugsVersion() {
+    protected static String getSpotBugsVersion() {
         return Version.VERSION_STRING
     }
 

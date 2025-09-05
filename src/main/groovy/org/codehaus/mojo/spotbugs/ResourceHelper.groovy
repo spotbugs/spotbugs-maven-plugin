@@ -124,7 +124,7 @@ final class ResourceHelper {
         return outputResourcePath
     }
 
-    private createParentDirectories(Path outputResourcePath) {
+    private static createParentDirectories(Path outputResourcePath) {
         Path parent = outputResourcePath.getParent()
         if (parent != null && Files.notExists(parent)) {
             Files.createDirectories(parent)

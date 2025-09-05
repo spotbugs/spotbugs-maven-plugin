@@ -1071,7 +1071,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @param file Destination file to create.
      */
-    private void forceFileCreation(File file) {
+    private static void forceFileCreation(File file) {
         if (file.exists()) {
             file.delete()
         }
