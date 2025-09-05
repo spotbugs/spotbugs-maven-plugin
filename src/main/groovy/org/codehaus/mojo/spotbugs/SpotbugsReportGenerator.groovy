@@ -595,7 +595,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         log.debug("Exiting printFilesSummary")
     }
 
-    public void generateReport() {
+    void generateReport() {
         if (log.isDebugEnabled()) {
             log.debug('Reporter Locale is ' + this.bundle.getLocale().getLanguage())
         }

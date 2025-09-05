@@ -107,7 +107,7 @@ class XDocsReporter {
         return Version.VERSION_STRING
     }
 
-    public void generateReport() {
+    void generateReport() {
         StreamingMarkupBuilder xmlBuilder = new StreamingMarkupBuilder()
         xmlBuilder.encoding = outputEncoding.name()
 

@@ -1381,7 +1381,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @see AbstractMavenReport#setReportOutputDirectory(File)
      */
     @Override
-    public void setReportOutputDirectory(File reportOutputDirectory) {
+    void setReportOutputDirectory(File reportOutputDirectory) {
         super.setReportOutputDirectory(reportOutputDirectory)
         this.outputDirectory = reportOutputDirectory
     }
