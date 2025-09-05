@@ -197,19 +197,19 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     }
 
     private boolean doSourceFilesExist() {
-        boolean foundClassFiles = false;
+        boolean foundClassFiles = false
         List<String> classFilesList = []
         if (this.classFilesDirectory.isDirectory()) {
             foundClassFiles = walkFiles(classFilesList, classFilesDirectory, foundClassFiles)
         }
 
-        boolean foundTestFiles = false;
+        boolean foundTestFiles = false
         List<String> testFilesList = []
         if (this.includeTests && this.testClassFilesDirectory.isDirectory()) {
             foundTestFiles = walkFiles(testFilesList, testClassFilesDirectory, foundTestFiles)
         }
 
-        return foundClassFiles || foundTestFiles;
+        return foundClassFiles || foundTestFiles
     }
 
     private boolean walkFiles(List filesList, File filesDirectory, boolean foundFiles) {

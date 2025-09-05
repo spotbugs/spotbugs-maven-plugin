@@ -93,14 +93,14 @@ final class ResourceHelper {
         if (new File(name).exists()) {
             // Avoid copying the file onto itself
             if (Path.of(name).toAbsolutePath().normalize().equals(outputResourcePath.toAbsolutePath().normalize())) {
-                return outputResourcePath;
+                return outputResourcePath
             }
 
             createParentDirectories(outputResourcePath)
 
             // Copy existing file (not a URL)
             return Files.copy(Path.of(name), outputResourcePath, StandardCopyOption.REPLACE_EXISTING,
-                StandardCopyOption.COPY_ATTRIBUTES);
+                StandardCopyOption.COPY_ATTRIBUTES)
         }
 
         // Copying resource from classpath to a file
@@ -124,7 +124,7 @@ final class ResourceHelper {
         return outputResourcePath
     }
 
-    private createParentDirectories(Path outputResourcePath) {
+    private static createParentDirectories(Path outputResourcePath) {
         Path parent = outputResourcePath.getParent()
         if (parent != null && Files.notExists(parent)) {
             Files.createDirectories(parent)

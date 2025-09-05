@@ -135,7 +135,7 @@ class SourceFileIndexer {
      * @param path Path to clean up
      * @return Path safe to use for comparison
      */
-    private String normalizePath(String path) {
+    private static String normalizePath(String path) {
         return path.replace('\\', '/')
     }
 
