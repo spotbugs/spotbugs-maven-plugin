@@ -29,7 +29,7 @@
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.9.4.2</version>
+    <version>4.9.4.3-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
@@ -89,7 +89,7 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</developerConnection>
-        <tag>spotbugs-maven-plugin-4.9.4.2</tag>
+        <tag>HEAD</tag>
         <url>https://github.com/spotbugs/spotbugs-maven-plugin</url>
     </scm>
     <issueManagement>
@@ -117,7 +117,7 @@
         <testSourceDirectory>${project.basedir}/src/test/groovy</testSourceDirectory>
 
         <!-- Reproducible Builds: override timestamp value from parent -->
-        <project.build.outputTimestamp>1757281172</project.build.outputTimestamp>
+        <project.build.outputTimestamp>1757281341</project.build.outputTimestamp>
 
         <jacoco.minimum.coverage>0.11</jacoco.minimum.coverage>
 
