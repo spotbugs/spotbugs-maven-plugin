@@ -29,7 +29,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.concurrent.ThreadLocalRandom;
 
 public final class MavenWrapperDownloader {
-    private static final String WRAPPER_VERSION = "3.3.3";
+    private static final String WRAPPER_VERSION = "3.3.4";
 
     private static final boolean VERBOSE = Boolean.parseBoolean(System.getenv("MVNW_VERBOSE"));
 
