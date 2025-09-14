@@ -201,6 +201,9 @@
 
         <!-- TODO: Skipping tests until spock supports groovy 5. -->
         <skipTests>true</skipTests>
+
+        <!-- TODO: Remove after parent '55' update -->
+        <allowed.build.jdks note="Allow any 17, 21, 24, 25, 26">[17,18),[21,22),[24,25),[25,26),[26,27)</allowed.build.jdks>
     </properties>
 
     <dependencyManagement>
