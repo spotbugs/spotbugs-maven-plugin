@@ -53,6 +53,7 @@ public class MathUtilsTest {
         assertEquals(0, mathUtils.power(0, 5));
         assertEquals(1, mathUtils.power(0, 0));
         assertEquals(1, mathUtils.power(1, 100));
+        assertEquals(1, mathUtils.power(-5, 0));
         assertThrows(IllegalArgumentException.class, () -> mathUtils.power(0, -5));
         assertEquals(4, mathUtils.power(-2, 2));
         assertEquals(-8, mathUtils.power(-2, 3));
