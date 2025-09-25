@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
  * Test class for MathUtils with intentionally incomplete coverage.
  * Some edge cases are deliberately not tested to allow mutations to survive.
  */
-class MathUtilsTest {
+public class MathUtilsTest {
 
     private final MathUtils mathUtils = new MathUtils();
 
