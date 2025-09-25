@@ -24,6 +24,8 @@ public class MathUtilsTest {
         // Added additional cases to cover mid-range values
         assertEquals(12345, mathUtils.abs(12345));
         assertEquals(12345, mathUtils.abs(-12345));
+        // Added to kill mutation: test small positive
+        assertEquals(1, mathUtils.abs(1));
     }
 
     @Test
@@ -37,6 +39,8 @@ public class MathUtilsTest {
         assertEquals(-5, mathUtils.min(-5, -5));
         // Added reverse order zero and negative
         assertEquals(-1, mathUtils.min(0, -1));
+        // Added to kill mutation: both zeros
+        assertEquals(0, mathUtils.min(0, 0));
     }
 
     @Test
@@ -50,6 +54,8 @@ public class MathUtilsTest {
         assertTrue(mathUtils.isEven(Integer.MAX_VALUE - 1));
         // Added edge-case for Integer.MIN_VALUE
         assertTrue(mathUtils.isEven(Integer.MIN_VALUE));
+        // Added to kill mutation: odd positive one
+        assertFalse(mathUtils.isEven(1));
     }
 
     @Test
@@ -72,6 +78,10 @@ public class MathUtilsTest {
         // Added additional exponent checks around overflow threshold and a mid-range base
         assertEquals(1073741824, mathUtils.power(2, 30));
         assertEquals(243, mathUtils.power(3, 5));
+        // Added to kill mutation: base -1 exponent 1
+        assertEquals(-1, mathUtils.power(-1, 1));
+        // Added to kill mutation: zero base exponent one
+        assertEquals(0, mathUtils.power(0, 1));
     }
 
     @Test
@@ -88,6 +98,8 @@ public class MathUtilsTest {
         // Added additional factorials to cover the upper safe range
         assertEquals(5040, mathUtils.factorial(7));
         assertEquals(479001600, mathUtils.factorial(12));
+        // Added to kill mutation: mid-range factorial
+        assertEquals(39916800, mathUtils.factorial(11));
     }
 
     @Test
