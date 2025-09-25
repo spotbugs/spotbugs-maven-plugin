@@ -32,6 +32,7 @@ public class MathUtilsTest {
         assertEquals(5, mathUtils.abs(5));
         assertEquals(10, mathUtils.abs(-10));
         assertEquals(0, mathUtils.abs(0));
+        assertEquals(Integer.MIN_VALUE, mathUtils.abs(Integer.MIN_VALUE));
     }
 
     @Test
