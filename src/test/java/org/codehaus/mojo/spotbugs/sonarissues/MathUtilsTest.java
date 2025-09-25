@@ -56,6 +56,8 @@ public class MathUtilsTest {
         assertThrows(IllegalArgumentException.class, () -> mathUtils.power(0, -5));
         assertEquals(4, mathUtils.power(-2, 2));
         assertEquals(-8, mathUtils.power(-2, 3));
+        assertEquals(2, mathUtils.power(2, 1));
+        assertEquals(32, mathUtils.power(2, 5));
     }
 
     @Test
@@ -67,6 +69,7 @@ public class MathUtilsTest {
         assertThrows(IllegalArgumentException.class, () -> mathUtils.factorial(-1));
         assertEquals(2, mathUtils.factorial(2));
         assertEquals(720, mathUtils.factorial(6));
+        assertThrows(ArithmeticException.class, () -> mathUtils.factorial(13));
         assertThrows(ArithmeticException.class, () -> mathUtils.factorial(14));
     }
 
