@@ -59,6 +59,9 @@ public class MathUtilsTest {
         assertEquals(-8, mathUtils.power(-2, 3));
         assertEquals(2, mathUtils.power(2, 1));
         assertEquals(32, mathUtils.power(2, 5));
+        assertThrows(ArithmeticException.class, () -> mathUtils.power(2, 31));
+        assertEquals(1, mathUtils.power(-1, 100000));
+        assertEquals(-1, mathUtils.power(-1, 100001));
     }
 
     @Test
