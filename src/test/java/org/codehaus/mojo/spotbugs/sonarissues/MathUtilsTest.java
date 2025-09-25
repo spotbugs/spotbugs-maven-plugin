@@ -21,6 +21,9 @@ public class MathUtilsTest {
         assertEquals(1, mathUtils.abs(-1));
         assertEquals(Integer.MAX_VALUE, mathUtils.abs(Integer.MAX_VALUE));
         assertEquals(Integer.MAX_VALUE, mathUtils.abs(-Integer.MAX_VALUE));
+        // Added additional cases to cover mid-range values
+        assertEquals(12345, mathUtils.abs(12345));
+        assertEquals(12345, mathUtils.abs(-12345));
     }
 
     @Test
@@ -32,6 +35,8 @@ public class MathUtilsTest {
         assertEquals(Integer.MIN_VALUE, mathUtils.min(Integer.MIN_VALUE, Integer.MAX_VALUE));
         assertEquals(Integer.MIN_VALUE, mathUtils.min(Integer.MAX_VALUE, Integer.MIN_VALUE));
         assertEquals(-5, mathUtils.min(-5, -5));
+        // Added reverse order zero and negative
+        assertEquals(-1, mathUtils.min(0, -1));
     }
 
     @Test
@@ -43,6 +48,8 @@ public class MathUtilsTest {
         assertFalse(mathUtils.isEven(-3));
         assertFalse(mathUtils.isEven(Integer.MAX_VALUE));
         assertTrue(mathUtils.isEven(Integer.MAX_VALUE - 1));
+        // Added edge-case for Integer.MIN_VALUE
+        assertTrue(mathUtils.isEven(Integer.MIN_VALUE));
     }
 
     @Test
@@ -62,6 +69,9 @@ public class MathUtilsTest {
         assertThrows(ArithmeticException.class, () -> mathUtils.power(2, 31));
         assertEquals(1, mathUtils.power(-1, 100000));
         assertEquals(-1, mathUtils.power(-1, 100001));
+        // Added additional exponent checks around overflow threshold and a mid-range base
+        assertEquals(1073741824, mathUtils.power(2, 30));
+        assertEquals(243, mathUtils.power(3, 5));
     }
 
     @Test
@@ -75,6 +85,9 @@ public class MathUtilsTest {
         assertEquals(720, mathUtils.factorial(6));
         assertThrows(ArithmeticException.class, () -> mathUtils.factorial(13));
         assertThrows(ArithmeticException.class, () -> mathUtils.factorial(14));
+        // Added additional factorials to cover the upper safe range
+        assertEquals(5040, mathUtils.factorial(7));
+        assertEquals(479001600, mathUtils.factorial(12));
     }
 
     @Test
