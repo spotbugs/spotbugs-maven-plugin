@@ -1,18 +1,3 @@
-/*
- * Copyright 2005-2025 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.codehaus.mojo.spotbugs.sonarissues;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,6 +20,7 @@ public class MathUtilsTest {
         assertEquals(Integer.MIN_VALUE, mathUtils.abs(Integer.MIN_VALUE));
         assertEquals(1, mathUtils.abs(-1));
         assertEquals(Integer.MAX_VALUE, mathUtils.abs(Integer.MAX_VALUE));
+        assertEquals(Integer.MAX_VALUE, mathUtils.abs(-Integer.MAX_VALUE));
     }
 
     @Test
@@ -44,6 +30,8 @@ public class MathUtilsTest {
         assertEquals(5, mathUtils.min(5, 5));
         assertEquals(-10, mathUtils.min(-5, -10));
         assertEquals(Integer.MIN_VALUE, mathUtils.min(Integer.MIN_VALUE, Integer.MAX_VALUE));
+        assertEquals(Integer.MIN_VALUE, mathUtils.min(Integer.MAX_VALUE, Integer.MIN_VALUE));
+        assertEquals(-5, mathUtils.min(-5, -5));
     }
 
     @Test
@@ -53,6 +41,8 @@ public class MathUtilsTest {
         assertTrue(mathUtils.isEven(0));
         assertTrue(mathUtils.isEven(-2));
         assertFalse(mathUtils.isEven(-3));
+        assertFalse(mathUtils.isEven(Integer.MAX_VALUE));
+        assertTrue(mathUtils.isEven(Integer.MAX_VALUE - 1));
     }
 
     @Test
@@ -62,6 +52,10 @@ public class MathUtilsTest {
         assertThrows(IllegalArgumentException.class, () -> mathUtils.power(2, -1));
         assertEquals(0, mathUtils.power(0, 5));
         assertEquals(1, mathUtils.power(0, 0));
+        assertEquals(1, mathUtils.power(1, 100));
+        assertThrows(IllegalArgumentException.class, () -> mathUtils.power(0, -5));
+        assertEquals(4, mathUtils.power(-2, 2));
+        assertEquals(-8, mathUtils.power(-2, 3));
     }
 
     @Test
@@ -73,6 +67,7 @@ public class MathUtilsTest {
         assertThrows(IllegalArgumentException.class, () -> mathUtils.factorial(-1));
         assertEquals(2, mathUtils.factorial(2));
         assertEquals(720, mathUtils.factorial(6));
+        assertThrows(ArithmeticException.class, () -> mathUtils.factorial(14));
     }
 
     @Test
