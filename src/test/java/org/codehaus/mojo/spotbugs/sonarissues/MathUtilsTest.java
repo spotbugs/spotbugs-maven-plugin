@@ -31,24 +31,29 @@ public class MathUtilsTest {
     void testAbsPositive() {
         assertEquals(5, mathUtils.abs(5));
         assertEquals(10, mathUtils.abs(-10));
+        assertEquals(0, mathUtils.abs(0));
     }
 
     @Test
     void testMinBasic() {
         assertEquals(3, mathUtils.min(3, 7));
         assertEquals(1, mathUtils.min(5, 1));
+        assertEquals(5, mathUtils.min(5, 5));
     }
 
     @Test
     void testIsEvenBasic() {
         assertTrue(mathUtils.isEven(4));
         assertFalse(mathUtils.isEven(3));
+        assertTrue(mathUtils.isEven(0));
+        assertTrue(mathUtils.isEven(-2));
     }
 
     @Test
     void testPowerBasic() {
         assertEquals(8, mathUtils.power(2, 3));
         assertEquals(1, mathUtils.power(5, 0));
+        assertThrows(IllegalArgumentException.class, () -> mathUtils.power(2, -1));
     }
 
     @Test
@@ -56,11 +61,14 @@ public class MathUtilsTest {
         assertEquals(1, mathUtils.factorial(1));
         assertEquals(6, mathUtils.factorial(3));
         assertEquals(24, mathUtils.factorial(4));
+        assertEquals(1, mathUtils.factorial(0));
+        assertThrows(IllegalArgumentException.class, () -> mathUtils.factorial(-1));
     }
 
     @Test
     void testIsPositiveBasic() {
         assertTrue(mathUtils.isPositive(5));
         assertFalse(mathUtils.isPositive(-3));
+        assertFalse(mathUtils.isPositive(0));
     }
 }
