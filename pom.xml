@@ -132,7 +132,7 @@
 
         <antVersion>1.10.15</antVersion>
         <groovyVersion>5.0.1</groovyVersion>
-        <javaparserVersion>3.27.0</javaparserVersion>
+        <javaparserVersion>3.27.1</javaparserVersion>
 
         <doxiaVersion>2.0.0</doxiaVersion>
         <doxiaSiteToolsVersion>2.0.0</doxiaSiteToolsVersion>
