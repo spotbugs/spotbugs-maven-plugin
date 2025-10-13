@@ -180,7 +180,7 @@
 
         <!-- Targeted patches -->
         <asm.version>9.9</asm.version>
-        <bcel.version>6.10.0</bcel.version>
+        <bcel.version>6.11.0</bcel.version>
         <beanutils.version>1.11.0</beanutils.version>
         <codec.version>1.19.0</codec.version>
         <codenarc.version>3.6.0-groovy-4.0</codenarc.version>
