@@ -29,7 +29,7 @@
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.9.6.1-SNAPSHOT</version>
+    <version>4.9.7.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
@@ -122,8 +122,8 @@
         <jacoco.minimum.coverage>0.11</jacoco.minimum.coverage>
 
         <!-- Override spotbugs to this version from base-parent -->
-        <spotbugs.version>4.9.6</spotbugs.version>
-        <spotbugs.plugin>4.9.5.0</spotbugs.plugin>
+        <spotbugs.version>4.9.7</spotbugs.version>
+        <spotbugs.plugin>4.9.6.0</spotbugs.plugin>
 
         <byte-buddy.version>1.17.8</byte-buddy.version>
         <javabean-tester.version>2.11.1</javabean-tester.version>
