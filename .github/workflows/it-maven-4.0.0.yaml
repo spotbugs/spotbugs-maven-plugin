@@ -8,11 +8,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  maven-version: 4.0.0-rc-4
+
 jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    name: Integration Tests Maven 4.0.0-rc-4
+    name: Integration Tests Maven 4.0.0-rc-4 with java 25
 
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
@@ -21,8 +24,8 @@ jobs:
         with:
           cache: maven
           distribution: zulu
-          java-version: 21
-      - name: Set Maven Wrapper version
-        run: sed -i "s|^distributionUrl=.*|distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/4.0.0-rc-4/apache-maven-4.0.0-rc-4-bin.zip|" .mvn/wrapper/maven-wrapper.properties
-      - name: Integration Test with Maven
-        run: ./mvnw --batch-mode --show-version -DtestSrc=remote -Prun-its verify -Dinvoker.parallelThreads=8 -Dlicense.skip=true -Dmaven.min-version=4.0.0-rc-4 -Dmaven=4.0.0-rc-4 --no-transfer-progress
+          java-version: 25
+      - name: Set Maven Wrapper version ${{ env.maven-version }}
+        run: sed -i "s|^distributionUrl=.*|distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/${{ env.maven-version }}/apache-maven-${{ env.maven-version }}-bin.zip|" .mvn/wrapper/maven-wrapper.properties
+      - name: Integration Test with Maven ${{ env.maven-version }}
+        run: ./mvnw verify --batch-mode  --no-transfer-progress --show-version -Dinvoker.parallelThreads=8 -Dlicense.skip=true -Dmaven=${{ env.maven-version }} -Dmaven.min-version=${{ env.maven-version }} -DtestSrc=remote -Prun-its

@@ -8,11 +8,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  maven-version: 3.6.3
+
 jobs:
   test:
     runs-on: windows-latest
     timeout-minutes: 30
-    name: Integration Tests Maven 3.6.3
+    name: Integration Tests Maven 3.6.3 with java 21
 
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
@@ -22,7 +25,9 @@ jobs:
           cache: maven
           distribution: zulu
           java-version: 21
-      - name: Load Maven 3.6.3
-        run: mvn --batch-mode --show-version org.apache.maven.plugins:maven-wrapper-plugin:3.3.2:wrapper -Dmaven="3.6.3" --no-transfer-progress
+      - name: Set Maven Wrapper version ${{ env.maven-version }}
+        run: sed -i "s|^distributionUrl=.*|distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/${{ env.maven-version }}/apache-maven-${{ env.maven-version }}-bin.zip|" .mvn/wrapper/maven-wrapper.properties
+      - name: Set 'project.basedir' to 'basedir' for more broad maven ${{ env.maven-version }} support
+        run: sed -i "s|project.basedir|basedir|" pom.xml
       - name: Integration Test with Maven
-        run: ./mvnw --batch-mode --show-version -DtestSrc=remote -Prun-its verify -D"invoker.parallelThreads=8" -D"license.skip=true" -D"maven.min-version=3.6.3" --no-transfer-progress
+        run: ./mvnw verify --batch-mode --no-transfer-progress --show-version -D"invoker.parallelThreads=8" -D"license.skip=true" -D"maven=${{ env.maven-version }}" -D"maven.min-version=${{ env.maven-version }}" -DtestSrc=remote -Prun-its

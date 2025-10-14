@@ -23,9 +23,9 @@ jobs:
         with:
           cache: maven
           distribution: temurin
-          java-version: 21
+          java-version: 25
       - name: Deploy to Sonatype
-        run: ./mvnw deploy -DskipTests --batch-mode --show-version --no-transfer-progress --settings ./.mvn/settings.xml -Dlicense.skip=true
+        run: ./mvnw deploy --batch-mode --no-transfer-progress --settings ./.mvn/settings.xml --show-version -Dlicense.skip=true -DskipTests
         env:
           CI_DEPLOY_USERNAME: ${{ secrets.CI_DEPLOY_USERNAME }}
           CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}

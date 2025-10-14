@@ -16,7 +16,7 @@ jobs:
       matrix:
         cache: [maven]
         distribution: [temurin]
-        java: [17, 21, 24, 25-ea, 26-ea]
+        java: [17, 21, 25, 26-ea]
         os: [macos-latest, ubuntu-latest, windows-latest]
       fail-fast: false
       max-parallel: 6
@@ -31,4 +31,4 @@ jobs:
           distribution: ${{ matrix.distribution }}
           java-version: ${{ matrix.java }}
       - name: Test with Maven
-        run: ./mvnw test --batch-mode --show-version --no-transfer-progress -D"license.skip=true"
+        run: ./mvnw test --batch-mode --no-transfer-progress --show-version -D"license.skip=true"
