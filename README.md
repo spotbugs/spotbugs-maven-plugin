@@ -89,6 +89,11 @@ Run gui with a specific version
 mvn com.github.spotbugs:spotbugs-maven-plugin:${spotbugs.plugin}:gui
 ```
 
+## Testing Upstream Spotbugs Updates ##
+
+- In the pom.xml, switch `<spotbugs.version>x.x.x</spotbugs.version>` to spotbugs snapshot Version so that it pulls from sonatype snapshots.
+- In the pom.xml, switch `<spotbugs-scm.version>${spotbugs.version}</spotbugs-scm.version>` to 'master'.
+
 ## Creating new site examples ##
 
 This product `site` contains a copy of an integration test result using spotbugs to show how it works.  To update that, use the following instructions.
