@@ -29,7 +29,7 @@
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.9.7.1-SNAPSHOT</version>
+    <version>4.9.8.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
@@ -123,7 +123,11 @@
 
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.9.8</spotbugs.version>
-        <spotbugs.plugin>4.9.6.0</spotbugs.plugin>
+        <spotbugs.plugin>4.9.7.0</spotbugs.plugin>
+
+        <!-- Use 'master' branch or '${spotbugs.version}' tag for integration test source pull from spotbugs. -->
+        <!-- <spotbugs-scm.version>master</spotbugs-scm.version> -->
+        <spotbugs-scm.version>${spotbugs.version}</spotbugs-scm.version>
 
         <byte-buddy.version>1.17.8</byte-buddy.version>
         <javabean-tester.version>2.11.1</javabean-tester.version>
@@ -1074,7 +1078,7 @@
                                         <git>jgit</git>
                                     </providerImplementations>
                                     <includes>${includesTestSrcPattern}</includes>
-                                    <scmVersion>${spotbugs.version}</scmVersion>
+                                    <scmVersion>${spotbugs-scm.version}</scmVersion>
                                     <scmVersionType>tag</scmVersionType>
                                 </configuration>
                             </execution>
