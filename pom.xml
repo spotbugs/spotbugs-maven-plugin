@@ -157,7 +157,7 @@
         <plexusVelocityVersion>2.3.0</plexusVelocityVersion>
         <plexusXmlVersion>3.0.2</plexusXmlVersion>
 
-        <execPluginVersion>3.6.1</execPluginVersion>
+        <execPluginVersion>3.6.2</execPluginVersion>
         <pluginPluginVersion>3.15.1</pluginPluginVersion>
         <l10nPluginVersion>1.1.0</l10nPluginVersion>
         <codenarcPluginVersion>0.1</codenarcPluginVersion>
