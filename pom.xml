@@ -29,7 +29,7 @@
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.9.8.1</version>
+    <version>4.9.8.2-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
@@ -117,7 +117,7 @@
         <testSourceDirectory>${project.basedir}/src/test/groovy</testSourceDirectory>
 
         <!-- Reproducible Builds: override timestamp value from parent -->
-        <project.build.outputTimestamp>1760927507</project.build.outputTimestamp>
+        <project.build.outputTimestamp>1760927702</project.build.outputTimestamp>
 
         <jacoco.minimum.coverage>0.11</jacoco.minimum.coverage>
 
