@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.github.spotbugs.spotbugs_maven_plugin","l":"HelpMojo"},{"p":"com.github.spotbugs","l":"StubOverrideFixer"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"com.github.spotbugs.spotbugs_maven_plugin","l":"HelpMojo"},{"p":"com.github.spotbugs","l":"StubOverrideFixer"}];updateSearchResults();
