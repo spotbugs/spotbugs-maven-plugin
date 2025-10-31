@@ -128,7 +128,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         Path outputFile = outputDir.resolve(spotbugsXmlOutputFilename)
 
         if (Files.notExists(outputFile)) {
-            log.debug('Output file does not exist!')
+            log.warn('Output file does not exist!')
             return
         }
 
