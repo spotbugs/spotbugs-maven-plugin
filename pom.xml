@@ -131,7 +131,7 @@
 
         <byte-buddy.version>1.17.8</byte-buddy.version>
         <javabean-tester.version>2.11.1</javabean-tester.version>
-        <junitVersion>6.0.0</junitVersion>
+        <junitVersion>6.0.1</junitVersion>
         <slf4jVersion>2.0.17</slf4jVersion>
 
         <antVersion>1.10.15</antVersion>
