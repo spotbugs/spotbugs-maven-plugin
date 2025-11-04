@@ -527,10 +527,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         boolean canGenerate = false
         log.debug('****** SpotBugsMojo canGenerateReport *******')
+
         Predicate<Path> containsSource = { Path path ->
             String fileName = path.toFile().name
-            return fileName.endsWith(SpotBugsInfo.CLASS_SUFFIX) || (nested && (fileName.endsWith(SpotBugsInfo.JAR_SUFFIX) || fileName.endsWith(SpotBugsInfo.ZIP_SUFFIX)))
+            return fileName.endsWith(SpotBugsInfo.CLASS_SUFFIX) ||
+                (nested && (fileName.endsWith(SpotBugsInfo.JAR_SUFFIX) || fileName.endsWith(SpotBugsInfo.ZIP_SUFFIX)))
         }
+
         if (classFilesDirectory.exists()) {
             try {
                 canGenerate = Files.walk(classFilesDirectory.toPath())
