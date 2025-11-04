@@ -28,6 +28,7 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.function.Predicate
 import java.util.stream.Collectors
 
 import javax.inject.Inject
@@ -526,11 +527,14 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         boolean canGenerate = false
         log.debug('****** SpotBugsMojo canGenerateReport *******')
-
+        Predicate<Path> containsSource = { Path path ->
+            String fileName = path.toFile().name
+            return fileName.endsWith(SpotBugsInfo.CLASS_SUFFIX) || (nested && (fileName.endsWith(SpotBugsInfo.JAR_SUFFIX) || fileName.endsWith(SpotBugsInfo.ZIP_SUFFIX)))
+        }
         if (classFilesDirectory.exists()) {
             try {
                 canGenerate = Files.walk(classFilesDirectory.toPath())
-                    .anyMatch { Path path -> path.toFile().name.contains(SpotBugsInfo.CLASS_SUFFIX) }
+                    .anyMatch(containsSource)
             } catch (IOException e) {
                 log.warn("Error searching class files: ${e.message}")
             }
@@ -542,7 +546,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (!canGenerate && testClassFilesDirectory.exists() && includeTests) {
             try {
                 canGenerate = Files.walk(testClassFilesDirectory.toPath())
-                    .anyMatch { Path path -> path.toFile().name.contains(SpotBugsInfo.CLASS_SUFFIX) }
+                    .anyMatch(containsSource)
             } catch (IOException e) {
                 log.warn("Error searching test class files: ${e.message}")
             }
