@@ -59,6 +59,10 @@ interface SpotBugsInfo {
 
     /** The static class suffix. */
     static final String CLASS_SUFFIX = '.class'
+    /** The static jar suffix. */
+    static final String JAR_SUFFIX = '.jar'
+    /** The static zip suffix. */
+    static final String ZIP_SUFFIX = '.zip'
 
     /** The spotbugs efforts as max, min, and default as default. */
     Map<String, String> spotbugsEfforts = [Max: 'max', Min: 'min', Default: 'default']
