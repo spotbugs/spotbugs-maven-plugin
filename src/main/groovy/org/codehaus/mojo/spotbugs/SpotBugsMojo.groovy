@@ -571,9 +571,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (session != null && session.getRequest() != null) {
             List<String> goals = session.getRequest().getGoals()
             if (goals != null && goals.any { String goal ->
-                goal == "site" ||
-                goal == "site-deploy" ||
-                goal.startsWith("site:")
+                goal.contains("site")
             }) {
                 isSiteLifecycle = true
             }
@@ -586,7 +584,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 return false
             }
         } else {
-            log.info('No files found to run spotbugs, check compile phase has been run')
+            log.info('No files found to run spotbugs; check compile phase has been run.')
         }
 
         return canGenerate
@@ -728,7 +726,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         log.debug('Generating Spotbugs XML')
 
         if (!spotbugsXmlOutputDirectory.exists() && !spotbugsXmlOutputDirectory.mkdirs()) {
-            throw new MojoExecutionException('Cannot create xml output directory')
+            throw new MojoExecutionException('Cannot create xml output directory.')
         }
     }
 
