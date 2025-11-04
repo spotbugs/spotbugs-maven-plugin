@@ -574,7 +574,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (session != null && session.getRequest() != null) {
             List<String> goals = session.getRequest().getGoals()
             if (goals != null && goals.any { String goal ->
-                goal.contains("site")
+                goal.contains('site')
             }) {
                 isSiteLifecycle = true
             }
