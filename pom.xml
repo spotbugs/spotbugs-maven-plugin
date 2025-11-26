@@ -202,9 +202,6 @@
 
         <!-- Surefire Setup -->
         <argLine>-javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar</argLine>
-
-        <!-- TODO: Skipping tests until spock supports groovy 5. -->
-        <skipTests>true</skipTests>
     </properties>
 
     <dependencyManagement>
