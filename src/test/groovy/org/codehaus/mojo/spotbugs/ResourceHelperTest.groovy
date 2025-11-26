@@ -46,8 +46,7 @@ class ResourceHelperTest extends Specification {
         result.exists()
         result.toPath() == outputDirectory.resolve('resource.txt')
         Files.readString(result.toPath()) == 'test'
-        1 * log.debug('resource is test/path/resource.txt' + SpotBugsInfo.EOL + 'location is test/path' +
-            SpotBugsInfo.EOL + 'artifact is resource.txt')
+        1 * log.debug({ String msg -> msg.contains("resource is 'test/path/resource.txt'") && msg.contains("location is 'test/path'") && msg.contains("artifact is 'resource.txt'") })
 
         cleanup:
         result?.delete()
