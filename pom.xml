@@ -130,7 +130,7 @@
         <spotbugs-scm.version>${spotbugs.version}</spotbugs-scm.version>
 
         <byte-buddy.version>1.18.5</byte-buddy.version>
-        <javabean-tester.version>2.11.2</javabean-tester.version>
+        <javabean-tester.version>2.12.0</javabean-tester.version>
         <junitVersion>6.0.3</junitVersion>
         <slf4jVersion>2.0.17</slf4jVersion>
 
