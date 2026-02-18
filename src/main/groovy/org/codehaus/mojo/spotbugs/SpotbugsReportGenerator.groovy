@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -358,8 +358,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
                 return
             }
             prefix = outputDirectory.toPath().relativize(xrefLocation.toPath())
-            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefLocation.getName() +
-                SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
         }
 
         if (includeTests && !prefix) {
@@ -369,8 +368,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
                     return
                 }
                 prefix = outputDirectory.toPath().relativize(xrefTestLocation.toPath())
-                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefTestLocation.getName() +
-                    SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
             }
         }
 
