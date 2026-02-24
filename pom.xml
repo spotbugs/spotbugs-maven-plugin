@@ -149,7 +149,7 @@
         <!-- Maven minimum version -->
         <maven.min-version>${mavenVersion}</maven.min-version>
 
-        <resolver.version>1.9.26</resolver.version>
+        <resolver.version>1.9.27</resolver.version>
 
         <plexusComponentAnnotationsVersion>2.2.0</plexusComponentAnnotationsVersion>
         <plexusResourcesVersion>1.3.1</plexusResourcesVersion>
