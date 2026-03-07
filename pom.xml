@@ -125,14 +125,14 @@
         <spotbugs.version>4.8.6</spotbugs.version>
         <spotbugs.plugin>4.8.6.6</spotbugs.plugin>
 
-        <byte-buddy.version>1.17.7</byte-buddy.version>
-        <javabean-tester.version>2.11.0</javabean-tester.version>
+        <byte-buddy.version>1.17.8</byte-buddy.version>
+        <javabean-tester.version>2.11.1</javabean-tester.version>
         <junitVersion>5.13.4</junitVersion>
         <slf4jVersion>2.0.17</slf4jVersion>
 
         <antVersion>1.10.15</antVersion>
         <groovyVersion>4.0.28</groovyVersion>
-        <javaparserVersion>3.27.0</javaparserVersion>
+        <javaparserVersion>3.27.1</javaparserVersion>
 
         <doxiaVersion>2.0.0</doxiaVersion>
         <doxiaSiteToolsVersion>2.0.0</doxiaSiteToolsVersion>

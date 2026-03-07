@@ -342,6 +342,15 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     String omitVisitors
 
     /**
+     * Selectively enable/disable detectors. This is a comma-delimited list with "+" or "-" before each detectors name indicated enabling or disabling.
+     *
+     * @since 4.8.6.8
+     * @since 4.9.4.2
+     */
+    @Parameter(property = 'spotbugs.chooseVisitors')
+    String chooseVisitors
+
+    /**
      * The plugin list to include in the report. This is a comma-delimited list.
      * <p>
      * Potential values are a filesystem path, a URL, or a classpath resource.
