@@ -162,7 +162,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
     List<String> bugClasses = []
 
     /** Pre-compiled pattern for removing inner class suffixes. */
-    private static final Pattern INNER_CLASS_PATTERN = Pattern.compile('\$.*')
+    private static final Pattern INNER_CLASS_PATTERN = Pattern.compile('\\$.*')
 
     /**
      * Default constructor.
