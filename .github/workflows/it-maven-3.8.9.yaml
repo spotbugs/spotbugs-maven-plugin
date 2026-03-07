@@ -10,7 +10,6 @@ concurrency:
 
 env:
   maven-version: 3.8.9
-  MVNW_DISABLE_CHECKSUM_VALIDATION: true
 
 jobs:
   test:
@@ -26,7 +25,11 @@ jobs:
           cache: maven
           distribution: zulu
           java-version: 21
-      - name: Load Maven 3.8.9
-        run: mvn -B -V org.apache.maven.plugins:maven-wrapper-plugin:3.3.2:wrapper -Dmaven="3.8.9" --no-transfer-progress
+      - name: Set Maven Wrapper version ${{ env.maven-version }}
+        run: sed -i "s|^distributionUrl=.*|distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/${{ env.maven-version }}/apache-maven-${{ env.maven-version }}-bin.zip|" .mvn/wrapper/maven-wrapper.properties
+      - name: Set 'project.basedir' to 'basedir' for more broad maven ${{ env.maven-version }} support
+        run: sed -i "s|project.basedir|basedir|" pom.xml
+      - name: Disable Maven Wrapper checksum validation
+        run: sed -i '/distributionSha256Sum/d' .mvn/wrapper/maven-wrapper.properties
       - name: Integration Test with Maven
         run: ./mvnw -B -V -DtestSrc=remote -Prun-its verify -D"invoker.parallelThreads=8" -D"license.skip=true" -D"maven.min-version=3.8.9" --no-transfer-progress
