@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.apache.maven.project.MavenProject
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.concurrent.locks.ReentrantLock
 
 /**
@@ -55,20 +56,20 @@ class SourceFileIndexer {
 
             // Resource
             for (Resource resource in project.getResources()) {
-                scanDirectory(Path.of(resource.directory), basePath)
+                scanDirectory(Paths.get(resource.directory), basePath)
             }
 
             for (Resource resource in project.getTestResources()) {
-                scanDirectory(Path.of(resource.directory), basePath)
+                scanDirectory(Paths.get(resource.directory), basePath)
             }
 
             // Source files
             for (String sourceRoot in project.getCompileSourceRoots()) {
-                scanDirectory(Path.of(sourceRoot), basePath)
+                scanDirectory(Paths.get(sourceRoot), basePath)
             }
 
             for (String sourceRoot in project.getTestCompileSourceRoots()) {
-                scanDirectory(Path.of(sourceRoot), basePath)
+                scanDirectory(Paths.get(sourceRoot), basePath)
             }
 
             // While not perfect, add the following paths will add basic support for Groovy, Kotlin, Scala and Webapp sources.
@@ -112,7 +113,7 @@ class SourceFileIndexer {
                         // It will most likely be stored in a work directory.
                         // Example: /work/project-code-to-scan/src/main/java/File.java => src/main/java/File.java
                         //   (Here baseDirectory is /work/project-code-to-scan/)
-                        String relativePath = Path.of(baseDirectory).relativize(Path.of(newSourceFile))
+                        String relativePath = Paths.get(baseDirectory).relativize(Paths.get(newSourceFile))
                         allSourceFiles.add(normalizePath(relativePath))
                     } else {
                         // Use the full path instead:
@@ -135,7 +136,7 @@ class SourceFileIndexer {
      * @param path Path to clean up
      * @return Path safe to use for comparison
      */
-    private static String normalizePath(String path) {
+    private String normalizePath(String path) {
         return path.replace('\\', '/')
     }
 

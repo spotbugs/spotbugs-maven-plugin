@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ class ResourceHelperTest extends Specification {
         then:
         result.exists()
         result.toPath() == outputDirectory.resolve('resource.txt')
-        Files.readString(result.toPath()) == 'test'
+        result.text == 'test'
         1 * log.debug({ String msg -> msg.contains("resource is 'test/path/resource.txt'") && msg.contains("location is 'test/path'") && msg.contains("artifact is 'resource.txt'") })
 
         cleanup:
@@ -61,7 +61,7 @@ class ResourceHelperTest extends Specification {
         }
         Path outputDirectory = Files.createTempDirectory('ResourceHelperTest')
         Path existingFile = outputDirectory.resolve('resource.txt')
-        Files.writeString(existingFile, 'originalContent', StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)
+        Files.write(existingFile, 'originalContent'.bytes, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)
         ResourceManager resourceManager = Mock(ResourceManager) {
             getResourceAsInputStream(_) >> null
         }
@@ -74,7 +74,7 @@ class ResourceHelperTest extends Specification {
         then:
         result.exists()
         result.toPath() == existingFile
-        Files.readString(result.toPath()) == 'originalContent'
+        result.text == 'originalContent'
 
         cleanup:
         result?.delete()

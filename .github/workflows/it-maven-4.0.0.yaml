@@ -1,31 +1,28 @@
-name: Java Integration Tests Maven 4.0.0-rc-5
+name: Java Integration Tests Maven 4.0.0-rc-4
 
 on: [push, pull_request]
 
 permissions: read-all
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: true
-
-env:
-  maven-version: 4.0.0-rc-5
 
 jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    name: Integration Tests Maven 4.0.0-rc-5 with java 25
+    name: Integration Tests Maven 4.0.0-rc-4
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       - name: Setup Java
-        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5
         with:
           cache: maven
           distribution: zulu
-          java-version: 25
-      - name: Set Maven Wrapper version ${{ env.maven-version }}
-        run: sed -i "s|^distributionUrl=.*|distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/${{ env.maven-version }}/apache-maven-${{ env.maven-version }}-bin.zip|" .mvn/wrapper/maven-wrapper.properties
-      - name: Integration Test with Maven ${{ env.maven-version }}
-        run: ./mvnw verify --batch-mode  --no-transfer-progress --show-version -Dinvoker.parallelThreads=8 -Dlicense.skip=true -Dmaven=${{ env.maven-version }} -Dmaven.min-version=${{ env.maven-version }} -DtestSrc=remote -Prun-its
+          java-version: 21
+      - name: Set Maven Wrapper version
+        run: sed -i "s|^distributionUrl=.*|distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/4.0.0-rc-4/apache-maven-4.0.0-rc-4-bin.zip|" .mvn/wrapper/maven-wrapper.properties
+      - name: Integration Test with Maven
+        run: ./mvnw -B -V -DtestSrc=remote -Prun-its verify -Dinvoker.parallelThreads=8 -Dlicense.skip=true -Dmaven.min-version=4.0.0-rc-4 -Dmaven=4.0.0-rc-4 --no-transfer-progress

@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.function.Predicate
+import java.nio.file.Paths
 import java.util.stream.Collectors
 
 import javax.inject.Inject
@@ -342,14 +342,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     String omitVisitors
 
     /**
-     * Selectively enable/disable detectors. This is a comma-delimited list with "+" or "-" before each detectors name indicated enabling or disabling.
-     *
-     * @since 4.9.4.2
-     */
-    @Parameter(property = 'spotbugs.chooseVisitors')
-    String chooseVisitors
-
-    /**
      * The plugin list to include in the report. This is a comma-delimited list.
      * <p>
      * Potential values are a filesystem path, a URL, or a classpath resource.
@@ -528,16 +520,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         boolean canGenerate = false
         log.debug('****** SpotBugsMojo canGenerateReport *******')
 
-        Predicate<Path> containsSource = { Path path ->
-            String fileName = path.toFile().name
-            return fileName.endsWith(SpotBugsInfo.CLASS_SUFFIX) ||
-                (nested && (fileName.endsWith(SpotBugsInfo.JAR_SUFFIX) || fileName.endsWith(SpotBugsInfo.ZIP_SUFFIX)))
-        }
-
         if (classFilesDirectory.exists()) {
             try {
                 canGenerate = Files.walk(classFilesDirectory.toPath())
-                    .anyMatch(containsSource)
+                    .anyMatch { Path path -> path.toFile().name.endsWith(SpotBugsInfo.CLASS_SUFFIX) }
             } catch (IOException e) {
                 log.warn("Error searching class files: ${e.message}")
             }
@@ -549,7 +535,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (!canGenerate && testClassFilesDirectory.exists() && includeTests) {
             try {
                 canGenerate = Files.walk(testClassFilesDirectory.toPath())
-                    .anyMatch(containsSource)
+                    .anyMatch { Path path -> path.toFile().name.endsWith(SpotBugsInfo.CLASS_SUFFIX) }
             } catch (IOException e) {
                 log.warn("Error searching test class files: ${e.message}")
             }
@@ -570,13 +556,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug("canGenerate is ${canGenerate}")
         }
 
-        boolean isSiteLifecycle = false
+        boolean isSiteLifecycle = false;
         if (session != null && session.getRequest() != null) {
-            List<String> goals = session.getRequest().getGoals()
-            if (goals != null && goals.any { String goal ->
-                goal.contains('site')
-            }) {
-                isSiteLifecycle = true
+            List<String> goals = session.getRequest().getGoals();
+            if (goals != null && goals.any { String goal -> goal == "site" || goal.startsWith("site:") }) {
+                isSiteLifecycle = true;
             }
         }
 
@@ -584,13 +568,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             if (!isSiteLifecycle) {
                 // Only generate xdoc report, skip site pages
                 generateXDoc(getLocale())
-                return false
+                return false;
             }
         } else {
-            log.info('No files found to run spotbugs; check compile phase has been run.')
+            log.info('No files found to run spotbugs, check compile phase has been run')
         }
 
-        return canGenerate
+        return canGenerate;
     }
 
     /**
@@ -729,7 +713,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         log.debug('Generating Spotbugs XML')
 
         if (!spotbugsXmlOutputDirectory.exists() && !spotbugsXmlOutputDirectory.mkdirs()) {
-            throw new MojoExecutionException('Cannot create xml output directory.')
+            throw new MojoExecutionException('Cannot create xml output directory')
         }
     }
 
@@ -752,7 +736,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
 
             XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
-            xDocsReporter.setOutputWriter(Files.newBufferedWriter(Path.of("${xmlOutputDirectory}/spotbugs.xml"),
+            xDocsReporter.setOutputWriter(Files.newBufferedWriter(Paths.get("${xmlOutputDirectory}/spotbugs.xml"),
                 Charset.forName(outputEncoding)))
 
             XmlSlurper xmlSlurper = new XmlSlurper()
@@ -901,12 +885,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug("  Adding 'omitVisitors'")
             args << '-omitVisitors'
             args << omitVisitors
-        }
-
-        if (chooseVisitors) {
-            log.debug("  Adding 'chooseVisitors'")
-            args << '-chooseVisitors'
-            args << chooseVisitors
         }
 
         if (relaxed) {
@@ -1080,7 +1058,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @param file Destination file to create.
      */
-    private static void forceFileCreation(File file) {
+    private void forceFileCreation(File file) {
         if (file.exists()) {
             file.delete()
         }
@@ -1390,7 +1368,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @see AbstractMavenReport#setReportOutputDirectory(File)
      */
     @Override
-    void setReportOutputDirectory(File reportOutputDirectory) {
+    public void setReportOutputDirectory(File reportOutputDirectory) {
         super.setReportOutputDirectory(reportOutputDirectory)
         this.outputDirectory = reportOutputDirectory
     }

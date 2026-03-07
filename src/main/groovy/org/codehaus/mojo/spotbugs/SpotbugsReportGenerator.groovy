@@ -19,6 +19,7 @@ import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.slurpersupport.NodeChild
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -353,22 +354,24 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         String prefix
         compileSourceRoots.each { String compileSourceRoot ->
-            Path sourcePath = Path.of(compileSourceRoot).resolve(line.@sourcepath.text())
+            Path sourcePath = Paths.get(compileSourceRoot).resolve(line.@sourcepath.text())
             if (Files.notExists(sourcePath)) {
                 return
             }
             prefix = outputDirectory.toPath().relativize(xrefLocation.toPath())
-            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefLocation.getName() +
+                SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
         }
 
         if (includeTests && !prefix) {
             testSourceRoots.each { String testSourceRoot ->
-                Path testSourcePath = Path.of(testSourceRoot).resolve(line.@sourcepath.text())
+                Path testSourcePath = Paths.get(testSourceRoot).resolve(line.@sourcepath.text())
                 if (Files.notExists(testSourcePath)) {
                     return
                 }
                 prefix = outputDirectory.toPath().relativize(xrefTestLocation.toPath())
-                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefTestLocation.getName() +
+                    SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
             }
         }
 
@@ -593,7 +596,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         log.debug("Exiting printFilesSummary")
     }
 
-    void generateReport() {
+    public void generateReport() {
         if (log.isDebugEnabled()) {
             log.debug('Reporter Locale is ' + this.bundle.getLocale().getLanguage())
         }

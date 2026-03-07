@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,7 +128,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         Path outputFile = outputDir.resolve(spotbugsXmlOutputFilename)
 
         if (Files.notExists(outputFile)) {
-            log.warn('Output file does not exist!')
+            log.debug('Output file does not exist!')
             return
         }
 
@@ -197,19 +197,19 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     }
 
     private boolean doSourceFilesExist() {
-        boolean foundClassFiles = false
+        boolean foundClassFiles = false;
         List<String> classFilesList = []
         if (this.classFilesDirectory.isDirectory()) {
             foundClassFiles = walkFiles(classFilesList, classFilesDirectory, foundClassFiles)
         }
 
-        boolean foundTestFiles = false
+        boolean foundTestFiles = false;
         List<String> testFilesList = []
         if (this.includeTests && this.testClassFilesDirectory.isDirectory()) {
             foundTestFiles = walkFiles(testFilesList, testClassFilesDirectory, foundTestFiles)
         }
 
-        return foundClassFiles || foundTestFiles
+        return foundClassFiles || foundTestFiles;
     }
 
     private boolean walkFiles(List filesList, File filesDirectory, boolean foundFiles) {

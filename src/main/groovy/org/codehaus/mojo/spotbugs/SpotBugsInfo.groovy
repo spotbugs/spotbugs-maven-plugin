@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,12 +59,6 @@ interface SpotBugsInfo {
 
     /** The static class suffix. */
     static final String CLASS_SUFFIX = '.class'
-
-    /** The static jar suffix. */
-    static final String JAR_SUFFIX = '.jar'
-
-    /** The static zip suffix. */
-    static final String ZIP_SUFFIX = '.zip'
 
     /** The spotbugs efforts as max, min, and default as default. */
     Map<String, String> spotbugsEfforts = [Max: 'max', Min: 'min', Default: 'default']
