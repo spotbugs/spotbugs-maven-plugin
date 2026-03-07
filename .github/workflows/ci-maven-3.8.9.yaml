@@ -10,6 +10,7 @@ concurrency:
 
 env:
   maven-version: 3.8.9
+  MVNW_DISABLE_CHECKSUM_VALIDATION: true
 
 jobs:
   test:

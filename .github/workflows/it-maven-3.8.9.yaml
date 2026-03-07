@@ -1,0 +1,32 @@
+name: Java Integration Tests Maven 3.8.9
+
+on: [push, pull_request]
+
+permissions: read-all
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+env:
+  maven-version: 3.8.9
+  MVNW_DISABLE_CHECKSUM_VALIDATION: true
+
+jobs:
+  test:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    name: Integration Tests Maven 3.8.9 with java 21
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - name: Setup Java
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
+        with:
+          cache: maven
+          distribution: zulu
+          java-version: 21
+      - name: Load Maven 3.8.9
+        run: mvn -B -V org.apache.maven.plugins:maven-wrapper-plugin:3.3.2:wrapper -Dmaven="3.8.9" --no-transfer-progress
+      - name: Integration Test with Maven
+        run: ./mvnw -B -V -DtestSrc=remote -Prun-its verify -D"invoker.parallelThreads=8" -D"license.skip=true" -D"maven.min-version=3.8.9" --no-transfer-progress

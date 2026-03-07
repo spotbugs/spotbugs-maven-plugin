@@ -10,6 +10,7 @@ concurrency:
 
 env:
   maven-version: 4.0.0-rc-5
+  MVNW_DISABLE_CHECKSUM_VALIDATION: true
 
 jobs:
   test:
