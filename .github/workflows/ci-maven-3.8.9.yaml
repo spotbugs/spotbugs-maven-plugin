@@ -29,5 +29,7 @@ jobs:
         run: sed -i "s|^distributionUrl=.*|distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/${{ env.maven-version }}/apache-maven-${{ env.maven-version }}-bin.zip|" .mvn/wrapper/maven-wrapper.properties
       - name: Set 'project.basedir' to 'basedir' for more broad maven ${{ env.maven-version }} support
         run: sed -i "s|project.basedir|basedir|" pom.xml
+      - name: Disable Maven Wrapper checksum validation
+        run: sed -i '/distributionSha256Sum/d' .mvn/wrapper/maven-wrapper.properties
       - name: Test with Maven ${{ env.maven-version }}
         run: ./mvnw test --batch-mode --no-transfer-progress --show-version -D"license.skip=true" -D"maven=${{ env.maven-version }}" -D"maven.min-version=${{ env.maven-version }}"
