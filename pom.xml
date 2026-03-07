@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2005-2025 the original author or authors.
+    Copyright 2005-2026 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -198,9 +198,6 @@
 
         <!-- Surefire Setup -->
         <argLine>-javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar</argLine>
-
-        <!-- TODO: Skipping tests until spock supports groovy 5. -->
-        <skipTests>true</skipTests>
     </properties>
 
     <dependencyManagement>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.stream.Collectors
 
 import javax.inject.Inject
@@ -522,7 +523,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (classFilesDirectory.exists()) {
             try {
                 canGenerate = Files.walk(classFilesDirectory.toPath())
-                    .anyMatch { Path path -> path.toFile().name.contains(SpotBugsInfo.CLASS_SUFFIX) }
+                    .anyMatch { Path path -> path.toFile().name.endsWith(SpotBugsInfo.CLASS_SUFFIX) }
             } catch (IOException e) {
                 log.warn("Error searching class files: ${e.message}")
             }
@@ -534,7 +535,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (!canGenerate && testClassFilesDirectory.exists() && includeTests) {
             try {
                 canGenerate = Files.walk(testClassFilesDirectory.toPath())
-                    .anyMatch { Path path -> path.toFile().name.contains(SpotBugsInfo.CLASS_SUFFIX) }
+                    .anyMatch { Path path -> path.toFile().name.endsWith(SpotBugsInfo.CLASS_SUFFIX) }
             } catch (IOException e) {
                 log.warn("Error searching test class files: ${e.message}")
             }
@@ -735,7 +736,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
 
             XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
-            xDocsReporter.setOutputWriter(Files.newBufferedWriter(Path.of("${xmlOutputDirectory}/spotbugs.xml"),
+            xDocsReporter.setOutputWriter(Files.newBufferedWriter(Paths.get("${xmlOutputDirectory}/spotbugs.xml"),
                 Charset.forName(outputEncoding)))
 
             XmlSlurper xmlSlurper = new XmlSlurper()

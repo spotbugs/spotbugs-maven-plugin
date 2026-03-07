@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package org.codehaus.mojo.spotbugs
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import java.util.regex.Pattern
 
@@ -87,19 +88,19 @@ final class ResourceHelper {
     }
 
     private Path getResourceAsFile(final String name, final String outputPath) {
-        Path outputResourcePath = outputDirectory == null ? Path.of(outputPath) : outputDirectory.toPath().resolve(outputPath)
+        Path outputResourcePath = outputDirectory == null ? Paths.get(outputPath) : outputDirectory.toPath().resolve(outputPath)
 
         // Checking if the resource is already a file
         if (new File(name).exists()) {
             // Avoid copying the file onto itself
-            if (Path.of(name).toAbsolutePath().normalize().equals(outputResourcePath.toAbsolutePath().normalize())) {
+            if (Paths.get(name).toAbsolutePath().normalize().equals(outputResourcePath.toAbsolutePath().normalize())) {
                 return outputResourcePath;
             }
 
             createParentDirectories(outputResourcePath)
 
             // Copy existing file (not a URL)
-            return Files.copy(Path.of(name), outputResourcePath, StandardCopyOption.REPLACE_EXISTING,
+            return Files.copy(Paths.get(name), outputResourcePath, StandardCopyOption.REPLACE_EXISTING,
                 StandardCopyOption.COPY_ATTRIBUTES);
         }
 

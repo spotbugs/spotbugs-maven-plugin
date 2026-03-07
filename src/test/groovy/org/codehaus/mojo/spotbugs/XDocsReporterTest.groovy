@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 package org.codehaus.mojo.spotbugs
 
+import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.XmlSlurper
-import groovy.xml.StreamingMarkupBuilder
 
 import java.nio.charset.StandardCharsets
 
@@ -81,9 +81,18 @@ class XDocsReporterTest extends Specification {
         String output = writer.toString()
 
         then:
-        output.contains('BugCollection')
-        output.contains('Project')
-        output.contains('Error')
+        output
+
+        and: 'output is well-formed XML'
+        XmlSlurper outSlurper = new XmlSlurper()
+        outSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+        outSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+        GPathResult doc = outSlurper.parseText(output)
+
+        and: 'expected top-level nodes exist'
+        doc.name() == 'BugCollection'
+        doc.Project.size() == 1
+        doc.Error.size() == 1
     }
 
 }

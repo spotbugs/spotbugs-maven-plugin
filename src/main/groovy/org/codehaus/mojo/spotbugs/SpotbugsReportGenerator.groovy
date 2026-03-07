@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.slurpersupport.NodeChild
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -162,7 +163,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
     List<String> bugClasses = []
 
     /** Pre-compiled pattern for removing inner class suffixes. */
-    private static final Pattern INNER_CLASS_PATTERN = Pattern.compile('\$.*')
+    private static final Pattern INNER_CLASS_PATTERN = Pattern.compile('\\$.*')
 
     /**
      * Default constructor.
@@ -353,7 +354,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         String prefix
         compileSourceRoots.each { String compileSourceRoot ->
-            Path sourcePath = Path.of(compileSourceRoot).resolve(line.@sourcepath.text())
+            Path sourcePath = Paths.get(compileSourceRoot).resolve(line.@sourcepath.text())
             if (Files.notExists(sourcePath)) {
                 return
             }
@@ -364,7 +365,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         if (includeTests && !prefix) {
             testSourceRoots.each { String testSourceRoot ->
-                Path testSourcePath = Path.of(testSourceRoot).resolve(line.@sourcepath.text())
+                Path testSourcePath = Paths.get(testSourceRoot).resolve(line.@sourcepath.text())
                 if (Files.notExists(testSourcePath)) {
                     return
                 }
