@@ -535,11 +535,15 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (classFilesDirectory.exists()) {
-            try {
-                canGenerate = Files.walk(classFilesDirectory.toPath())
-                    .anyMatch(containsSource)
-            } catch (IOException e) {
-                log.warn("Error searching class files: ${e.message}")
+            if (noClassOk) {
+                canGenerate = true
+            } else {
+                try {
+                    canGenerate = Files.walk(classFilesDirectory.toPath())
+                        .anyMatch(containsSource)
+                } catch (IOException e) {
+                    log.warn("Error searching class files: ${e.message}")
+                }
             }
             if (log.isDebugEnabled()) {
                 log.debug("canGenerate Src is ${canGenerate}")
@@ -547,11 +551,15 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (!canGenerate && testClassFilesDirectory.exists() && includeTests) {
-            try {
-                canGenerate = Files.walk(testClassFilesDirectory.toPath())
-                    .anyMatch(containsSource)
-            } catch (IOException e) {
-                log.warn("Error searching test class files: ${e.message}")
+            if (noClassOk) {
+                canGenerate = true
+            } else {
+                try {
+                    canGenerate = Files.walk(testClassFilesDirectory.toPath())
+                        .anyMatch(containsSource)
+                } catch (IOException e) {
+                    log.warn("Error searching test class files: ${e.message}")
+                }
             }
             if (log.isDebugEnabled()) {
                 log.debug("canGenerate Test Src is ${canGenerate}")
