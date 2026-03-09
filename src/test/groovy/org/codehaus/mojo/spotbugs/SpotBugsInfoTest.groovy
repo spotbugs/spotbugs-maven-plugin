@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,13 +29,8 @@ class SpotBugsInfoTest extends Specification {
         SpotBugsInfo.BUNDLE_NAME == 'spotbugs'
         SpotBugsInfo.NAME_KEY == 'report.spotbugs.name'
         SpotBugsInfo.DESCRIPTION_KEY == 'report.spotbugs.description'
-        SpotBugsInfo.SOURCE_ROOT_KEY == 'report.spotbugs.sourceRoot'
-        SpotBugsInfo.TEST_SOURCE_ROOT_KEY == 'report.spotbugs.testSourceRoot'
-        SpotBugsInfo.JAVA_SOURCES_KEY == 'report.spotbugs.javasources'
         SpotBugsInfo.EXTENSIONS == ['class'] as String[]
         SpotBugsInfo.COMMA == ','
-        SpotBugsInfo.FORWARD_SLASH == '/'
-        SpotBugsInfo.BACKWARD_SLASH == '\\'
         SpotBugsInfo.URL_SEPARATOR == '/'
         SpotBugsInfo.BLANK == ' '
         SpotBugsInfo.PERIOD == '.'

@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ import org.codehaus.plexus.resource.ResourceManager
 class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
     /** Locale to use for Resource bundle. */
-    static Locale locale = Locale.ENGLISH
+    static Locale locale = Locale.getDefault()
 
     /** Directory containing the class files for Spotbugs to analyze. */
     @Parameter(defaultValue = '${project.build.outputDirectory}', required = true)

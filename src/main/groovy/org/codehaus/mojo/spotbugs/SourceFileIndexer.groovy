@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,11 @@ package org.codehaus.mojo.spotbugs
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.model.Resource
 import org.apache.maven.plugin.MojoExecutionException
+import org.apache.maven.project.MavenProject
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.concurrent.locks.ReentrantLock
 
 /**
  * Utility class used to transform path relative to the <b>source directory</b>
@@ -28,45 +30,61 @@ import java.nio.file.Path
  */
 class SourceFileIndexer {
 
+    /** Reentrant lock to ensure class is thread safe. */
+    private final ReentrantLock lock = new ReentrantLock()
+
     /** List of source files found in the current Maven project. */
-    private List<String> allSourceFiles
+    private List<String> allSourceFiles = []
 
     /**
      * Initialize the complete list of source files with their
      *
-     * @param project Reference to the Maven project to get the list of source directories
      * @param session Reference to the Maven session used to get the location of the root directory
      */
     protected void buildListSourceFiles(MavenSession session) {
+        lock.lock()
+        try {
+            // All source files to load
+            allSourceFiles.clear()
 
-        String basePath = normalizePath(session.getExecutionRootDirectory())
+            // Normalized base path
+            String basePath = normalizePath(session.getExecutionRootDirectory())
 
-        List<File> allSourceFiles = []
+            // Get current project
+            MavenProject project = session.getCurrentProject()
 
-        // Resource
-        for (Resource r in session.getCurrentProject().getResources()) {
-            scanDirectory(Path.of(r.directory), allSourceFiles, basePath)
+            // Resource
+            for (Resource resource in project.getResources()) {
+                scanDirectory(Path.of(resource.directory), basePath)
+            }
+
+            for (Resource resource in project.getTestResources()) {
+                scanDirectory(Path.of(resource.directory), basePath)
+            }
+
+            // Source files
+            for (String sourceRoot in project.getCompileSourceRoots()) {
+                scanDirectory(Path.of(sourceRoot), basePath)
+            }
+
+            for (String sourceRoot in project.getTestCompileSourceRoots()) {
+                scanDirectory(Path.of(sourceRoot), basePath)
+            }
+
+            // While not perfect, add the following paths will add basic support for Groovy, Kotlin, Scala and Webapp sources.
+            scanDirectory(project.getBasedir().toPath().resolve('src/main/groovy'), basePath)
+            scanDirectory(project.getBasedir().toPath().resolve('src/main/kotlin'), basePath)
+            scanDirectory(project.getBasedir().toPath().resolve('src/main/scala'), basePath)
+            scanDirectory(project.getBasedir().toPath().resolve('src/main/webapp'), basePath)
+
+            scanDirectory(project.getBasedir().toPath().resolve('src/test/groovy'), basePath)
+            scanDirectory(project.getBasedir().toPath().resolve('src/test/kotlin'), basePath)
+            scanDirectory(project.getBasedir().toPath().resolve('src/test/scala'), basePath)
+            scanDirectory(project.getBasedir().toPath().resolve('src/test/webapp'), basePath)
+
+        } finally {
+            lock.unlock()
         }
-
-        for (Resource r in session.getCurrentProject().getTestResources()) {
-            scanDirectory(Path.of(r.directory), allSourceFiles, basePath)
-        }
-
-        // Source files
-        for (String sourceRoot in session.getCurrentProject().getCompileSourceRoots()) {
-            scanDirectory(Path.of(sourceRoot), allSourceFiles, basePath)
-        }
-
-        for (String sourceRoot in session.getCurrentProject().getTestCompileSourceRoots()) {
-            scanDirectory(Path.of(sourceRoot), allSourceFiles, basePath)
-        }
-
-        // While not perfect, add the following paths will add basic support for Groovy, Kotlin, and Webapp sources.
-        scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/groovy'), allSourceFiles, basePath)
-        scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/kotlin'), allSourceFiles, basePath)
-        scanDirectory(session.getCurrentProject().getBasedir().toPath().resolve('src/main/webapp'), allSourceFiles, basePath)
-
-        this.allSourceFiles = allSourceFiles
     }
 
     /**
@@ -74,10 +92,9 @@ class SourceFileIndexer {
      * The base directory will be truncated from the path stored.
      *
      * @param directory Directory to scan
-     * @param files ArrayList where files found will be stored
      * @param baseDirectory This part will be truncated from path stored
      */
-    private void scanDirectory(Path directory, List<String> files, String baseDirectory) {
+    private void scanDirectory(Path directory, String baseDirectory) {
 
         if (Files.notExists(directory)) {
             return
@@ -85,21 +102,26 @@ class SourceFileIndexer {
 
         for (File child : directory.toFile().listFiles()) {
             if (child.isDirectory()) {
-                scanDirectory(child.toPath(), files, baseDirectory)
+                scanDirectory(child.toPath(), baseDirectory)
             } else {
                 String newSourceFile = normalizePath(child.getCanonicalPath())
-                if (newSourceFile.startsWith(baseDirectory)) {
-                    // The project will not be at the root of our file system.
-                    // It will most likely be stored in a work directory.
-                    // Example: /work/project-code-to-scan/src/main/java/File.java => src/main/java/File.java
-                    //   (Here baseDirectory is /work/project-code-to-scan/)
-                    String relativePath = Path.of(baseDirectory).relativize(Path.of(newSourceFile))
-                    files.add(normalizePath(relativePath))
-                } else {
-                    // Use the full path instead:
-                    // This will occurs in many cases including when the pom.xml is
-                    // not in the same directory tree as the sources.
-                    files.add(newSourceFile)
+                lock.lock()
+                try {
+                    if (newSourceFile.startsWith(baseDirectory)) {
+                        // The project will not be at the root of our file system.
+                        // It will most likely be stored in a work directory.
+                        // Example: /work/project-code-to-scan/src/main/java/File.java => src/main/java/File.java
+                        //   (Here baseDirectory is /work/project-code-to-scan/)
+                        String relativePath = Path.of(baseDirectory).relativize(Path.of(newSourceFile))
+                        allSourceFiles.add(normalizePath(relativePath))
+                    } else {
+                        // Use the full path instead:
+                        // This will occurs in many cases including when the pom.xml is
+                        // not in the same directory tree as the sources.
+                        allSourceFiles.add(newSourceFile)
+                    }
+                } finally {
+                    lock.unlock()
                 }
             }
         }
@@ -113,8 +135,8 @@ class SourceFileIndexer {
      * @param path Path to clean up
      * @return Path safe to use for comparison
      */
-    private String normalizePath(String path) {
-        return path.replace('\\\\','/')
+    private static String normalizePath(String path) {
+        return path.replace('\\', '/')
     }
 
     /**
@@ -124,15 +146,19 @@ class SourceFileIndexer {
      * @return Complete path found. Null is not found!
      */
     protected String searchActualFilesLocation(String filename) {
-
-        if (allSourceFiles == null) {
-            throw new MojoExecutionException('Source files cache must be built prior to searches.')
-        }
-
-        for (String fileFound in allSourceFiles) {
-            if (fileFound.endsWith(filename)) {
-                return fileFound
+        lock.lock()
+        try {
+            if (allSourceFiles.isEmpty()) {
+                throw new MojoExecutionException('Source files cache must be built prior to searches.')
             }
+
+            for (String fileFound in allSourceFiles) {
+                if (fileFound.endsWith(filename)) {
+                    return fileFound
+                }
+            }
+        } finally {
+            lock.unlock()
         }
 
         // Not found

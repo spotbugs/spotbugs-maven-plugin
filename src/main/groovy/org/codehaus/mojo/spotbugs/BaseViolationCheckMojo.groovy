@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import groovy.xml.XmlParser
 import java.nio.file.Files
 import java.nio.file.Path
 
-import org.apache.commons.io.FileUtils
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugins.annotations.Parameter
@@ -102,7 +101,7 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     @Override
     void execute() {
-        log.debug('Executing spotbugs:check')
+        log.debug('Executing spotbugs mojo')
 
         if (skip) {
             log.info('Spotbugs plugin skipped')
@@ -114,18 +113,22 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
             return
         }
 
-        log.debug('Executing spotbugs:check')
+        log.debug('Files found to process spotbugs')
 
         Path outputDir = spotbugsXmlOutputDirectory.toPath()
 
-        if (Files.notExists(outputDir) && !Files.createDirectories(outputDir)) {
-            throw new MojoExecutionException('Cannot create xml output directory')
+        if (Files.notExists(outputDir)) {
+            try {
+                Files.createDirectories(outputDir)
+            } catch (IOException e) {
+                throw new MojoExecutionException('Cannot create xml output directory', e)
+            }
         }
 
         Path outputFile = outputDir.resolve(spotbugsXmlOutputFilename)
 
         if (Files.notExists(outputFile)) {
-            log.debug('Output file does not exist!')
+            log.warn('Output file does not exist!')
             return
         }
 
@@ -162,17 +165,14 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
         int bugCountAboveThreshold = 0
         bugs.each { Node bug ->
-            int priorityNum = bug.'@priority' as Integer
+            int priorityNum = bug.'@priority'.toInteger()
             // lower is more severe
             if (priorityNum <= priorityThresholdNum) {
                 bugCountAboveThreshold++
             }
 
             if (!quiet && (log.isErrorEnabled() || log.isInfoEnabled())) {
-                String priorityName = SpotBugsInfo.spotbugsPriority[priorityNum]
-                String logMsg = priorityName + ': ' + bug.LongMessage.text() + SpotBugsInfo.BLANK +
-                    bug.SourceLine.'@classname' + SpotBugsInfo.BLANK + bug.SourceLine.Message.text() +
-                    SpotBugsInfo.BLANK + bug.'@type'
+                String logMsg = SpotBugsInfo.spotbugsPriority[priorityNum] + ': ' + bugLog(bug)
 
                 // lower is more severe
                 if (priorityNum <= priorityThresholdNum) {
@@ -197,34 +197,64 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     }
 
     private boolean doSourceFilesExist() {
-        Collection<File> sourceFiles = []
-
+        boolean foundClassFiles = false
+        List<String> classFilesList = []
         if (this.classFilesDirectory.isDirectory()) {
-            if (log.isDebugEnabled()) {
-                log.debug('looking for class files with extensions: ' + SpotBugsInfo.EXTENSIONS)
-            }
-            sourceFiles.addAll(FileUtils.listFiles(classFilesDirectory, SpotBugsInfo.EXTENSIONS, true))
+            foundClassFiles = walkFiles(classFilesList, classFilesDirectory, foundClassFiles)
         }
 
+        boolean foundTestFiles = false
+        List<String> testFilesList = []
         if (this.includeTests && this.testClassFilesDirectory.isDirectory()) {
-            if (log.isDebugEnabled()) {
-                log.debug('looking for test class files: ' + SpotBugsInfo.EXTENSIONS)
+            foundTestFiles = walkFiles(testFilesList, testClassFilesDirectory, foundTestFiles)
+        }
+
+        return foundClassFiles || foundTestFiles
+    }
+
+    private boolean walkFiles(List filesList, File filesDirectory, boolean foundFiles) {
+        if (log.isDebugEnabled()) {
+            log.debug('looking for files with extensions: ' + SpotBugsInfo.EXTENSIONS)
+            Files.walk(filesDirectory.toPath()).filter { Path path ->
+                SpotBugsInfo.EXTENSIONS.any { String ext ->
+                    path.toString().toLowerCase(Locale.getDefault()).endsWith(ext)
+                }
+            }.forEach { Path path ->
+                filesList.add(path.toString())
             }
-            sourceFiles.addAll(FileUtils.listFiles(testClassFilesDirectory, SpotBugsInfo.EXTENSIONS, true))
+            foundFiles = !filesList.isEmpty()
+        } else {
+            foundFiles = Files.walk(filesDirectory.toPath()).anyMatch { Path path ->
+                SpotBugsInfo.EXTENSIONS.any { String ext ->
+                    path.toString().toLowerCase(Locale.getDefault()).endsWith(ext)
+                }
+            }
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("SourceFiles: ${sourceFiles}")
+            log.debug("SourceFiles found flag: ${foundFiles} with count: ${filesList.size()}")
+            if (!filesList.isEmpty()) {
+                log.debug("Files found: " + filesList)
+            }
         }
-        !sourceFiles.isEmpty()
+
+        return foundFiles
     }
 
     private void printBugs(NodeList bugs) {
         if (log.isErrorEnabled()) {
-            bugs.forEach{ Node bug ->
-                log.error(bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
-                    bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type')
+            StringBuilder sb = new StringBuilder()
+            bugs.each { Node bug ->
+                sb.append(bugLog(bug)).append(SpotBugsInfo.EOL)
             }
+            log.error(sb.toString())
         }
     }
+
+    // Protected to allow groovy closure to see this method
+    protected static String bugLog(Node bug) {
+        return bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
+            bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type'
+    }
+
 }

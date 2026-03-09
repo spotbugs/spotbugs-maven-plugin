@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.NodeChild
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -43,29 +44,33 @@ println '******************'
 
 String effortLevel = 'default'
 
-assert spotbugsHtml.text.contains("<i>" + effortLevel + "</i>")
+assert spotbugsHtml.text.contains('<i>' + effortLevel + '</i>')
 
-XmlSlurper xhtmlParser = new XmlSlurper()
-xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
-xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
-GPathResult path = xhtmlParser.parse(spotbugsHtml)
+XmlSlurper xmlSlurper = new XmlSlurper()
+xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
 
-int spotbugsErrors = path.body.'**'.find {main -> main.@id == 'bodyColumn'}.section[1].table.tr[1].td[1].toInteger()
+// Temporarily allow DOCTYPE for HTML parsing
+xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', false)
+GPathResult path = xmlSlurper.parse(spotbugsHtml)
+xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+
+int spotbugsErrors = path.body.'**'.find { NodeChild main -> main.@id == 'bodyColumn' }.section[1].table.tr[1].td[1].toInteger()
 println "Error Count is ${spotbugsErrors}"
 
 println '******************'
 println 'Checking xDoc file'
 println '******************'
 
-path = new XmlSlurper().parse(spotbugXdoc)
+path = xmlSlurper.parse(spotbugXdoc)
 
-List<Node> allNodes = path.depthFirst().collect{ it }
-int xdocErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+List<NodeChild> allNodes = path.depthFirst().toList()
+int xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${xdocErrors}"
 
 assert spotbugsErrors == xdocErrors
 
-xdocErrors = allNodes.findAll {it.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}.size()
+xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'DLS_DEAD_LOCAL_STORE' }
 println "BugInstance with includes size is ${xdocErrors}"
 
 assert spotbugsErrors == xdocErrors
@@ -74,15 +79,15 @@ println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-path = new XmlSlurper().parse(spotbugXml)
+path = xmlSlurper.parse(spotbugXml)
 
-allNodes = path.depthFirst().collect{ it }
-int spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+allNodes = path.depthFirst().toList()
+int spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
 
-spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}.size()
+spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'DLS_DEAD_LOCAL_STORE' }
 println "BugInstance with includes size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
@@ -93,44 +98,44 @@ println '*****************'
 println 'Checking Module-2'
 println '*****************'
 
-module = "module-2"
+module = 'module-2'
 
-spotbugsHtml =  new File(basedir, "modules/${module}/target/site/spotbugs.html")
+spotbugsHtml =  basedir.toPath().resolve("modules/${module}/target/site/spotbugs.html")
 assert Files.exists(spotbugsHtml)
 
-spotbugXdoc = new File(basedir, "modules/${module}/target/spotbugs.xml")
+spotbugXdoc = basedir.toPath().resolve("modules/${module}/target/spotbugs.xml")
 assert Files.exists(spotbugXdoc)
 
-spotbugXml = new File(basedir, "modules/${module}/target/spotbugsXml.xml")
+spotbugXml = basedir.toPath().resolve("modules/${module}/target/spotbugsXml.xml")
 assert Files.exists(spotbugXml)
 
 println '******************'
 println 'Checking HTML file'
 println '******************'
 
-assert spotbugsHtml.text.contains("<i>" + effortLevel + "</i>")
+assert spotbugsHtml.text.contains('<i>' + effortLevel + '</i>')
 
-xhtmlParser = new XmlSlurper()
-xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
-xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
-path = xhtmlParser.parse(spotbugsHtml)
+// Temporarily allow DOCTYPE for HTML parsing
+xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', false)
+path = xmlSlurper.parse(spotbugsHtml)
+xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
 
-spotbugsErrors = path.body.'**'.find {main -> main.@id == 'bodyColumn'}.section[1].table.tr[1].td[1].toInteger()
+spotbugsErrors = path.body.'**'.find { NodeChild main -> main.@id == 'bodyColumn' }.section[1].table.tr[1].td[1].toInteger()
 println "Error Count is ${spotbugsErrors}"
 
 println '******************'
 println 'Checking xDoc file'
 println '******************'
 
-path = new XmlSlurper().parse(spotbugXdoc)
+path = xmlSlurper.parse(spotbugXdoc)
 
-allNodes = path.depthFirst().collect{ it }
-xdocErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+allNodes = path.depthFirst().toList()
+xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${xdocErrors}"
 
 assert spotbugsErrors == xdocErrors
 
-xdocErrors = allNodes.findAll {it.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}.size()
+xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'DLS_DEAD_LOCAL_STORE'}
 println "BugInstance with includes size is ${xdocErrors}"
 
 assert spotbugsErrors == xdocErrors
@@ -139,15 +144,15 @@ println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-path = new XmlSlurper().parse(spotbugXml)
+path = xmlSlurper.parse(spotbugXml)
 
-allNodes = path.depthFirst().collect{ it }
-spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+allNodes = path.depthFirst().toList()
+spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
 
-spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'  && it.@type == "DLS_DEAD_LOCAL_STORE"}.size()
+spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance'  && node.@type == 'DLS_DEAD_LOCAL_STORE'}
 println "BugInstance with includes size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors

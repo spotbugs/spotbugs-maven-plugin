@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,7 +87,7 @@ class XDocsReporter {
      *            The ThresholdValue integer to evaluate.
      * @return The string valueof the Threshold object.
      */
-    protected String evaluateThresholdParameter(String thresholdValue) {
+    protected static String evaluateThresholdParameter(String thresholdValue) {
         switch (thresholdValue) {
             case '1': return 'High'
             case '2': return 'Normal'
@@ -103,11 +103,11 @@ class XDocsReporter {
      *
      * @return The Spotbugs Version used on the report.
      */
-    protected String getSpotBugsVersion() {
+    protected static String getSpotBugsVersion() {
         return Version.VERSION_STRING
     }
 
-    public void generateReport() {
+    void generateReport() {
         StreamingMarkupBuilder xmlBuilder = new StreamingMarkupBuilder()
         xmlBuilder.encoding = outputEncoding.name()
 
@@ -147,7 +147,7 @@ class XDocsReporter {
                     file(classname: bugClass) {
                         spotbugsResults.BugInstance.each() { NodeChild bugInstance ->
 
-                            if (bugInstance.Class.find{ it.@primary == "true" }.@classname.text() != bugClass) {
+                            if (bugInstance.Class.find { NodeChild classNode -> classNode.@primary == "true" }.@classname.text() != bugClass) {
                                 return
                             }
 

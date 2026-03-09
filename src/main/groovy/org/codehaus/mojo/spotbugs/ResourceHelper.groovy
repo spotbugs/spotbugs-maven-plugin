@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@ package org.codehaus.mojo.spotbugs
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.StandardCopyOption
+import java.util.regex.Pattern
 
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugin.MojoExecutionException
@@ -32,6 +34,9 @@ final class ResourceHelper {
 
     /** The resource manager. */
     private final ResourceManager resourceManager
+
+    /** Precompiled regex pattern for resource name sanitization. */
+    private static final Pattern SANITIZE_PATTERN = Pattern.compile('[?:&=%]')
 
     ResourceHelper(final Log log, final File outputDirectory, final ResourceManager resourceManager) {
         this.log = Objects.requireNonNull(log, "log must not be null")
@@ -51,74 +56,79 @@ final class ResourceHelper {
         Objects.requireNonNull(resource, "resource must not be null")
 
         String location = null
-        String artifact = resource
+        String artifact = null
 
-        // Linux Checks
-        if (resource.indexOf(SpotBugsInfo.FORWARD_SLASH) != -1) {
-            artifact = resource.substring(resource.lastIndexOf(SpotBugsInfo.FORWARD_SLASH) + 1)
-            location = resource.substring(0, resource.lastIndexOf(SpotBugsInfo.FORWARD_SLASH))
-        }
-
-        // Windows Checks
-        if (resource.indexOf(SpotBugsInfo.BACKWARD_SLASH) != -1) {
-            artifact = resource.substring(resource.lastIndexOf(SpotBugsInfo.BACKWARD_SLASH) + 1)
-            location = resource.substring(0, resource.lastIndexOf(SpotBugsInfo.BACKWARD_SLASH))
+        // Normalize path separator to always use forward slash for resource lookup
+        String normalizedResource = resource.replace('\\', '/')
+        int lastSeparatorIndex = normalizedResource.lastIndexOf('/')
+        if (lastSeparatorIndex != -1) {
+            location = normalizedResource.substring(0, lastSeparatorIndex)
+            artifact = normalizedResource.substring(lastSeparatorIndex + 1)
+        } else {
+            artifact = normalizedResource
         }
 
         // replace all occurrences of the following characters:  ? : & =
-        location = location?.replaceAll("[\\?\\:\\&\\=\\%]", "_")
-        artifact = artifact?.replaceAll("[\\?\\:\\&\\=\\%]", "_")
+        location = location != null ? SANITIZE_PATTERN.matcher(location).replaceAll('_') : null
+        artifact = SANITIZE_PATTERN.matcher(artifact).replaceAll('_')
 
         if (log.isDebugEnabled()) {
-            log.debug("resource is ${resource}")
-            log.debug("location is ${location}")
-            log.debug("artifact is ${artifact}")
+            log.debug("resource is '${normalizedResource}'" + ", location is '${location}'" +
+                ", artifact is '${artifact}'" + ", outputDirectory is '${outputDirectory}'")
         }
 
-        File resourceFile = getResourceAsFile(resource, artifact)
+        Path resourcePath = getResourceAsFile(normalizedResource, artifact)
 
         if (log.isDebugEnabled()) {
-            log.debug("location of resourceFile file is ${resourceFile.absolutePath}")
+            log.debug("location of resourceFile file is ${resourcePath.toAbsolutePath()}")
         }
 
-        return resourceFile
+        return resourcePath.toFile()
     }
 
-    private File getResourceAsFile(final String name, final String outputPath) {
-        // Optimization for File to File fetches
-        File file = new File(name)
-        if (file.exists() && outputPath == null) {
-            if (log.isDebugEnabled()) {
-                log.debug("optimized file ${name}")
+    private Path getResourceAsFile(final String name, final String outputPath) {
+        Path outputResourcePath = outputDirectory == null ? Path.of(outputPath) : outputDirectory.toPath().resolve(outputPath)
+
+        // Checking if the resource is already a file
+        if (new File(name).exists()) {
+            // Avoid copying the file onto itself
+            if (Path.of(name).toAbsolutePath().normalize().equals(outputResourcePath.toAbsolutePath().normalize())) {
+                return outputResourcePath
             }
-            return file
-        }
-        // End optimization
 
-        Path outputResourcePath
-        if (outputDirectory != null) {
-            outputResourcePath = outputDirectory.toPath().resolve(outputPath)
-        } else {
-            outputResourcePath = Path.of(outputPath)
+            createParentDirectories(outputResourcePath)
+
+            // Copy existing file (not a URL)
+            return Files.copy(Path.of(name), outputResourcePath, StandardCopyOption.REPLACE_EXISTING,
+                StandardCopyOption.COPY_ATTRIBUTES)
         }
 
+        // Copying resource from classpath to a file
         try {
-            Path parent = outputResourcePath.getParent()
-            if (parent != null && Files.notExists(parent)) {
-                Files.createDirectories(parent)
-            }
+            createParentDirectories(outputResourcePath)
 
             resourceManager.getResourceAsInputStream(name).withCloseable { InputStream is ->
                 new BufferedInputStream(is).withCloseable { BufferedInputStream bis ->
                     Files.newOutputStream(outputResourcePath).withCloseable { OutputStream os ->
-                        os << bis
+                        new BufferedOutputStream(os).withCloseable { BufferedOutputStream bos ->
+                            bos << bis
+                        }
                     }
                 }
             }
         } catch (IOException e) {
+            log.error('Unable to create file-based resource for ' + name + ' in ' + outputResourcePath, e)
             throw new MojoExecutionException('Cannot create file-based resource.', e)
         }
 
-        return outputResourcePath.toFile()
+        return outputResourcePath
     }
+
+    private static createParentDirectories(Path outputResourcePath) {
+        Path parent = outputResourcePath.getParent()
+        if (parent != null && Files.notExists(parent)) {
+            Files.createDirectories(parent)
+        }
+    }
+
 }

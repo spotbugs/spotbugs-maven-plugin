@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,26 +36,11 @@ interface SpotBugsInfo {
     /** The key to get the description of the Plug-In from the bundle. */
     static final String DESCRIPTION_KEY = 'report.spotbugs.description'
 
-    /** The key to get the source directory message of the Plug-In from the bundle. */
-    static final String SOURCE_ROOT_KEY = 'report.spotbugs.sourceRoot'
-
-    /** The key to get the source directory message of the Plug-In from the bundle. */
-    static final String TEST_SOURCE_ROOT_KEY = 'report.spotbugs.testSourceRoot'
-
-    /** The key to get the java source message of the Plug-In from the bundle. */
-    static final String JAVA_SOURCES_KEY = 'report.spotbugs.javasources'
-
     /** The extensions to search files for. */
     static final String[] EXTENSIONS = ['class']
 
     /** The comma character. */
     static final String COMMA = ','
-
-    /** The forward slash character. */
-    static final String FORWARD_SLASH = '/'
-
-    /** The backward slash character. */
-    static final String BACKWARD_SLASH = '\\'
 
     /** The character to separate URL tokens. */
     static final String URL_SEPARATOR = '/'
@@ -75,6 +60,12 @@ interface SpotBugsInfo {
     /** The static class suffix. */
     static final String CLASS_SUFFIX = '.class'
 
+    /** The static jar suffix. */
+    static final String JAR_SUFFIX = '.jar'
+
+    /** The static zip suffix. */
+    static final String ZIP_SUFFIX = '.zip'
+
     /** The spotbugs efforts as max, min, and default as default. */
     Map<String, String> spotbugsEfforts = [Max: 'max', Min: 'min', Default: 'default']
 
@@ -82,10 +73,6 @@ interface SpotBugsInfo {
     Map<String, String> spotbugsThresholds = [High: 'high', Exp: 'experimental', Low: 'low', Medium: 'medium', Default: 'medium']
 
     /** The spotbugs priority as unknown, high, medium, and low. */
-    List<String> spotbugsPriority = [
-        'unknown',
-        'High',
-        'Medium',
-        'Low'
-    ]
+    List<String> spotbugsPriority = ['unknown', 'High', 'Medium', 'Low' ]
+
 }

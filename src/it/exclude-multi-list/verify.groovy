@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.NodeChild
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -34,23 +35,26 @@ println '******************'
 println 'Checking HTML file'
 println '******************'
 
-XmlSlurper xhtmlParser = new XmlSlurper()
-xhtmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
-xhtmlParser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
-GPathResult path = xhtmlParser.parse(spotbugsHtml)
+XmlSlurper xmlSlurper = new XmlSlurper()
+xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
 
-int spotbugsErrors = path.body.'**'.find {main -> main.@id == 'bodyColumn'}.section[1].table.tr[1].td[1].toInteger()
+// Temporarily allow DOCTYPE for HTML parsing
+xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', false)
+GPathResult path = xmlSlurper.parse(spotbugsHtml)
+xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+
+int spotbugsErrors = path.body.'**'.find { NodeChild main -> main.@id == 'bodyColumn' }.section[1].table.tr[1].td[1].toInteger()
 println "Error Count is ${spotbugsErrors}"
-
 
 println '*********************************'
 println 'Checking Spotbugs Native XML file'
 println '*********************************'
 
-path = new XmlSlurper().parse(spotbugXml)
+path = xmlSlurper.parse(spotbugXml)
 
-List<Node> allNodes = path.depthFirst().collect{ it }
-int spotbugsXmlErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+List<NodeChild> allNodes = path.depthFirst().toList()
+int spotbugsXmlErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${spotbugsXmlErrors}"
 
 assert spotbugsErrors == spotbugsXmlErrors
@@ -59,10 +63,10 @@ println '******************'
 println 'Checking xDoc file'
 println '******************'
 
-path = new XmlSlurper().parse(spotbugXdoc)
+path = xmlSlurper.parse(spotbugXdoc)
 
-allNodes = path.depthFirst().collect{ it }
-int xdocErrors = allNodes.findAll {it.name() == 'BugInstance'}.size()
+allNodes = path.depthFirst().toList()
+int xdocErrors = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
 println "BugInstance size is ${xdocErrors}"
 
 assert xdocErrors == spotbugsXmlErrors

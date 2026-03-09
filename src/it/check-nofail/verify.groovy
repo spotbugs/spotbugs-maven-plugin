@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,5 +18,5 @@ import java.nio.file.Path
 
 // Check no missing classes
 
-Path buildLog = Path.of(basedir.resolve('build.log')
+Path buildLog = basedir.toPath().resolve('build.log')
 assert buildLog.text.contains('BUILD SUCCESS')

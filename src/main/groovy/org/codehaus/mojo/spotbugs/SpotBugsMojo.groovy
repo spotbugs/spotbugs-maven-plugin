@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.NodeChild
 import groovy.xml.slurpersupport.NodeChildren
 import groovy.xml.StreamingMarkupBuilder
 
@@ -27,6 +28,7 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.function.Predicate
 import java.util.stream.Collectors
 
 import javax.inject.Inject
@@ -102,7 +104,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Parameter(defaultValue = '${project.build.directory}', property = 'spotbugs.sarifOutputDirectory', required = true)
     File sarifOutputDirectory
-
 
     /**
      * Set the name of the output SARIF file produced.
@@ -341,6 +342,14 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     String omitVisitors
 
     /**
+     * Selectively enable/disable detectors. This is a comma-delimited list with "+" or "-" before each detectors name indicated enabling or disabling.
+     *
+     * @since 4.9.4.2
+     */
+    @Parameter(property = 'spotbugs.chooseVisitors')
+    String chooseVisitors
+
+    /**
      * The plugin list to include in the report. This is a comma-delimited list.
      * <p>
      * Potential values are a filesystem path, a URL, or a classpath resource.
@@ -509,28 +518,40 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Override
     boolean canGenerateReport() {
+        if (skip) {
+            log.info('Spotbugs plugin skipped')
+            return false
+        }
 
-        boolean canGenerate
+        executeCheck()
+
+        boolean canGenerate = false
         log.debug('****** SpotBugsMojo canGenerateReport *******')
 
-        if (!skip && classFilesDirectory.exists()) {
+        Predicate<Path> containsSource = { Path path ->
+            String fileName = path.toFile().name
+            return fileName.endsWith(SpotBugsInfo.CLASS_SUFFIX) ||
+                (nested && (fileName.endsWith(SpotBugsInfo.JAR_SUFFIX) || fileName.endsWith(SpotBugsInfo.ZIP_SUFFIX)))
+        }
 
-            classFilesDirectory.eachFileRecurse { File file ->
-                if (file.name.contains(SpotBugsInfo.CLASS_SUFFIX)) {
-                    canGenerate = true
-                }
+        if (classFilesDirectory.exists()) {
+            try {
+                canGenerate = Files.walk(classFilesDirectory.toPath())
+                    .anyMatch(containsSource)
+            } catch (IOException e) {
+                log.warn("Error searching class files: ${e.message}")
             }
             if (log.isDebugEnabled()) {
                 log.debug("canGenerate Src is ${canGenerate}")
             }
         }
 
-        if (!skip && testClassFilesDirectory.exists() && includeTests) {
-
-            testClassFilesDirectory.eachFileRecurse { File file ->
-                if (file.name.contains(SpotBugsInfo.CLASS_SUFFIX)) {
-                    canGenerate = true
-                }
+        if (!canGenerate && testClassFilesDirectory.exists() && includeTests) {
+            try {
+                canGenerate = Files.walk(testClassFilesDirectory.toPath())
+                    .anyMatch(containsSource)
+            } catch (IOException e) {
+                log.warn("Error searching test class files: ${e.message}")
             }
             if (log.isDebugEnabled()) {
                 log.debug("canGenerate Test Src is ${canGenerate}")
@@ -539,9 +560,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (canGenerate && outputSpotbugsFile == null) {
             outputSpotbugsFile = spotbugsXmlOutputDirectory.toPath().resolve(spotbugsXmlOutputFilename).toFile()
-
             executeSpotbugs(outputSpotbugsFile)
-
             if (skipEmptyReport && bugCount == 0) {
                 canGenerate = false
             }
@@ -549,6 +568,26 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (log.isDebugEnabled()) {
             log.debug("canGenerate is ${canGenerate}")
+        }
+
+        boolean isSiteLifecycle = false
+        if (session != null && session.getRequest() != null) {
+            List<String> goals = session.getRequest().getGoals()
+            if (goals != null && goals.any { String goal ->
+                goal.contains('site')
+            }) {
+                isSiteLifecycle = true
+            }
+        }
+
+        if (canGenerate) {
+            if (!isSiteLifecycle) {
+                // Only generate xdoc report, skip site pages
+                generateXDoc(getLocale())
+                return false
+            }
+        } else {
+            log.info('No files found to run spotbugs; check compile phase has been run.')
         }
 
         return canGenerate
@@ -591,7 +630,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @see {@link MavenReport#getOutputName()}
      *
      * @deprecated Method name does not properly reflect its purpose. Implement and use
-     * {@link #getOutputPath()} instead.
+     * {@link #getOutputPath()} instead. This is waiting on maven to switch in report
+     * plugin before we can remove it.
      */
     @Override
     @Deprecated
@@ -623,12 +663,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Override
     void executeReport(Locale locale) {
-
         log.debug('****** SpotBugsMojo executeReport *******')
-        executeCheck()
-
-        if (skip || !canGenerateReport()) {
-            log.info('cannot generate report')
+        if (!canGenerateReport()) {
             return
         }
 
@@ -671,7 +707,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 generator.setLog(log)
                 generator.threshold = threshold
                 generator.effort = effort
-                generator.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
+
+                XmlSlurper xmlSlurper = new XmlSlurper()
+                xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+                xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+
+                generator.setSpotbugsResults(xmlSlurper.parse(outputSpotbugsFile))
                 generator.setOutputDirectory(new File(outputDirectory.getAbsolutePath()))
                 generator.generateReport()
 
@@ -688,7 +729,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         log.debug('Generating Spotbugs XML')
 
         if (!spotbugsXmlOutputDirectory.exists() && !spotbugsXmlOutputDirectory.mkdirs()) {
-            throw new MojoExecutionException('Cannot create xml output directory')
+            throw new MojoExecutionException('Cannot create xml output directory.')
         }
     }
 
@@ -713,7 +754,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
             xDocsReporter.setOutputWriter(Files.newBufferedWriter(Path.of("${xmlOutputDirectory}/spotbugs.xml"),
                 Charset.forName(outputEncoding)))
-            xDocsReporter.setSpotbugsResults(new XmlSlurper().parse(outputSpotbugsFile))
+
+            XmlSlurper xmlSlurper = new XmlSlurper()
+            xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+            xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+
+            xDocsReporter.setSpotbugsResults(xmlSlurper.parse(outputSpotbugsFile))
             xDocsReporter.setCompileSourceRoots(session.getCurrentProject().compileSourceRoots)
             xDocsReporter.setTestSourceRoots(session.getCurrentProject().testCompileSourceRoots)
 
@@ -768,7 +814,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         return isEnabled
     }
 
-    ResourceBundle getBundle(locale) {
+    ResourceBundle getBundle(Locale locale) {
 
         this.bundle = ResourceBundle.getBundle(SpotBugsInfo.BUNDLE_NAME, locale, SpotBugsMojo.class.getClassLoader())
 
@@ -799,7 +845,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
 
             args << '-userPrefs'
-            args << resourceHelper.getResourceFile(userPrefs.trim())
+            args << resourceHelper.getResourceFile(userPrefs.trim()).getAbsolutePath()
         }
 
         if (htmlOutput) {
@@ -857,6 +903,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             args << omitVisitors
         }
 
+        if (chooseVisitors) {
+            log.debug("  Adding 'chooseVisitors'")
+            args << '-chooseVisitors'
+            args << chooseVisitors
+        }
+
         if (relaxed) {
             log.debug("  Adding 'relaxed'")
             args << '-relaxed'
@@ -886,7 +938,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             includefilters.each { String includefilter ->
                 args << '-include'
-                args << resourceHelper.getResourceFile(includefilter.trim())
+                args << resourceHelper.getResourceFile(includefilter.trim()).getAbsolutePath()
             }
         }
 
@@ -895,7 +947,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             includeFilterFiles.each { String includefilter ->
                 args << '-include'
-                args << resourceHelper.getResourceFile(includefilter.trim())
+                args << resourceHelper.getResourceFile(includefilter.trim()).getAbsolutePath()
             }
         }
 
@@ -905,7 +957,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             excludefilters.each { String excludeFilter ->
                 args << '-exclude'
-                args << resourceHelper.getResourceFile(excludeFilter.trim())
+                args << resourceHelper.getResourceFile(excludeFilter.trim()).getAbsolutePath()
             }
         }
 
@@ -914,7 +966,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             excludeFilterFiles.each { String excludeFilter ->
                 args << '-exclude'
-                args << resourceHelper.getResourceFile(excludeFilter.trim())
+                args << resourceHelper.getResourceFile(excludeFilter.trim()).getAbsolutePath()
             }
         }
 
@@ -924,7 +976,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             excludeFiles.each() { String excludeFile ->
                 args << '-excludeBugs'
-                args << resourceHelper.getResourceFile(excludeFile.trim())
+                args << resourceHelper.getResourceFile(excludeFile.trim()).getAbsolutePath()
             }
         }
 
@@ -933,7 +985,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             excludeBugsFiles.each() { String excludeFile ->
                 args << '-excludeBugs'
-                args << resourceHelper.getResourceFile(excludeFile.trim())
+                args << resourceHelper.getResourceFile(excludeFile.trim()).getAbsolutePath()
             }
         }
 
@@ -941,9 +993,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug('  Adding Source directories (To process source exclusions)')
             args << '-sourcepath'
             String sourceRoots = ''
-            session.getCurrentProject().compileSourceRoots.each() { sourceRoots += it + File.pathSeparator }
+            session.getCurrentProject().compileSourceRoots.each { String sourceRoot ->
+                sourceRoots += sourceRoot + File.pathSeparator
+            }
             if (includeTests) {
-                session.getCurrentProject().testCompileSourceRoots.each() { sourceRoots += it + File.pathSeparator }
+                session.getCurrentProject().testCompileSourceRoots.each { String testSourceRoot ->
+                    sourceRoots += testSourceRoot + File.pathSeparator
+                }
             }
             args << sourceRoots.substring(0, sourceRoots.length() -1)
         }
@@ -951,7 +1007,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (maxRank) {
             log.debug("  Adding 'maxRank'")
             args << '-maxRank'
-            args << maxRank
+            args << String.valueOf(maxRank)
         }
 
         if (classFilesDirectory.isDirectory()) {
@@ -1024,7 +1080,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @param file Destination file to create.
      */
-    private void forceFileCreation(File file) {
+    private static void forceFileCreation(File file) {
         if (file.exists()) {
             file.delete()
         }
@@ -1069,7 +1125,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (log.isDebugEnabled()) {
             log.debug("resourceManager.outputDirectory is ${resourceManager.outputDirectory}")
-            log.debug("Plugin Artifacts to be added -> ${pluginArtifacts.toString()}")
+            log.debug("Plugin Artifacts to be added -> ${pluginArtifacts}")
             log.debug("outputFile is ${outputFile.getCanonicalPath()}")
             log.debug("output Directory is ${spotbugsXmlOutputDirectory.getAbsolutePath()}")
             if (htmlOutput) {
@@ -1115,7 +1171,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                 List<String> args = Arrays.asList(jvmArgs.split(SpotBugsInfo.BLANK))
 
-                args.each() { jvmArg ->
+                args.each() { String jvmArg ->
                     if (log.isDebugEnabled()) {
                         log.debug("Adding JVM Arg => ${jvmArg}")
                     }
@@ -1131,14 +1187,14 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
                 pluginArtifacts.each() { Artifact pluginArtifact ->
                     if (log.isDebugEnabled()) {
-                        log.debug('  Adding to pluginArtifact -> ' + pluginArtifact.file.toString())
+                        log.debug("  Adding to pluginArtifact -> ${pluginArtifact.file}")
                     }
 
                     pathelement(location: pluginArtifact.file)
                 }
             }
 
-            spotbugsArgs.each { spotbugsArg ->
+            spotbugsArgs.each { String spotbugsArg ->
                 if (log.isDebugEnabled()) {
                     log.debug("Spotbugs arg is ${spotbugsArg}")
                 }
@@ -1168,16 +1224,20 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (xmlTempFile.exists()) {
             if (xmlTempFile.size() > 0) {
-                GPathResult path = new XmlSlurper().parse(xmlTempFile)
+                XmlSlurper xmlSlurper = new XmlSlurper()
+                xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+                xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
 
-                List<Node> allNodes = path.depthFirst().collect { it }
+                GPathResult path = xmlSlurper.parse(xmlTempFile)
 
-                bugCount = allNodes.findAll { it.name() == 'BugInstance' }.size()
+                List<NodeChild> allNodes = path.depthFirst().toList()
+
+                bugCount = allNodes.count { NodeChild node -> node.name() == 'BugInstance' }
                 if (log.isDebugEnabled()) {
                     log.debug("BugInstance size is ${bugCount}")
                 }
 
-                errorCount = allNodes.findAll { it.name() == 'Error' }.size()
+                errorCount = allNodes.count { NodeChild node -> node.name() == 'Error' }
                 if (log.isDebugEnabled()) {
                     log.debug("Error size is ${errorCount}")
                 }
@@ -1216,7 +1276,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                     writer.write '<?xml version="1.0" encoding="windows-1252"?>'
                 } else {
                     writer.write '<?xml version="1.0" encoding="' +
-                        effectiveEncoding.name().toLowerCase(Locale.ENGLISH) + '"?>'
+                        effectiveEncoding.name().toLowerCase(Locale.getDefault()) + '"?>'
                 }
 
                 writer.write SpotBugsInfo.EOL
@@ -1234,7 +1294,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         if (sarifTempFile && sarifOutput && sarifTempFile.size() > 0) {
 
-            Map slurpedResult = new JsonSlurper().parse(sarifTempFile)
+            Map<String, Object> slurpedResult = new JsonSlurper().parse(sarifTempFile)
             JsonBuilder builder = new JsonBuilder(slurpedResult)
 
             // With -Dspotbugs.sarifFullPath=true
@@ -1330,7 +1390,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @see AbstractMavenReport#setReportOutputDirectory(File)
      */
     @Override
-    public void setReportOutputDirectory(File reportOutputDirectory) {
+    void setReportOutputDirectory(File reportOutputDirectory) {
         super.setReportOutputDirectory(reportOutputDirectory)
         this.outputDirectory = reportOutputDirectory
     }

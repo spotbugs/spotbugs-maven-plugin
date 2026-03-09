@@ -1,22 +1,33 @@
-name: Java Integration Tests Maven 4.0.0-beta-4
+name: Java Integration Tests Maven 4.0.0-rc-5
 
 on: [push, pull_request]
 
 permissions: read-all
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  maven-version: 4.0.0-rc-5
+
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Integration Tests Maven 4.0.0-beta-4
+    timeout-minutes: 30
+    name: Integration Tests Maven 4.0.0-rc-5 with java 25
 
     steps:
-      - uses: actions/checkout@v5
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - name: Setup Java
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5
         with:
-          java-version: 21
+          cache: maven
           distribution: zulu
-      - name: Load Maven 4.0.0-beta-4
-        run: mvn -B -V org.apache.maven.plugins:maven-wrapper-plugin:3.3.2:wrapper -Dmaven=4.0.0-beta-4 --no-transfer-progress
-      - name: Integration Test with Maven
-        run: ./mvnw -B -V -DtestSrc=remote -Prun-its verify -Dinvoker.parallelThreads=8 -Dlicense.skip=true -Dmaven.min-version=4.0.0-beta-4 --no-transfer-progress
+          java-version: 25
+      - name: Set Maven Wrapper version ${{ env.maven-version }}
+        run: sed -i "s|^distributionUrl=.*|distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/${{ env.maven-version }}/apache-maven-${{ env.maven-version }}-bin.zip|" .mvn/wrapper/maven-wrapper.properties
+      - name: Disable Maven Wrapper checksum validation
+        run: sed -i '/distributionSha256Sum/d' .mvn/wrapper/maven-wrapper.properties
+      - name: Integration Test with Maven ${{ env.maven-version }}
+        run: ./mvnw verify --batch-mode  --no-transfer-progress --show-version -Dinvoker.parallelThreads=8 -Dlicense.skip=true -Dmaven=${{ env.maven-version }} -Dmaven.min-version=${{ env.maven-version }} -DtestSrc=remote -Prun-its

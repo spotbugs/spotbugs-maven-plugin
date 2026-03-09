@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,9 @@ public class App implements Cloneable {
     }
 
     public static void main(String[] args) {
-        Objects.isNull(args);
+        if (Objects.isNull(args)) {
+            logger.warn("Input args is null");
+        }
         logger.info("Hello World!");
     }
 

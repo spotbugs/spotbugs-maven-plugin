@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,14 @@ import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.slurpersupport.NodeChild
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 import org.apache.maven.doxia.markup.HtmlMarkup
 import org.apache.maven.doxia.sink.Sink
 import org.apache.maven.doxia.sink.SinkEventAttributes
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet
 import org.apache.maven.plugin.logging.Log
-
-import org.codehaus.plexus.util.PathTool
 
 /**
  * The reporter controls the generation of the SpotBugs report. It contains call back methods which gets called by
@@ -160,6 +160,9 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
     /** Bug classes. */
     List<String> bugClasses = []
+
+    /** Pre-compiled pattern for removing inner class suffixes. */
+    private static final Pattern INNER_CLASS_PATTERN = Pattern.compile('\\$.*')
 
     /**
      * Default constructor.
@@ -317,7 +320,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
             // priority
             sink.tableCell()
-            sink.text(spotbugsPriority[priority as Integer])
+            sink.text(spotbugsPriority[priority.toInteger()])
             sink.tableCell_()
 
             sink.tableRow_()
@@ -349,27 +352,30 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         }
 
         String prefix
-        compileSourceRoots.each { compileSourceRoot ->
-            if (Files.notExists(Path.of(compileSourceRoot + File.separator + line.@sourcepath.text()))) {
+        compileSourceRoots.each { String compileSourceRoot ->
+            Path sourcePath = Path.of(compileSourceRoot).resolve(line.@sourcepath.text())
+            if (Files.notExists(sourcePath)) {
                 return
             }
-            prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefLocation.getAbsolutePath())
-            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefLocation.getName() +
-                SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+            prefix = outputDirectory.toPath().relativize(xrefLocation.toPath())
+            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
         }
 
         if (includeTests && !prefix) {
-            testSourceRoots.each { testSourceRoot ->
-                if (Files.notExists(Path.of(testSourceRoot + File.separator + line.@sourcepath.text()))) {
+            testSourceRoots.each { String testSourceRoot ->
+                Path testSourcePath = Path.of(testSourceRoot).resolve(line.@sourcepath.text())
+                if (Files.notExists(testSourcePath)) {
                     return
                 }
-                prefix = PathTool.getRelativePath(outputDirectory.getAbsolutePath(), xrefTestLocation.getAbsolutePath())
-                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefTestLocation.getName() +
-                    SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+                prefix = outputDirectory.toPath().relativize(xrefTestLocation.toPath())
+                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
             }
         }
 
-        String path = prefix + line.@classname.text().replaceAll('[.]', '/').replaceAll('[$].*', '')
+        String className = line.@classname.text().replace('.', '/')
+        Matcher matcher = INNER_CLASS_PATTERN.matcher(className)
+        String cleanClassName = matcher.replaceFirst('')
+        String path = prefix + cleanClassName
         String lineNumber = valueForLine(line)
 
         String hyperlink
@@ -409,9 +415,9 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         // Dollar '$' for nested classes is not valid character in sink.anchor() and therefore it is ignored
         // https://github.com/spotbugs/spotbugs-maven-plugin/issues/236
-        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_START] as Object[],
+        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_START].toArray(),
             new SinkEventAttributeSet(SinkEventAttributes.NAME, bugClass))
-        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_END] as Object[], null)
+        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_END].toArray(), null)
 
         sink.section2()
         sink.sectionTitle2()
@@ -587,7 +593,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         log.debug("Exiting printFilesSummary")
     }
 
-    public void generateReport() {
+    void generateReport() {
         if (log.isDebugEnabled()) {
             log.debug('Reporter Locale is ' + this.bundle.getLocale().getLanguage())
         }

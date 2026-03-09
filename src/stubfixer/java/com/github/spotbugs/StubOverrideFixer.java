@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2025 the original author or authors.
+ * Copyright 2005-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 public class StubOverrideFixer {
 
     /** The logger. */
-    private static Logger logger = LoggerFactory.getLogger(StubOverrideFixer.class);
+    private static final Logger logger = LoggerFactory.getLogger(StubOverrideFixer.class);
 
     /** The Constant GROOVY_METHODS. */
     private static final Set<String> GROOVY_METHODS = Set.of("getMetaClass", "setMetaClass", "invokeMethod",
