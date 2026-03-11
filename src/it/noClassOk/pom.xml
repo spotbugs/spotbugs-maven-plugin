@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2005-2026 the original author or authors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Parent is disabled on purpose
+  <parent>
+    <groupId>spotbugs-maven-plugin.it</groupId>
+    <artifactId>common</artifactId>
+    <version>testing</version>
+    <relativePath>../common.xml</relativePath>
+  </parent>
+  -->
+
+  <groupId>spotbugs-maven-plugin.it</groupId>
+  <artifactId>noClassOk</artifactId>
+  <version>testing</version>
+
+  <name>noClassOk</name>
+
+  <url>https://spotbugs.github.io/spotbugs-maven-plugin/</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <!-- These two are used due to old compiler on maven 3.6.3 GHA build -->
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+
+    <maven.compiler.release>11</maven.compiler.release>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>@clean.plugin@</version>
+        <configuration>
+          <force>true</force>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>@pom.version@</version>
+        <configuration>
+          <noClassOk>true</noClassOk>
+          <debug>@spotbugsTestDebug@</debug>
+        </configuration>
+        <executions>
+          <execution>
+            <id>run-analysis</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>spotbugs</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
