@@ -530,11 +530,15 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         log.debug('****** SpotBugsMojo canGenerateReport *******')
 
         if (classFilesDirectory.exists()) {
-            try {
-                canGenerate = Files.walk(classFilesDirectory.toPath())
-                    .anyMatch { Path path -> path.toFile().name.endsWith(SpotBugsInfo.CLASS_SUFFIX) }
-            } catch (IOException e) {
-                log.warn("Error searching class files: ${e.message}")
+            if (noClassOk) {
+                canGenerate = true
+            } else {
+                try {
+                    canGenerate = Files.walk(classFilesDirectory.toPath())
+                        .anyMatch { Path path -> path.toFile().name.endsWith(SpotBugsInfo.CLASS_SUFFIX) }
+                } catch (IOException e) {
+                    log.warn("Error searching class files: ${e.message}")
+                }
             }
             if (log.isDebugEnabled()) {
                 log.debug("canGenerate Src is ${canGenerate}")
@@ -542,11 +546,15 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         if (!canGenerate && testClassFilesDirectory.exists() && includeTests) {
-            try {
-                canGenerate = Files.walk(testClassFilesDirectory.toPath())
-                    .anyMatch { Path path -> path.toFile().name.endsWith(SpotBugsInfo.CLASS_SUFFIX) }
-            } catch (IOException e) {
-                log.warn("Error searching test class files: ${e.message}")
+            if (noClassOk) {
+                canGenerate = true
+            } else {
+                try {
+                    canGenerate = Files.walk(testClassFilesDirectory.toPath())
+                        .anyMatch { Path path -> path.toFile().name.endsWith(SpotBugsInfo.CLASS_SUFFIX) }
+                } catch (IOException e) {
+                    log.warn("Error searching test class files: ${e.message}")
+                }
             }
             if (log.isDebugEnabled()) {
                 log.debug("canGenerate Test Src is ${canGenerate}")
@@ -997,6 +1005,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             args << String.valueOf(maxRank)
         }
 
+        if (noClassOk) {
+            log.debug("  Adding 'noClassOk'")
+            args << '-noClassOk'
+        }
+
         if (classFilesDirectory.isDirectory()) {
             if (log.isDebugEnabled()) {
                 log.debug('  Adding to Source Directory -> ' + classFilesDirectory.absolutePath)
@@ -1009,11 +1022,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 log.debug('  Adding to Source Directory -> ' + testClassFilesDirectory.absolutePath)
             }
             args << testClassFilesDirectory.absolutePath
-        }
-
-        if (noClassOk) {
-            log.debug("  Adding 'noClassOk'")
-            args << '-noClassOk'
         }
 
         return args
@@ -1271,6 +1279,15 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 writer << xmlBuilder.bind { mkp.yield path }
             } else {
                 log.info('No bugs found')
+                if (noClassOk) {
+                    log.info('No class files to analyze; creating empty output due to noClassOk=true')
+                    Charset effectiveEncodingForEmpty = outputEncoding ?: StandardCharsets.UTF_8
+                    Files.createDirectories(outputFile.toPath().getParent())
+                    String minimalXml = '<?xml version="1.0" encoding="' +
+                        effectiveEncodingForEmpty.name().toLowerCase(Locale.ROOT) + '"?>' +
+                        SpotBugsInfo.EOL + '<BugCollection></BugCollection>'
+                    Files.write(outputFile.toPath(), minimalXml.getBytes(effectiveEncodingForEmpty))
+                }
             }
 
             // Do not delete file when running under debug mode
