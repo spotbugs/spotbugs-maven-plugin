@@ -573,7 +573,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug("canGenerate is ${canGenerate}")
         }
 
-        boolean isSiteLifecycle = false;
+        boolean isSiteLifecycle = false
         if (session != null && session.getRequest() != null) {
             List<String> goals = session.getRequest().getGoals();
             if (goals != null && goals.any { String goal -> goal == "site" || goal.startsWith("site:") }) {
@@ -585,13 +585,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             if (!isSiteLifecycle) {
                 // Only generate xdoc report, skip site pages
                 generateXDoc(getLocale())
-                return false;
+                return false
             }
         } else {
-            log.info('No files found to run spotbugs, check compile phase has been run')
+            log.info('No files found to run spotbugs; check compile phase has been run.')
         }
 
-        return canGenerate;
+        return canGenerate
     }
 
     /**
@@ -730,7 +730,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         log.debug('Generating Spotbugs XML')
 
         if (!spotbugsXmlOutputDirectory.exists() && !spotbugsXmlOutputDirectory.mkdirs()) {
-            throw new MojoExecutionException('Cannot create xml output directory')
+            throw new MojoExecutionException('Cannot create xml output directory.')
         }
     }
 
@@ -904,6 +904,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             args << omitVisitors
         }
 
+        if (chooseVisitors) {
+            log.debug("  Adding 'chooseVisitors'")
+            args << '-chooseVisitors'
+            args << chooseVisitors
+        }
+
         if (relaxed) {
             log.debug("  Adding 'relaxed'")
             args << '-relaxed'
@@ -1075,7 +1081,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      * @param file Destination file to create.
      */
-    private void forceFileCreation(File file) {
+    private static void forceFileCreation(File file) {
         if (file.exists()) {
             file.delete()
         }
@@ -1394,7 +1400,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @see AbstractMavenReport#setReportOutputDirectory(File)
      */
     @Override
-    public void setReportOutputDirectory(File reportOutputDirectory) {
+    void setReportOutputDirectory(File reportOutputDirectory) {
         super.setReportOutputDirectory(reportOutputDirectory)
         this.outputDirectory = reportOutputDirectory
     }
