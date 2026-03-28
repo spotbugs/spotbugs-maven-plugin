@@ -30,4 +30,4 @@ jobs:
       - name: Disable Maven Wrapper checksum validation
         run: sed -i '/distributionSha256Sum/d' .mvn/wrapper/maven-wrapper.properties
       - name: Integration Test with Maven ${{ env.maven-version }}
-        run: ./mvnw verify --batch-mode --no-transfer-progress --show-version -D"invoker.parallelThreads=8" -D"license.skip=true" -D"maven=${{ env.maven-version }}" -D"maven.min-version=${{ env.maven-version }}" -DtestSrc=remote -Prun-its
+        run: ./mvnw verify --batch-mode --no-transfer-progress --show-version -Dinvoker.parallelThreads=8 -Dlicense.skip=true -Dmaven=${{ env.maven-version }} -Dmaven.min-version=${{ env.maven-version }} -DtestSrc=remote -Prun-its
