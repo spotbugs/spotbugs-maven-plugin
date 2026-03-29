@@ -24,7 +24,6 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 
-import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
@@ -47,18 +46,6 @@ class SpotBugsAggregateMojo extends AbstractMavenReport {
     /** Location where the generated HTML aggregate report will be created. */
     @Parameter(defaultValue = '${project.reporting.outputDirectory}', required = true)
     File outputDirectory
-
-    /**
-     * The reactor projects in the current build.
-     *
-     * @since 4.9.4.2
-     */
-    @Parameter(defaultValue = '${reactorProjects}', readonly = true, required = true)
-    List<MavenProject> reactorProjects
-
-    /** Maven Session. */
-    @Parameter(defaultValue = '${session}', readonly = true, required = true)
-    MavenSession session
 
     /**
      * The file encoding to use when creating the HTML reports. If the property
