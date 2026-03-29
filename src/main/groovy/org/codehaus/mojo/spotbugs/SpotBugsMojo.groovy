@@ -840,11 +840,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @param htmlTempFile Spotbugs html temp output file
      * @param xmlTempFile Spotbugs xml temp output file
      * @param sarifTempFile Spotbugs sarif temp output file
+     * @param auxClasspathFile Spotbugs auxclasspath file, or null if not needed
      *
      * @return Spotbugs command line arguments.
      *
      */
-    private ArrayList<String> getSpotbugsArgs(File htmlTempFile, File xmlTempFile, File sarifTempFile) {
+    private ArrayList<String> getSpotbugsArgs(File htmlTempFile, File xmlTempFile, File sarifTempFile,
+            File auxClasspathFile) {
         ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)
         List<String> args = []
 
@@ -869,8 +871,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug("  Adding 'sarifOutput'")
             args << '-sarif=' + sarifTempFile.getAbsolutePath()
         }
-
-        File auxClasspathFile = createSpotbugsAuxClasspathFile()
 
         if (auxClasspathFile) {
             log.debug("  Adding 'auxclasspathFromFile'")
@@ -1042,8 +1042,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     }
 
     /**
-     * Create the Spotbugs AuxClasspath file.
+     * Create the Spotbugs AuxClasspath file in the project build directory.
+     * The caller is responsible for deleting the returned file when it is no longer needed.
      *
+     * @return the auxclasspath file, or null if no auxclasspath elements are available
      */
     private File createSpotbugsAuxClasspathFile() {
         List<String> auxClasspathElements
@@ -1057,8 +1059,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         File auxClasspathFile = null
 
         if (auxClasspathElements) {
-            auxClasspathFile = File.createTempFile('auxclasspath', '.tmp')
-            auxClasspathFile.deleteOnExit()
             if (log.isDebugEnabled()) {
                 log.debug('  AuxClasspath Elements -> ' + auxClasspathElements)
             }
@@ -1086,12 +1086,15 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                     log.debug('  Last AuxClasspath is -> ' + auxClasspathList[auxClasspathList.size() - 1])
                 }
 
-                auxClasspathList.each() { String auxClasspathElement ->
-                    if (log.isDebugEnabled()) {
+                auxClasspathFile = new File(project.build.directory, 'spotbugsAuxClasspath.tmp')
+                Files.createDirectories(auxClasspathFile.toPath().getParent())
+
+                if (log.isDebugEnabled()) {
+                    auxClasspathList.each { String auxClasspathElement ->
                         log.debug('  Adding to AuxClasspath -> ' + auxClasspathElement)
                     }
-                    auxClasspathFile << auxClasspathElement + SpotBugsInfo.EOL
                 }
+                auxClasspathFile.text = auxClasspathList.join(SpotBugsInfo.EOL) + SpotBugsInfo.EOL
             }
         }
 
@@ -1198,7 +1201,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             startTime = System.nanoTime()
         }
 
-        List<String> spotbugsArgs = getSpotbugsArgs(htmlTempFile, xmlTempFile, sarifTempFile)
+        File auxClasspathFile = createSpotbugsAuxClasspathFile()
+
+        try {
+            List<String> spotbugsArgs = getSpotbugsArgs(htmlTempFile, xmlTempFile, sarifTempFile, auxClasspathFile)
 
         Charset effectiveEncoding
         if (sourceEncoding) {
@@ -1399,6 +1405,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             // Do not delete file when running under debug mode
             if (!debug) {
                 sarifTempFile.delete()
+            }
+        }
+
+        } finally {
+            // Delete the auxclasspath temp file regardless of success or failure
+            if (auxClasspathFile && !debug) {
+                auxClasspathFile.delete()
             }
         }
     }
