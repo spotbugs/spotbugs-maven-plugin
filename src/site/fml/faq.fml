@@ -24,13 +24,18 @@
      <question>Is there an easy way to generate the aggregate report?</question>
      <answer>
        <p>
-       Unfortunately Maven's internal support for report aggregation
-       is rather poor and does have a number of limitations.
+       Yes! Use the <code>spotbugs:spotbugs-aggregate</code> goal to generate an aggregate
+       SpotBugs report for multi-module projects.
       </p>
       <p>
-      This may be addressed in the future by a module like
-      <a href="https://maven.apache.org/archives/maven-1.x/plugins/dashboard/">dashboard</a>
-      to get an aggregate report.
+      First, run <code>spotbugs:spotbugs</code> on each module (e.g. via <code>mvn compile spotbugs:spotbugs</code>),
+      then run <code>mvn spotbugs:spotbugs-aggregate</code> from the root of your multi-module project.
+      The aggregate goal collects the SpotBugs XML results from each module and combines them into a single
+      HTML report at the root level.
+      </p>
+      <p>
+      Alternatively, add the <code>spotbugs-aggregate</code> goal to the <code>&lt;reporting&gt;</code> section
+      of the root POM and run <code>mvn site</code> after compiling all modules.
       </p>
      </answer>
    </faq>
