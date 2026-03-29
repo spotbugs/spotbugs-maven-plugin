@@ -36,6 +36,12 @@ interface SpotBugsInfo {
     /** The key to get the description of the Plug-In from the bundle. */
     static final String DESCRIPTION_KEY = 'report.spotbugs.description'
 
+    /** The key to get the name of the aggregate report from the bundle. */
+    static final String AGGREGATE_NAME_KEY = 'report.spotbugs.aggregate.name'
+
+    /** The key to get the description of the aggregate report from the bundle. */
+    static final String AGGREGATE_DESCRIPTION_KEY = 'report.spotbugs.aggregate.description'
+
     /** The extensions to search files for. */
     static final String[] EXTENSIONS = ['class']
 
