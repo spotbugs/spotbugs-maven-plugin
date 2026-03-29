@@ -359,8 +359,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
                 return
             }
             prefix = outputDirectory.toPath().relativize(xrefLocation.toPath())
-            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefLocation.getName() +
-                SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
         }
 
         if (includeTests && !prefix) {
@@ -370,8 +369,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
                     return
                 }
                 prefix = outputDirectory.toPath().relativize(xrefTestLocation.toPath())
-                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR + xrefTestLocation.getName() +
-                    SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
+                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD
             }
         }
 
@@ -596,7 +594,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         log.debug("Exiting printFilesSummary")
     }
 
-    public void generateReport() {
+    void generateReport() {
         if (log.isDebugEnabled()) {
             log.debug('Reporter Locale is ' + this.bundle.getLocale().getLanguage())
         }
