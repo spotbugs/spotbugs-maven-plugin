@@ -15,16 +15,23 @@
  */
 package org.codehaus.mojo.spotbugs
 
-import java.nio.file.Files
-
+import org.apache.maven.api.plugin.testing.InjectMojo
+import org.apache.maven.api.plugin.testing.MojoParameter
+import org.apache.maven.api.plugin.testing.MojoTest
 import org.apache.maven.plugin.MojoExecutionException
-import org.apache.maven.plugin.testing.AbstractMojoTestCase
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
+
+import static org.junit.jupiter.api.Assertions.*
 
 /**
- * Tests for {@link CheckMojo} using the Maven Plugin Testing Harness.
+ * Tests for {@link CheckMojo} using the Maven Plugin Testing Harness (JUnit 5).
  * Exercises realistic mojo loading and execution paths that Spock mocks cannot reach.
  */
-class CheckMojoHarnessTest extends AbstractMojoTestCase {
+@MojoTest
+class CheckMojoHarnessTest {
+
+    private static final String POM = 'src/test/resources/unit/check-mojo/minimal-pom.xml'
 
     private static final String SPOTBUGS_XML_NO_BUGS = '''\
 <?xml version="1.0" encoding="UTF-8"?>
@@ -73,53 +80,34 @@ class CheckMojoHarnessTest extends AbstractMojoTestCase {
 </BugCollection>
 '''
 
-    /** Temporary directory used by individual tests. */
-    private File tempDir
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp()
-        tempDir = Files.createTempDirectory('CheckMojoHarnessTest').toFile()
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown()
-        tempDir?.deleteDir()
-    }
-
     /**
      * Verifies that the harness can load the check mojo from the test POM and that
      * key parameters have their expected defaults.
      */
-    void testMojoLoadedWithDefaults() throws Exception {
-        File pom = new File(getBasedir(), 'src/test/resources/unit/check-mojo/minimal-pom.xml')
-        assert pom.exists(), "Test POM not found: ${pom.absolutePath}"
-
-        CheckMojo mojo = (CheckMojo) lookupMojo('check', pom)
-        assert mojo != null, 'lookupMojo should return a non-null CheckMojo'
+    @Test
+    @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
+    void mojoLoadedWithDefaults(CheckMojo mojo) {
+        assertNotNull(mojo, 'InjectMojo should supply a non-null CheckMojo')
 
         // Parameters injected from the test POM
-        assert mojo.spotbugsXmlOutputFilename == 'spotbugsXml.xml'
-        assert mojo.failOnError
-        assert mojo.maxAllowedViolations == 0
+        assertEquals('spotbugsXml.xml', mojo.spotbugsXmlOutputFilename)
+        assertTrue(mojo.failOnError)
+        assertEquals(0, mojo.maxAllowedViolations)
 
         // Parameters with default values (not overridden in POM)
-        assert !mojo.skip
-        assert !mojo.includeTests
-        assert !mojo.debug
-        assert !mojo.quiet
+        assertFalse(mojo.skip)
+        assertFalse(mojo.includeTests)
+        assertFalse(mojo.debug)
+        assertFalse(mojo.quiet)
     }
 
     /**
      * Verifies that executing the check mojo against a class directory that does not
      * exist causes the mojo to exit early without error (nothing to analyse).
      */
-    void testExecuteWithMissingClassDirectory() throws Exception {
-        File pom = new File(getBasedir(), 'src/test/resources/unit/check-mojo/minimal-pom.xml')
-        CheckMojo mojo = (CheckMojo) lookupMojo('check', pom)
-        assert mojo != null
-
+    @Test
+    @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
+    void executeWithMissingClassDirectory(CheckMojo mojo, @TempDir File tempDir) {
         mojo.spotbugsXmlOutputDirectory = tempDir
         mojo.classFilesDirectory = new File(tempDir, 'nonexistent-classes')
         mojo.testClassFilesDirectory = new File(tempDir, 'nonexistent-test-classes')
@@ -132,11 +120,9 @@ class CheckMojoHarnessTest extends AbstractMojoTestCase {
      * Verifies that executing the check mojo against an empty class directory
      * causes the mojo to exit early without error.
      */
-    void testExecuteWithEmptyClassDirectory() throws Exception {
-        File pom = new File(getBasedir(), 'src/test/resources/unit/check-mojo/minimal-pom.xml')
-        CheckMojo mojo = (CheckMojo) lookupMojo('check', pom)
-        assert mojo != null
-
+    @Test
+    @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
+    void executeWithEmptyClassDirectory(CheckMojo mojo, @TempDir File tempDir) {
         File classesDir = new File(tempDir, 'classes')
         classesDir.mkdirs()
 
@@ -152,11 +138,9 @@ class CheckMojoHarnessTest extends AbstractMojoTestCase {
      * Verifies that when class files exist but the SpotBugs XML output file is absent
      * the mojo logs a warning and returns gracefully.
      */
-    void testExecuteWithMissingOutputFile() throws Exception {
-        File pom = new File(getBasedir(), 'src/test/resources/unit/check-mojo/minimal-pom.xml')
-        CheckMojo mojo = (CheckMojo) lookupMojo('check', pom)
-        assert mojo != null
-
+    @Test
+    @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
+    void executeWithMissingOutputFile(CheckMojo mojo, @TempDir File tempDir) {
         File classesDir = new File(tempDir, 'classes')
         classesDir.mkdirs()
         new File(classesDir, 'Dummy.class').createNewFile()
@@ -174,17 +158,14 @@ class CheckMojoHarnessTest extends AbstractMojoTestCase {
      * Verifies that when the SpotBugs XML reports zero bugs the mojo completes
      * without throwing and logs that no bugs were found.
      */
-    void testExecuteWithNoBugsInReport() throws Exception {
-        File pom = new File(getBasedir(), 'src/test/resources/unit/check-mojo/minimal-pom.xml')
-        CheckMojo mojo = (CheckMojo) lookupMojo('check', pom)
-        assert mojo != null
-
+    @Test
+    @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
+    void executeWithNoBugsInReport(CheckMojo mojo, @TempDir File tempDir) {
         File classesDir = new File(tempDir, 'classes')
         classesDir.mkdirs()
         new File(classesDir, 'Dummy.class').createNewFile()
 
-        File xmlFile = new File(tempDir, 'spotbugsXml.xml')
-        xmlFile.text = SPOTBUGS_XML_NO_BUGS
+        new File(tempDir, 'spotbugsXml.xml').text = SPOTBUGS_XML_NO_BUGS
 
         mojo.spotbugsXmlOutputDirectory = tempDir
         mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
@@ -200,17 +181,14 @@ class CheckMojoHarnessTest extends AbstractMojoTestCase {
      * Verifies that a report containing bugs causes the mojo to throw
      * {@link MojoExecutionException} when {@code failOnError=true}.
      */
-    void testExecuteWithBugsAndFailOnError() throws Exception {
-        File pom = new File(getBasedir(), 'src/test/resources/unit/check-mojo/minimal-pom.xml')
-        CheckMojo mojo = (CheckMojo) lookupMojo('check', pom)
-        assert mojo != null
-
+    @Test
+    @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
+    void executeWithBugsAndFailOnError(CheckMojo mojo, @TempDir File tempDir) {
         File classesDir = new File(tempDir, 'classes')
         classesDir.mkdirs()
         new File(classesDir, 'Dummy.class').createNewFile()
 
-        File xmlFile = new File(tempDir, 'spotbugsXml.xml')
-        xmlFile.text = SPOTBUGS_XML_WITH_BUGS
+        new File(tempDir, 'spotbugsXml.xml').text = SPOTBUGS_XML_WITH_BUGS
 
         mojo.spotbugsXmlOutputDirectory = tempDir
         mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
@@ -218,28 +196,21 @@ class CheckMojoHarnessTest extends AbstractMojoTestCase {
         mojo.testClassFilesDirectory = new File(tempDir, 'test-classes')
         mojo.failOnError = true
 
-        try {
-            mojo.execute()
-            fail('Expected MojoExecutionException due to bugs in report')
-        } catch (MojoExecutionException expected) {
-            assert expected.message.contains('failed with')
-        }
+        MojoExecutionException ex = assertThrows(MojoExecutionException) { mojo.execute() }
+        assertTrue(ex.message.contains('failed with'), "Expected 'failed with' in: ${ex.message}")
     }
 
     /**
      * Verifies that bugs do not trigger a build failure when {@code failOnError=false}.
      */
-    void testExecuteWithBugsAndNoFailOnError() throws Exception {
-        File pom = new File(getBasedir(), 'src/test/resources/unit/check-mojo/minimal-pom.xml')
-        CheckMojo mojo = (CheckMojo) lookupMojo('check', pom)
-        assert mojo != null
-
+    @Test
+    @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
+    void executeWithBugsAndNoFailOnError(CheckMojo mojo, @TempDir File tempDir) {
         File classesDir = new File(tempDir, 'classes')
         classesDir.mkdirs()
         new File(classesDir, 'Dummy.class').createNewFile()
 
-        File xmlFile = new File(tempDir, 'spotbugsXml.xml')
-        xmlFile.text = SPOTBUGS_XML_WITH_BUGS
+        new File(tempDir, 'spotbugsXml.xml').text = SPOTBUGS_XML_WITH_BUGS
 
         mojo.spotbugsXmlOutputDirectory = tempDir
         mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
@@ -255,17 +226,14 @@ class CheckMojoHarnessTest extends AbstractMojoTestCase {
      * Verifies that when the number of bugs is within {@code maxAllowedViolations}
      * the mojo logs them but does not throw.
      */
-    void testExecuteWithBugsWithinMaxAllowedViolations() throws Exception {
-        File pom = new File(getBasedir(), 'src/test/resources/unit/check-mojo/minimal-pom.xml')
-        CheckMojo mojo = (CheckMojo) lookupMojo('check', pom)
-        assert mojo != null
-
+    @Test
+    @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
+    void executeWithBugsWithinMaxAllowedViolations(CheckMojo mojo, @TempDir File tempDir) {
         File classesDir = new File(tempDir, 'classes')
         classesDir.mkdirs()
         new File(classesDir, 'Dummy.class').createNewFile()
 
-        File xmlFile = new File(tempDir, 'spotbugsXml.xml')
-        xmlFile.text = SPOTBUGS_XML_TWO_BUGS
+        new File(tempDir, 'spotbugsXml.xml').text = SPOTBUGS_XML_TWO_BUGS
 
         mojo.spotbugsXmlOutputDirectory = tempDir
         mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
@@ -281,17 +249,14 @@ class CheckMojoHarnessTest extends AbstractMojoTestCase {
     /**
      * Verifies that an invalid {@code failThreshold} value causes the mojo to throw.
      */
-    void testExecuteWithInvalidFailThreshold() throws Exception {
-        File pom = new File(getBasedir(), 'src/test/resources/unit/check-mojo/minimal-pom.xml')
-        CheckMojo mojo = (CheckMojo) lookupMojo('check', pom)
-        assert mojo != null
-
+    @Test
+    @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
+    void executeWithInvalidFailThreshold(CheckMojo mojo, @TempDir File tempDir) {
         File classesDir = new File(tempDir, 'classes')
         classesDir.mkdirs()
         new File(classesDir, 'Dummy.class').createNewFile()
 
-        File xmlFile = new File(tempDir, 'spotbugsXml.xml')
-        xmlFile.text = SPOTBUGS_XML_WITH_BUGS
+        new File(tempDir, 'spotbugsXml.xml').text = SPOTBUGS_XML_WITH_BUGS
 
         mojo.spotbugsXmlOutputDirectory = tempDir
         mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
@@ -300,29 +265,23 @@ class CheckMojoHarnessTest extends AbstractMojoTestCase {
         mojo.failOnError = true
         mojo.failThreshold = 'InvalidPriority'
 
-        try {
-            mojo.execute()
-            fail('Expected MojoExecutionException for invalid failThreshold')
-        } catch (MojoExecutionException expected) {
-            assert expected.message.contains('Invalid value for failThreshold')
-        }
+        MojoExecutionException ex = assertThrows(MojoExecutionException) { mojo.execute() }
+        assertTrue(ex.message.contains('Invalid value for failThreshold'),
+            "Expected 'Invalid value for failThreshold' in: ${ex.message}")
     }
 
     /**
      * Verifies that {@code failThreshold=Low} passes bugs that are at or above Low
      * priority (i.e. all bugs) and fails the build when failOnError is set.
      */
-    void testExecuteWithFailThresholdLow() throws Exception {
-        File pom = new File(getBasedir(), 'src/test/resources/unit/check-mojo/minimal-pom.xml')
-        CheckMojo mojo = (CheckMojo) lookupMojo('check', pom)
-        assert mojo != null
-
+    @Test
+    @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
+    void executeWithFailThresholdLow(CheckMojo mojo, @TempDir File tempDir) {
         File classesDir = new File(tempDir, 'classes')
         classesDir.mkdirs()
         new File(classesDir, 'Dummy.class').createNewFile()
 
-        File xmlFile = new File(tempDir, 'spotbugsXml.xml')
-        xmlFile.text = SPOTBUGS_XML_WITH_BUGS
+        new File(tempDir, 'spotbugsXml.xml').text = SPOTBUGS_XML_WITH_BUGS
 
         mojo.spotbugsXmlOutputDirectory = tempDir
         mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
@@ -332,23 +291,17 @@ class CheckMojoHarnessTest extends AbstractMojoTestCase {
         // 'High' priority = index 1, bug has priority "1" (high), so it exceeds the threshold
         mojo.failThreshold = 'Low'
 
-        try {
-            mojo.execute()
-            fail('Expected MojoExecutionException – High-priority bug exceeds Low threshold')
-        } catch (MojoExecutionException expected) {
-            assert expected.message.contains('failed with')
-        }
+        MojoExecutionException ex = assertThrows(MojoExecutionException) { mojo.execute() }
+        assertTrue(ex.message.contains('failed with'), "Expected 'failed with' in: ${ex.message}")
     }
 
     /**
      * Verifies that the mojo skip flag prevents any processing.
      */
-    void testExecuteWithSkipEnabled() throws Exception {
-        File pom = new File(getBasedir(), 'src/test/resources/unit/check-mojo/minimal-pom.xml')
-        CheckMojo mojo = (CheckMojo) lookupMojo('check', pom)
-        assert mojo != null
-
-        mojo.skip = true
+    @Test
+    @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
+    @MojoParameter(name = 'skip', value = 'true')
+    void executeWithSkipEnabled(CheckMojo mojo, @TempDir File tempDir) {
         mojo.spotbugsXmlOutputDirectory = tempDir
         mojo.classFilesDirectory = new File(tempDir, 'classes')
 
