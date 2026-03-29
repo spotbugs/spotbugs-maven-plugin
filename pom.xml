@@ -174,6 +174,7 @@
 
         <!-- Tests -->
         <spock.version>2.4-groovy-5.0</spock.version>
+        <maven-plugin-testing-harness.version>3.5.1</maven-plugin-testing-harness.version>
 
         <!-- Used by Integration tests -->
         <findsecbugs.version>1.14.0</findsecbugs.version>
@@ -558,6 +559,18 @@
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
             <version>${spock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-testing</groupId>
+            <artifactId>maven-plugin-testing-harness</artifactId>
+            <version>${maven-plugin-testing-harness.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-compat</artifactId>
+            <version>${mavenVersion}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
