@@ -30,7 +30,6 @@ class CheckMojoHarnessTest extends AbstractMojoTestCase {
 <?xml version="1.0" encoding="UTF-8"?>
 <BugCollection version="4.9.8" threshold="medium" effort="default">
     <Project/>
-    <BugInstance/>
     <Errors errors="0" missingClasses="0"/>
     <FindBugsSummary total_classes="1" total_bugs="0" total_size="100"/>
     <ClassFeatures/>

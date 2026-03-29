@@ -222,7 +222,6 @@ class BaseViolationCheckMojoTest extends Specification {
         xmlFile.text = '''\
 <?xml version="1.0" encoding="UTF-8"?>
 <BugCollection>
-    <BugInstance/>
     <Errors errors="0" missingClasses="0"/>
 </BugCollection>
 '''
