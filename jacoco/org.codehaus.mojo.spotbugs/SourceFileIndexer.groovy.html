@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SourceFileIndexer.groovy</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spotbugs-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.codehaus.mojo.spotbugs</a> &gt; <span class="el_source">SourceFileIndexer.groovy</span></div><h1>SourceFileIndexer.groovy</h1><pre class="source lang-java linenums">/*
+ * Copyright 2005-2026 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.codehaus.mojo.spotbugs
+
+import org.apache.maven.execution.MavenSession
+import org.apache.maven.model.Resource
+import org.apache.maven.plugin.MojoExecutionException
+import org.apache.maven.project.MavenProject
+
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.concurrent.locks.ReentrantLock
+
+/**
+ * Utility class used to transform path relative to the &lt;b&gt;source directory&lt;/b&gt;
+ * to their path relative to the &lt;b&gt;root directory&lt;/b&gt;.
+ */
+class SourceFileIndexer {
+
+    /** Reentrant lock to ensure class is thread safe. */
+    private final ReentrantLock lock = new ReentrantLock()
+
+    /** List of source files found in the current Maven project. */
+    private List&lt;String&gt; allSourceFiles = []
+
+    /**
+     * Initialize the complete list of source files with their
+     *
+     * @param session Reference to the Maven session used to get the location of the root directory
+     */
+    protected void buildListSourceFiles(MavenSession session) {
+<span class="fc" id="L45">        lock.lock()</span>
+        try {
+            // All source files to load
+<span class="fc" id="L48">            allSourceFiles.clear()</span>
+
+            // Normalized base path
+<span class="fc" id="L51">            String basePath = normalizePath(session.getExecutionRootDirectory())</span>
+
+            // Get current project
+<span class="fc" id="L54">            MavenProject project = session.getCurrentProject()</span>
+
+            // Resource
+<span class="pc bpc" id="L57" title="1 of 4 branches missed.">            for (Resource resource in project.getResources()) {</span>
+<span class="fc" id="L58">                scanDirectory(Path.of(resource.directory), basePath)</span>
+            }
+
+<span class="pc bpc" id="L61" title="2 of 4 branches missed.">            for (Resource resource in project.getTestResources()) {</span>
+<span class="nc" id="L62">                scanDirectory(Path.of(resource.directory), basePath)</span>
+            }
+
+            // Source files
+<span class="pc bpc" id="L66" title="1 of 4 branches missed.">            for (String sourceRoot in project.getCompileSourceRoots()) {</span>
+<span class="fc" id="L67">                scanDirectory(Path.of(sourceRoot), basePath)</span>
+            }
+
+<span class="pc bpc" id="L70" title="2 of 4 branches missed.">            for (String sourceRoot in project.getTestCompileSourceRoots()) {</span>
+<span class="nc" id="L71">                scanDirectory(Path.of(sourceRoot), basePath)</span>
+            }
+
+            // While not perfect, add the following paths will add basic support for Groovy, Kotlin, Scala and Webapp sources.
+<span class="fc" id="L75">            scanDirectory(project.getBasedir().toPath().resolve('src/main/groovy'), basePath)</span>
+<span class="fc" id="L76">            scanDirectory(project.getBasedir().toPath().resolve('src/main/kotlin'), basePath)</span>
+<span class="fc" id="L77">            scanDirectory(project.getBasedir().toPath().resolve('src/main/scala'), basePath)</span>
+<span class="fc" id="L78">            scanDirectory(project.getBasedir().toPath().resolve('src/main/webapp'), basePath)</span>
+
+<span class="fc" id="L80">            scanDirectory(project.getBasedir().toPath().resolve('src/test/groovy'), basePath)</span>
+<span class="fc" id="L81">            scanDirectory(project.getBasedir().toPath().resolve('src/test/kotlin'), basePath)</span>
+<span class="fc" id="L82">            scanDirectory(project.getBasedir().toPath().resolve('src/test/scala'), basePath)</span>
+<span class="fc" id="L83">            scanDirectory(project.getBasedir().toPath().resolve('src/test/webapp'), basePath)</span>
+
+        } finally {
+<span class="fc" id="L86">            lock.unlock()</span>
+        }
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * Recursively scan the directory given and add all files found to the files array list.
+     * The base directory will be truncated from the path stored.
+     *
+     * @param directory Directory to scan
+     * @param baseDirectory This part will be truncated from path stored
+     */
+    private void scanDirectory(Path directory, String baseDirectory) {
+
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (Files.notExists(directory)) {</span>
+<span class="fc" id="L100">            return</span>
+        }
+
+<span class="pc bpc" id="L103" title="1 of 4 branches missed.">        for (File child : directory.toFile().listFiles()) {</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">            if (child.isDirectory()) {</span>
+<span class="nc" id="L105">                scanDirectory(child.toPath(), baseDirectory)</span>
+            } else {
+<span class="fc" id="L107">                String newSourceFile = normalizePath(child.getCanonicalPath())</span>
+<span class="fc" id="L108">                lock.lock()</span>
+                try {
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">                    if (newSourceFile.startsWith(baseDirectory)) {</span>
+                        // The project will not be at the root of our file system.
+                        // It will most likely be stored in a work directory.
+                        // Example: /work/project-code-to-scan/src/main/java/File.java =&gt; src/main/java/File.java
+                        //   (Here baseDirectory is /work/project-code-to-scan/)
+<span class="fc" id="L115">                        String relativePath = Path.of(baseDirectory).relativize(Path.of(newSourceFile))</span>
+<span class="fc" id="L116">                        allSourceFiles.add(normalizePath(relativePath))</span>
+                    } else {
+                        // Use the full path instead:
+                        // This will occurs in many cases including when the pom.xml is
+                        // not in the same directory tree as the sources.
+<span class="pc" id="L121">                        allSourceFiles.add(newSourceFile)</span>
+                    }
+                } finally {
+<span class="fc" id="L124">                    lock.unlock()</span>
+                }
+            }
+        }
+<span class="fc" id="L128">    }</span>
+
+    /**
+     * Normalize path to use forward slash.
+     * &lt;p&gt;
+     * This will facilitate searches.
+     *
+     * @param path Path to clean up
+     * @return Path safe to use for comparison
+     */
+    private static String normalizePath(String path) {
+<span class="fc" id="L139">        return path.replace('\\', '/')</span>
+    }
+
+    /**
+     * Transform partial path to complete path
+     *
+     * @param filename Partial name to search
+     * @return Complete path found. Null is not found!
+     */
+    protected String searchActualFilesLocation(String filename) {
+<span class="fc" id="L149">        lock.lock()</span>
+        try {
+<span class="fc bfc" id="L151" title="All 2 branches covered.">            if (allSourceFiles.isEmpty()) {</span>
+<span class="fc" id="L152">                throw new MojoExecutionException('Source files cache must be built prior to searches.')</span>
+            }
+
+<span class="pc bpc" id="L155" title="2 of 4 branches missed.">            for (String fileFound in allSourceFiles) {</span>
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">                if (fileFound.endsWith(filename)) {</span>
+<span class="fc" id="L157">                    return fileFound</span>
+                }
+            }
+        } finally {
+<span class="pc" id="L161">            lock.unlock()</span>
+        }
+
+        // Not found
+<span class="nc" id="L165">        return null</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

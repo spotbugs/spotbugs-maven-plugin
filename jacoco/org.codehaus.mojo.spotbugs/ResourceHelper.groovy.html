@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResourceHelper.groovy</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spotbugs-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.codehaus.mojo.spotbugs</a> &gt; <span class="el_source">ResourceHelper.groovy</span></div><h1>ResourceHelper.groovy</h1><pre class="source lang-java linenums">/*
+ * Copyright 2005-2026 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.codehaus.mojo.spotbugs
+
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.StandardCopyOption
+import java.util.regex.Pattern
+
+import org.apache.maven.plugin.logging.Log
+import org.apache.maven.plugin.MojoExecutionException
+import org.codehaus.plexus.resource.ResourceManager
+
+final class ResourceHelper {
+
+    /** The log. */
+    private final Log log
+
+    /** The output directory. */
+    private final File outputDirectory
+
+    /** The resource manager. */
+    private final ResourceManager resourceManager
+
+    /** Precompiled regex pattern for resource name sanitization. */
+<span class="fc" id="L39">    private static final Pattern SANITIZE_PATTERN = Pattern.compile('[?:&amp;=%]')</span>
+
+<span class="fc" id="L41">    ResourceHelper(final Log log, final File outputDirectory, final ResourceManager resourceManager) {</span>
+<span class="fc" id="L42">        this.log = Objects.requireNonNull(log, &quot;log must not be null&quot;)</span>
+<span class="fc" id="L43">        this.outputDirectory = outputDirectory</span>
+<span class="fc" id="L44">        this.resourceManager = Objects.requireNonNull(resourceManager, &quot;resourceManager must not be null&quot;)</span>
+<span class="fc" id="L45">    }</span>
+
+    /**
+     * Get the File reference for a File passed in as a string reference.
+     *
+     * @param resource
+     *            The file for the resource manager to locate
+     * @return The File of the resource
+     *
+     */
+    File getResourceFile(final String resource) {
+<span class="fc" id="L56">        Objects.requireNonNull(resource, &quot;resource must not be null&quot;)</span>
+
+<span class="fc" id="L58">        String location = null</span>
+<span class="fc" id="L59">        String artifact = null</span>
+
+        // Normalize path separator to always use forward slash for resource lookup
+<span class="fc" id="L62">        String normalizedResource = resource.replace('\\', '/')</span>
+<span class="fc" id="L63">        int lastSeparatorIndex = normalizedResource.lastIndexOf('/')</span>
+<span class="pc bpc" id="L64" title="2 of 4 branches missed.">        if (lastSeparatorIndex != -1) {</span>
+<span class="fc" id="L65">            location = normalizedResource.substring(0, lastSeparatorIndex)</span>
+<span class="fc" id="L66">            artifact = normalizedResource.substring(lastSeparatorIndex + 1)</span>
+        } else {
+<span class="nc" id="L68">            artifact = normalizedResource</span>
+        }
+
+        // replace all occurrences of the following characters:  ? : &amp; =
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        location = location != null ? SANITIZE_PATTERN.matcher(location).replaceAll('_') : null</span>
+<span class="fc" id="L73">        artifact = SANITIZE_PATTERN.matcher(artifact).replaceAll('_')</span>
+
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L76">            log.debug(&quot;resource is '${normalizedResource}'&quot; + &quot;, location is '${location}'&quot; +</span>
+                &quot;, artifact is '${artifact}'&quot; + &quot;, outputDirectory is '${outputDirectory}'&quot;)
+        }
+
+<span class="fc" id="L80">        Path resourcePath = getResourceAsFile(normalizedResource, artifact)</span>
+
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L83">            log.debug(&quot;location of resourceFile file is ${resourcePath.toAbsolutePath()}&quot;)</span>
+        }
+
+<span class="fc" id="L86">        return resourcePath.toFile()</span>
+    }
+
+    private Path getResourceAsFile(final String name, final String outputPath) {
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        Path outputResourcePath = outputDirectory == null ? Path.of(outputPath) : outputDirectory.toPath().resolve(outputPath)</span>
+
+        // Checking if the resource is already a file
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (new File(name).exists()) {</span>
+            // Avoid copying the file onto itself
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">            if (Path.of(name).toAbsolutePath().normalize().equals(outputResourcePath.toAbsolutePath().normalize())) {</span>
+<span class="fc" id="L96">                return outputResourcePath</span>
+            }
+
+<span class="nc" id="L99">            createParentDirectories(outputResourcePath)</span>
+
+            // Copy existing file (not a URL)
+<span class="nc" id="L102">            return Files.copy(Path.of(name), outputResourcePath, StandardCopyOption.REPLACE_EXISTING,</span>
+                StandardCopyOption.COPY_ATTRIBUTES)
+        }
+
+        // Copying resource from classpath to a file
+        try {
+<span class="fc" id="L108">            createParentDirectories(outputResourcePath)</span>
+
+<span class="pc" id="L110">            resourceManager.getResourceAsInputStream(name).withCloseable { InputStream is -&gt;</span>
+<span class="fc" id="L111">                new BufferedInputStream(is).withCloseable { BufferedInputStream bis -&gt;</span>
+<span class="fc" id="L112">                    Files.newOutputStream(outputResourcePath).withCloseable { OutputStream os -&gt;</span>
+<span class="fc" id="L113">                        new BufferedOutputStream(os).withCloseable { BufferedOutputStream bos -&gt;</span>
+<span class="fc" id="L114">                            bos &lt;&lt; bis</span>
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+<span class="nc" id="L120">            log.error('Unable to create file-based resource for ' + name + ' in ' + outputResourcePath, e)</span>
+<span class="pc" id="L121">            throw new MojoExecutionException('Cannot create file-based resource.', e)</span>
+        }
+
+<span class="fc" id="L124">        return outputResourcePath</span>
+    }
+
+    private static createParentDirectories(Path outputResourcePath) {
+<span class="fc" id="L128">        Path parent = outputResourcePath.getParent()</span>
+<span class="pc bpc" id="L129" title="3 of 6 branches missed.">        if (parent != null &amp;&amp; Files.notExists(parent)) {</span>
+<span class="nc" id="L130">            Files.createDirectories(parent)</span>
+        }
+<span class="fc" id="L132">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
