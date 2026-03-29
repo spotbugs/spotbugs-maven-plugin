@@ -29,6 +29,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.function.Predicate
+import java.util.jar.JarFile
 import java.util.stream.Collectors
 
 import javax.inject.Inject
@@ -1063,7 +1064,22 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
 
             List<String> auxClasspathList = auxClasspathElements.findAll { String auxClasspath ->
-                session.getCurrentProject().getBuild().outputDirectory != auxClasspath
+                if (session.getCurrentProject().getBuild().outputDirectory == auxClasspath) {
+                    return false
+                }
+                // Exclude JAR files that contain classes in the java.* package. Such JARs (e.g.
+                // JavaCard API jars) provide partial re-implementations of bootstrap JDK classes.
+                // Including them in the auxClasspath causes SpotBugs to use the incomplete java.*
+                // versions instead of the real JDK classes, resulting in "missing classes" warnings
+                // for standard JDK types. The JDK always provides the authoritative java.* classes
+                // via the jrt:/ filesystem, so these JARs must never appear in the auxClasspath.
+                if (containsJdkClasses(auxClasspath)) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("  Excluding from auxClasspath (contains java.* class overrides): ${auxClasspath}")
+                    }
+                    return false
+                }
+                return true
             }
             if (auxClasspathList.size() > 0) {
                 if (log.isDebugEnabled()) {
@@ -1080,6 +1096,34 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         return auxClasspathFile
+    }
+
+    /**
+     * Checks whether the given path is a JAR file that contains class files in the
+     * {@code java.*} package. Such JARs shadow JDK bootstrap classes and must be
+     * excluded from the SpotBugs auxClasspath.
+     *
+     * @param path the filesystem path to check
+     * @return {@code true} if the path is a JAR containing {@code java.*} classes
+     */
+    private boolean containsJdkClasses(String path) {
+        if (!path.endsWith('.jar')) {
+            return false
+        }
+        File jarFile = new File(path)
+        if (!jarFile.isFile()) {
+            return false
+        }
+        try {
+            new JarFile(jarFile).withCloseable { jar ->
+                return jar.entries().asIterator().any { entry ->
+                    !entry.isDirectory() && entry.name.startsWith('java/') && entry.name.endsWith('.class')
+                }
+            }
+        } catch (IOException e) {
+            log.debug("Cannot inspect jar file for JDK class overrides: ${path}")
+            return false
+        }
     }
 
     /**
