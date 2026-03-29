@@ -29,6 +29,7 @@ import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
+import org.apache.maven.toolchain.ToolchainManager
 import org.codehaus.plexus.resource.ResourceManager
 
 /**
@@ -82,6 +83,10 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
     /** Used to look up Artifacts in the remote repository. */
     @Inject
     org.apache.maven.repository.RepositorySystem factory
+
+    /** Toolchain manager used to retrieve the JDK toolchain. */
+    @Inject
+    ToolchainManager toolchainManager
 
     /** Maven Session. */
     @Parameter (defaultValue = '${session}', readonly = true, required = true)
@@ -156,7 +161,17 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
         ant.project.setProperty('basedir', spotbugsXmlOutputDirectory.getAbsolutePath())
         ant.project.setProperty('verbose', 'true')
 
-        ant.java(classname: 'edu.umd.cs.findbugs.LaunchAppropriateUI', fork: 'true', failonerror: 'true', clonevm: 'true', maxmemory: "${maxHeap}m") {
+        def toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
+        Map<String, Object> javaTaskParams = [classname: 'edu.umd.cs.findbugs.LaunchAppropriateUI',
+                fork: 'true', failonerror: 'true', clonevm: 'true', maxmemory: "${maxHeap}m"]
+        if (toolchain) {
+            String javaExecutable = toolchain.findTool('java')
+            if (javaExecutable) {
+                log.info("Toolchain in spotbugs-maven-plugin: ${toolchain}")
+                javaTaskParams['executable'] = javaExecutable
+            }
+        }
+        ant.java(javaTaskParams) {
 
             sysproperty(key: 'file.encoding' , value: effectiveEncoding.name())
 

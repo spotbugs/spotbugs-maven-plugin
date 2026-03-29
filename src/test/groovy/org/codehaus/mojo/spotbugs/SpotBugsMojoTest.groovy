@@ -18,10 +18,13 @@ package org.codehaus.mojo.spotbugs
 import java.util.jar.JarEntry
 import java.util.jar.JarOutputStream
 
+import org.apache.maven.execution.MavenSession
 import org.apache.maven.model.Plugin
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecution
 import org.apache.maven.plugin.logging.Log
+import org.apache.maven.toolchain.Toolchain
+import org.apache.maven.toolchain.ToolchainManager
 
 import spock.lang.Specification
 import spock.lang.TempDir
@@ -255,6 +258,57 @@ class SpotBugsMojoTest extends Specification {
     void 'getOutputPath returns spotbugs plugin name'() {
         expect:
         new SpotBugsMojo().getOutputPath() == SpotBugsInfo.PLUGIN_NAME
+    }
+
+    void 'getJavaExecutable returns null when no toolchain is configured'() {
+        given:
+        MavenSession session = Mock(MavenSession)
+        ToolchainManager toolchainManager = Mock(ToolchainManager) {
+            getToolchainFromBuildContext('jdk', session) >> null
+        }
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.session = session
+        mojo.toolchainManager = toolchainManager
+
+        when:
+        String result = mojo.getJavaExecutable()
+
+        then:
+        result == null
+    }
+
+    void 'getJavaExecutable returns null when toolchainManager is null'() {
+        given:
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.session = Mock(MavenSession)
+        mojo.toolchainManager = null
+
+        when:
+        String result = mojo.getJavaExecutable()
+
+        then:
+        result == null
+    }
+
+    void 'getJavaExecutable returns java executable from configured toolchain'() {
+        given:
+        String expectedJavaPath = '/usr/lib/jvm/java-11/bin/java'
+        MavenSession session = Mock(MavenSession)
+        Toolchain toolchain = Mock(Toolchain) {
+            findTool('java') >> expectedJavaPath
+        }
+        ToolchainManager toolchainManager = Mock(ToolchainManager) {
+            getToolchainFromBuildContext('jdk', session) >> toolchain
+        }
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.session = session
+        mojo.toolchainManager = toolchainManager
+
+        when:
+        String result = mojo.getJavaExecutable()
+
+        then:
+        result == expectedJavaPath
     }
 
 }
