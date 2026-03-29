@@ -747,11 +747,21 @@
                         <id>generate-groovydoc</id>
                         <goals>
                             <goal>groovydoc</goal>
-                            <goal>groovydoc-jar</goal>
                             <goal>groovydocTests</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                    </execution>
+                    <execution>
+                        <id>generate-groovydoc-jars</id>
+                        <goals>
+                            <goal>groovydoc-jar</goal>
                             <goal>groovydocTests-jar</goal>
                         </goals>
                         <phase>package</phase>
+                        <configuration>
+                            <!-- Do not re-invoke groovydoc: HTML was already generated and timestamps stripped -->
+                            <invokeGroovyDoc>false</invokeGroovyDoc>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>site</id>
@@ -764,6 +774,39 @@
                             <goal>groovydocTests-jar</goal>
                         </goals>
                         <phase>site</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Strip non-reproducible timestamps from GroovyDoc HTML before JAR packaging -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>strip-groovydoc-timestamps</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- Remove " on <date>" from GroovyDoc generated HTML comments -->
+                                <replaceregexp byline="true">
+                                    <regexp pattern=" on \w+ \w+ +\d+ \d+:\d+:\d+ \S+ \d+"/>
+                                    <substitution expression=""/>
+                                    <fileset dir="${project.reporting.outputDirectory}/gapidocs" erroronmissingdir="false" includes="**/*.html"/>
+                                    <fileset dir="${project.reporting.outputDirectory}/testgapidocs" erroronmissingdir="false" includes="**/*.html"/>
+                                </replaceregexp>
+                                <!-- Remove meta date tags from GroovyDoc generated HTML -->
+                                <replaceregexp byline="true">
+                                    <regexp pattern="&lt;meta name=&quot;date&quot; content=&quot;[0-9-]+&quot;&gt;"/>
+                                    <substitution expression=""/>
+                                    <fileset dir="${project.reporting.outputDirectory}/gapidocs" erroronmissingdir="false" includes="**/*.html"/>
+                                    <fileset dir="${project.reporting.outputDirectory}/testgapidocs" erroronmissingdir="false" includes="**/*.html"/>
+                                </replaceregexp>
+                            </target>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
