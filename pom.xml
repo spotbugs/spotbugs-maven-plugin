@@ -697,18 +697,6 @@
                                 <compileSourceRoot>${project.basedir}/src/stubfixer/java</compileSourceRoot>
                             </compileSourceRoots>
                             <outputDirectory>${project.build.directory}/classes</outputDirectory>
-                            <!-- Disable error-prone for this simple build utility; error_prone_core 2.46+ requires Java 21 -->
-                            <annotationProcessorPaths combine.self="override"/>
-                            <compilerArgs combine.self="override">
-                                <compilerArg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</compilerArg>
-                                <compilerArg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</compilerArg>
-                                <compilerArg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</compilerArg>
-                                <compilerArg>-J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED</compilerArg>
-                                <compilerArg>-J--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED</compilerArg>
-                                <compilerArg>-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</compilerArg>
-                                <compilerArg>-J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</compilerArg>
-                                <compilerArg>-J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</compilerArg>
-                            </compilerArgs>
                         </configuration>
                     </execution>
                 </executions>
