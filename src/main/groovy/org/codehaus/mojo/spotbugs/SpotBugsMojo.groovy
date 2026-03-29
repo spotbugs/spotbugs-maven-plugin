@@ -42,6 +42,7 @@ import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
 import org.apache.maven.reporting.AbstractMavenReport
 import org.apache.maven.reporting.MavenReport
+import org.apache.maven.toolchain.ToolchainManager
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceLoader
 
@@ -203,6 +204,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /** Used to look up Artifacts in the remote repository. */
     @Inject
     org.apache.maven.repository.RepositorySystem factory
+
+    /** Toolchain manager used to retrieve the JDK toolchain. */
+    @Inject
+    ToolchainManager toolchainManager
 
     /**
      * File name of the include filter. Only bugs in matching the filters are reported.
@@ -1217,8 +1222,19 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         AntBuilder ant = new AntBuilder()
-        ant.java(classname: 'edu.umd.cs.findbugs.FindBugs2', fork: "${fork}", failonerror: 'true',
-                clonevm: 'false', timeout: timeout, maxmemory: "${maxHeap}m") {
+        Map<String, Object> javaTaskParams = [classname: 'edu.umd.cs.findbugs.FindBugs2', fork: "${fork}",
+                failonerror: 'true', clonevm: 'false', timeout: timeout, maxmemory: "${maxHeap}m"]
+        def toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
+        String javaExecutable = toolchain?.findTool('java')
+        if (javaExecutable) {
+            if (fork) {
+                log.info("Toolchain in spotbugs-maven-plugin: ${toolchain}")
+                javaTaskParams['executable'] = javaExecutable
+            } else {
+                log.warn('Toolchain is configured but fork is disabled. The toolchain JVM will not be used.')
+            }
+        }
+        ant.java(javaTaskParams) {
 
             sysproperty(key: 'file.encoding', value: effectiveEncoding.name())
 
@@ -1467,5 +1483,21 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     void setReportOutputDirectory(File reportOutputDirectory) {
         super.setReportOutputDirectory(reportOutputDirectory)
         this.outputDirectory = reportOutputDirectory
+    }
+
+    /**
+     * Gets the Java executable to use for the forked SpotBugs process.
+     * If a JDK toolchain is configured for the build, the executable from that toolchain is returned.
+     * Otherwise, returns {@code null} and the default JVM will be used.
+     *
+     * @return the java executable path from the toolchain, or {@code null} if no toolchain is configured
+     * @since 4.9.8.4
+     */
+    String getJavaExecutable() {
+        def toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
+        if (toolchain) {
+            return toolchain.findTool('java')
+        }
+        return null
     }
 }
