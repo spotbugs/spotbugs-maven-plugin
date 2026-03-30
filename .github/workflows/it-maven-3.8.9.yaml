@@ -25,6 +25,25 @@ jobs:
           cache: maven
           distribution: zulu
           java-version: 21
+      - name: Create Maven toolchains
+        shell: bash
+        run: |
+          JAVA_SPEC_VER=$(java -XshowSettings:property 2>&1 | grep 'java.specification.version' | awk '{print $NF}')
+          mkdir -p "${HOME}/.m2"
+          cat > "${HOME}/.m2/toolchains.xml" << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <toolchains>
+            <toolchain>
+              <type>jdk</type>
+              <provides>
+                <version>${JAVA_SPEC_VER}</version>
+              </provides>
+              <configuration>
+                <jdkHome>${JAVA_HOME}</jdkHome>
+              </configuration>
+            </toolchain>
+          </toolchains>
+          EOF
       - name: Set Maven Wrapper version ${{ env.maven-version }}
         run: sed -i "s|^distributionUrl=.*|distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/${{ env.maven-version }}/apache-maven-${{ env.maven-version }}-bin.zip|" .mvn/wrapper/maven-wrapper.properties
       - name: Set 'project.basedir' to 'basedir' for more broad maven ${{ env.maven-version }} support

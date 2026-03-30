@@ -24,6 +24,8 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 
+import org.xml.sax.SAXException
+
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
@@ -263,7 +265,7 @@ class SpotBugsAggregateMojo extends AbstractMavenReport {
                 }
                 try {
                     allResults.add(xmlSlurper.parse(xmlFile))
-                } catch (Exception e) {
+                } catch (SAXException | IOException e) {
                     log.warn("Failed to parse SpotBugs XML from ${xmlFile}: ${e.message}")
                 }
             } else if (log.isDebugEnabled()) {
