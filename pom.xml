@@ -1231,6 +1231,16 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.gmavenplus</groupId>
+                        <artifactId>gmavenplus-plugin</artifactId>
+                        <!-- gmavenplus reads maven.compiler.target for targetBytecode; since the maven4 profile clears
+                             maven.compiler.source/target to avoid conflicts with maven-compiler-plugin 4.x, we must
+                             set targetBytecode directly so gmavenplus uses the correct bytecode version. -->
+                        <configuration>
+                            <targetBytecode>${java.release.version}</targetBytecode>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
