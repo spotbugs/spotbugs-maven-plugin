@@ -29,6 +29,10 @@ assert Files.exists(spotbugXdoc)
 Path spotbugXml = basedir.toPath().resolve('target/spotbugsXml.xml')
 assert Files.exists(spotbugXml)
 
+Path spotbugsPluginsDir = basedir.toPath().resolve('target/spotbugs')
+assert Files.isDirectory(spotbugsPluginsDir) : "Extra plugins should be copied into target/spotbugs/ subdirectory"
+assert Files.list(spotbugsPluginsDir).anyMatch { Path p -> p.fileName.toString().endsWith('.jar') } : "target/spotbugs/ should contain the copied plugin JARs"
+
 println '******************'
 println 'Checking HTML file'
 println '******************'
