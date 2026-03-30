@@ -1208,8 +1208,8 @@
                 </property>
             </activation>
             <properties>
-                <!-- maven-compiler-plugin 4.x does not allow using both --source/--target and --release simultaneously.
-                     Clear source and target to avoid "option --source cannot be used together with --release". -->
+                <!-- maven-compiler-plugin 4.x does not allow using both ..source/..target and ..release simultaneously.
+                     Clear source and target to avoid "option ..source cannot be used together with ..release". -->
                 <maven.compiler.source/>
                 <maven.compiler.target/>
                 <maven.compiler.testSource/>
