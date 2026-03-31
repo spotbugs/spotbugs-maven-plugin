@@ -73,7 +73,7 @@ class SpotBugsPluginsTraitTest extends Specification {
         Files.deleteIfExists(jarPath)
     }
 
-    void "isSpotBugsPlugin returns false for JAR without META-INF/findbugs/findbugs.xml"() {
+    void "isSpotBugsPlugin returns false for JAR without findbugs.xml"() {
         given:
         SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", Mock(Log), Mock(ResourceManager),
             Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
