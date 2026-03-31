@@ -376,7 +376,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * <p>
      * As an alternative, SpotBugs extension plugin JARs can also be declared as standard Maven
      * {@code <dependencies>} of this plugin. Any dependency whose JAR contains
-     * {@code META-INF/findbugs/findbugs.xml} is automatically detected and passed to SpotBugs.
+     * {@code findbugs.xml} is automatically detected and passed to SpotBugs.
      *
      * @since 2.4.1
      * @since 4.8.3.0 includes classifier
