@@ -24,13 +24,13 @@
   <parent>
     <groupId>spotbugs-maven-plugin.it</groupId>
     <artifactId>common</artifactId>
-    <version>testing</version>
+    <version>1.0</version>
     <relativePath>../common.xml</relativePath>
   </parent>
   -->
 
   <groupId>spotbugs-maven-plugin.it</groupId>
-  <version>testing</version>
+  <version>1.0</version>
   <artifactId>skipEmpty</artifactId>
 
   <name>skipEmpty</name>

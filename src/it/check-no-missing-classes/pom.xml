@@ -25,14 +25,14 @@
   <parent>
     <groupId>spotbugs-maven-plugin.it</groupId>
     <artifactId>common</artifactId>
-    <version>testing</version>
+    <version>1.0</version>
     <relativePath>../common.xml</relativePath>
   </parent>
   -->
 
   <groupId>spotbugs-maven-plugin.it</groupId>
   <artifactId>check-no-missing-classes</artifactId>
-  <version>testing</version>
+  <version>1.0</version>
 
   <name>check-no-missing-classes</name>
 

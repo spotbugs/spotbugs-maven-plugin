@@ -25,7 +25,7 @@
   <parent>
     <groupId>spotbugs-maven-plugin.it</groupId>
     <artifactId>check-multi-filter-dups</artifactId>
-    <version>testing</version>
+    <version>1.0</version>
     <relativePath>..</relativePath>
   </parent>
 

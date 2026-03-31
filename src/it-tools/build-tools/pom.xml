@@ -24,7 +24,7 @@
 
   <groupId>spotbugs-maven-plugin.it</groupId>
   <artifactId>build-tools</artifactId>
-  <version>testing</version>
+  <version>1.0</version>
 
   <name>build-tools</name>
 

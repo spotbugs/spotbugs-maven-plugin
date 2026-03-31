@@ -23,7 +23,7 @@
 
   <groupId>spotbugs-maven-plugin.it</groupId>
   <artifactId>common</artifactId>
-  <version>testing</version>
+  <version>1.0</version>
   <packaging>pom</packaging>
 
   <url>https://spotbugs.github.io/spotbugs-maven-plugin/</url>
