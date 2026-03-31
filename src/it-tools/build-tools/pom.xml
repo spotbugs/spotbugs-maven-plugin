@@ -134,7 +134,7 @@
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-clean-plugin</artifactId>
-              <!-- force parameter was removed in maven-clean-plugin 4.x -->
+              <!-- force parameter is not yet available in maven-clean-plugin 4.x -->
               <configuration combine.self="override"/>
             </plugin>
           </plugins>
