@@ -15,4 +15,4 @@
  */
 import java.nio.file.Files
 
-assert Files.exists(basedir.toPath().resolve('target/build-tools-testing.jar'))
+assert Files.exists(basedir.toPath().resolve('target/build-tools-1.0.jar'))
