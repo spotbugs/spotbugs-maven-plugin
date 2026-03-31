@@ -46,6 +46,9 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
           <version>@clean.plugin@</version>
+          <configuration>
+            <force>true</force>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -91,7 +94,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>@compiler.plugin@</version>
         <configuration>
-          <debuglevel>none</debuglevel>
+          <debug>false</debug>
           <release>11</release>
           <excludes>
             <exclude>fakeAnnotations/**</exclude>

@@ -35,9 +35,6 @@ List results = slurpedResult.runs.results[0]
 
 for (result in results) {
     for (loc in result.locations) {
-        if (loc.physicalLocation?.artifactLocation == null) {
-            continue
-        }
         String location = normalizePath(loc.physicalLocation.artifactLocation.uri)
         //Making sure that the path was expanded
         assert location.contains('src/it-src/test/java') || location.contains('src/java') : "${location} does not contain 'src/it-src/test/java' or 'src/java'"

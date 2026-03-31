@@ -373,10 +373,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /**
      * Collection of PluginArtifact to work on. (PluginArtifact contains groupId, artifactId, version, type, classifier.)
      * See <a href="./usage.html#Using Detectors from a Repository">Usage</a> for details.
-     * <p>
-     * As an alternative, SpotBugs extension plugin JARs can also be declared as standard Maven
-     * {@code <dependencies>} of this plugin. Any dependency whose JAR contains
-     * {@code findbugs.xml} is automatically detected and passed to SpotBugs.
      *
      * @since 2.4.1
      * @since 4.8.3.0 includes classifier
@@ -902,11 +898,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             args << '-progress'
         }
 
-        String spotbugsPlugins = getSpotbugsPlugins()
-        if (spotbugsPlugins) {
+        if (pluginList || plugins) {
             log.debug("  Adding 'pluginList'")
             args << '-pluginList'
-            args << spotbugsPlugins
+            args << getSpotbugsPlugins()
         }
 
 
@@ -1398,9 +1393,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 for (result in slurpedResult.runs.results[0]) {
 
                     for (loc in result.locations) {
-                        if (loc.physicalLocation?.artifactLocation == null) {
-                            continue
-                        }
                         String originalFullPath = loc.physicalLocation.artifactLocation.uri
 
                         //We replace relative path to the complete path
