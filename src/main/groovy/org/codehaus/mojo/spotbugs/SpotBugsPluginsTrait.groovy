@@ -149,7 +149,7 @@ trait SpotBugsPluginsTrait {
 
     /**
      * Determines whether the given file is a SpotBugs extension plugin by checking
-     * if it is a JAR containing {@code META-INF/findbugs/findbugs.xml}.
+     * if it is a JAR containing {@code findbugs.xml} at the root.
      *
      * @param file the artifact file to inspect
      * @return {@code true} if the file is a SpotBugs plugin JAR, {@code false} otherwise
@@ -160,7 +160,7 @@ trait SpotBugsPluginsTrait {
         }
         try {
             new JarFile(file).withCloseable { jar ->
-                return jar.getEntry('META-INF/findbugs/findbugs.xml') != null
+                return jar.getEntry('findbugs.xml') != null
             }
         } catch (IOException ignored) {
             return false

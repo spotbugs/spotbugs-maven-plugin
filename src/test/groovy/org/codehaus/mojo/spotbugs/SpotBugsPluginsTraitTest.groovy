@@ -55,13 +55,13 @@ class SpotBugsPluginsTraitTest extends Specification {
         null     || "-effort:default"
     }
 
-    void "isSpotBugsPlugin returns true for JAR containing META-INF/findbugs/findbugs.xml"() {
+    void "isSpotBugsPlugin returns true for JAR containing findbugs.xml at root"() {
         given:
         SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", Mock(Log), Mock(ResourceManager),
             Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
         Path jarPath = Files.createTempFile("test-plugin", ".jar")
         new JarOutputStream(Files.newOutputStream(jarPath)).withCloseable { jos ->
-            jos.putNextEntry(new JarEntry("META-INF/findbugs/findbugs.xml"))
+            jos.putNextEntry(new JarEntry("findbugs.xml"))
             jos.write("<FindbugsPlugin></FindbugsPlugin>".bytes)
             jos.closeEntry()
         }
