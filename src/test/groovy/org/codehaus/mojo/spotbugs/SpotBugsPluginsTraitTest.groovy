@@ -16,9 +16,15 @@
 package org.codehaus.mojo.spotbugs
 
 import spock.lang.Specification
+import org.apache.maven.artifact.Artifact
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.execution.MavenSession
 import org.codehaus.plexus.resource.ResourceManager
+
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.jar.JarEntry
+import java.util.jar.JarOutputStream
 
 class SpotBugsPluginsTraitTest extends Specification {
 
@@ -49,10 +55,70 @@ class SpotBugsPluginsTraitTest extends Specification {
         null     || "-effort:default"
     }
 
+    void "isSpotBugsPlugin returns true for JAR containing META-INF/findbugs/findbugs.xml"() {
+        given:
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", Mock(Log), Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+        Path jarPath = Files.createTempFile("test-plugin", ".jar")
+        new JarOutputStream(Files.newOutputStream(jarPath)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry("META-INF/findbugs/findbugs.xml"))
+            jos.write("<FindbugsPlugin></FindbugsPlugin>".bytes)
+            jos.closeEntry()
+        }
+
+        expect:
+        impl.isSpotBugsPlugin(jarPath.toFile()) == true
+
+        cleanup:
+        Files.deleteIfExists(jarPath)
+    }
+
+    void "isSpotBugsPlugin returns false for JAR without META-INF/findbugs/findbugs.xml"() {
+        given:
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", Mock(Log), Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+        Path jarPath = Files.createTempFile("not-a-plugin", ".jar")
+        new JarOutputStream(Files.newOutputStream(jarPath)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry("com/example/Foo.class"))
+            jos.write("class".bytes)
+            jos.closeEntry()
+        }
+
+        expect:
+        impl.isSpotBugsPlugin(jarPath.toFile()) == false
+
+        cleanup:
+        Files.deleteIfExists(jarPath)
+    }
+
+    void "isSpotBugsPlugin returns false for null file"() {
+        given:
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", Mock(Log), Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+
+        expect:
+        impl.isSpotBugsPlugin(null) == false
+    }
+
+    void "isSpotBugsPlugin returns false for non-JAR file"() {
+        given:
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", Mock(Log), Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+        Path txtPath = Files.createTempFile("not-a-jar", ".txt")
+        txtPath.toFile().text = "hello"
+
+        expect:
+        impl.isSpotBugsPlugin(txtPath.toFile()) == false
+
+        cleanup:
+        Files.deleteIfExists(txtPath)
+    }
+
     static class SpotBugsPluginsTraitImpl implements SpotBugsPluginsTrait {
         String effort
         String pluginList = ""
         List<PluginArtifact> plugins = []
+        List<Artifact> pluginArtifacts = []
         Log log
         File spotbugsXmlOutputDirectory = new File(".")
         ResourceManager resourceManager

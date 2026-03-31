@@ -17,6 +17,8 @@ package org.codehaus.mojo.spotbugs
 
 import groovy.transform.CompileStatic
 
+import java.util.jar.JarFile
+
 import org.apache.maven.RepositoryUtils
 import org.apache.maven.artifact.Artifact
 import org.apache.maven.execution.MavenSession
@@ -46,6 +48,7 @@ trait SpotBugsPluginsTrait {
     // when fixed, should move pluginList and plugins properties here
     abstract String getPluginList()
     abstract List<PluginArtifact> getPlugins()
+    abstract List<Artifact> getPluginArtifacts()
     abstract String getEffort()
     abstract MavenSession getSession()
 
@@ -109,6 +112,32 @@ trait SpotBugsPluginsTrait {
             }
         }
 
+        // Auto-detect SpotBugs extension plugins added as standard Maven <dependencies> to the plugin.
+        // Any artifact on the plugin classpath (pluginArtifacts) that contains META-INF/findbugs/findbugs.xml
+        // and is not part of the SpotBugs core (com.github.spotbugs group) is treated as a plugin extension.
+        if (pluginArtifacts) {
+            if (log.isDebugEnabled()) {
+                log.debug('  Scanning plugin artifacts for SpotBugs extension plugins (added via <dependencies>)')
+            }
+
+            // Collect file names already in the plugin list to avoid adding the same JAR twice
+            // (e.g. when a plugin is declared both via <plugins> config and as a <dependency>).
+            Set<String> addedFileNames = urlPlugins.collect { new File(it).name } as Set
+
+            pluginArtifacts.each { Artifact artifact ->
+                if ('com.github.spotbugs' != artifact.groupId && artifact.file != null && isSpotBugsPlugin(artifact.file)) {
+                    String jarFileName = artifact.file.name
+                    if (!addedFileNames.contains(jarFileName)) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("  Auto-detected SpotBugs extension plugin from dependency: ${artifact}")
+                        }
+                        addedFileNames << jarFileName
+                        urlPlugins << resourceHelper.getResourceFile(artifact.file.absolutePath).absolutePath
+                    }
+                }
+            }
+        }
+
         String pluginListStr = urlPlugins.join(File.pathSeparator)
 
         if (log.isDebugEnabled()) {
@@ -116,6 +145,26 @@ trait SpotBugsPluginsTrait {
         }
 
         return pluginListStr
+    }
+
+    /**
+     * Determines whether the given file is a SpotBugs extension plugin by checking
+     * if it is a JAR containing {@code META-INF/findbugs/findbugs.xml}.
+     *
+     * @param file the artifact file to inspect
+     * @return {@code true} if the file is a SpotBugs plugin JAR, {@code false} otherwise
+     */
+    boolean isSpotBugsPlugin(File file) {
+        if (file == null || !file.exists() || !file.name.endsWith('.jar')) {
+            return false
+        }
+        try {
+            new JarFile(file).withCloseable { jar ->
+                return jar.getEntry('META-INF/findbugs/findbugs.xml') != null
+            }
+        } catch (IOException ignored) {
+            return false
+        }
     }
 
     /**

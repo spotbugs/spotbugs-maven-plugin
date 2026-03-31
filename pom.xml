@@ -334,7 +334,7 @@
                 <artifactId>velocity-engine-core</artifactId>
                 <version>${velocity.version}</version>
             </dependency>
-            
+
             <!-- Use latest doxia for maven reporting -->
             <dependency>
                 <groupId>org.apache.maven.doxia</groupId>
@@ -363,7 +363,7 @@
                 <artifactId>doxia-integration-tools</artifactId>
                 <version>${doxiaSiteToolsVersion}</version>
             </dependency>
-            
+
             <!-- Use latest plexus component annotations -->
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>

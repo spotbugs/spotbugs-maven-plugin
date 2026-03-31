@@ -308,6 +308,50 @@ mvn site
 mvn site
 +-----+
 
+* Using Detectors via Standard Maven Dependencies
+
+  As an alternative to the custom <<<\<plugins\>>>> configuration, SpotBugs extension
+  plugins can be declared as standard Maven <<<\<dependencies\>>>> of the plugin.
+  The plugin automatically detects any dependency whose JAR contains
+  <<<META-INF/findbugs/findbugs.xml>>> and passes it to SpotBugs. This approach
+  allows the extensions to be managed in <<<\<dependencyManagement\>>>>, picked up
+  by tools like the Versions Maven Plugin, and reported by dependency security scanners.
+
++-----+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  ...
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.mebigfatguy.sb-contrib</groupId>
+            <artifactId>sb-contrib</artifactId>
+            <version>7.6.10</version>
+          </dependency>
+          <dependency>
+            <groupId>com.h3xstream.findsecbugs</groupId>
+            <artifactId>findsecbugs-plugin</artifactId>
+            <version>1.14.0</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+  ...
+</project>
++-----+
+
+  Then, execute the check goal to run SpotBugs with the extension detectors.
+
++-----+
+mvn spotbugs:check
++-----+
+
 
 * Launch the Spotbugs GUI
 
