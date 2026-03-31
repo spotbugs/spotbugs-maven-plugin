@@ -44,7 +44,7 @@
         </configuration>
         <!-- SpotBugs extension plugins declared as standard Maven <dependencies>
              instead of the custom <plugins> configuration.
-             The plugin auto-detects them by looking for META-INF/findbugs/findbugs.xml. -->
+             The plugin auto-detects them by looking for findbugs.xml. -->
         <dependencies>
           <dependency>
             <groupId>com.mebigfatguy.sb-contrib</groupId>
