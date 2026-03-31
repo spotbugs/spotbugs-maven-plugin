@@ -113,7 +113,7 @@ trait SpotBugsPluginsTrait {
         }
 
         // Auto-detect SpotBugs extension plugins added as standard Maven <dependencies> to the plugin.
-        // Any artifact on the plugin classpath (pluginArtifacts) that contains META-INF/findbugs/findbugs.xml
+        // Any artifact on the plugin classpath (pluginArtifacts) that contains findbugs.xml
         // and is not part of the SpotBugs core (com.github.spotbugs group) is treated as a plugin extension.
         if (pluginArtifacts) {
             if (log.isDebugEnabled()) {
