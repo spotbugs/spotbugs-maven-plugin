@@ -1398,6 +1398,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 for (result in slurpedResult.runs.results[0]) {
 
                     for (loc in result.locations) {
+                        if (loc.physicalLocation?.artifactLocation == null) {
+                            continue
+                        }
                         String originalFullPath = loc.physicalLocation.artifactLocation.uri
 
                         //We replace relative path to the complete path
