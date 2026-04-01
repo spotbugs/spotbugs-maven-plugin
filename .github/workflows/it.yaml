@@ -22,22 +22,5 @@ jobs:
           cache: maven
           distribution: zulu
           java-version: 21
-      - name: Generate Maven toolchains.xml
-        run: |
-          mkdir -p ~/.m2
-          cat > ~/.m2/toolchains.xml << EOF
-          <?xml version="1.0" encoding="UTF-8"?>
-          <toolchains>
-            <toolchain>
-              <type>jdk</type>
-              <provides>
-                <version>21</version>
-              </provides>
-              <configuration>
-                <jdkHome>$JAVA_HOME</jdkHome>
-              </configuration>
-            </toolchain>
-          </toolchains>
-          EOF
       - name: Integration Test with Maven
         run: ./mvnw --batch-mode --show-version -DtestSrc=remote -Prun-its verify -Dinvoker.parallelThreads=8 -Dlicense.skip=true --no-transfer-progress
