@@ -174,6 +174,11 @@ trait SpotBugsPluginsTrait {
      * Builds a mapping from bug type codes to their documentation URLs by reading
      * the {@code findbugs.xml} descriptor from each resolved SpotBugs plugin JAR.
      * <p>
+     * The method inspects JARs from two sources:
+     * <ol>
+     *   <li>Plugin JARs listed in {@code pluginList} (comma-separated file paths).</li>
+     *   <li>Plugin JARs discovered automatically from {@code pluginArtifacts} (Maven dependencies).</li>
+     * </ol>
      * Built-in documentation URL templates are provided for the following well-known plugins:
      * <ul>
      *   <li>{@code com.mebigfatguy.fbcontrib} &rarr; fb-contrib / sb-contrib</li>
@@ -196,18 +201,29 @@ trait SpotBugsPluginsTrait {
         Map<String, String> effectiveUrls = defaults + (userPluginDocUrls ?: [:])
         Map<String, String> bugTypeUrlMap = [:]
 
-        String pluginListStr = getSpotbugsPlugins()
-        if (!pluginListStr) {
-            return bugTypeUrlMap
+        // Collect all candidate JAR files from pluginList and pluginArtifacts.
+        // We read the JARs directly (without copying) since we only need their metadata.
+        Set<File> pluginJars = []
+
+        if (pluginList) {
+            pluginList.split(SpotBugsInfo.COMMA).each { String path ->
+                String trimmed = path?.trim()
+                if (trimmed) {
+                    File jar = new File(trimmed)
+                    if (jar.exists()) pluginJars << jar
+                }
+            }
         }
 
-        pluginListStr.split(java.util.regex.Pattern.quote(File.pathSeparator)).each { String pluginPath ->
-            String trimmedPath = pluginPath?.trim()
-            if (!trimmedPath) return
+        if (pluginArtifacts) {
+            pluginArtifacts.each { Artifact artifact ->
+                if ('com.github.spotbugs' != artifact.groupId && artifact.file != null && artifact.file.exists()) {
+                    pluginJars << artifact.file
+                }
+            }
+        }
 
-            File pluginJar = new File(trimmedPath)
-            if (!pluginJar.exists()) return
-
+        pluginJars.each { File pluginJar ->
             try {
                 new JarFile(pluginJar).withCloseable { JarFile jar ->
                     JarEntry entry = jar.getEntry('findbugs.xml')
@@ -226,7 +242,7 @@ trait SpotBugsPluginsTrait {
                     }
                 }
             } catch (Exception e) {
-                log.warn("Failed to read SpotBugs plugin JAR for URL mapping: ${trimmedPath}: ${e.message}")
+                log.warn("Failed to read SpotBugs plugin JAR for URL mapping: ${pluginJar}: ${e.message}")
             }
         }
 
