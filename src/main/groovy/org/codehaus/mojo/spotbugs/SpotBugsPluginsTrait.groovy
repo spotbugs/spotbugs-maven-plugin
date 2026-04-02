@@ -30,6 +30,7 @@ import org.apache.maven.plugin.MojoExecutionException
 import org.codehaus.plexus.resource.ResourceManager
 import org.eclipse.aether.resolution.ArtifactRequest
 import org.eclipse.aether.resolution.ArtifactResult
+import org.xml.sax.SAXException
 
 /**
  * SpotBugs plugin support for Mojos.
@@ -241,7 +242,7 @@ trait SpotBugsPluginsTrait {
                         }
                     }
                 }
-            } catch (Exception e) {
+            } catch (IOException | SAXException e) {
                 log.warn("Failed to read SpotBugs plugin JAR for URL mapping: ${pluginJar}: ${e.message}")
             }
         }
