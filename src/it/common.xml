@@ -177,7 +177,7 @@
 
   <profiles>
     <profile>
-      <!-- Override parameters not valid in maven-clean-plugin 4.x and maven-compiler-plugin 4.x -->
+      <!-- Override parameters not valid in maven-clean-plugin 4.x -->
       <id>maven4</id>
       <activation>
         <property>
@@ -196,26 +196,6 @@
             </plugin>
           </plugins>
         </pluginManagement>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <!-- debug parameter is deprecated in maven-compiler-plugin 4.x; use debuglevel instead -->
-            <configuration combine.self="override">
-              <debuglevel>none</debuglevel>
-              <release>11</release>
-              <excludes>
-                <exclude>*fakeAnnotations/**</exclude>
-                <exclude>jsr305/**</exclude>
-                <exclude>*Ejb3Fields.java</exclude>
-                <exclude>*Sql*.java</exclude>
-                <exclude>*Volatile*.java</exclude>
-                <exclude>*sfBugs/Bug1578441.java</exclude>
-                <exclude>*sfBugs/Bug1718130.java</exclude>
-              </excludes>
-            </configuration>
-          </plugin>
-        </plugins>
       </build>
     </profile>
   </profiles>
