@@ -15,8 +15,11 @@
  */
 package org.codehaus.mojo.spotbugs
 
+import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
+import groovy.xml.XmlSlurper
 
+import java.util.jar.JarEntry
 import java.util.jar.JarFile
 
 import org.apache.maven.RepositoryUtils
@@ -165,6 +168,69 @@ trait SpotBugsPluginsTrait {
         } catch (IOException ignored) {
             return false
         }
+    }
+
+    /**
+     * Builds a mapping from bug type codes to their documentation URLs by reading
+     * the {@code findbugs.xml} descriptor from each resolved SpotBugs plugin JAR.
+     * <p>
+     * Built-in documentation URL templates are provided for the following well-known plugins:
+     * <ul>
+     *   <li>{@code com.mebigfatguy.fbcontrib} &rarr; fb-contrib / sb-contrib</li>
+     *   <li>{@code com.h3xstream.findsecbugs} &rarr; Find Security Bugs</li>
+     * </ul>
+     * User-supplied entries in {@code userPluginDocUrls} override the built-in defaults.
+     * URL templates may contain the placeholder {@code {type}} which will be replaced with
+     * the bug type code (e.g. {@code https://example.com/bugs.html#{type}}).
+     *
+     * @param userPluginDocUrls optional user-configured map of plugin IDs to URL templates
+     * @return a map from bug type code to fully-resolved documentation URL
+     */
+    @CompileDynamic
+    Map<String, String> buildBugTypeUrlMap(Map<String, String> userPluginDocUrls) {
+        Map<String, String> defaults = [
+            'com.mebigfatguy.fbcontrib'   : 'https://fb-contrib.sourceforge.net/bugdescriptions.html#{type}',
+            'com.h3xstream.findsecbugs'   : 'https://find-sec-bugs.github.io/bugs.htm#{type}',
+        ]
+
+        Map<String, String> effectiveUrls = defaults + (userPluginDocUrls ?: [:])
+        Map<String, String> bugTypeUrlMap = [:]
+
+        String pluginListStr = getSpotbugsPlugins()
+        if (!pluginListStr) {
+            return bugTypeUrlMap
+        }
+
+        pluginListStr.split(java.util.regex.Pattern.quote(File.pathSeparator)).each { String pluginPath ->
+            String trimmedPath = pluginPath?.trim()
+            if (!trimmedPath) return
+
+            File pluginJar = new File(trimmedPath)
+            if (!pluginJar.exists()) return
+
+            try {
+                new JarFile(pluginJar).withCloseable { JarFile jar ->
+                    JarEntry entry = jar.getEntry('findbugs.xml')
+                    if (!entry) return
+
+                    def xml = new XmlSlurper().parse(jar.getInputStream(entry))
+                    String pluginId = xml.@pluginid.text()
+                    String urlTemplate = effectiveUrls[pluginId]
+                    if (!urlTemplate) return
+
+                    xml.BugPattern.each { bugPattern ->
+                        String type = bugPattern.@type.text()
+                        if (type) {
+                            bugTypeUrlMap[type] = urlTemplate.replace('{type}', type)
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                log.warn("Failed to read SpotBugs plugin JAR for URL mapping: ${trimmedPath}: ${e.message}")
+            }
+        }
+
+        return bugTypeUrlMap
     }
 
     /**
