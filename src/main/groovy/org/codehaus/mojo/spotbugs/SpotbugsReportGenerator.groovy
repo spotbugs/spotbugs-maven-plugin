@@ -161,6 +161,13 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
     /** Bug classes. */
     List<String> bugClasses = []
 
+    /**
+     * Map from bug type code to its documentation URL. Populated from SpotBugs addon plugin
+     * descriptors for known plugins (e.g. fb-contrib, findsecbugs). When a bug type is not
+     * present in this map the default SpotBugs documentation URL is used as a fallback.
+     */
+    Map<String, String> bugTypeUrlMap = [:]
+
     /** Pre-compiled pattern for removing inner class suffixes. */
     private static final Pattern INNER_CLASS_PATTERN = Pattern.compile('\\$.*')
 
@@ -301,7 +308,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
             // description link
             sink.tableCell()
-            sink.link(bundle.getString(DETAILSLINK_KEY) + "#" + type)
+            sink.link(getBugDetailsUrl(type))
             sink.text(type)
             sink.link_()
             sink.tableCell_()
@@ -330,6 +337,19 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
         sink.table_()
 
         sink.section2_()
+    }
+
+    /**
+     * Returns the documentation URL for the given bug type. If a URL is registered in
+     * {@link #bugTypeUrlMap} (populated from addon plugin descriptors) that URL is returned;
+     * otherwise the default SpotBugs documentation URL is used as a fallback.
+     *
+     * @param type the bug type code (e.g. {@code NP_NULL_POINTER})
+     * @return the documentation URL for the bug type
+     */
+    protected String getBugDetailsUrl(String type) {
+        String url = bugTypeUrlMap?.get(type)
+        return url ?: (bundle.getString(DETAILSLINK_KEY) + '#' + type)
     }
 
     /**

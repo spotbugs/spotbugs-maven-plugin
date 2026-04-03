@@ -114,6 +114,124 @@ class SpotBugsPluginsTraitTest extends Specification {
         Files.deleteIfExists(txtPath)
     }
 
+    void "buildBugTypeUrlMap returns empty map when no plugins are configured"() {
+        given:
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", Mock(Log), Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+
+        expect:
+        impl.buildBugTypeUrlMap(null).isEmpty()
+    }
+
+    void "buildBugTypeUrlMap maps bug types from a known plugin using built-in defaults"() {
+        given:
+        Log log = Mock()
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", log, Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+
+        // Create a fake fb-contrib plugin JAR with a findbugs.xml that declares two bug patterns
+        Path jarPath = Files.createTempFile("fb-contrib", ".jar")
+        new JarOutputStream(Files.newOutputStream(jarPath)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry("findbugs.xml"))
+            jos.write('''<FindbugsPlugin pluginid="com.mebigfatguy.fbcontrib">
+                <BugPattern type="ABC_ARRAY_BASED_COLLECTIONS" abbrev="ABC" category="PERFORMANCE"/>
+                <BugPattern type="SPP_STRINGBUILDER_IS_MUTABLE" abbrev="SPP" category="STYLE"/>
+            </FindbugsPlugin>'''.bytes)
+            jos.closeEntry()
+        }
+        impl.pluginList = jarPath.toAbsolutePath().toString()
+
+        when:
+        Map<String, String> result = impl.buildBugTypeUrlMap(null)
+
+        then:
+        result['ABC_ARRAY_BASED_COLLECTIONS'] == 'https://fb-contrib.sourceforge.net/bugdescriptions.html#ABC_ARRAY_BASED_COLLECTIONS'
+        result['SPP_STRINGBUILDER_IS_MUTABLE'] == 'https://fb-contrib.sourceforge.net/bugdescriptions.html#SPP_STRINGBUILDER_IS_MUTABLE'
+
+        cleanup:
+        Files.deleteIfExists(jarPath)
+    }
+
+    void "buildBugTypeUrlMap respects user-supplied URL override for a known plugin"() {
+        given:
+        Log log = Mock()
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", log, Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+
+        Path jarPath = Files.createTempFile("fb-contrib-override", ".jar")
+        new JarOutputStream(Files.newOutputStream(jarPath)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry("findbugs.xml"))
+            jos.write('''<FindbugsPlugin pluginid="com.mebigfatguy.fbcontrib">
+                <BugPattern type="ABC_ARRAY_BASED_COLLECTIONS" abbrev="ABC" category="PERFORMANCE"/>
+            </FindbugsPlugin>'''.bytes)
+            jos.closeEntry()
+        }
+        impl.pluginList = jarPath.toAbsolutePath().toString()
+
+        when:
+        Map<String, String> result = impl.buildBugTypeUrlMap(
+            ['com.mebigfatguy.fbcontrib': 'https://custom.example.com/bugs#{type}'])
+
+        then:
+        result['ABC_ARRAY_BASED_COLLECTIONS'] == 'https://custom.example.com/bugs#ABC_ARRAY_BASED_COLLECTIONS'
+
+        cleanup:
+        Files.deleteIfExists(jarPath)
+    }
+
+    void "buildBugTypeUrlMap supports user-supplied URL for an unknown plugin"() {
+        given:
+        Log log = Mock()
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", log, Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+
+        Path jarPath = Files.createTempFile("custom-plugin", ".jar")
+        new JarOutputStream(Files.newOutputStream(jarPath)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry("findbugs.xml"))
+            jos.write('''<FindbugsPlugin pluginid="com.example.myplugin">
+                <BugPattern type="MY_BUG_TYPE" abbrev="MBT" category="STYLE"/>
+            </FindbugsPlugin>'''.bytes)
+            jos.closeEntry()
+        }
+        impl.pluginList = jarPath.toAbsolutePath().toString()
+
+        when:
+        Map<String, String> result = impl.buildBugTypeUrlMap(
+            ['com.example.myplugin': 'https://example.com/bugs#{type}'])
+
+        then:
+        result['MY_BUG_TYPE'] == 'https://example.com/bugs#MY_BUG_TYPE'
+
+        cleanup:
+        Files.deleteIfExists(jarPath)
+    }
+
+    void "buildBugTypeUrlMap ignores plugin JARs without a configured URL"() {
+        given:
+        Log log = Mock()
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", log, Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+
+        Path jarPath = Files.createTempFile("unknown-plugin", ".jar")
+        new JarOutputStream(Files.newOutputStream(jarPath)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry("findbugs.xml"))
+            jos.write('''<FindbugsPlugin pluginid="com.example.unknownplugin">
+                <BugPattern type="UNKNOWN_BUG" abbrev="UB" category="STYLE"/>
+            </FindbugsPlugin>'''.bytes)
+            jos.closeEntry()
+        }
+        impl.pluginList = jarPath.toAbsolutePath().toString()
+
+        when:
+        Map<String, String> result = impl.buildBugTypeUrlMap(null)
+
+        then:
+        !result.containsKey('UNKNOWN_BUG')
+
+        cleanup:
+        Files.deleteIfExists(jarPath)
+    }
+
     static class SpotBugsPluginsTraitImpl implements SpotBugsPluginsTrait {
         String effort
         String pluginList = ""

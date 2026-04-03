@@ -508,6 +508,35 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Parameter(property = 'spotbugs.systemPropertyVariables')
     Map<String, String> systemPropertyVariables
 
+    /**
+     * Map of SpotBugs plugin IDs to their documentation URL templates.
+     * The placeholder {@code {type}} in the template is replaced with the bug type code when
+     * generating report links.
+     * <p>
+     * Built-in defaults are already provided for the following well-known plugins:
+     * <ul>
+     *   <li>{@code com.mebigfatguy.fbcontrib} &rarr;
+     *       {@code https://fb-contrib.sourceforge.net/bugdescriptions.html#{type}}</li>
+     *   <li>{@code com.h3xstream.findsecbugs} &rarr;
+     *       {@code https://find-sec-bugs.github.io/bugs.htm#{type}}</li>
+     * </ul>
+     * Entries provided here override the built-in defaults, allowing you to add support for
+     * other SpotBugs addon plugins or customise the URLs for the ones above.
+     * The plugin ID can be found in the {@code pluginid} attribute of the plugin's
+     * {@code findbugs.xml} descriptor.
+     * <p>
+     * Example:
+     * <pre>{@code
+     * <pluginDocumentationUrls>
+     *   <com.example.myplugin>https://example.com/bugs.html#{type}</com.example.myplugin>
+     * </pluginDocumentationUrls>
+     * }</pre>
+     *
+     * @since 4.9.4.3
+     */
+    @Parameter
+    Map<String, String> pluginDocumentationUrls
+
     /** The bug count. */
     int bugCount
 
@@ -725,6 +754,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 generator.setLog(log)
                 generator.threshold = threshold
                 generator.effort = effort
+                generator.bugTypeUrlMap = buildBugTypeUrlMap(pluginDocumentationUrls)
 
                 XmlSlurper xmlSlurper = new XmlSlurper()
                 xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)

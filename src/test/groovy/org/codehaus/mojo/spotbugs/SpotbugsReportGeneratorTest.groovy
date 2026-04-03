@@ -91,4 +91,43 @@ class SpotbugsReportGeneratorTest extends Specification {
         1 * sink.close()
     }
 
+    void 'getBugDetailsUrl returns default SpotBugs URL when bugTypeUrlMap is empty'() {
+        given:
+        Sink sink = Mock()
+        ResourceBundle bundle = new StubResourceBundle()
+        SpotbugsReportGenerator generator = new SpotbugsReportGenerator(sink, bundle)
+
+        expect:
+        generator.getBugDetailsUrl('NP_NULL_ON_SOME_PATH') ==
+            'report.spotbugs.detailslink#NP_NULL_ON_SOME_PATH'
+    }
+
+    void 'getBugDetailsUrl returns mapped URL for a known addon bug type'() {
+        given:
+        Sink sink = Mock()
+        ResourceBundle bundle = new StubResourceBundle()
+        SpotbugsReportGenerator generator = new SpotbugsReportGenerator(sink, bundle)
+        generator.bugTypeUrlMap = [
+            'ABC_ARRAY_BASED_COLLECTIONS': 'https://fb-contrib.sourceforge.net/bugdescriptions.html#ABC_ARRAY_BASED_COLLECTIONS'
+        ]
+
+        expect:
+        generator.getBugDetailsUrl('ABC_ARRAY_BASED_COLLECTIONS') ==
+            'https://fb-contrib.sourceforge.net/bugdescriptions.html#ABC_ARRAY_BASED_COLLECTIONS'
+    }
+
+    void 'getBugDetailsUrl falls back to default URL for a type not in the map'() {
+        given:
+        Sink sink = Mock()
+        ResourceBundle bundle = new StubResourceBundle()
+        SpotbugsReportGenerator generator = new SpotbugsReportGenerator(sink, bundle)
+        generator.bugTypeUrlMap = [
+            'ABC_ARRAY_BASED_COLLECTIONS': 'https://fb-contrib.sourceforge.net/bugdescriptions.html#ABC_ARRAY_BASED_COLLECTIONS'
+        ]
+
+        expect:
+        generator.getBugDetailsUrl('NP_NULL_ON_SOME_PATH') ==
+            'report.spotbugs.detailslink#NP_NULL_ON_SOME_PATH'
+    }
+
 }
