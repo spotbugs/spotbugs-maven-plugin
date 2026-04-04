@@ -232,6 +232,218 @@ class SpotBugsPluginsTraitTest extends Specification {
         Files.deleteIfExists(jarPath)
     }
 
+    void "buildBugTypeUrlMap with pluginArtifacts maps bug types from non-spotbugs artifact"() {
+        given:
+        Log log = Mock()
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", log, Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+
+        Path jarPath = Files.createTempFile("artifact-plugin", ".jar")
+        new JarOutputStream(Files.newOutputStream(jarPath)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry("findbugs.xml"))
+            jos.write('''<FindbugsPlugin pluginid="com.mebigfatguy.fbcontrib">
+                <BugPattern type="ABC_ARRAY_BASED_COLLECTIONS" abbrev="ABC" category="PERFORMANCE"/>
+            </FindbugsPlugin>'''.bytes)
+            jos.closeEntry()
+        }
+
+        Artifact artifact = Mock(Artifact)
+        artifact.groupId >> "com.mebigfatguy"
+        artifact.file >> jarPath.toFile()
+        impl.pluginArtifacts = [artifact]
+
+        when:
+        Map<String, String> result = impl.buildBugTypeUrlMap(null)
+
+        then:
+        result['ABC_ARRAY_BASED_COLLECTIONS'] == 'https://fb-contrib.sourceforge.net/bugdescriptions.html#ABC_ARRAY_BASED_COLLECTIONS'
+
+        cleanup:
+        Files.deleteIfExists(jarPath)
+    }
+
+    void "buildBugTypeUrlMap skips artifacts from com.github.spotbugs group"() {
+        given:
+        Log log = Mock()
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", log, Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+
+        Path jarPath = Files.createTempFile("spotbugs-core", ".jar")
+        new JarOutputStream(Files.newOutputStream(jarPath)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry("findbugs.xml"))
+            jos.write('''<FindbugsPlugin pluginid="com.github.spotbugs">
+                <BugPattern type="CORE_BUG" abbrev="CB" category="CORRECTNESS"/>
+            </FindbugsPlugin>'''.bytes)
+            jos.closeEntry()
+        }
+
+        Artifact artifact = Mock(Artifact)
+        artifact.groupId >> "com.github.spotbugs"
+        artifact.file >> jarPath.toFile()
+        impl.pluginArtifacts = [artifact]
+
+        when:
+        Map<String, String> result = impl.buildBugTypeUrlMap(null)
+
+        then:
+        result.isEmpty()
+
+        cleanup:
+        Files.deleteIfExists(jarPath)
+    }
+
+    // -------------------------------------------------------------------------
+    // getSpotbugsPlugins() tests
+    // -------------------------------------------------------------------------
+
+    void "getSpotbugsPlugins returns empty string when no plugins configured"() {
+        given:
+        Log log = Mock() {
+            isDebugEnabled() >> false
+        }
+        Path tempOutputDir = Files.createTempDirectory("spotbugs-output")
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", log, Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+        impl.spotbugsXmlOutputDirectory = tempOutputDir.toFile()
+
+        when:
+        String result = impl.getSpotbugsPlugins()
+
+        then:
+        result == ''
+
+        cleanup:
+        tempOutputDir.toFile().deleteDir()
+    }
+
+    void "getSpotbugsPlugins includes JAR from pluginList"() {
+        given:
+        Log log = Mock() {
+            isDebugEnabled() >> true
+        }
+        Path tempOutputDir = Files.createTempDirectory("spotbugs-output-plugin")
+        Path jarPath = Files.createTempFile("custom-plugin", ".jar")
+        new JarOutputStream(Files.newOutputStream(jarPath)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry("findbugs.xml"))
+            jos.write("<FindbugsPlugin></FindbugsPlugin>".bytes)
+            jos.closeEntry()
+        }
+
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", log, Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+        impl.spotbugsXmlOutputDirectory = tempOutputDir.toFile()
+        impl.pluginList = jarPath.toAbsolutePath().toString()
+
+        when:
+        String result = impl.getSpotbugsPlugins()
+
+        then:
+        result.contains(jarPath.toFile().name)
+
+        cleanup:
+        Files.deleteIfExists(jarPath)
+        tempOutputDir.toFile().deleteDir()
+    }
+
+    void "getSpotbugsPlugins includes plugin JAR from non-spotbugs pluginArtifacts"() {
+        given:
+        Log log = Mock() {
+            isDebugEnabled() >> true
+        }
+        Path tempOutputDir = Files.createTempDirectory("spotbugs-output-artifact")
+        Path jarPath = Files.createTempFile("artifact-ext-plugin", ".jar")
+        new JarOutputStream(Files.newOutputStream(jarPath)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry("findbugs.xml"))
+            jos.write("<FindbugsPlugin></FindbugsPlugin>".bytes)
+            jos.closeEntry()
+        }
+
+        Artifact artifact = Mock(Artifact)
+        artifact.groupId >> "com.example"
+        artifact.file >> jarPath.toFile()
+
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", log, Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+        impl.spotbugsXmlOutputDirectory = tempOutputDir.toFile()
+        impl.pluginArtifacts = [artifact]
+
+        when:
+        String result = impl.getSpotbugsPlugins()
+
+        then:
+        result.contains(jarPath.toFile().name)
+
+        cleanup:
+        Files.deleteIfExists(jarPath)
+        tempOutputDir.toFile().deleteDir()
+    }
+
+    void "getSpotbugsPlugins skips pluginArtifacts from com.github.spotbugs group"() {
+        given:
+        Log log = Mock() {
+            isDebugEnabled() >> true
+        }
+        Path tempOutputDir = Files.createTempDirectory("spotbugs-output-skip")
+        Path jarPath = Files.createTempFile("spotbugs-core", ".jar")
+        new JarOutputStream(Files.newOutputStream(jarPath)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry("findbugs.xml"))
+            jos.write("<FindbugsPlugin></FindbugsPlugin>".bytes)
+            jos.closeEntry()
+        }
+
+        Artifact artifact = Mock(Artifact)
+        artifact.groupId >> "com.github.spotbugs"
+        artifact.file >> jarPath.toFile()
+
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", log, Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+        impl.spotbugsXmlOutputDirectory = tempOutputDir.toFile()
+        impl.pluginArtifacts = [artifact]
+
+        when:
+        String result = impl.getSpotbugsPlugins()
+
+        then:
+        result == ''
+
+        cleanup:
+        Files.deleteIfExists(jarPath)
+        tempOutputDir.toFile().deleteDir()
+    }
+
+    void "getSpotbugsPlugins skips non-spotbugs artifact without findbugs.xml"() {
+        given:
+        Log log = Mock() {
+            isDebugEnabled() >> false
+        }
+        Path tempOutputDir = Files.createTempDirectory("spotbugs-output-no-fb")
+        Path jarPath = Files.createTempFile("regular-lib", ".jar")
+        new JarOutputStream(Files.newOutputStream(jarPath)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry("com/example/Lib.class"))
+            jos.write([0xCA, 0xFE, 0xBA, 0xBE] as byte[])
+            jos.closeEntry()
+        }
+
+        Artifact artifact = Mock(Artifact)
+        artifact.groupId >> "com.example"
+        artifact.file >> jarPath.toFile()
+
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", log, Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+        impl.spotbugsXmlOutputDirectory = tempOutputDir.toFile()
+        impl.pluginArtifacts = [artifact]
+
+        when:
+        String result = impl.getSpotbugsPlugins()
+
+        then:
+        result == ''
+
+        cleanup:
+        Files.deleteIfExists(jarPath)
+        tempOutputDir.toFile().deleteDir()
+    }
+
     static class SpotBugsPluginsTraitImpl implements SpotBugsPluginsTrait {
         String effort
         String pluginList = ""

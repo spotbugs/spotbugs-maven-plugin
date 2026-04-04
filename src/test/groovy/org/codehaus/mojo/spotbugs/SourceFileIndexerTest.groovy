@@ -76,6 +76,115 @@ class SourceFileIndexerTest extends Specification {
         thrown(MojoExecutionException)
     }
 
+    void "searchActualFilesLocation returns null when file is not in the index"() {
+        given:
+        File baseDir = Files.createTempDirectory("project-notfound").toFile()
+        File srcDir = new File(baseDir, "src/main/java")
+        srcDir.mkdirs()
+        File testFile = new File(srcDir, "Existing.java")
+        testFile.text = "class Existing {}"
+
+        MavenProject project = Mock(MavenProject)
+        project.getBasedir() >> baseDir
+        project.getResources() >> []
+        project.getTestResources() >> []
+        project.getCompileSourceRoots() >> [srcDir.getAbsolutePath()]
+        project.getTestCompileSourceRoots() >> []
+
+        MavenSession session = Mock(MavenSession)
+        session.getExecutionRootDirectory() >> baseDir.getAbsolutePath()
+        session.getCurrentProject() >> project
+
+        SourceFileIndexer indexer = new SourceFileIndexer()
+        indexer.buildListSourceFiles(session)
+
+        when:
+        String result = indexer.searchActualFilesLocation("NonExistent.java")
+
+        then:
+        result == null
+
+        cleanup:
+        testFile.delete()
+        srcDir.delete()
+        baseDir.delete()
+    }
+
+    void "buildListSourceFiles scans nested subdirectories"() {
+        given:
+        File baseDir = Files.createTempDirectory("project-nested").toFile()
+        File srcDir = new File(baseDir, "src/main/java")
+        File subPkg = new File(srcDir, "com/example")
+        subPkg.mkdirs()
+        File nestedFile = new File(subPkg, "Service.java")
+        nestedFile.text = "class Service {}"
+
+        MavenProject project = Mock(MavenProject)
+        project.getBasedir() >> baseDir
+        project.getResources() >> []
+        project.getTestResources() >> []
+        project.getCompileSourceRoots() >> [srcDir.getAbsolutePath()]
+        project.getTestCompileSourceRoots() >> []
+
+        MavenSession session = Mock(MavenSession)
+        session.getExecutionRootDirectory() >> baseDir.getAbsolutePath()
+        session.getCurrentProject() >> project
+
+        SourceFileIndexer indexer = new SourceFileIndexer()
+
+        when:
+        indexer.buildListSourceFiles(session)
+        String found = indexer.searchActualFilesLocation("Service.java")
+
+        then:
+        found != null
+        found.endsWith("com/example/Service.java")
+
+        cleanup:
+        nestedFile.delete()
+        subPkg.delete()
+        new File(srcDir, "com").delete()
+        srcDir.delete()
+        new File(baseDir, "src/main").delete()
+        new File(baseDir, "src").delete()
+        baseDir.delete()
+    }
+
+    void "buildListSourceFiles includes files from test source roots"() {
+        given:
+        File baseDir = Files.createTempDirectory("project-testsrc").toFile()
+        File testSrcDir = new File(baseDir, "src/test/java")
+        testSrcDir.mkdirs()
+        File testFile = new File(testSrcDir, "FooTest.java")
+        testFile.text = "class FooTest {}"
+
+        MavenProject project = Mock(MavenProject)
+        project.getBasedir() >> baseDir
+        project.getResources() >> []
+        project.getTestResources() >> []
+        project.getCompileSourceRoots() >> []
+        project.getTestCompileSourceRoots() >> [testSrcDir.getAbsolutePath()]
+
+        MavenSession session = Mock(MavenSession)
+        session.getExecutionRootDirectory() >> baseDir.getAbsolutePath()
+        session.getCurrentProject() >> project
+
+        SourceFileIndexer indexer = new SourceFileIndexer()
+
+        when:
+        indexer.buildListSourceFiles(session)
+        String found = indexer.searchActualFilesLocation("FooTest.java")
+
+        then:
+        found != null
+        found.endsWith("FooTest.java")
+
+        cleanup:
+        testFile.delete()
+        testSrcDir.delete()
+        baseDir.delete()
+    }
+
     private static Resource resource(File dir) {
         Resource res = new Resource()
         res.setDirectory(dir.getAbsolutePath())

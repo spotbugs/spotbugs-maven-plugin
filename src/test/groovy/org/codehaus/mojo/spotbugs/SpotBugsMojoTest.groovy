@@ -18,11 +18,16 @@ package org.codehaus.mojo.spotbugs
 import java.util.jar.JarEntry
 import java.util.jar.JarOutputStream
 
+import org.apache.maven.execution.MavenExecutionRequest
 import org.apache.maven.execution.MavenSession
+import org.apache.maven.model.Model
 import org.apache.maven.model.Plugin
+import org.apache.maven.model.ReportPlugin
+import org.apache.maven.model.Reporting
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecution
 import org.apache.maven.plugin.logging.Log
+import org.apache.maven.project.MavenProject
 import org.apache.maven.toolchain.Toolchain
 import org.apache.maven.toolchain.ToolchainManager
 
@@ -309,6 +314,228 @@ class SpotBugsMojoTest extends Specification {
 
         then:
         result == expectedJavaPath
+    }
+
+    // -------------------------------------------------------------------------
+    // getThresholdParameter() – threshold value mapping
+    // -------------------------------------------------------------------------
+
+    void 'getThresholdParameter returns -high for threshold High'() {
+        given:
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> true }
+        mojo.threshold = 'High'
+
+        expect:
+        mojo.getThresholdParameter() == '-high'
+    }
+
+    void 'getThresholdParameter returns -experimental for threshold Exp'() {
+        given:
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.threshold = 'Exp'
+
+        expect:
+        mojo.getThresholdParameter() == '-experimental'
+    }
+
+    void 'getThresholdParameter returns -low for threshold Low'() {
+        given:
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.threshold = 'Low'
+
+        expect:
+        mojo.getThresholdParameter() == '-low'
+    }
+
+    void 'getThresholdParameter returns -high for lowercase threshold high'() {
+        given:
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.threshold = 'high'
+
+        expect:
+        mojo.getThresholdParameter() == '-high'
+    }
+
+    void 'getThresholdParameter returns -medium for unknown threshold'() {
+        given:
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.threshold = 'Default'
+
+        expect:
+        mojo.getThresholdParameter() == '-medium'
+    }
+
+    // -------------------------------------------------------------------------
+    // getName / getDescription / getOutputDirectory / setReportOutputDirectory
+    // -------------------------------------------------------------------------
+
+    void 'getName returns SpotBugs in English'() {
+        expect:
+        new SpotBugsMojo().getName(Locale.ENGLISH) == 'SpotBugs'
+    }
+
+    void 'getDescription returns non-empty description in English'() {
+        expect:
+        new SpotBugsMojo().getDescription(Locale.ENGLISH).length() > 0
+    }
+
+    void 'getOutputDirectory returns absolute path of outputDirectory'() {
+        given:
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.outputDirectory = tempDir
+
+        expect:
+        mojo.getOutputDirectory() == tempDir.absolutePath
+    }
+
+    void 'setReportOutputDirectory sets outputDirectory'() {
+        given:
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        File newDir = new File(tempDir, 'reports')
+
+        when:
+        mojo.setReportOutputDirectory(newDir)
+
+        then:
+        mojo.@outputDirectory == newDir
+    }
+
+    // -------------------------------------------------------------------------
+    // isJxrPluginEnabled() – JXR plugin detection
+    // -------------------------------------------------------------------------
+
+    void 'isJxrPluginEnabled returns true when xrefLocation exists'() {
+        given:
+        File existingXref = new File(tempDir, 'xref')
+        existingXref.mkdirs()
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.xrefLocation = existingXref
+
+        expect:
+        mojo.isJxrPluginEnabled() == true
+    }
+
+    void 'isJxrPluginEnabled returns false when xrefLocation missing and no report plugins'() {
+        given:
+        MavenProject project = Mock(MavenProject)
+        Model model = Mock(Model)
+        Reporting reporting = Mock(Reporting)
+        MavenSession session = Mock(MavenSession)
+
+        session.getCurrentProject() >> project
+        project.getModel() >> model
+        model.getReporting() >> reporting
+        reporting.getPlugins() >> []
+
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.session = session
+        mojo.xrefLocation = new File(tempDir, 'nonexistent-xref')
+
+        expect:
+        !mojo.isJxrPluginEnabled()
+    }
+
+    void 'isJxrPluginEnabled returns true when maven-jxr-plugin is in report plugins'() {
+        given:
+        ReportPlugin jxrPlugin = Mock(ReportPlugin) { getArtifactId() >> 'maven-jxr-plugin' }
+        ReportPlugin otherPlugin = Mock(ReportPlugin) { getArtifactId() >> 'maven-surefire-report-plugin' }
+        MavenProject project = Mock(MavenProject)
+        Model model = Mock(Model)
+        Reporting reporting = Mock(Reporting)
+        MavenSession session = Mock(MavenSession)
+
+        session.getCurrentProject() >> project
+        project.getModel() >> model
+        model.getReporting() >> reporting
+        reporting.getPlugins() >> [otherPlugin, jxrPlugin]
+
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> true }
+        mojo.session = session
+        mojo.xrefLocation = new File(tempDir, 'nonexistent-xref')
+
+        expect:
+        mojo.isJxrPluginEnabled() == true
+    }
+
+    // -------------------------------------------------------------------------
+    // canGenerateReport() – additional path coverage
+    // -------------------------------------------------------------------------
+
+    void 'canGenerateReport with nested=true and JAR covers nested file detection'() {
+        given:
+        Log log = Mock(Log) { isDebugEnabled() >> false }
+        File classesDir = new File(tempDir, 'classes-nested')
+        classesDir.mkdirs()
+        File jarFile = new File(classesDir, 'lib.jar')
+        new JarOutputStream(new FileOutputStream(jarFile)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry('com/example/Foo.class'))
+            jos.write([0xCA, 0xFE, 0xBA, 0xBE] as byte[])
+            jos.closeEntry()
+        }
+        File xmlOutputDir = new File(tempDir, 'xmloutput-nested')
+        xmlOutputDir.mkdirs()
+
+        // Use a session with site goals so isSiteLifecycle=true and generateXDoc is NOT called
+        MavenExecutionRequest request = Mock(MavenExecutionRequest) {
+            getGoals() >> ['site']
+        }
+        MavenSession session = Mock(MavenSession) {
+            getRequest() >> request
+        }
+
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = log
+        mojo.session = session
+        mojo.classFilesDirectory = classesDir
+        mojo.testClassFilesDirectory = new File(tempDir, 'nonexistent-tests')
+        mojo.spotbugsXmlOutputDirectory = xmlOutputDir
+        mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
+        mojo.nested = true
+        mojo.noClassOk = false
+        // Pre-set outputSpotbugsFile so executeSpotbugs is not called
+        mojo.outputSpotbugsFile = new File(xmlOutputDir, 'nonexistent-spotbugsXml.xml')
+
+        when:
+        boolean result = mojo.canGenerateReport()
+
+        then:
+        // canGenerate=true (JAR found), outputSpotbugsFile pre-set, isSiteLifecycle=true → return true
+        result
+    }
+
+    void 'canGenerateReport covers site lifecycle detection via session goals'() {
+        given:
+        Log log = Mock(Log) { isDebugEnabled() >> false }
+        MavenExecutionRequest request = Mock(MavenExecutionRequest) {
+            getGoals() >> ['site']
+        }
+        MavenSession session = Mock(MavenSession) {
+            getRequest() >> request
+        }
+
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = log
+        mojo.session = session
+        mojo.classFilesDirectory = new File(tempDir, 'nonexistent-classes')
+        mojo.testClassFilesDirectory = new File(tempDir, 'nonexistent-tests')
+        mojo.spotbugsXmlOutputDirectory = tempDir
+        mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
+
+        when:
+        boolean result = mojo.canGenerateReport()
+
+        then:
+        // classFilesDirectory doesn't exist → canGenerate=false → logs warning
+        !result
+        1 * log.info('No files found to run spotbugs; check compile phase has been run.')
     }
 
 }

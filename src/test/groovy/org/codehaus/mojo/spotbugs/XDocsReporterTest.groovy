@@ -95,4 +95,54 @@ class XDocsReporterTest extends Specification {
         doc.Error.size() == 1
     }
 
+    void 'generateReport with BugInstance covers bug processing closures'() {
+        given:
+        ResourceBundle bundle = Mock(ResourceBundle)
+        Log log = Mock(Log) { isDebugEnabled() >> false }
+        StringWriter writer = new StringWriter()
+        XDocsReporter reporter = new XDocsReporter(bundle, log, '1', 'max', StandardCharsets.UTF_8.name())
+        reporter.outputWriter = writer
+        reporter.compileSourceRoots = ['src/main/java']
+        reporter.testSourceRoots = []
+        reporter.bugClasses = []
+
+        String xml = '''
+            <BugCollection>
+                <FindBugsSummary total_bugs='1'>
+                    <PackageStats>
+                        <ClassStats class='com.example.Foo' bugs='1'/>
+                    </PackageStats>
+                </FindBugsSummary>
+                <BugInstance type='NP_NULL_ON_SOME_PATH' category='CORRECTNESS' priority='1'>
+                    <LongMessage>Null pointer dereference</LongMessage>
+                    <Class classname='com.example.Foo' primary='true'/>
+                    <SourceLine classname='com.example.Foo' sourcepath='Foo.java' start='10' end='10'/>
+                </BugInstance>
+                <Error>
+                    <analysisError><message>None</message></analysisError>
+                </Error>
+            </BugCollection>
+        '''
+
+        XmlSlurper xmlSlurper = new XmlSlurper()
+        xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+        xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+        reporter.spotbugsResults = xmlSlurper.parseText(xml)
+
+        when:
+        reporter.generateReport()
+        String output = writer.toString()
+
+        then:
+        output
+
+        and: 'output contains BugInstance'
+        XmlSlurper outSlurper = new XmlSlurper()
+        outSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+        outSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+        GPathResult doc = outSlurper.parseText(output)
+        doc.name() == 'BugCollection'
+        doc.file.BugInstance.size() == 1
+    }
+
 }
