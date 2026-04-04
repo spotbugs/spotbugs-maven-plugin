@@ -105,9 +105,7 @@ class SourceFileIndexerTest extends Specification {
         result == null
 
         cleanup:
-        testFile.delete()
-        srcDir.delete()
-        baseDir.delete()
+        baseDir.deleteDir()
     }
 
     void "buildListSourceFiles scans nested subdirectories"() {
@@ -141,13 +139,7 @@ class SourceFileIndexerTest extends Specification {
         found.endsWith("com/example/Service.java")
 
         cleanup:
-        nestedFile.delete()
-        subPkg.delete()
-        new File(srcDir, "com").delete()
-        srcDir.delete()
-        new File(baseDir, "src/main").delete()
-        new File(baseDir, "src").delete()
-        baseDir.delete()
+        baseDir.deleteDir()
     }
 
     void "buildListSourceFiles includes files from test source roots"() {
@@ -180,9 +172,7 @@ class SourceFileIndexerTest extends Specification {
         found.endsWith("FooTest.java")
 
         cleanup:
-        testFile.delete()
-        testSrcDir.delete()
-        baseDir.delete()
+        baseDir.deleteDir()
     }
 
     private static Resource resource(File dir) {
