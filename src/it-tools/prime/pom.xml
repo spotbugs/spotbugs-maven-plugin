@@ -24,7 +24,7 @@
 
   <groupId>spotbugs-maven-plugin.it</groupId>
   <artifactId>prime</artifactId>
-  <version>testing</version>
+  <version>1.0</version>
 
   <name>prime</name>
 

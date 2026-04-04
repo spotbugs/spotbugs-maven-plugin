@@ -24,7 +24,7 @@
 
   <groupId>spotbugs-maven-plugin.it</groupId>
   <artifactId>build-tools</artifactId>
-  <version>testing</version>
+  <version>1.0</version>
 
   <name>build-tools</name>
 
@@ -117,5 +117,30 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <!-- Override parameters not valid in maven-clean-plugin 4.x -->
+      <id>maven4</id>
+      <activation>
+        <property>
+          <name>maven.version</name>
+          <value>4.0.0-rc-5</value>
+        </property>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-clean-plugin</artifactId>
+              <!-- force parameter is not yet available in maven-clean-plugin 4.x -->
+              <configuration combine.self="override"/>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

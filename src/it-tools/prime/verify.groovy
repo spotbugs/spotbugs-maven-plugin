@@ -15,4 +15,4 @@
  */
 import java.nio.file.Files
 
-assert Files.exists(basedir.toPath().resolve('target/prime-testing.jar'))
+assert Files.exists(basedir.toPath().resolve('target/prime-1.0.jar'))
