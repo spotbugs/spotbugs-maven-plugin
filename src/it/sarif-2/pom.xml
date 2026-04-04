@@ -32,6 +32,22 @@
   <artifactId>sarif-2</artifactId>
   <name>sarif-2</name>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <!-- Override common.xml debug=false: SourceFile debug attributes are required so SpotBugs can resolve
+               source file names (rather than falling back to <Unknown>) when generating SARIF output.
+               Maven Compiler Plugin 4.x correctly removes SourceFile attributes when debug=false, causing
+               SpotBugs to use <Unknown> as the source filename, which is an illegal URI character. -->
+          <debug>true</debug>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
   <reporting>
     <excludeDefaults>true</excludeDefaults>
     <plugins>
