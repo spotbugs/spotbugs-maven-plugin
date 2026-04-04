@@ -444,6 +444,58 @@ class SpotBugsPluginsTraitTest extends Specification {
         tempOutputDir.toFile().deleteDir()
     }
 
+    void "buildBugTypeUrlMap logs warning for corrupt JAR covers catch block"() {
+        given:
+        Log log = Mock()
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", log, Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+
+        // Create a file that looks like a JAR but is not a valid ZIP/JAR
+        Path corruptJar = Files.createTempFile("corrupt-plugin", ".jar")
+        corruptJar.toFile().text = "this is not a valid JAR file content at all"
+        impl.pluginList = corruptJar.toAbsolutePath().toString()
+
+        when:
+        Map<String, String> result = impl.buildBugTypeUrlMap(null)
+
+        then:
+        result.isEmpty()
+        1 * log.warn(_)
+
+        cleanup:
+        Files.deleteIfExists(corruptJar)
+    }
+
+    void "getSpotbugsPlugins with debug logging covers debug paths in pluginList handling"() {
+        given:
+        Log log = Mock() {
+            isDebugEnabled() >> true
+        }
+        Path tempOutputDir = Files.createTempDirectory("spotbugs-output-debug")
+        Path jarPath = Files.createTempFile("debug-plugin", ".jar")
+        new JarOutputStream(Files.newOutputStream(jarPath)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry("findbugs.xml"))
+            jos.write("<FindbugsPlugin></FindbugsPlugin>".bytes)
+            jos.closeEntry()
+        }
+
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", log, Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+        impl.spotbugsXmlOutputDirectory = tempOutputDir.toFile()
+        impl.pluginList = jarPath.toAbsolutePath().toString()
+
+        when:
+        String result = impl.getSpotbugsPlugins()
+
+        then:
+        result.contains(jarPath.toFile().name)
+        (1.._) * log.debug(_)
+
+        cleanup:
+        Files.deleteIfExists(jarPath)
+        tempOutputDir.toFile().deleteDir()
+    }
+
     static class SpotBugsPluginsTraitImpl implements SpotBugsPluginsTrait {
         String effort
         String pluginList = ""

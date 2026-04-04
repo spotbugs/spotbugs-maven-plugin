@@ -130,4 +130,111 @@ class SpotbugsReportGeneratorTest extends Specification {
             'report.spotbugs.detailslink#NP_NULL_ON_SOME_PATH'
     }
 
+    void 'generateReport with JXR enabled covers assembleJxrHyperlink path'() {
+        given:
+        Sink sink = Mock()
+        ResourceBundle bundle = new StubResourceBundle()
+        Log log = Mock() { isDebugEnabled() >> false }
+        SpotbugsReportGenerator generator = new SpotbugsReportGenerator(sink, bundle)
+        generator.log = log
+        generator.threshold = org.codehaus.mojo.spotbugs.SpotBugsInfo.spotbugsThresholds.keySet().first()
+        generator.effort = org.codehaus.mojo.spotbugs.SpotBugsInfo.spotbugsEfforts.keySet().first()
+        generator.compileSourceRoots = ['src/main/java']
+        generator.testSourceRoots = ['src/test/java']
+        generator.includeTests = false
+        generator.outputDirectory = new File('.')
+        generator.xrefLocation = new File('.')
+        generator.xrefTestLocation = new File('.')
+        generator.isJXRReportEnabled = true
+
+        XmlSlurper xmlSlurper = new XmlSlurper()
+        xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+        xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+
+        generator.spotbugsResults = xmlSlurper.parseText('''
+            <BugCollection>
+                <FindBugsSummary total_classes='1' total_bugs='1'>
+                    <PackageStats>
+                        <ClassStats class='com.example.Foo' bugs='1'/>
+                    </PackageStats>
+                </FindBugsSummary>
+                <Errors errors='0' missingClasses='0'/>
+                <BugInstance type='NP_NULL_ON_SOME_PATH' category='CORRECTNESS' priority='1'>
+                    <LongMessage>Null pointer dereference</LongMessage>
+                    <Class classname='com.example.Foo'/>
+                    <SourceLine classname='com.example.Foo' sourcepath='com/example/Foo.java' start='10' end='10'/>
+                </BugInstance>
+            </BugCollection>
+        ''')
+
+        when:
+        generator.generateReport()
+
+        then:
+        1 * sink.head()
+        1 * sink.body()
+        1 * sink.rawText(_)
+    }
+
+    void 'generateReport with debug logging enabled covers debug paths'() {
+        given:
+        Sink sink = Mock()
+        ResourceBundle bundle = new StubResourceBundle()
+        Log log = Mock() { isDebugEnabled() >> true }
+        SpotbugsReportGenerator generator = new SpotbugsReportGenerator(sink, bundle)
+        generator.log = log
+        generator.threshold = org.codehaus.mojo.spotbugs.SpotBugsInfo.spotbugsThresholds.keySet().first()
+        generator.effort = org.codehaus.mojo.spotbugs.SpotBugsInfo.spotbugsEfforts.keySet().first()
+        generator.compileSourceRoots = ['src/main/java']
+        generator.testSourceRoots = ['src/test/java']
+        generator.includeTests = false
+        generator.outputDirectory = new File('.')
+        generator.xrefLocation = new File('.')
+        generator.xrefTestLocation = new File('.')
+
+        XmlSlurper xmlSlurper = new XmlSlurper()
+        xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+        xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+
+        generator.spotbugsResults = xmlSlurper.parseText('''
+            <BugCollection>
+                <FindBugsSummary total_classes='1' total_bugs='1'>
+                    <PackageStats>
+                        <ClassStats class='com.example.Foo' bugs='1'/>
+                    </PackageStats>
+                </FindBugsSummary>
+                <Errors errors='0' missingClasses='0'/>
+                <BugInstance type='NP_NULL_ON_SOME_PATH' category='CORRECTNESS' priority='1'>
+                    <LongMessage>Null pointer dereference</LongMessage>
+                    <Class classname='com.example.Foo'/>
+                    <SourceLine classname='com.example.Foo' sourcepath='Foo.java' start='10' end='10'/>
+                </BugInstance>
+            </BugCollection>
+        ''')
+
+        when:
+        generator.generateReport()
+
+        then:
+        1 * sink.head()
+        1 * sink.body()
+        (1.._) * log.debug(_)
+    }
+
+    void 'SpotbugsReportGenerator constructor rejects null sink'() {
+        when:
+        new SpotbugsReportGenerator(null, new StubResourceBundle())
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    void 'SpotbugsReportGenerator constructor rejects null bundle'() {
+        when:
+        new SpotbugsReportGenerator(Mock(Sink), null)
+
+        then:
+        thrown(IllegalArgumentException)
+    }
+
 }
