@@ -134,7 +134,7 @@
         <junitVersion>6.0.3</junitVersion>
         <slf4jVersion>2.0.17</slf4jVersion>
 
-        <antVersion>1.10.16</antVersion>
+        <antVersion>1.10.17</antVersion>
         <groovyVersion>5.0.5</groovyVersion>
         <javaparserVersion>3.28.0</javaparserVersion>
 
