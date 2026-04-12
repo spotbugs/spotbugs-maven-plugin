@@ -67,4 +67,47 @@ class SpotBugsInfoTest extends Specification {
         info.spotbugsPriority == ['unknown', 'High', 'Medium', 'Low']
     }
 
+    void "should have correct suffix and aggregate key constants"() {
+        expect:
+        SpotBugsInfo.JAR_SUFFIX == '.jar'
+        SpotBugsInfo.ZIP_SUFFIX == '.zip'
+        SpotBugsInfo.AGGREGATE_NAME_KEY == 'report.spotbugs.aggregate.name'
+        SpotBugsInfo.AGGREGATE_DESCRIPTION_KEY == 'report.spotbugs.aggregate.description'
+    }
+
+    void "spotbugsThresholds contains exactly five entries"() {
+        given:
+        SpotBugsInfo info = new SpotBugsInfoImpl()
+
+        expect:
+        info.spotbugsThresholds.size() == 5
+    }
+
+    void "spotbugsEfforts contains exactly three entries"() {
+        given:
+        SpotBugsInfo info = new SpotBugsInfoImpl()
+
+        expect:
+        info.spotbugsEfforts.size() == 3
+    }
+
+    void "spotbugsPriority has unknown at index 0"() {
+        given:
+        SpotBugsInfo info = new SpotBugsInfoImpl()
+
+        expect:
+        info.spotbugsPriority[0] == 'unknown'
+    }
+
+    void "spotbugsPriority indexOf works correctly for valid priorities"() {
+        given:
+        SpotBugsInfo info = new SpotBugsInfoImpl()
+
+        expect:
+        info.spotbugsPriority.indexOf('High') == 1
+        info.spotbugsPriority.indexOf('Medium') == 2
+        info.spotbugsPriority.indexOf('Low') == 3
+        info.spotbugsPriority.indexOf('NotAPriority') == -1
+    }
+
 }

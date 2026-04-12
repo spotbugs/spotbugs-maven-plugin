@@ -573,4 +573,154 @@ class BaseViolationCheckMojoTest extends Specification {
         (1.._) * log.debug(_)
     }
 
+    // -------------------------------------------------------------------------
+    // bugLog() – static helper method
+    // -------------------------------------------------------------------------
+
+    void 'bugLog formats bug message using LongMessage, classname, source message and type'() {
+        given:
+        groovy.xml.XmlParser parser = new groovy.xml.XmlParser()
+        Node bug = parser.parseText('''\
+<BugInstance type="NP_NULL_DEREF" priority="1">
+    <LongMessage>Null pointer dereference here</LongMessage>
+    <SourceLine classname="com.example.Foo" start="5" end="5">
+        <Message>At Foo.java:[line 5]</Message>
+    </SourceLine>
+</BugInstance>''')
+
+        when:
+        String result = BaseViolationCheckMojo.bugLog(bug)
+
+        then:
+        result.contains('Null pointer dereference here')
+        result.contains('com.example.Foo')
+        result.contains('At Foo.java:[line 5]')
+        result.contains('NP_NULL_DEREF')
+    }
+
+    // -------------------------------------------------------------------------
+    // execute() – error count paths
+    // -------------------------------------------------------------------------
+
+    void 'execute() throws when error count is non-zero and failOnError=true'() {
+        given:
+        Log log = Mock(Log) {
+            isInfoEnabled() >> true
+            isErrorEnabled() >> true
+        }
+        File classesDir = new File(tempDir, 'classes')
+        classesDir.mkdirs()
+        new File(classesDir, 'Foo.class').createNewFile()
+
+        File xmlFile = new File(tempDir, 'spotbugsXml.xml')
+        // One BugInstance plus one Error element – both drive the failure
+        xmlFile.text = '''\
+<?xml version="1.0" encoding="UTF-8"?>
+<BugCollection>
+    <BugInstance type="NP_NULL" priority="1">
+        <LongMessage>Null pointer</LongMessage>
+        <SourceLine classname="com.example.Foo" sourcepath="Foo.java" start="1" end="1">
+            <Message>At Foo.java:[line 1]</Message>
+        </SourceLine>
+    </BugInstance>
+    <Error>
+        <analysisError>
+            <message>Analysis failed</message>
+        </analysisError>
+    </Error>
+    <Errors errors="1" missingClasses="0"/>
+</BugCollection>
+'''
+
+        ConcreteCheckMojo mojo = new ConcreteCheckMojo()
+        mojo.log = log
+        mojo.spotbugsXmlOutputDirectory = tempDir
+        mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
+        mojo.classFilesDirectory = classesDir
+        mojo.testClassFilesDirectory = new File(tempDir, 'no-test-classes')
+        mojo.failOnError = true
+
+        when:
+        mojo.execute()
+
+        then:
+        // One bug and one error → "failed with 1 bugs and 1 errors"
+        MojoExecutionException ex = thrown(MojoExecutionException)
+        ex.message.contains('bugs')
+    }
+
+    void 'execute() does not fail when errors present but failOnError=false'() {
+        given:
+        Log log = Mock(Log) {
+            isInfoEnabled() >> true
+            isErrorEnabled() >> true
+        }
+        File classesDir = new File(tempDir, 'classes')
+        classesDir.mkdirs()
+        new File(classesDir, 'Foo.class').createNewFile()
+
+        File xmlFile = new File(tempDir, 'spotbugsXml.xml')
+        xmlFile.text = '''\
+<?xml version="1.0" encoding="UTF-8"?>
+<BugCollection>
+    <BugInstance type="NP_NULL" priority="1">
+        <LongMessage>Null pointer</LongMessage>
+        <SourceLine classname="com.example.Foo" sourcepath="Foo.java" start="1" end="1">
+            <Message>At Foo.java:[line 1]</Message>
+        </SourceLine>
+    </BugInstance>
+    <Error>
+        <analysisError>
+            <message>Analysis failed</message>
+        </analysisError>
+    </Error>
+    <Errors errors="1" missingClasses="0"/>
+</BugCollection>
+'''
+
+        ConcreteCheckMojo mojo = new ConcreteCheckMojo()
+        mojo.log = log
+        mojo.spotbugsXmlOutputDirectory = tempDir
+        mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
+        mojo.classFilesDirectory = classesDir
+        mojo.testClassFilesDirectory = new File(tempDir, 'no-test-classes')
+        mojo.failOnError = false
+
+        when:
+        mojo.execute()
+
+        then:
+        notThrown(MojoExecutionException)
+    }
+
+    // -------------------------------------------------------------------------
+    // execute() – createDirectories branch
+    // -------------------------------------------------------------------------
+
+    void 'execute() creates output directory if it does not exist'() {
+        given:
+        Log log = Mock(Log)
+        File classesDir = new File(tempDir, 'classes')
+        classesDir.mkdirs()
+        new File(classesDir, 'Foo.class').createNewFile()
+
+        // Use a non-existent subdirectory as the output dir
+        File outputDir = new File(tempDir, 'new-output-dir')
+
+        ConcreteCheckMojo mojo = new ConcreteCheckMojo()
+        mojo.log = log
+        mojo.spotbugsXmlOutputDirectory = outputDir
+        mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
+        mojo.classFilesDirectory = classesDir
+        mojo.testClassFilesDirectory = new File(tempDir, 'no-test-classes')
+
+        when:
+        // No XML file inside the newly created directory → should warn and return
+        mojo.execute()
+
+        then:
+        outputDir.exists()
+        1 * log.warn('Output file does not exist!')
+    }
+
 }
