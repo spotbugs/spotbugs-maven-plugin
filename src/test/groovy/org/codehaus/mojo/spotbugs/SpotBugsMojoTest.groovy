@@ -538,5 +538,625 @@ class SpotBugsMojoTest extends Specification {
         1 * log.info('No files found to run spotbugs; check compile phase has been run.')
     }
 
+    // -------------------------------------------------------------------------
+    // getSpotbugsArgs – via reflection to cover conditional arg-building branches
+    // -------------------------------------------------------------------------
+
+    void 'getSpotbugsArgs includes basic required args for a simple configuration'() {
+        given:
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        File htmlFile = new File(tempDir, 'spotbugs.html')
+        File xmlFile  = new File(tempDir, 'spotbugsTemp.xml')
+        File sarifFile = new File(tempDir, 'spotbugsTempSarif.json')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, htmlFile, xmlFile, sarifFile, null)
+
+        then:
+        // Must always include xml output and project name
+        args.contains('-xml:withMessages=' + xmlFile.absolutePath)
+        args.contains('-projectName')
+        args.contains('test-project')
+        // Must include effort and threshold parameters
+        args.any { it.startsWith('-effort:') }
+        args.contains('-medium')
+        // nested:false when nested not enabled
+        args.contains('-nested:false')
+    }
+
+    void 'getSpotbugsArgs includes -html arg when htmlOutput is true'() {
+        given:
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.htmlOutput = true
+        File htmlFile = new File(tempDir, 'spotbugs.html')
+        File xmlFile  = new File(tempDir, 'spotbugsTemp.xml')
+        File sarifFile = new File(tempDir, 'spotbugsTempSarif.json')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, htmlFile, xmlFile, sarifFile, null)
+
+        then:
+        args.any { it.startsWith('-html=') }
+    }
+
+    void 'getSpotbugsArgs includes -sarif arg when sarifOutput is true'() {
+        given:
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.sarifOutput = true
+        File htmlFile = new File(tempDir, 'spotbugs.html')
+        File xmlFile  = new File(tempDir, 'spotbugsTemp.xml')
+        File sarifFile = new File(tempDir, 'spotbugsTempSarif.json')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, htmlFile, xmlFile, sarifFile, null)
+
+        then:
+        args.any { it.startsWith('-sarif=') }
+    }
+
+    void 'getSpotbugsArgs includes auxclasspathFromFile when auxClasspathFile is provided'() {
+        given:
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        File htmlFile = new File(tempDir, 'spotbugs.html')
+        File xmlFile  = new File(tempDir, 'spotbugsTemp.xml')
+        File sarifFile = new File(tempDir, 'spotbugsTempSarif.json')
+        File auxFile  = new File(tempDir, 'spotbugsAuxClasspath.tmp')
+        auxFile.text = '/some/dep.jar'
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, htmlFile, xmlFile, sarifFile, auxFile)
+
+        then:
+        args.contains('-auxclasspathFromFile')
+        args.contains(auxFile.absolutePath)
+    }
+
+    void 'getSpotbugsArgs includes -progress when debug is true'() {
+        given:
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.debug = true
+        File xmlFile = new File(tempDir, 'spotbugsTemp.xml')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, new File(tempDir, 'x.html'), xmlFile,
+            new File(tempDir, 'x.json'), null)
+
+        then:
+        args.contains('-progress')
+    }
+
+    void 'getSpotbugsArgs includes -nested:true when nested is enabled'() {
+        given:
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.nested = true
+        File xmlFile = new File(tempDir, 'spotbugsTemp.xml')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, new File(tempDir, 'x.html'), xmlFile,
+            new File(tempDir, 'x.json'), null)
+
+        then:
+        args.contains('-nested:true')
+        !args.contains('-nested:false')
+    }
+
+    void 'getSpotbugsArgs includes visitors when set'() {
+        given:
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.visitors = 'FindNullDeref,FindDeadLocalStores'
+        File xmlFile = new File(tempDir, 'spotbugsTemp.xml')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, new File(tempDir, 'x.html'), xmlFile,
+            new File(tempDir, 'x.json'), null)
+
+        then:
+        args.contains('-visitors')
+        args.contains('FindNullDeref,FindDeadLocalStores')
+    }
+
+    void 'getSpotbugsArgs includes omitVisitors when set'() {
+        given:
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.omitVisitors = 'FindBugs'
+        File xmlFile = new File(tempDir, 'spotbugsTemp.xml')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, new File(tempDir, 'x.html'), xmlFile,
+            new File(tempDir, 'x.json'), null)
+
+        then:
+        args.contains('-omitVisitors')
+        args.contains('FindBugs')
+    }
+
+    void 'getSpotbugsArgs includes chooseVisitors when set'() {
+        given:
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.chooseVisitors = '+FindNullDeref,-FindDeadLocalStores'
+        File xmlFile = new File(tempDir, 'spotbugsTemp.xml')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, new File(tempDir, 'x.html'), xmlFile,
+            new File(tempDir, 'x.json'), null)
+
+        then:
+        args.contains('-chooseVisitors')
+        args.contains('+FindNullDeref,-FindDeadLocalStores')
+    }
+
+    void 'getSpotbugsArgs includes -relaxed when relaxed is true'() {
+        given:
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.relaxed = true
+        File xmlFile = new File(tempDir, 'spotbugsTemp.xml')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, new File(tempDir, 'x.html'), xmlFile,
+            new File(tempDir, 'x.json'), null)
+
+        then:
+        args.contains('-relaxed')
+    }
+
+    void 'getSpotbugsArgs includes -maxRank when maxRank is set'() {
+        given:
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.maxRank = 12
+        File xmlFile = new File(tempDir, 'spotbugsTemp.xml')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, new File(tempDir, 'x.html'), xmlFile,
+            new File(tempDir, 'x.json'), null)
+
+        then:
+        args.contains('-maxRank')
+        args.contains('12')
+    }
+
+    void 'getSpotbugsArgs includes -noClassOk when noClassOk is true'() {
+        given:
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.noClassOk = true
+        File xmlFile = new File(tempDir, 'spotbugsTemp.xml')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, new File(tempDir, 'x.html'), xmlFile,
+            new File(tempDir, 'x.json'), null)
+
+        then:
+        args.contains('-noClassOk')
+    }
+
+    void 'getSpotbugsArgs includes class directory when it exists'() {
+        given:
+        File classesDir = new File(tempDir, 'classes')
+        classesDir.mkdirs()
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.classFilesDirectory = classesDir
+        File xmlFile = new File(tempDir, 'spotbugsTemp.xml')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, new File(tempDir, 'x.html'), xmlFile,
+            new File(tempDir, 'x.json'), null)
+
+        then:
+        args.contains(classesDir.absolutePath)
+    }
+
+    void 'getSpotbugsArgs includes test class directory when includeTests=true and dir exists'() {
+        given:
+        File testClassesDir = new File(tempDir, 'test-classes')
+        testClassesDir.mkdirs()
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.testClassFilesDirectory = testClassesDir
+        mojo.includeTests = true
+        File xmlFile = new File(tempDir, 'spotbugsTemp.xml')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, new File(tempDir, 'x.html'), xmlFile,
+            new File(tempDir, 'x.json'), null)
+
+        then:
+        args.contains(testClassesDir.absolutePath)
+    }
+
+    void 'getSpotbugsArgs includes addSourceDirs args when addSourceDirs=true'() {
+        given:
+        File classesDir = new File(tempDir, 'classes')
+        classesDir.mkdirs()
+        String srcRoot = new File(tempDir, 'src/main/java').absolutePath
+
+        MavenProject project = Mock(MavenProject) {
+            getName() >> 'test-project'
+            getCompileSourceRoots() >> [srcRoot]
+            getTestCompileSourceRoots() >> []
+        }
+        MavenSession session = Mock(MavenSession) {
+            getCurrentProject() >> project
+        }
+
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.classFilesDirectory = classesDir
+        mojo.addSourceDirs = true
+        mojo.session = session
+        // Override the project field via reflection so getSpotbugsArgs can call project.name
+        setField(mojo, 'project', project)
+
+        File xmlFile = new File(tempDir, 'spotbugsTemp.xml')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, new File(tempDir, 'x.html'), xmlFile,
+            new File(tempDir, 'x.json'), null)
+
+        then:
+        args.contains('-sourcepath')
+    }
+
+    void 'getSpotbugsArgs uses -high threshold parameter'() {
+        given:
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.threshold = 'High'
+        File xmlFile = new File(tempDir, 'spotbugsTemp.xml')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, new File(tempDir, 'x.html'), xmlFile,
+            new File(tempDir, 'x.json'), null)
+
+        then:
+        args.contains('-high')
+    }
+
+    void 'getSpotbugsArgs uses -effort:max when effort is Max'() {
+        given:
+        SpotBugsMojo mojo = buildMinimalMojoForArgs(tempDir)
+        mojo.effort = 'Max'
+        File xmlFile = new File(tempDir, 'spotbugsTemp.xml')
+
+        when:
+        List<String> args = invokeGetSpotbugsArgs(mojo, new File(tempDir, 'x.html'), xmlFile,
+            new File(tempDir, 'x.json'), null)
+
+        then:
+        args.contains('-effort:max')
+    }
+
+    // -------------------------------------------------------------------------
+    // createSpotbugsAuxClasspathFile – via reflection
+    // -------------------------------------------------------------------------
+
+    void 'createSpotbugsAuxClasspathFile returns null when classpath elements are null'() {
+        given:
+        File classesDir = new File(tempDir, 'classes')
+        classesDir.mkdirs()
+
+        MavenProject project = Mock(MavenProject) {
+            getCompileClasspathElements() >> null
+        }
+        org.apache.maven.model.Build build = Mock(org.apache.maven.model.Build) {
+            getOutputDirectory() >> classesDir.absolutePath
+            getDirectory() >> tempDir.absolutePath
+        }
+        project.getBuild() >> build
+
+        MavenSession session = Mock(MavenSession) {
+            getCurrentProject() >> project
+        }
+
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.classFilesDirectory = classesDir
+        mojo.testClassFilesDirectory = new File(tempDir, 'test-classes')
+        mojo.includeTests = false
+        mojo.session = session
+        setField(mojo, 'project', project)
+
+        when:
+        def method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
+        method.setAccessible(true)
+        File result = method.invoke(mojo) as File
+
+        then:
+        result == null
+    }
+
+    void 'createSpotbugsAuxClasspathFile returns null when classpath elements are empty'() {
+        given:
+        File classesDir = new File(tempDir, 'classes')
+        classesDir.mkdirs()
+
+        MavenProject project = Mock(MavenProject) {
+            getCompileClasspathElements() >> []
+        }
+        org.apache.maven.model.Build build = Mock(org.apache.maven.model.Build) {
+            getOutputDirectory() >> classesDir.absolutePath
+            getDirectory() >> tempDir.absolutePath
+        }
+        project.getBuild() >> build
+
+        MavenSession session = Mock(MavenSession) {
+            getCurrentProject() >> project
+        }
+
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.classFilesDirectory = classesDir
+        mojo.testClassFilesDirectory = new File(tempDir, 'test-classes')
+        mojo.includeTests = false
+        mojo.session = session
+        setField(mojo, 'project', project)
+
+        when:
+        def method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
+        method.setAccessible(true)
+        File result = method.invoke(mojo) as File
+
+        then:
+        result == null
+    }
+
+    void 'createSpotbugsAuxClasspathFile creates file with filtered classpath'() {
+        given:
+        File classesDir = new File(tempDir, 'classes')
+        classesDir.mkdirs()
+        File depJar = new File(tempDir, 'my-dep.jar')
+        depJar.createNewFile()
+
+        MavenProject project = Mock(MavenProject) {
+            getCompileClasspathElements() >> [classesDir.absolutePath, depJar.absolutePath]
+        }
+        org.apache.maven.model.Build build = Mock(org.apache.maven.model.Build) {
+            // outputDirectory matches classesDir → should be excluded from aux classpath
+            getOutputDirectory() >> classesDir.absolutePath
+            getDirectory() >> tempDir.absolutePath
+        }
+        project.getBuild() >> build
+
+        MavenSession session = Mock(MavenSession) {
+            getCurrentProject() >> project
+        }
+
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.classFilesDirectory = classesDir
+        mojo.testClassFilesDirectory = new File(tempDir, 'test-classes')
+        mojo.includeTests = false
+        mojo.session = session
+        setField(mojo, 'project', project)
+
+        when:
+        def method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
+        method.setAccessible(true)
+        File result = method.invoke(mojo) as File
+
+        then:
+        result != null
+        result.exists()
+        // classesDir (= outputDirectory) is excluded; depJar remains
+        result.text.contains(depJar.absolutePath)
+        !result.text.contains(classesDir.absolutePath)
+
+        cleanup:
+        result?.delete()
+    }
+
+    void 'createSpotbugsAuxClasspathFile uses testClasspathElements when includeTests=true'() {
+        given:
+        File testClassesDir = new File(tempDir, 'test-classes')
+        testClassesDir.mkdirs()
+        File depJar = new File(tempDir, 'test-dep.jar')
+        depJar.createNewFile()
+
+        org.apache.maven.model.Build build = Mock(org.apache.maven.model.Build) {
+            getOutputDirectory() >> new File(tempDir, 'classes').absolutePath
+            getDirectory() >> tempDir.absolutePath
+        }
+        MavenProject project = Mock(MavenProject) {
+            getTestClasspathElements() >> [depJar.absolutePath]
+            getBuild() >> build
+        }
+        MavenSession session = Mock(MavenSession) {
+            getCurrentProject() >> project
+        }
+
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.classFilesDirectory = new File(tempDir, 'classes')
+        mojo.testClassFilesDirectory = testClassesDir
+        mojo.includeTests = true
+        mojo.session = session
+        setField(mojo, 'project', project)
+
+        when:
+        def method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
+        method.setAccessible(true)
+        File result = method.invoke(mojo) as File
+
+        then:
+        result != null
+        result.exists()
+        result.text.contains(depJar.absolutePath)
+
+        cleanup:
+        result?.delete()
+    }
+
+    void 'createSpotbugsAuxClasspathFile excludes JARs containing java.* classes'() {
+        given:
+        File classesDir = new File(tempDir, 'classes')
+        classesDir.mkdirs()
+
+        // Create a JAR that simulates a JavaCard-style API with java.* classes
+        File jdkStyleJar = new File(tempDir, 'fake-jdk.jar')
+        new java.util.jar.JarOutputStream(new FileOutputStream(jdkStyleJar)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry('java/lang/Object.class'))
+            jos.write(Object.class.getResourceAsStream('/java/lang/Object.class').readAllBytes())
+            jos.closeEntry()
+        }
+
+        // Create a regular dep jar
+        File regularJar = new File(tempDir, 'regular.jar')
+        new java.util.jar.JarOutputStream(new FileOutputStream(regularJar)).withCloseable { jos ->
+            jos.putNextEntry(new JarEntry('com/example/SomeClass.class'))
+            jos.write([0xCA, 0xFE, 0xBA, 0xBE] as byte[])
+            jos.closeEntry()
+        }
+
+        org.apache.maven.model.Build build = Mock(org.apache.maven.model.Build) {
+            getOutputDirectory() >> new File(tempDir, 'output').absolutePath
+            getDirectory() >> tempDir.absolutePath
+        }
+        MavenProject project = Mock(MavenProject) {
+            getCompileClasspathElements() >> [jdkStyleJar.absolutePath, regularJar.absolutePath]
+            getBuild() >> build
+        }
+        MavenSession session = Mock(MavenSession) {
+            getCurrentProject() >> project
+        }
+
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.classFilesDirectory = classesDir
+        mojo.testClassFilesDirectory = new File(tempDir, 'test-classes')
+        mojo.includeTests = false
+        mojo.session = session
+        setField(mojo, 'project', project)
+
+        when:
+        def method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
+        method.setAccessible(true)
+        File result = method.invoke(mojo) as File
+
+        then:
+        result != null
+        result.exists()
+        // JDK-style jar must be excluded
+        !result.text.contains(jdkStyleJar.absolutePath)
+        // Regular jar must be present
+        result.text.contains(regularJar.absolutePath)
+
+        cleanup:
+        result?.delete()
+    }
+
+    // -------------------------------------------------------------------------
+    // forceFileCreation – static helper
+    // -------------------------------------------------------------------------
+
+    void 'forceFileCreation creates file and parent directories'() {
+        given:
+        File target = new File(tempDir, 'nested/subdir/output.xml')
+
+        when:
+        def method = SpotBugsMojo.class.getDeclaredMethod('forceFileCreation', File)
+        method.setAccessible(true)
+        method.invoke(null, target)
+
+        then:
+        target.exists()
+        target.isFile()
+    }
+
+    void 'forceFileCreation replaces an existing file'() {
+        given:
+        File target = new File(tempDir, 'existing.xml')
+        target.text = 'old content'
+
+        when:
+        def method = SpotBugsMojo.class.getDeclaredMethod('forceFileCreation', File)
+        method.setAccessible(true)
+        method.invoke(null, target)
+
+        then:
+        target.exists()
+        target.length() == 0
+    }
+
+    // -------------------------------------------------------------------------
+    // getEffortParameter
+    // -------------------------------------------------------------------------
+
+    void 'getEffortParameter returns -effort:min for Min'() {
+        given:
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.effort = 'Min'
+
+        expect:
+        mojo.getEffortParameter() == '-effort:min'
+    }
+
+    void 'getEffortParameter returns -effort:default for Default'() {
+        given:
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.effort = 'Default'
+
+        expect:
+        mojo.getEffortParameter() == '-effort:default'
+    }
+
+    // -------------------------------------------------------------------------
+    // Helper methods
+    // -------------------------------------------------------------------------
+
+    /**
+     * Builds a SpotBugsMojo wired with minimal mocks sufficient for getSpotbugsArgs to run.
+     */
+    private SpotBugsMojo buildMinimalMojoForArgs(File baseDir) {
+        File xmlOutputDir = new File(baseDir, 'spotbugs-output')
+        xmlOutputDir.mkdirs()
+
+        MavenProject project = Mock(MavenProject) {
+            getName() >> 'test-project'
+            getCompileSourceRoots() >> []
+            getTestCompileSourceRoots() >> []
+        }
+        MavenSession session = Mock(MavenSession) {
+            getCurrentProject() >> project
+        }
+
+        org.codehaus.plexus.resource.ResourceManager rm = Mock(org.codehaus.plexus.resource.ResourceManager)
+
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.effort = 'Default'
+        mojo.threshold = 'Default'
+        mojo.spotbugsXmlOutputDirectory = xmlOutputDir
+        mojo.classFilesDirectory = new File(baseDir, 'nonexistent-classes')
+        mojo.testClassFilesDirectory = new File(baseDir, 'nonexistent-test-classes')
+        mojo.resourceManager = rm
+        mojo.pluginArtifacts = []
+        mojo.session = session
+        mojo.plugins = null
+        mojo.pluginList = null
+        setField(mojo, 'project', project)
+
+        return mojo
+    }
+
+    private static List<String> invokeGetSpotbugsArgs(SpotBugsMojo mojo, File htmlFile, File xmlFile,
+            File sarifFile, File auxFile) {
+        def method = SpotBugsMojo.class.getDeclaredMethod('getSpotbugsArgs',
+            File, File, File, File)
+        method.setAccessible(true)
+        return method.invoke(mojo, htmlFile, xmlFile, sarifFile, auxFile) as List<String>
+    }
+
+    private static void setField(Object target, String fieldName, Object value) {
+        Class<?> clazz = target.getClass()
+        while (clazz != null) {
+            try {
+                def field = clazz.getDeclaredField(fieldName)
+                field.setAccessible(true)
+                field.set(target, value)
+                return
+            } catch (NoSuchFieldException ignored) {
+                clazz = clazz.getSuperclass()
+            }
+        }
+        throw new NoSuchFieldException("Field '${fieldName}' not found in ${target.getClass().name} hierarchy")
+    }
+
 }
 
