@@ -182,27 +182,22 @@ class ResourceHelperTest extends Specification {
         }
 
         ResourceManager resourceManager = Mock(ResourceManager)
-        org.apache.maven.repository.RepositorySystem factory = Mock(org.apache.maven.repository.RepositorySystem)
         RepositorySystem repositorySystem = Mock(RepositorySystem)
         RepositorySystemSession repositorySession = Mock(RepositorySystemSession)
-        MavenProject project = Stub(MavenProject) {
-            getRemoteProjectRepositories() >> [] as List<RemoteRepository>
-        }
-        MavenSession session = Stub(MavenSession) {
-            getCurrentProject() >> project
-            getRepositorySession() >> repositorySession
-        }
-        org.apache.maven.artifact.Artifact mavenArtifact = Stub(org.apache.maven.artifact.Artifact)
+        MavenProject project = Mock(MavenProject)
+        project.getRemoteProjectRepositories() >> ([] as List<RemoteRepository>)
+        MavenSession session = Mock(MavenSession)
+        session.getCurrentProject() >> project
+        session.getRepositorySession() >> repositorySession
         AetherArtifact aetherArtifact = Stub(AetherArtifact) {
             getFile() >> artifactPath.toFile()
         }
         ArtifactResult artifactResult = Stub(ArtifactResult) {
             getArtifact() >> aetherArtifact
         }
-        factory.createArtifact('com.example', 'build-tools', '1.0', '', 'jar') >> mavenArtifact
         repositorySystem.resolveArtifact(repositorySession, _) >> artifactResult
 
-        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager, repositorySystem, factory, session)
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager, repositorySystem, session)
 
         when:
         File result = helper.getResourceFile('mvn:com.example:build-tools:1.0!/whizbang/lib-filter.xml')
@@ -230,27 +225,22 @@ class ResourceHelperTest extends Specification {
         }
 
         ResourceManager resourceManager = Mock(ResourceManager)
-        org.apache.maven.repository.RepositorySystem factory = Mock(org.apache.maven.repository.RepositorySystem)
         RepositorySystem repositorySystem = Mock(RepositorySystem)
         RepositorySystemSession repositorySession = Mock(RepositorySystemSession)
-        MavenProject project = Stub(MavenProject) {
-            getRemoteProjectRepositories() >> [] as List<RemoteRepository>
-        }
-        MavenSession session = Stub(MavenSession) {
-            getCurrentProject() >> project
-            getRepositorySession() >> repositorySession
-        }
-        org.apache.maven.artifact.Artifact mavenArtifact = Stub(org.apache.maven.artifact.Artifact)
+        MavenProject project = Mock(MavenProject)
+        project.getRemoteProjectRepositories() >> ([] as List<RemoteRepository>)
+        MavenSession session = Mock(MavenSession)
+        session.getCurrentProject() >> project
+        session.getRepositorySession() >> repositorySession
         AetherArtifact aetherArtifact = Stub(AetherArtifact) {
             getFile() >> artifactPath.toFile()
         }
         ArtifactResult artifactResult = Stub(ArtifactResult) {
             getArtifact() >> aetherArtifact
         }
-        factory.createArtifact('com.example', 'build-tools', '1.0', '', 'jar') >> mavenArtifact
         repositorySystem.resolveArtifact(repositorySession, _) >> artifactResult
 
-        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager, repositorySystem, factory, session)
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager, repositorySystem, session)
 
         when:
         helper.getResourceFile('mvn:com.example:build-tools:1.0!/missing/filter.xml')

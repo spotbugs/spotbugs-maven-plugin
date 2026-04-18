@@ -893,7 +893,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     private ArrayList<String> getSpotbugsArgs(File htmlTempFile, File xmlTempFile, File sarifTempFile,
             File auxClasspathFile) {
         ResourceHelper resourceHelper =
-            new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager, repositorySystem, factory, session)
+            new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager, repositorySystem, session)
         List<String> args = []
 
         if (userPrefs) {

@@ -21,12 +21,11 @@ import java.nio.file.StandardCopyOption
 import java.util.regex.Pattern
 import java.util.jar.JarFile
 
-import org.apache.maven.RepositoryUtils
-import org.apache.maven.artifact.Artifact
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugin.MojoExecutionException
 import org.codehaus.plexus.resource.ResourceManager
+import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.resolution.ArtifactRequest
 import org.eclipse.aether.resolution.ArtifactResult
 
@@ -44,9 +43,6 @@ final class ResourceHelper {
     /** Artifact resolver for maven coordinates (optional). */
     private final org.eclipse.aether.RepositorySystem repositorySystem
 
-    /** Legacy artifact factory for maven coordinates (optional). */
-    private final org.apache.maven.repository.RepositorySystem factory
-
     /** Maven session for repository context (optional). */
     private final MavenSession session
 
@@ -58,18 +54,16 @@ final class ResourceHelper {
         Pattern.compile('^mvn:([^:]+):([^:]+):([^:!]+)(?::([^:!]+))?(?::([^:!]+))?!/(.+)$')
 
     ResourceHelper(final Log log, final File outputDirectory, final ResourceManager resourceManager) {
-        this(log, outputDirectory, resourceManager, null, null, null)
+        this(log, outputDirectory, resourceManager, null, null)
     }
 
     ResourceHelper(final Log log, final File outputDirectory, final ResourceManager resourceManager,
             final org.eclipse.aether.RepositorySystem repositorySystem,
-            final org.apache.maven.repository.RepositorySystem factory,
             final MavenSession session) {
         this.log = Objects.requireNonNull(log, "log must not be null")
         this.outputDirectory = outputDirectory
         this.resourceManager = Objects.requireNonNull(resourceManager, "resourceManager must not be null")
         this.repositorySystem = repositorySystem
-        this.factory = factory
         this.session = session
     }
 
@@ -158,7 +152,7 @@ final class ResourceHelper {
     }
 
     private Path resolveMavenResource(final String name, final Path outputResourcePath) {
-        if (repositorySystem == null || factory == null || session == null) {
+        if (repositorySystem == null || session == null) {
             throw new MojoExecutionException("Cannot resolve Maven resource '${name}': repository context is unavailable")
         }
 
@@ -174,12 +168,9 @@ final class ResourceHelper {
         String classifier = matcher.group(5)
         String entryPath = matcher.group(6)
 
-        Artifact mavenArtifact = classifier == null ?
-            factory.createArtifact(groupId, artifactId, version, "", type) :
-            factory.createArtifactWithClassifier(groupId, artifactId, version, type, classifier)
-
+        def aetherArtifact = new DefaultArtifact(groupId, artifactId, classifier ?: '', type, version)
         ArtifactRequest request =
-            new ArtifactRequest(RepositoryUtils.toArtifact(mavenArtifact), session.getCurrentProject().getRemoteProjectRepositories(), null)
+            new ArtifactRequest(aetherArtifact, session.getCurrentProject().getRemoteProjectRepositories(), null)
         ArtifactResult result = repositorySystem.resolveArtifact(session.getRepositorySession(), request)
 
         File artifactFile = result?.getArtifact()?.getFile()
