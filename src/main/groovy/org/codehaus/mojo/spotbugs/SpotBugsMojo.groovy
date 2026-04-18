@@ -938,6 +938,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (filterServerId) {
             def server = settings?.getServer(filterServerId)
             if (server != null) {
+                if (settingsDecrypter == null) {
+                    log.debug("settingsDecrypter is unavailable; using raw server credentials for filterServerId '${filterServerId}'")
+                }
                 def decrypted = settingsDecrypter?.decrypt(new DefaultSettingsDecryptionRequest(server))
                 def decryptedServer = decrypted?.getServer() ?: server
                 httpUser = decryptedServer.getUsername()

@@ -57,7 +57,10 @@ final class ResourceHelper {
     /** Precompiled regex pattern for resource name sanitization. */
     private static final Pattern SANITIZE_PATTERN = Pattern.compile('[?:&=%]')
 
-    /** Pattern for Maven artifact resources in the format mvn:groupId:artifactId:version[:type[:classifier]]!/path/in/jar.xml. */
+    /**
+     * Pattern for Maven artifact resources.
+     * Groups: (1) groupId, (2) artifactId, (3) version, (4) type (optional), (5) classifier (optional), (6) entry path
+     */
     private static final Pattern MAVEN_RESOURCE_PATTERN =
         Pattern.compile('^mvn:([^:]+):([^:]+):([^:!]+)(?::([^:!]+))?(?::([^:!]+))?!/(.+)$')
 
