@@ -165,10 +165,10 @@ final class ResourceHelper {
         String artifactId = matcher.group(2)
         String version = matcher.group(3)
         String type = matcher.group(4) ?: 'jar'
-        String classifier = matcher.group(5)
+        String classifier = matcher.group(5) ?: ''
         String entryPath = matcher.group(6)
 
-        def aetherArtifact = new DefaultArtifact(groupId, artifactId, classifier ?: '', type, version)
+        def aetherArtifact = new DefaultArtifact(groupId, artifactId, classifier, type, version)
         ArtifactRequest request =
             new ArtifactRequest(aetherArtifact, session.getCurrentProject().getRemoteProjectRepositories(), null)
         ArtifactResult result = repositorySystem.resolveArtifact(session.getRepositorySession(), request)
