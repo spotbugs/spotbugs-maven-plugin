@@ -42,6 +42,9 @@ import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
 import org.apache.maven.reporting.AbstractMavenReport
 import org.apache.maven.reporting.MavenReport
+import org.apache.maven.settings.Settings
+import org.apache.maven.settings.crypto.DefaultSettingsDecryptionRequest
+import org.apache.maven.settings.crypto.SettingsDecrypter
 import org.apache.maven.toolchain.ToolchainManager
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceLoader
@@ -439,6 +442,44 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Inject
     ResourceManager resourceManager
+
+    /**
+     * The Maven Settings object, used to look up server credentials for authenticated URLs.
+     */
+    @Parameter(defaultValue = '${settings}', readonly = true)
+    Settings settings
+
+    /**
+     * Settings decrypter used to decrypt passwords stored in Maven settings.
+     */
+    @Inject
+    SettingsDecrypter settingsDecrypter
+
+    /**
+     * The id of a server configured in Maven's {@code settings.xml} whose credentials
+     * (username and password) will be used when fetching filter or baseline files from
+     * an {@code http://} or {@code https://} URL.
+     * <p>
+     * Example {@code settings.xml} entry:
+     * <pre>{@code
+     * <server>
+     *   <id>my-nexus</id>
+     *   <username>user</username>
+     *   <password>secret</password>
+     * </server>
+     * }</pre>
+     * Example usage:
+     * <pre>{@code
+     * <configuration>
+     *   <excludeFilterFile>https://nexus.example.com/config/spotbugs-exclude.xml</excludeFilterFile>
+     *   <filterServerId>my-nexus</filterServerId>
+     * </configuration>
+     * }</pre>
+     *
+     * @since 4.9.8.4
+     */
+    @Parameter(property = 'spotbugs.filterServerId')
+    String filterServerId
 
     /**
      * Fail the build on an error.
@@ -892,8 +933,22 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     private ArrayList<String> getSpotbugsArgs(File htmlTempFile, File xmlTempFile, File sarifTempFile,
             File auxClasspathFile) {
+        String httpUser = null
+        String httpPassword = null
+        if (filterServerId) {
+            def server = settings?.getServer(filterServerId)
+            if (server != null) {
+                def decrypted = settingsDecrypter?.decrypt(new DefaultSettingsDecryptionRequest(server))
+                def decryptedServer = decrypted?.getServer() ?: server
+                httpUser = decryptedServer.getUsername()
+                httpPassword = decryptedServer.getPassword()
+            } else {
+                log.warn("filterServerId '${filterServerId}' not found in Maven settings")
+            }
+        }
         ResourceHelper resourceHelper =
-            new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager, repositorySystem, session)
+            new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager, repositorySystem, session,
+                httpUser, httpPassword)
         List<String> args = []
 
         if (userPrefs) {

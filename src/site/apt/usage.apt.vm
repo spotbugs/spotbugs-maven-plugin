@@ -146,8 +146,43 @@ mvn site
 mvn site
 +-----+
 
+* Loading filter files from a remote URL
+
+  Filter and baseline files can be fetched from a remote <<<http://>>> or <<<https://>>>
+  URL. This is useful in enterprise environments where a central Nexus or Artifactory
+  repository hosts shared SpotBugs configurations.
+
++-----+
+<configuration>
+  <excludeFilterFile>https://nexus.example.com/config/spotbugs-exclude.xml</excludeFilterFile>
+</configuration>
++-----+
+
+  For repositories that require authentication, add the server credentials to your
+  Maven <<<settings.xml>>>:
+
++-----+
+<server>
+  <id>my-nexus</id>
+  <username>user</username>
+  <password>secret</password>
+</server>
++-----+
+
+  Then reference that server id via the <<<filterServerId>>> parameter:
+
++-----+
+<configuration>
+  <excludeFilterFile>https://nexus.example.com/config/spotbugs-exclude.xml</excludeFilterFile>
+  <filterServerId>my-nexus</filterServerId>
+</configuration>
++-----+
+
+  Encrypted passwords (produced by <<<mvn --encrypt-password>>>) are decrypted
+  automatically.
+
   Filter files can also be loaded from a Maven artifact (resolved via your normal
-  repositories and <<<settings.xml>>> credentials) using this syntax:
+  repositories and <<<settings.xml>>> credentials) using the <<<mvn:>>> syntax:
 
 +-----+
 <excludeFilterFile>mvn:com.example:build-tools:1.0!/spotbugs/spotbugs-exclude.xml</excludeFilterFile>

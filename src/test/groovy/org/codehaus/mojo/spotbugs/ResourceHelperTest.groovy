@@ -20,6 +20,7 @@ import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 import java.util.jar.JarOutputStream
 import java.util.zip.ZipEntry
+import com.sun.net.httpserver.HttpServer
 import org.codehaus.mojo.spotbugs.ResourceHelper
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.project.MavenProject
@@ -123,8 +124,8 @@ class ResourceHelperTest extends Specification {
             getResourceAsInputStream(_) >> new ByteArrayInputStream('data'.bytes)
         }
         ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
-        // Path with special chars that should be sanitized to underscores
-        String resource = 'http://example.com:8080/path?param=value/output.xml'
+        // Classpath path with special chars (? : & =) that should be sanitized in the location portion
+        String resource = 'classpath:some/path?id=1&ver=2/output.xml'
 
         when:
         File result = helper.getResourceFile(resource)
@@ -165,6 +166,107 @@ class ResourceHelperTest extends Specification {
         thrown(org.apache.maven.plugin.MojoExecutionException)
 
         cleanup:
+        outputDirectory.toFile().deleteDir()
+    }
+
+    void 'getResourceFile fetches content from an http URL'() {
+        given:
+        Log log = Mock(Log) {
+            isDebugEnabled() >> false
+        }
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-url')
+        ResourceManager resourceManager = Mock(ResourceManager)
+
+        String content = '<FindBugsFilter/>'
+        HttpServer server = HttpServer.create(new InetSocketAddress(0), 0)
+        server.createContext('/filter.xml') { exchange ->
+            byte[] bytes = content.bytes
+            exchange.sendResponseHeaders(200, bytes.length)
+            exchange.responseBody.withCloseable { os -> os.write(bytes) }
+        }
+        server.start()
+        int port = server.address.port
+
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
+
+        when:
+        File result = helper.getResourceFile("http://localhost:${port}/filter.xml")
+
+        then:
+        result.exists()
+        result.name == 'filter.xml'
+        Files.readString(result.toPath()) == content
+
+        cleanup:
+        server.stop(0)
+        outputDirectory.toFile().deleteDir()
+    }
+
+    void 'getResourceFile fetches content from an http URL with Basic auth credentials'() {
+        given:
+        Log log = Mock(Log) {
+            isDebugEnabled() >> false
+        }
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-url-auth')
+        ResourceManager resourceManager = Mock(ResourceManager)
+
+        String content = '<FindBugsFilter/>'
+        String capturedAuth = null
+        HttpServer server = HttpServer.create(new InetSocketAddress(0), 0)
+        server.createContext('/secure-filter.xml') { exchange ->
+            capturedAuth = exchange.requestHeaders.getFirst('Authorization')
+            byte[] bytes = content.bytes
+            exchange.sendResponseHeaders(200, bytes.length)
+            exchange.responseBody.withCloseable { os -> os.write(bytes) }
+        }
+        server.start()
+        int port = server.address.port
+
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager,
+            null, null, 'myuser', 'mypassword')
+
+        when:
+        File result = helper.getResourceFile("http://localhost:${port}/secure-filter.xml")
+
+        then:
+        result.exists()
+        Files.readString(result.toPath()) == content
+        capturedAuth != null
+        capturedAuth.startsWith('Basic ')
+        new String(Base64.decoder.decode(capturedAuth.substring(6))) == 'myuser:mypassword'
+
+        cleanup:
+        server.stop(0)
+        outputDirectory.toFile().deleteDir()
+    }
+
+    void 'getResourceFile throws MojoExecutionException when http URL returns non-200'() {
+        given:
+        Log log = Mock(Log) {
+            isDebugEnabled() >> false
+            error(*_) >> {}
+        }
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-url-404')
+        ResourceManager resourceManager = Mock(ResourceManager)
+
+        HttpServer server = HttpServer.create(new InetSocketAddress(0), 0)
+        server.createContext('/not-found.xml') { exchange ->
+            exchange.sendResponseHeaders(404, -1)
+            exchange.responseBody.close()
+        }
+        server.start()
+        int port = server.address.port
+
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
+
+        when:
+        helper.getResourceFile("http://localhost:${port}/not-found.xml")
+
+        then:
+        thrown(org.apache.maven.plugin.MojoExecutionException)
+
+        cleanup:
+        server.stop(0)
         outputDirectory.toFile().deleteDir()
     }
 
