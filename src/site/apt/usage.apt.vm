@@ -146,6 +146,13 @@ mvn site
 mvn site
 +-----+
 
+  Filter files can also be loaded from a Maven artifact (resolved via your normal
+  repositories and <<<settings.xml>>> credentials) using this syntax:
+
++-----+
+<excludeFilterFile>mvn:com.example:build-tools:1.0!/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
++-----+
+
 * Specifying which bug detectors to run
 
   The <<<visitors>>> option specifies a comma-separated list of bug detectors which
@@ -384,4 +391,3 @@ mvn spotbugs:check
 +-----+
 mvn spotbugs:gui
 +-----+
-

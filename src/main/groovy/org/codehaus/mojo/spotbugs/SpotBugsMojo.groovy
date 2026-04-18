@@ -212,7 +212,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /**
      * File name of the include filter. Only bugs in matching the filters are reported.
      * <p>
-     * Potential values are a filesystem path, a URL, or a classpath resource.
+     * Potential values are a filesystem path, a URL, a classpath resource, or
+     * a Maven artifact resource in the format
+     * <code>mvn:groupId:artifactId:version[:type[:classifier]]!/path/in/archive</code>.
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
@@ -228,7 +230,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /**
      * File name for include filter files. Only bugs in matching the filters are reported.
      * <p>
-     * Potential values are a filesystem path, a URL, or a classpath resource.
+     * Potential values are a filesystem path, a URL, a classpath resource, or
+     * a Maven artifact resource in the format
+     * <code>mvn:groupId:artifactId:version[:type[:classifier]]!/path/in/archive</code>.
      * <p>
      * This is an alternative to <code>&lt;includeFilterFile&gt;</code> which allows multiple
      * files to be specified as separate elements in a pom.
@@ -246,7 +250,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /**
      * File name of the exclude filter. Bugs matching the filters are not reported.
      * <p>
-     * Potential values are a filesystem path, a URL, or a classpath resource.
+     * Potential values are a filesystem path, a URL, a classpath resource, or
+     * a Maven artifact resource in the format
+     * <code>mvn:groupId:artifactId:version[:type[:classifier]]!/path/in/archive</code>.
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
@@ -886,7 +892,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     private ArrayList<String> getSpotbugsArgs(File htmlTempFile, File xmlTempFile, File sarifTempFile,
             File auxClasspathFile) {
-        ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)
+        ResourceHelper resourceHelper =
+            new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager, repositorySystem, factory, session)
         List<String> args = []
 
         if (userPrefs) {

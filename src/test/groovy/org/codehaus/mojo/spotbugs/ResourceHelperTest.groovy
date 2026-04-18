@@ -18,10 +18,18 @@ package org.codehaus.mojo.spotbugs
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
+import java.util.jar.JarOutputStream
+import java.util.zip.ZipEntry
 import org.codehaus.mojo.spotbugs.ResourceHelper
-import org.codehaus.mojo.spotbugs.SpotBugsInfo
+import org.apache.maven.execution.MavenSession
+import org.apache.maven.project.MavenProject
 import org.codehaus.plexus.resource.ResourceManager
 import org.apache.maven.plugin.logging.Log
+import org.eclipse.aether.RepositorySystem
+import org.eclipse.aether.RepositorySystemSession
+import org.eclipse.aether.artifact.Artifact as AetherArtifact
+import org.eclipse.aether.repository.RemoteRepository
+import org.eclipse.aether.resolution.ArtifactResult
 
 import spock.lang.Specification
 
@@ -152,6 +160,100 @@ class ResourceHelperTest extends Specification {
 
         when:
         helper.getResourceFile(resource)
+
+        then:
+        thrown(org.apache.maven.plugin.MojoExecutionException)
+
+        cleanup:
+        outputDirectory.toFile().deleteDir()
+    }
+
+    void 'getResourceFile resolves resource from maven artifact and extracts entry'() {
+        given:
+        Log log = Mock(Log) {
+            isDebugEnabled() >> false
+        }
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-maven')
+        Path artifactPath = outputDirectory.resolve('build-tools.jar')
+        new JarOutputStream(Files.newOutputStream(artifactPath)).withCloseable { JarOutputStream jos ->
+            jos.putNextEntry(new ZipEntry('whizbang/lib-filter.xml'))
+            jos.write('<FindBugsFilter/>'.bytes)
+            jos.closeEntry()
+        }
+
+        ResourceManager resourceManager = Mock(ResourceManager)
+        org.apache.maven.repository.RepositorySystem factory = Mock(org.apache.maven.repository.RepositorySystem)
+        RepositorySystem repositorySystem = Mock(RepositorySystem)
+        RepositorySystemSession repositorySession = Mock(RepositorySystemSession)
+        MavenProject project = Stub(MavenProject) {
+            getRemoteProjectRepositories() >> [] as List<RemoteRepository>
+        }
+        MavenSession session = Stub(MavenSession) {
+            getCurrentProject() >> project
+            getRepositorySession() >> repositorySession
+        }
+        org.apache.maven.artifact.Artifact mavenArtifact = Stub(org.apache.maven.artifact.Artifact)
+        AetherArtifact aetherArtifact = Stub(AetherArtifact) {
+            getFile() >> artifactPath.toFile()
+        }
+        ArtifactResult artifactResult = Stub(ArtifactResult) {
+            getArtifact() >> aetherArtifact
+        }
+        factory.createArtifact('com.example', 'build-tools', '1.0', '', 'jar') >> mavenArtifact
+        repositorySystem.resolveArtifact(repositorySession, _) >> artifactResult
+
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager, repositorySystem, factory, session)
+
+        when:
+        File result = helper.getResourceFile('mvn:com.example:build-tools:1.0!/whizbang/lib-filter.xml')
+
+        then:
+        result.exists()
+        result.name == 'lib-filter.xml'
+        Files.readString(result.toPath()) == '<FindBugsFilter/>'
+
+        cleanup:
+        outputDirectory.toFile().deleteDir()
+    }
+
+    void 'getResourceFile throws MojoExecutionException when maven artifact entry does not exist'() {
+        given:
+        Log log = Mock(Log) {
+            isDebugEnabled() >> false
+        }
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-maven-missing')
+        Path artifactPath = outputDirectory.resolve('build-tools.jar')
+        new JarOutputStream(Files.newOutputStream(artifactPath)).withCloseable { JarOutputStream jos ->
+            jos.putNextEntry(new ZipEntry('whizbang/lib-filter.xml'))
+            jos.write('<FindBugsFilter/>'.bytes)
+            jos.closeEntry()
+        }
+
+        ResourceManager resourceManager = Mock(ResourceManager)
+        org.apache.maven.repository.RepositorySystem factory = Mock(org.apache.maven.repository.RepositorySystem)
+        RepositorySystem repositorySystem = Mock(RepositorySystem)
+        RepositorySystemSession repositorySession = Mock(RepositorySystemSession)
+        MavenProject project = Stub(MavenProject) {
+            getRemoteProjectRepositories() >> [] as List<RemoteRepository>
+        }
+        MavenSession session = Stub(MavenSession) {
+            getCurrentProject() >> project
+            getRepositorySession() >> repositorySession
+        }
+        org.apache.maven.artifact.Artifact mavenArtifact = Stub(org.apache.maven.artifact.Artifact)
+        AetherArtifact aetherArtifact = Stub(AetherArtifact) {
+            getFile() >> artifactPath.toFile()
+        }
+        ArtifactResult artifactResult = Stub(ArtifactResult) {
+            getArtifact() >> aetherArtifact
+        }
+        factory.createArtifact('com.example', 'build-tools', '1.0', '', 'jar') >> mavenArtifact
+        repositorySystem.resolveArtifact(repositorySession, _) >> artifactResult
+
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager, repositorySystem, factory, session)
+
+        when:
+        helper.getResourceFile('mvn:com.example:build-tools:1.0!/missing/filter.xml')
 
         then:
         thrown(org.apache.maven.plugin.MojoExecutionException)
