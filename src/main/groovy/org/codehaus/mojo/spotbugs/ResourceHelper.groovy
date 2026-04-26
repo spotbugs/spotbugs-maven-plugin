@@ -15,14 +15,21 @@
  */
 package org.codehaus.mojo.spotbugs
 
+import java.net.HttpURLConnection
+import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
+import java.util.jar.JarFile
 import java.util.regex.Pattern
 
+import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugin.MojoExecutionException
 import org.codehaus.plexus.resource.ResourceManager
+import org.eclipse.aether.artifact.DefaultArtifact
+import org.eclipse.aether.resolution.ArtifactRequest
+import org.eclipse.aether.resolution.ArtifactResult
 
 final class ResourceHelper {
 
@@ -35,13 +42,50 @@ final class ResourceHelper {
     /** The resource manager. */
     private final ResourceManager resourceManager
 
+    /** Artifact resolver for Maven coordinates (optional). */
+    private final org.eclipse.aether.RepositorySystem repositorySystem
+
+    /** Maven session for repository context (optional). */
+    private final MavenSession session
+
+    /** HTTP Basic auth username for URL-based resources (optional). */
+    private final String httpUser
+
+    /** HTTP Basic auth password for URL-based resources (optional). */
+    private final String httpPassword
+
     /** Precompiled regex pattern for resource name sanitization. */
     private static final Pattern SANITIZE_PATTERN = Pattern.compile('[?:&=%]')
 
+    /**
+     * Pattern for Maven artifact resources.
+     * Groups: (1) groupId, (2) artifactId, (3) version, (4) type (optional), (5) classifier (optional), (6) entry path
+     */
+    private static final Pattern MAVEN_RESOURCE_PATTERN =
+        Pattern.compile('^mvn:([^:]+):([^:]+):([^:!]+)(?::([^:!]+))?(?::([^:!]+))?!/(.+)$')
+
     ResourceHelper(final Log log, final File outputDirectory, final ResourceManager resourceManager) {
+        this(log, outputDirectory, resourceManager, null, null, null, null)
+    }
+
+    ResourceHelper(final Log log, final File outputDirectory, final ResourceManager resourceManager,
+            final org.eclipse.aether.RepositorySystem repositorySystem,
+            final MavenSession session) {
+        this(log, outputDirectory, resourceManager, repositorySystem, session, null, null)
+    }
+
+    ResourceHelper(final Log log, final File outputDirectory, final ResourceManager resourceManager,
+            final org.eclipse.aether.RepositorySystem repositorySystem,
+            final MavenSession session,
+            final String httpUser,
+            final String httpPassword) {
         this.log = Objects.requireNonNull(log, "log must not be null")
         this.outputDirectory = outputDirectory
         this.resourceManager = Objects.requireNonNull(resourceManager, "resourceManager must not be null")
+        this.repositorySystem = repositorySystem
+        this.session = session
+        this.httpUser = httpUser
+        this.httpPassword = httpPassword
     }
 
     /**
@@ -89,6 +133,14 @@ final class ResourceHelper {
     private Path getResourceAsFile(final String name, final String outputPath) {
         Path outputResourcePath = outputDirectory == null ? Path.of(outputPath) : outputDirectory.toPath().resolve(outputPath)
 
+        if (name.startsWith('mvn:')) {
+            return resolveMavenResource(name, outputResourcePath)
+        }
+
+        if (name.startsWith('http://') || name.startsWith('https://')) {
+            return fetchFromUrl(name, outputResourcePath)
+        }
+
         // Checking if the resource is already a file
         if (new File(name).exists()) {
             // Avoid copying the file onto itself
@@ -114,6 +166,86 @@ final class ResourceHelper {
                             bos << bis
                         }
                     }
+                }
+            }
+        } catch (IOException e) {
+            log.error('Unable to create file-based resource for ' + name + ' in ' + outputResourcePath, e)
+            throw new MojoExecutionException('Cannot create file-based resource.', e)
+        }
+
+        return outputResourcePath
+    }
+
+    private Path fetchFromUrl(final String url, final Path outputResourcePath) {
+        try {
+            createParentDirectories(outputResourcePath)
+
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection()
+            connection.setConnectTimeout(30_000)
+            connection.setReadTimeout(60_000)
+            connection.setRequestProperty('User-Agent', 'spotbugs-maven-plugin')
+
+            if (httpUser != null && httpPassword != null) {
+                String credentials = "${httpUser}:${httpPassword}"
+                String encoded = Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8))
+                connection.setRequestProperty('Authorization', "Basic ${encoded}")
+            }
+
+            int responseCode = connection.getResponseCode()
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                throw new MojoExecutionException(
+                    "Failed to fetch '${url}': HTTP ${responseCode} ${connection.getResponseMessage()}")
+            }
+
+            connection.getInputStream().withCloseable { InputStream is ->
+                Files.copy(is, outputResourcePath, StandardCopyOption.REPLACE_EXISTING)
+            }
+        } catch (IOException e) {
+            log.error("Unable to fetch URL resource '${url}' to '${outputResourcePath}'", e)
+            throw new MojoExecutionException('Cannot fetch URL resource.', e)
+        }
+
+        return outputResourcePath
+    }
+
+    private Path resolveMavenResource(final String name, final Path outputResourcePath) {
+        if (repositorySystem == null || session == null) {
+            throw new MojoExecutionException("Cannot resolve Maven resource '${name}': repository context is unavailable")
+        }
+
+        def matcher = MAVEN_RESOURCE_PATTERN.matcher(name)
+        if (!matcher.matches()) {
+            throw new MojoExecutionException("Invalid Maven resource syntax '${name}'. Use mvn:groupId:artifactId:version[:type[:classifier]]!/path/in/archive")
+        }
+
+        String groupId = matcher.group(1)
+        String artifactId = matcher.group(2)
+        String version = matcher.group(3)
+        String type = matcher.group(4) ?: 'jar'
+        String classifier = matcher.group(5) ?: ''
+        String entryPath = matcher.group(6)
+
+        def aetherArtifact = new DefaultArtifact(groupId, artifactId, classifier, type, version)
+        ArtifactRequest request =
+            new ArtifactRequest(aetherArtifact, session.getCurrentProject().getRemoteProjectRepositories(), null)
+        ArtifactResult result = repositorySystem.resolveArtifact(session.getRepositorySession(), request)
+
+        File artifactFile = result?.getArtifact()?.getFile()
+        if (artifactFile == null || !artifactFile.exists()) {
+            throw new MojoExecutionException("Resolved Maven artifact has no local file: ${groupId}:${artifactId}:${version}")
+        }
+
+        try {
+            createParentDirectories(outputResourcePath)
+
+            new JarFile(artifactFile).withCloseable { JarFile jar ->
+                def entry = jar.getJarEntry(entryPath)
+                if (entry == null || entry.isDirectory()) {
+                    throw new MojoExecutionException("Entry '${entryPath}' not found in Maven artifact ${artifactFile.name}")
+                }
+
+                jar.getInputStream(entry).withCloseable { InputStream is ->
+                    Files.copy(is, outputResourcePath, StandardCopyOption.REPLACE_EXISTING)
                 }
             }
         } catch (IOException e) {

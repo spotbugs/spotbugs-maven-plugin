@@ -42,6 +42,9 @@ import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
 import org.apache.maven.reporting.AbstractMavenReport
 import org.apache.maven.reporting.MavenReport
+import org.apache.maven.settings.Settings
+import org.apache.maven.settings.crypto.DefaultSettingsDecryptionRequest
+import org.apache.maven.settings.crypto.SettingsDecrypter
 import org.apache.maven.toolchain.ToolchainManager
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceLoader
@@ -212,7 +215,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /**
      * File name of the include filter. Only bugs in matching the filters are reported.
      * <p>
-     * Potential values are a filesystem path, a URL, or a classpath resource.
+     * Potential values are a filesystem path, a URL, a classpath resource, or
+     * a Maven artifact resource in the format
+     * <code>mvn:groupId:artifactId:version[:type[:classifier]]!/path/in/archive</code>.
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
@@ -228,7 +233,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /**
      * File name for include filter files. Only bugs in matching the filters are reported.
      * <p>
-     * Potential values are a filesystem path, a URL, or a classpath resource.
+     * Potential values are a filesystem path, a URL, a classpath resource, or
+     * a Maven artifact resource in the format
+     * <code>mvn:groupId:artifactId:version[:type[:classifier]]!/path/in/archive</code>.
      * <p>
      * This is an alternative to <code>&lt;includeFilterFile&gt;</code> which allows multiple
      * files to be specified as separate elements in a pom.
@@ -246,7 +253,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /**
      * File name of the exclude filter. Bugs matching the filters are not reported.
      * <p>
-     * Potential values are a filesystem path, a URL, or a classpath resource.
+     * Potential values are a filesystem path, a URL, a classpath resource, or
+     * a Maven artifact resource in the format
+     * <code>mvn:groupId:artifactId:version[:type[:classifier]]!/path/in/archive</code>.
      * <p>
      * This parameter is resolved as resource, URL, then file. If successfully
      * resolved, the contents of the configuration is copied into the
@@ -433,6 +442,44 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Inject
     ResourceManager resourceManager
+
+    /**
+     * The Maven Settings object, used to look up server credentials for authenticated URLs.
+     */
+    @Parameter(defaultValue = '${settings}', readonly = true)
+    Settings settings
+
+    /**
+     * Settings decrypter used to decrypt passwords stored in Maven settings.
+     */
+    @Inject
+    SettingsDecrypter settingsDecrypter
+
+    /**
+     * The id of a server configured in Maven's {@code settings.xml} whose credentials
+     * (username and password) will be used when fetching filter or baseline files from
+     * an {@code http://} or {@code https://} URL.
+     * <p>
+     * Example {@code settings.xml} entry:
+     * <pre>{@code
+     * <server>
+     *   <id>my-nexus</id>
+     *   <username>user</username>
+     *   <password>secret</password>
+     * </server>
+     * }</pre>
+     * Example usage:
+     * <pre>{@code
+     * <configuration>
+     *   <excludeFilterFile>https://nexus.example.com/config/spotbugs-exclude.xml</excludeFilterFile>
+     *   <filterServerId>my-nexus</filterServerId>
+     * </configuration>
+     * }</pre>
+     *
+     * @since 4.9.8.4
+     */
+    @Parameter(property = 'spotbugs.filterServerId')
+    String filterServerId
 
     /**
      * Fail the build on an error.
@@ -886,7 +933,25 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     private ArrayList<String> getSpotbugsArgs(File htmlTempFile, File xmlTempFile, File sarifTempFile,
             File auxClasspathFile) {
-        ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)
+        String httpUser = null
+        String httpPassword = null
+        if (filterServerId) {
+            def server = settings?.getServer(filterServerId)
+            if (server != null) {
+                if (settingsDecrypter == null) {
+                    log.debug("settingsDecrypter is unavailable; using raw server credentials for filterServerId '${filterServerId}'")
+                }
+                def decrypted = settingsDecrypter?.decrypt(new DefaultSettingsDecryptionRequest(server))
+                def decryptedServer = decrypted?.getServer() ?: server
+                httpUser = decryptedServer.getUsername()
+                httpPassword = decryptedServer.getPassword()
+            } else {
+                log.warn("filterServerId '${filterServerId}' not found in Maven settings")
+            }
+        }
+        ResourceHelper resourceHelper =
+            new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager, repositorySystem, session,
+                httpUser, httpPassword)
         List<String> args = []
 
         if (userPrefs) {

@@ -18,10 +18,19 @@ package org.codehaus.mojo.spotbugs
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
+import java.util.jar.JarOutputStream
+import java.util.zip.ZipEntry
+import com.sun.net.httpserver.HttpServer
 import org.codehaus.mojo.spotbugs.ResourceHelper
-import org.codehaus.mojo.spotbugs.SpotBugsInfo
+import org.apache.maven.execution.MavenSession
+import org.apache.maven.project.MavenProject
 import org.codehaus.plexus.resource.ResourceManager
 import org.apache.maven.plugin.logging.Log
+import org.eclipse.aether.RepositorySystem
+import org.eclipse.aether.RepositorySystemSession
+import org.eclipse.aether.artifact.Artifact as AetherArtifact
+import org.eclipse.aether.repository.RemoteRepository
+import org.eclipse.aether.resolution.ArtifactResult
 
 import spock.lang.Specification
 
@@ -115,8 +124,8 @@ class ResourceHelperTest extends Specification {
             getResourceAsInputStream(_) >> new ByteArrayInputStream('data'.bytes)
         }
         ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
-        // Path with special chars that should be sanitized to underscores
-        String resource = 'http://example.com:8080/path?param=value/output.xml'
+        // Classpath path with special chars (? : & =) that should be sanitized in the location portion
+        String resource = 'classpath:some/path?id=1&ver=2/output.xml'
 
         when:
         File result = helper.getResourceFile(resource)
@@ -152,6 +161,191 @@ class ResourceHelperTest extends Specification {
 
         when:
         helper.getResourceFile(resource)
+
+        then:
+        thrown(org.apache.maven.plugin.MojoExecutionException)
+
+        cleanup:
+        outputDirectory.toFile().deleteDir()
+    }
+
+    void 'getResourceFile fetches content from an http URL'() {
+        given:
+        Log log = Mock(Log) {
+            isDebugEnabled() >> false
+        }
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-url')
+        ResourceManager resourceManager = Mock(ResourceManager)
+
+        String content = '<FindBugsFilter/>'
+        HttpServer server = HttpServer.create(new InetSocketAddress(0), 0)
+        server.createContext('/filter.xml') { exchange ->
+            byte[] bytes = content.bytes
+            exchange.sendResponseHeaders(200, bytes.length)
+            exchange.responseBody.withCloseable { os -> os.write(bytes) }
+        }
+        server.start()
+        int port = server.address.port
+
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
+
+        when:
+        File result = helper.getResourceFile("http://localhost:${port}/filter.xml")
+
+        then:
+        result.exists()
+        result.name == 'filter.xml'
+        Files.readString(result.toPath()) == content
+
+        cleanup:
+        server.stop(0)
+        outputDirectory.toFile().deleteDir()
+    }
+
+    void 'getResourceFile fetches content from an http URL with Basic auth credentials'() {
+        given:
+        Log log = Mock(Log) {
+            isDebugEnabled() >> false
+        }
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-url-auth')
+        ResourceManager resourceManager = Mock(ResourceManager)
+
+        String content = '<FindBugsFilter/>'
+        String capturedAuth = null
+        HttpServer server = HttpServer.create(new InetSocketAddress(0), 0)
+        server.createContext('/secure-filter.xml') { exchange ->
+            capturedAuth = exchange.requestHeaders.getFirst('Authorization')
+            byte[] bytes = content.bytes
+            exchange.sendResponseHeaders(200, bytes.length)
+            exchange.responseBody.withCloseable { os -> os.write(bytes) }
+        }
+        server.start()
+        int port = server.address.port
+
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager,
+            null, null, 'myuser', 'mypassword')
+
+        when:
+        File result = helper.getResourceFile("http://localhost:${port}/secure-filter.xml")
+
+        then:
+        result.exists()
+        Files.readString(result.toPath()) == content
+        capturedAuth != null
+        capturedAuth.startsWith('Basic ')
+        new String(Base64.decoder.decode(capturedAuth.substring(6))) == 'myuser:mypassword'
+
+        cleanup:
+        server.stop(0)
+        outputDirectory.toFile().deleteDir()
+    }
+
+    void 'getResourceFile throws MojoExecutionException when http URL returns non-200'() {
+        given:
+        Log log = Mock(Log) {
+            isDebugEnabled() >> false
+            error(*_) >> {}
+        }
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-url-404')
+        ResourceManager resourceManager = Mock(ResourceManager)
+
+        HttpServer server = HttpServer.create(new InetSocketAddress(0), 0)
+        server.createContext('/not-found.xml') { exchange ->
+            exchange.sendResponseHeaders(404, -1)
+            exchange.responseBody.close()
+        }
+        server.start()
+        int port = server.address.port
+
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
+
+        when:
+        helper.getResourceFile("http://localhost:${port}/not-found.xml")
+
+        then:
+        thrown(org.apache.maven.plugin.MojoExecutionException)
+
+        cleanup:
+        server.stop(0)
+        outputDirectory.toFile().deleteDir()
+    }
+
+    void 'getResourceFile resolves resource from maven artifact and extracts entry'() {
+        given:
+        Log log = Mock(Log) {
+            isDebugEnabled() >> false
+        }
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-maven')
+        Path artifactPath = outputDirectory.resolve('build-tools.jar')
+        new JarOutputStream(Files.newOutputStream(artifactPath)).withCloseable { JarOutputStream jos ->
+            jos.putNextEntry(new ZipEntry('whizbang/lib-filter.xml'))
+            jos.write('<FindBugsFilter/>'.bytes)
+            jos.closeEntry()
+        }
+
+        ResourceManager resourceManager = Mock(ResourceManager)
+        RepositorySystem repositorySystem = Mock(RepositorySystem)
+        RepositorySystemSession repositorySession = Mock(RepositorySystemSession)
+        MavenProject project = Mock(MavenProject)
+        project.getRemoteProjectRepositories() >> ([] as List<RemoteRepository>)
+        MavenSession session = Mock(MavenSession)
+        session.getCurrentProject() >> project
+        session.getRepositorySession() >> repositorySession
+        AetherArtifact aetherArtifact = Stub(AetherArtifact) {
+            getFile() >> artifactPath.toFile()
+        }
+        ArtifactResult artifactResult = Stub(ArtifactResult) {
+            getArtifact() >> aetherArtifact
+        }
+        repositorySystem.resolveArtifact(repositorySession, _) >> artifactResult
+
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager, repositorySystem, session)
+
+        when:
+        File result = helper.getResourceFile('mvn:com.example:build-tools:1.0!/whizbang/lib-filter.xml')
+
+        then:
+        result.exists()
+        result.name == 'lib-filter.xml'
+        Files.readString(result.toPath()) == '<FindBugsFilter/>'
+
+        cleanup:
+        outputDirectory.toFile().deleteDir()
+    }
+
+    void 'getResourceFile throws MojoExecutionException when maven artifact entry does not exist'() {
+        given:
+        Log log = Mock(Log) {
+            isDebugEnabled() >> false
+        }
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-maven-missing')
+        Path artifactPath = outputDirectory.resolve('build-tools.jar')
+        new JarOutputStream(Files.newOutputStream(artifactPath)).withCloseable { JarOutputStream jos ->
+            jos.putNextEntry(new ZipEntry('whizbang/lib-filter.xml'))
+            jos.write('<FindBugsFilter/>'.bytes)
+            jos.closeEntry()
+        }
+
+        ResourceManager resourceManager = Mock(ResourceManager)
+        RepositorySystem repositorySystem = Mock(RepositorySystem)
+        RepositorySystemSession repositorySession = Mock(RepositorySystemSession)
+        MavenProject project = Mock(MavenProject)
+        project.getRemoteProjectRepositories() >> ([] as List<RemoteRepository>)
+        MavenSession session = Mock(MavenSession)
+        session.getCurrentProject() >> project
+        session.getRepositorySession() >> repositorySession
+        AetherArtifact aetherArtifact = Stub(AetherArtifact) {
+            getFile() >> artifactPath.toFile()
+        }
+        ArtifactResult artifactResult = Stub(ArtifactResult) {
+            getArtifact() >> aetherArtifact
+        }
+        repositorySystem.resolveArtifact(repositorySession, _) >> artifactResult
+
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager, repositorySystem, session)
+
+        when:
+        helper.getResourceFile('mvn:com.example:build-tools:1.0!/missing/filter.xml')
 
         then:
         thrown(org.apache.maven.plugin.MojoExecutionException)
