@@ -162,7 +162,7 @@
         <l10nPluginVersion>1.2.0</l10nPluginVersion>
         <codenarcPluginVersion>0.1</codenarcPluginVersion>
         <gmavenPluginVersion>4.3.1</gmavenPluginVersion>
-        <invokerPluginVersion>3.9.1</invokerPluginVersion>
+        <invokerPluginVersion>3.10.0</invokerPluginVersion>
         <scmPluginVersion>2.2.1</scmPluginVersion>
 
         <spotbugsTestDebug>false</spotbugsTestDebug>
