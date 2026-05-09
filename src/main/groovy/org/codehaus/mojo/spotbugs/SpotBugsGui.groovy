@@ -17,6 +17,7 @@ package org.codehaus.mojo.spotbugs
 
 import groovy.ant.AntBuilder
 
+import java.awt.GraphicsEnvironment
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -147,6 +148,11 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
         }
         if (log.isInfoEnabled()) {
             log.info('File Encoding is ' + effectiveEncoding.name())
+        }
+
+        if (GraphicsEnvironment.isHeadless()) {
+            log.warn('Skipping SpotBugs GUI launch in headless environment')
+            return
         }
 
         // options must be added before the spotbugsXml path
