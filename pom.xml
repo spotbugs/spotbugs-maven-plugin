@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.github.hazendaz</groupId>
         <artifactId>base-parent</artifactId>
-        <version>58</version>
+        <version>59</version>
         <relativePath />
     </parent>
 
@@ -1232,36 +1232,47 @@
                     <value>4.0.0-rc-5</value>
                 </property>
             </activation>
-            <properties>
-                <!-- maven-compiler-plugin 4.x does not allow using both ..source/..target and ..release simultaneously.
-                     Clear source and target to avoid "option ..source cannot be used together with ..release". -->
-                <maven.compiler.source />
-                <maven.compiler.target />
-                <maven.compiler.testSource />
-                <maven.compiler.testTarget />
-            </properties>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
+                        <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>compile-stubfixer</id>
-                                <configuration combine.self="override">
-                                    <!-- Maven 4: compileSourceRoots is deprecated (replaced by project-wide sources)
-                                         and outputDirectory is read-only. The src/stubfixer/java source directory is
-                                         already registered via build-helper-maven-plugin add-source goal. -->
+                                <id>compile-stubfixer-main</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <mkdir dir="${project.build.outputDirectory}" />
+                                        <javac
+                                                srcdir="${project.basedir}/src/stubfixer/java"
+                                                destdir="${project.build.outputDirectory}"
+                                                classpathref="maven.compile.classpath"
+                                                encoding="${project.build.sourceEncoding}"
+                                                includeantruntime="false"
+                                                release="${java.release.version}" />
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
                     </plugin>
                     <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <!-- Maven compiler plugin 4.x does not place Error Prone's classpath-processor dependency on
+                                 the javac plugin path, so -Xplugin:ErrorProne fails with "plug-in not found".
+                                 Keep Maven 4 compilerArgs empty until that combination is supported. -->
+                            <compilerArgs combine.self="override" />
+                        </configuration>
+                    </plugin>
+                    <plugin>
                         <groupId>org.codehaus.gmavenplus</groupId>
                         <artifactId>gmavenplus-plugin</artifactId>
-                        <!-- gmavenplus reads maven.compiler.target for targetBytecode; since the maven4 profile clears
-                             maven.compiler.source/target to avoid conflicts with maven-compiler-plugin 4.x, we must
-                             set targetBytecode directly so gmavenplus uses the correct bytecode version. -->
+                        <!-- gmavenplus reads maven.compiler.target for targetBytecode; base-parent's Maven 4 profile clears
+                             maven.compiler.source/target to avoid compiler-plugin 4.x conflicts, so set targetBytecode
+                             directly to keep Groovy compilation aligned with the configured Java release. -->
                         <configuration>
                             <targetBytecode>${java.release.version}</targetBytecode>
                         </configuration>
