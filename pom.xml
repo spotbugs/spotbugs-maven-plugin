@@ -1246,7 +1246,13 @@
                                 <configuration>
                                     <target>
                                         <mkdir dir="${project.build.outputDirectory}" />
-                                        <javac srcdir="${project.basedir}/src/stubfixer/java" destdir="${project.build.outputDirectory}" classpathref="maven.compile.classpath" encoding="${project.build.sourceEncoding}" includeantruntime="false" release="${java.release.version}" />
+                                        <javac
+                                                srcdir="${project.basedir}/src/stubfixer/java"
+                                                destdir="${project.build.outputDirectory}"
+                                                classpathref="maven.compile.classpath"
+                                                encoding="${project.build.sourceEncoding}"
+                                                includeantruntime="false"
+                                                release="${java.release.version}" />
                                     </target>
                                 </configuration>
                             </execution>
@@ -1256,7 +1262,8 @@
                         <artifactId>maven-compiler-plugin</artifactId>
                         <configuration>
                             <!-- Maven compiler plugin 4.x does not place Error Prone's classpath-processor dependency on
-                                 the javac plugin path, so -Xplugin:ErrorProne fails with "plug-in not found". -->
+                                 the javac plugin path, so -Xplugin:ErrorProne fails with "plug-in not found".
+                                 Keep Maven 4 compilerArgs empty until that combination is supported. -->
                             <compilerArgs combine.self="override" />
                         </configuration>
                     </plugin>
