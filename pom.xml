@@ -124,6 +124,7 @@
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.9.8</spotbugs.version>
         <spotbugs.plugin>4.9.8.3</spotbugs.plugin>
+        <git-commit.plugin>9.0.2</git-commit.plugin>
 
         <!-- Use 'master' branch or '${spotbugs.version}' tag for integration test source pull from spotbugs. -->
         <!-- <spotbugs-scm.version>master</spotbugs-scm.version> -->
