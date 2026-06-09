@@ -1264,7 +1264,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (javaExecutable) {
             if (fork) {
                 log.info("Toolchain in spotbugs-maven-plugin: ${toolchain}")
-                javaTaskParams['executable'] = javaExecutable
+                javaTaskParams['jvm'] = javaExecutable
             } else {
                 log.warn('Toolchain is configured but fork is disabled. The toolchain JVM will not be used.')
             }
