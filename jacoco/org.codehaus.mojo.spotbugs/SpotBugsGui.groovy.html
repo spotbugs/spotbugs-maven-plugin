@@ -174,7 +174,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 <span class="nc" id="L174">            String javaExecutable = toolchain.findTool('java')</span>
 <span class="nc bnc" id="L175" title="All 2 branches missed.">            if (javaExecutable) {</span>
 <span class="nc" id="L176">                log.info(&quot;Toolchain in spotbugs-maven-plugin: ${toolchain}&quot;)</span>
-<span class="nc" id="L177">                javaTaskParams['executable'] = javaExecutable</span>
+<span class="nc" id="L177">                javaTaskParams['jvm'] = javaExecutable</span>
             }
         }
 <span class="nc" id="L180">        ant.java(javaTaskParams) {</span>
