@@ -36,10 +36,10 @@ import org.slf4j.LoggerFactory;
 <span class="nc" id="L36">public class StubOverrideFixer {</span>
 
     /** The logger. */
-<span class="nc" id="L39">    private static final Logger logger = LoggerFactory.getLogger(StubOverrideFixer.class);</span>
+<span class="fc" id="L39">    private static final Logger logger = LoggerFactory.getLogger(StubOverrideFixer.class);</span>
 
     /** The Constant GROOVY_METHODS. */
-<span class="nc" id="L42">    private static final Set&lt;String&gt; GROOVY_METHODS = Set.of(&quot;getMetaClass&quot;, &quot;setMetaClass&quot;, &quot;invokeMethod&quot;,</span>
+<span class="fc" id="L42">    private static final Set&lt;String&gt; GROOVY_METHODS = Set.of(&quot;getMetaClass&quot;, &quot;setMetaClass&quot;, &quot;invokeMethod&quot;,</span>
             &quot;getProperty&quot;, &quot;setProperty&quot;);
 
     /**
@@ -49,11 +49,11 @@ import org.slf4j.LoggerFactory;
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static void main(String[] args) throws IOException {
-<span class="nc" id="L52">        Path stubsDir = Path.of(args[0]);</span>
-<span class="nc" id="L53">        try (Stream&lt;Path&gt; stream = Files.walk(stubsDir)) {</span>
-<span class="nc" id="L54">            stream.filter(p -&gt; p.toString().endsWith(&quot;.java&quot;)).forEach(StubOverrideFixer::processStub);</span>
+<span class="fc" id="L52">        Path stubsDir = Path.of(args[0]);</span>
+<span class="fc" id="L53">        try (Stream&lt;Path&gt; stream = Files.walk(stubsDir)) {</span>
+<span class="fc" id="L54">            stream.filter(p -&gt; p.toString().endsWith(&quot;.java&quot;)).forEach(StubOverrideFixer::processStub);</span>
         }
-<span class="nc" id="L56">    }</span>
+<span class="fc" id="L56">    }</span>
 
     /**
      * Process stub.
@@ -62,19 +62,19 @@ import org.slf4j.LoggerFactory;
      */
     private static void processStub(Path filePath) {
         try {
-<span class="nc" id="L65">            CompilationUnit cu = StaticJavaParser.parse(filePath);</span>
+<span class="fc" id="L65">            CompilationUnit cu = StaticJavaParser.parse(filePath);</span>
 
-<span class="nc" id="L67">            cu.findAll(MethodDeclaration.class).forEach(method -&gt; {</span>
-<span class="nc bnc" id="L68" title="All 2 branches missed.">                if (shouldHaveOverride(method)) {</span>
-<span class="nc" id="L69">                    method.addAnnotation(&quot;java.lang.Override&quot;);</span>
+<span class="fc" id="L67">            cu.findAll(MethodDeclaration.class).forEach(method -&gt; {</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">                if (shouldHaveOverride(method)) {</span>
+<span class="fc" id="L69">                    method.addAnnotation(&quot;java.lang.Override&quot;);</span>
                 }
-<span class="nc" id="L71">            });</span>
+<span class="fc" id="L71">            });</span>
 
-<span class="nc" id="L73">            Files.write(filePath, cu.toString().getBytes(StandardCharsets.UTF_8));</span>
+<span class="fc" id="L73">            Files.write(filePath, cu.toString().getBytes(StandardCharsets.UTF_8));</span>
 <span class="nc" id="L74">        } catch (IOException | ParseProblemException e) {</span>
 <span class="nc" id="L75">            logger.error(&quot;Error processing: {} - {}&quot;, filePath, e.getMessage());</span>
-<span class="nc" id="L76">        }</span>
-<span class="nc" id="L77">    }</span>
+<span class="fc" id="L76">        }</span>
+<span class="fc" id="L77">    }</span>
 
     /**
      * Should have override.
@@ -83,7 +83,7 @@ import org.slf4j.LoggerFactory;
      * @return true, if successful
      */
     private static boolean shouldHaveOverride(MethodDeclaration method) {
-<span class="nc" id="L86">        return GROOVY_METHODS.contains(method.getNameAsString());</span>
+<span class="fc" id="L86">        return GROOVY_METHODS.contains(method.getNameAsString());</span>
     }
 
 }

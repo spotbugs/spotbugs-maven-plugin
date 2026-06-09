@@ -29,6 +29,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.function.Predicate
+import java.util.jar.JarFile
 import java.util.stream.Collectors
 
 import javax.inject.Inject
@@ -41,6 +42,7 @@ import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
 import org.apache.maven.reporting.AbstractMavenReport
 import org.apache.maven.reporting.MavenReport
+import org.apache.maven.toolchain.ToolchainManager
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceLoader
 
@@ -202,6 +204,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /** Used to look up Artifacts in the remote repository. */
     @Inject
     org.apache.maven.repository.RepositorySystem factory
+
+    /** Toolchain manager used to retrieve the JDK toolchain. */
+    @Inject
+    ToolchainManager toolchainManager
 
     /**
      * File name of the include filter. Only bugs in matching the filters are reported.
@@ -367,6 +373,10 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /**
      * Collection of PluginArtifact to work on. (PluginArtifact contains groupId, artifactId, version, type, classifier.)
      * See &lt;a href=&quot;./usage.html#Using Detectors from a Repository&quot;&gt;Usage&lt;/a&gt; for details.
+     * &lt;p&gt;
+     * As an alternative, SpotBugs extension plugin JARs can also be declared as standard Maven
+     * {@code &lt;dependencies&gt;} of this plugin. Any dependency whose JAR contains
+     * {@code findbugs.xml} is automatically detected and passed to SpotBugs.
      *
      * @since 2.4.1
      * @since 4.8.3.0 includes classifier
@@ -498,6 +508,35 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Parameter(property = 'spotbugs.systemPropertyVariables')
     Map&lt;String, String&gt; systemPropertyVariables
 
+    /**
+     * Map of SpotBugs plugin IDs to their documentation URL templates.
+     * The placeholder {@code {type}} in the template is replaced with the bug type code when
+     * generating report links.
+     * &lt;p&gt;
+     * Built-in defaults are already provided for the following well-known plugins:
+     * &lt;ul&gt;
+     *   &lt;li&gt;{@code com.mebigfatguy.fbcontrib} &amp;rarr;
+     *       {@code https://fb-contrib.sourceforge.net/bugdescriptions.html#{type}}&lt;/li&gt;
+     *   &lt;li&gt;{@code com.h3xstream.findsecbugs} &amp;rarr;
+     *       {@code https://find-sec-bugs.github.io/bugs.htm#{type}}&lt;/li&gt;
+     * &lt;/ul&gt;
+     * Entries provided here override the built-in defaults, allowing you to add support for
+     * other SpotBugs addon plugins or customise the URLs for the ones above.
+     * The plugin ID can be found in the {@code pluginid} attribute of the plugin's
+     * {@code findbugs.xml} descriptor.
+     * &lt;p&gt;
+     * Example:
+     * &lt;pre&gt;{@code
+     * &lt;pluginDocumentationUrls&gt;
+     *   &lt;com.example.myplugin&gt;https://example.com/bugs.html#{type}&lt;/com.example.myplugin&gt;
+     * &lt;/pluginDocumentationUrls&gt;
+     * }&lt;/pre&gt;
+     *
+     * @since 4.9.4.3
+     */
+    @Parameter
+    Map&lt;String, String&gt; pluginDocumentationUrls
+
     /** The bug count. */
     int bugCount
 
@@ -518,87 +557,87 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Override
     boolean canGenerateReport() {
-<span class="pc bpc" id="L521" title="1 of 2 branches missed.">        if (skip) {</span>
-<span class="fc" id="L522">            log.info('Spotbugs plugin skipped')</span>
-<span class="fc" id="L523">            return false</span>
+<span class="fc bfc" id="L560" title="All 2 branches covered.">        if (skip) {</span>
+<span class="fc" id="L561">            log.info('Spotbugs plugin skipped')</span>
+<span class="fc" id="L562">            return false</span>
         }
 
-<span class="nc" id="L526">        executeCheck()</span>
+<span class="fc" id="L565">        executeCheck()</span>
 
-<span class="nc" id="L528">        boolean canGenerate = false</span>
-<span class="nc" id="L529">        log.debug('****** SpotBugsMojo canGenerateReport *******')</span>
+<span class="fc" id="L567">        boolean canGenerate = false</span>
+<span class="fc" id="L568">        log.debug('****** SpotBugsMojo canGenerateReport *******')</span>
 
-<span class="nc" id="L531">        Predicate&lt;Path&gt; containsSource = { Path path -&gt;</span>
-<span class="nc" id="L532">            String fileName = path.toFile().name</span>
-<span class="nc bnc" id="L533" title="All 2 branches missed.">            return fileName.endsWith(SpotBugsInfo.CLASS_SUFFIX) ||</span>
-<span class="nc bnc" id="L534" title="All 10 branches missed.">                (nested &amp;&amp; (fileName.endsWith(SpotBugsInfo.JAR_SUFFIX) || fileName.endsWith(SpotBugsInfo.ZIP_SUFFIX)))</span>
+<span class="fc" id="L570">        Predicate&lt;Path&gt; containsSource = { Path path -&gt;</span>
+<span class="fc" id="L571">            String fileName = path.toFile().name</span>
+<span class="pc bpc" id="L572" title="1 of 2 branches missed.">            return fileName.endsWith(SpotBugsInfo.CLASS_SUFFIX) ||</span>
+<span class="pc bpc" id="L573" title="1 of 10 branches missed.">                (nested &amp;&amp; (fileName.endsWith(SpotBugsInfo.JAR_SUFFIX) || fileName.endsWith(SpotBugsInfo.ZIP_SUFFIX)))</span>
         }
 
-<span class="nc bnc" id="L537" title="All 2 branches missed.">        if (classFilesDirectory.exists()) {</span>
-<span class="nc bnc" id="L538" title="All 2 branches missed.">            if (noClassOk) {</span>
-<span class="nc" id="L539">                canGenerate = true</span>
+<span class="fc bfc" id="L576" title="All 2 branches covered.">        if (classFilesDirectory.exists()) {</span>
+<span class="fc bfc" id="L577" title="All 2 branches covered.">            if (noClassOk) {</span>
+<span class="fc" id="L578">                canGenerate = true</span>
             } else {
                 try {
-<span class="nc" id="L542">                    canGenerate = Files.walk(classFilesDirectory.toPath())</span>
+<span class="pc" id="L581">                    canGenerate = Files.walk(classFilesDirectory.toPath())</span>
                         .anyMatch(containsSource)
                 } catch (IOException e) {
-<span class="nc" id="L545">                    log.warn(&quot;Error searching class files: ${e.message}&quot;)</span>
+<span class="pc" id="L584">                    log.warn(&quot;Error searching class files: ${e.message}&quot;)</span>
                 }
             }
-<span class="nc bnc" id="L548" title="All 2 branches missed.">            if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L549">                log.debug(&quot;canGenerate Src is ${canGenerate}&quot;)</span>
+<span class="pc bpc" id="L587" title="1 of 2 branches missed.">            if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L588">                log.debug(&quot;canGenerate Src is ${canGenerate}&quot;)</span>
             }
         }
 
-<span class="nc bnc" id="L553" title="All 10 branches missed.">        if (!canGenerate &amp;&amp; testClassFilesDirectory.exists() &amp;&amp; includeTests) {</span>
-<span class="nc bnc" id="L554" title="All 2 branches missed.">            if (noClassOk) {</span>
-<span class="nc" id="L555">                canGenerate = true</span>
+<span class="pc bpc" id="L592" title="1 of 10 branches missed.">        if (!canGenerate &amp;&amp; testClassFilesDirectory.exists() &amp;&amp; includeTests) {</span>
+<span class="pc bpc" id="L593" title="1 of 2 branches missed.">            if (noClassOk) {</span>
+<span class="nc" id="L594">                canGenerate = true</span>
             } else {
                 try {
-<span class="nc" id="L558">                    canGenerate = Files.walk(testClassFilesDirectory.toPath())</span>
+<span class="pc" id="L597">                    canGenerate = Files.walk(testClassFilesDirectory.toPath())</span>
                         .anyMatch(containsSource)
                 } catch (IOException e) {
-<span class="nc" id="L561">                    log.warn(&quot;Error searching test class files: ${e.message}&quot;)</span>
+<span class="pc" id="L600">                    log.warn(&quot;Error searching test class files: ${e.message}&quot;)</span>
                 }
             }
-<span class="nc bnc" id="L564" title="All 2 branches missed.">            if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L565">                log.debug(&quot;canGenerate Test Src is ${canGenerate}&quot;)</span>
+<span class="pc bpc" id="L603" title="1 of 2 branches missed.">            if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L604">                log.debug(&quot;canGenerate Test Src is ${canGenerate}&quot;)</span>
             }
         }
 
-<span class="nc bnc" id="L569" title="All 6 branches missed.">        if (canGenerate &amp;&amp; outputSpotbugsFile == null) {</span>
-<span class="nc" id="L570">            outputSpotbugsFile = spotbugsXmlOutputDirectory.toPath().resolve(spotbugsXmlOutputFilename).toFile()</span>
-<span class="nc" id="L571">            executeSpotbugs(outputSpotbugsFile)</span>
-<span class="nc bnc" id="L572" title="All 8 branches missed.">            if (skipEmptyReport &amp;&amp; bugCount == 0) {</span>
-<span class="nc" id="L573">                canGenerate = false</span>
+<span class="pc bpc" id="L608" title="2 of 6 branches missed.">        if (canGenerate &amp;&amp; outputSpotbugsFile == null) {</span>
+<span class="nc" id="L609">            outputSpotbugsFile = spotbugsXmlOutputDirectory.toPath().resolve(spotbugsXmlOutputFilename).toFile()</span>
+<span class="nc" id="L610">            executeSpotbugs(outputSpotbugsFile)</span>
+<span class="nc bnc" id="L611" title="All 8 branches missed.">            if (skipEmptyReport &amp;&amp; bugCount == 0) {</span>
+<span class="nc" id="L612">                canGenerate = false</span>
             }
         }
 
-<span class="nc bnc" id="L577" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L578">            log.debug(&quot;canGenerate is ${canGenerate}&quot;)</span>
+<span class="pc bpc" id="L616" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L617">            log.debug(&quot;canGenerate is ${canGenerate}&quot;)</span>
         }
 
-<span class="nc" id="L581">        boolean isSiteLifecycle = false</span>
-<span class="nc bnc" id="L582" title="All 6 branches missed.">        if (session != null &amp;&amp; session.getRequest() != null) {</span>
-<span class="nc" id="L583">            List&lt;String&gt; goals = session.getRequest().getGoals()</span>
-<span class="nc bnc" id="L584" title="All 6 branches missed.">            if (goals != null &amp;&amp; goals.any { String goal -&gt;</span>
-<span class="nc" id="L585">                goal.contains('site')</span>
+<span class="fc" id="L620">        boolean isSiteLifecycle = false</span>
+<span class="pc bpc" id="L621" title="1 of 6 branches missed.">        if (session != null &amp;&amp; session.getRequest() != null) {</span>
+<span class="fc" id="L622">            List&lt;String&gt; goals = session.getRequest().getGoals()</span>
+<span class="pc bpc" id="L623" title="3 of 6 branches missed.">            if (goals != null &amp;&amp; goals.any { String goal -&gt;</span>
+<span class="fc" id="L624">                goal.contains('site')</span>
             }) {
-<span class="nc" id="L587">                isSiteLifecycle = true</span>
+<span class="fc" id="L626">                isSiteLifecycle = true</span>
             }
         }
 
-<span class="nc bnc" id="L591" title="All 2 branches missed.">        if (canGenerate) {</span>
-<span class="nc bnc" id="L592" title="All 2 branches missed.">            if (!isSiteLifecycle) {</span>
+<span class="fc bfc" id="L630" title="All 2 branches covered.">        if (canGenerate) {</span>
+<span class="fc bfc" id="L631" title="All 2 branches covered.">            if (!isSiteLifecycle) {</span>
                 // Only generate xdoc report, skip site pages
-<span class="nc" id="L594">                generateXDoc(getLocale())</span>
-<span class="nc" id="L595">                return false</span>
+<span class="nc" id="L633">                generateXDoc(getLocale())</span>
+<span class="pc" id="L634">                return false</span>
             }
         } else {
-<span class="nc" id="L598">            log.info('No files found to run spotbugs; check compile phase has been run.')</span>
+<span class="fc" id="L637">            log.info('No files found to run spotbugs; check compile phase has been run.')</span>
         }
 
-<span class="nc" id="L601">        return canGenerate</span>
+<span class="fc" id="L640">        return canGenerate</span>
     }
 
     /**
@@ -612,7 +651,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Override
     String getDescription(Locale locale) {
-<span class="nc" id="L615">        return getBundle(locale).getString(SpotBugsInfo.DESCRIPTION_KEY)</span>
+<span class="fc" id="L654">        return getBundle(locale).getString(SpotBugsInfo.DESCRIPTION_KEY)</span>
     }
 
     /**
@@ -626,7 +665,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Override
     String getName(Locale locale) {
-<span class="nc" id="L629">        return getBundle(locale).getString(SpotBugsInfo.NAME_KEY)</span>
+<span class="fc" id="L668">        return getBundle(locale).getString(SpotBugsInfo.NAME_KEY)</span>
     }
 
     /**
@@ -644,7 +683,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     @Override
     @Deprecated
     String getOutputName() {
-<span class="nc" id="L647">        return SpotBugsInfo.PLUGIN_NAME</span>
+<span class="fc" id="L686">        return SpotBugsInfo.PLUGIN_NAME</span>
     }
 
     /**
@@ -657,7 +696,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Override
     String getOutputPath() {
-<span class="nc" id="L660">        return SpotBugsInfo.PLUGIN_NAME</span>
+<span class="fc" id="L699">        return SpotBugsInfo.PLUGIN_NAME</span>
     }
 
     /**
@@ -671,109 +710,110 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Override
     void executeReport(Locale locale) {
-<span class="nc" id="L674">        log.debug('****** SpotBugsMojo executeReport *******')</span>
-<span class="nc bnc" id="L675" title="All 2 branches missed.">        if (!canGenerateReport()) {</span>
-<span class="nc" id="L676">            return</span>
+<span class="nc" id="L713">        log.debug('****** SpotBugsMojo executeReport *******')</span>
+<span class="nc bnc" id="L714" title="All 2 branches missed.">        if (!canGenerateReport()) {</span>
+<span class="nc" id="L715">            return</span>
         }
 
-<span class="nc bnc" id="L679" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L680">            log.debug(&quot;Locale is ${locale.getLanguage()}&quot;)</span>
-<span class="nc" id="L681">            log.debug('****** SpotBugsMojo executeReport *******')</span>
-<span class="nc" id="L682">            log.debug('report Output Directory is ' + getReportOutputDirectory())</span>
-<span class="nc" id="L683">            log.debug('Output Directory is ' + outputDirectory)</span>
-<span class="nc" id="L684">            log.debug('Classes Directory is ' + classFilesDirectory)</span>
-<span class="nc" id="L685">            log.debug(&quot;  Plugin Artifacts to be added -&gt; ${pluginArtifacts}&quot;)</span>
+<span class="nc bnc" id="L718" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L719">            log.debug(&quot;Locale is ${locale.getLanguage()}&quot;)</span>
+<span class="nc" id="L720">            log.debug('****** SpotBugsMojo executeReport *******')</span>
+<span class="nc" id="L721">            log.debug('report Output Directory is ' + getReportOutputDirectory())</span>
+<span class="nc" id="L722">            log.debug('Output Directory is ' + outputDirectory)</span>
+<span class="nc" id="L723">            log.debug('Classes Directory is ' + classFilesDirectory)</span>
+<span class="nc" id="L724">            log.debug(&quot;  Plugin Artifacts to be added -&gt; ${pluginArtifacts}&quot;)</span>
         }
 
-<span class="nc" id="L688">        generateXDoc(locale)</span>
+<span class="nc" id="L727">        generateXDoc(locale)</span>
 
-<span class="nc bnc" id="L690" title="All 6 branches missed.">        if (!outputDirectory.exists() &amp;&amp; !outputDirectory.mkdirs()) {</span>
-<span class="nc" id="L691">            throw new MojoExecutionException('Cannot create html output directory')</span>
+<span class="nc bnc" id="L729" title="All 6 branches missed.">        if (!outputDirectory.exists() &amp;&amp; !outputDirectory.mkdirs()) {</span>
+<span class="nc" id="L730">            throw new MojoExecutionException('Cannot create html output directory')</span>
         }
 
-<span class="nc bnc" id="L694" title="All 6 branches missed.">        if (outputSpotbugsFile != null &amp;&amp; outputSpotbugsFile.exists()) {</span>
+<span class="nc bnc" id="L733" title="All 6 branches missed.">        if (outputSpotbugsFile != null &amp;&amp; outputSpotbugsFile.exists()) {</span>
 
-<span class="nc bnc" id="L696" title="All 8 branches missed.">            if (skipEmptyReport &amp;&amp; bugCount == 0) {</span>
-<span class="nc" id="L697">                log.info('Skipping Generation Spotbugs HTML since there are not any bugs')</span>
+<span class="nc bnc" id="L735" title="All 8 branches missed.">            if (skipEmptyReport &amp;&amp; bugCount == 0) {</span>
+<span class="nc" id="L736">                log.info('Skipping Generation Spotbugs HTML since there are not any bugs')</span>
             } else {
-<span class="nc" id="L699">                log.debug('Generating Spotbugs HTML')</span>
+<span class="nc" id="L738">                log.debug('Generating Spotbugs HTML')</span>
 
-<span class="nc" id="L701">                SpotbugsReportGenerator generator = new SpotbugsReportGenerator(getSink(), getBundle(locale))</span>
+<span class="nc" id="L740">                SpotbugsReportGenerator generator = new SpotbugsReportGenerator(getSink(), getBundle(locale))</span>
 
-<span class="nc" id="L703">                boolean isJxrPluginEnabled = isJxrPluginEnabled()</span>
+<span class="nc" id="L742">                boolean isJxrPluginEnabled = isJxrPluginEnabled()</span>
 
-<span class="nc" id="L705">                generator.setIsJXRReportEnabled(isJxrPluginEnabled)</span>
+<span class="nc" id="L744">                generator.setIsJXRReportEnabled(isJxrPluginEnabled)</span>
 
-<span class="nc bnc" id="L707" title="All 2 branches missed.">                if (isJxrPluginEnabled) {</span>
-<span class="nc" id="L708">                    generator.setCompileSourceRoots(session.getCurrentProject().compileSourceRoots)</span>
-<span class="nc" id="L709">                    generator.setTestSourceRoots(session.getCurrentProject().testCompileSourceRoots)</span>
-<span class="nc" id="L710">                    generator.setXrefLocation(this.xrefLocation)</span>
-<span class="nc" id="L711">                    generator.setXrefTestLocation(this.xrefTestLocation)</span>
-<span class="nc" id="L712">                    generator.setIncludeTests(this.includeTests)</span>
+<span class="nc bnc" id="L746" title="All 2 branches missed.">                if (isJxrPluginEnabled) {</span>
+<span class="nc" id="L747">                    generator.setCompileSourceRoots(session.getCurrentProject().compileSourceRoots)</span>
+<span class="nc" id="L748">                    generator.setTestSourceRoots(session.getCurrentProject().testCompileSourceRoots)</span>
+<span class="nc" id="L749">                    generator.setXrefLocation(this.xrefLocation)</span>
+<span class="nc" id="L750">                    generator.setXrefTestLocation(this.xrefTestLocation)</span>
+<span class="nc" id="L751">                    generator.setIncludeTests(this.includeTests)</span>
                 }
 
-<span class="nc" id="L715">                generator.setLog(log)</span>
-<span class="nc" id="L716">                generator.threshold = threshold</span>
-<span class="nc" id="L717">                generator.effort = effort</span>
+<span class="nc" id="L754">                generator.setLog(log)</span>
+<span class="nc" id="L755">                generator.threshold = threshold</span>
+<span class="nc" id="L756">                generator.effort = effort</span>
+<span class="nc" id="L757">                generator.bugTypeUrlMap = buildBugTypeUrlMap(pluginDocumentationUrls)</span>
 
-<span class="nc" id="L719">                XmlSlurper xmlSlurper = new XmlSlurper()</span>
-<span class="nc" id="L720">                xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)</span>
-<span class="nc" id="L721">                xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)</span>
+<span class="nc" id="L759">                XmlSlurper xmlSlurper = new XmlSlurper()</span>
+<span class="nc" id="L760">                xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)</span>
+<span class="nc" id="L761">                xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)</span>
 
-<span class="nc" id="L723">                generator.setSpotbugsResults(xmlSlurper.parse(outputSpotbugsFile))</span>
-<span class="nc" id="L724">                generator.setOutputDirectory(new File(outputDirectory.getAbsolutePath()))</span>
-<span class="nc" id="L725">                generator.generateReport()</span>
+<span class="nc" id="L763">                generator.setSpotbugsResults(xmlSlurper.parse(outputSpotbugsFile))</span>
+<span class="nc" id="L764">                generator.setOutputDirectory(new File(outputDirectory.getAbsolutePath()))</span>
+<span class="nc" id="L765">                generator.generateReport()</span>
 
-<span class="nc bnc" id="L727" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L728">                    log.debug(&quot;xmlOutput is ${xmlOutput}&quot;)</span>
+<span class="nc bnc" id="L767" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L768">                    log.debug(&quot;xmlOutput is ${xmlOutput}&quot;)</span>
                 }
             }
         }
-<span class="nc" id="L732">    }</span>
+<span class="nc" id="L772">    }</span>
 
     private void executeCheck() {
-<span class="nc" id="L735">        log.debug('****** SpotBugsMojo executeCheck *******')</span>
+<span class="fc" id="L775">        log.debug('****** SpotBugsMojo executeCheck *******')</span>
 
-<span class="nc" id="L737">        log.debug('Generating Spotbugs XML')</span>
+<span class="fc" id="L777">        log.debug('Generating Spotbugs XML')</span>
 
-<span class="nc bnc" id="L739" title="All 6 branches missed.">        if (!spotbugsXmlOutputDirectory.exists() &amp;&amp; !spotbugsXmlOutputDirectory.mkdirs()) {</span>
-<span class="nc" id="L740">            throw new MojoExecutionException('Cannot create xml output directory.')</span>
+<span class="pc bpc" id="L779" title="4 of 6 branches missed.">        if (!spotbugsXmlOutputDirectory.exists() &amp;&amp; !spotbugsXmlOutputDirectory.mkdirs()) {</span>
+<span class="nc" id="L780">            throw new MojoExecutionException('Cannot create xml output directory.')</span>
         }
-<span class="nc" id="L742">    }</span>
+<span class="fc" id="L782">    }</span>
 
     private void generateXDoc(Locale locale) {
-<span class="nc" id="L745">        log.debug('****** SpotBugsMojo generateXDoc *******')</span>
+<span class="nc" id="L785">        log.debug('****** SpotBugsMojo generateXDoc *******')</span>
 
-<span class="nc bnc" id="L747" title="All 6 branches missed.">        if (outputSpotbugsFile == null || !outputSpotbugsFile.exists()) {</span>
-<span class="nc" id="L748">            return</span>
+<span class="nc bnc" id="L787" title="All 6 branches missed.">        if (outputSpotbugsFile == null || !outputSpotbugsFile.exists()) {</span>
+<span class="nc" id="L788">            return</span>
         }
 
-<span class="nc bnc" id="L751" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L752">            log.debug(&quot;xmlOutput is ${xmlOutput}&quot;)</span>
+<span class="nc bnc" id="L791" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L792">            log.debug(&quot;xmlOutput is ${xmlOutput}&quot;)</span>
         }
 
-<span class="nc bnc" id="L755" title="All 2 branches missed.">        if (xmlOutput) {</span>
-<span class="nc" id="L756">            log.debug('  Using the xdoc format')</span>
+<span class="nc bnc" id="L795" title="All 2 branches missed.">        if (xmlOutput) {</span>
+<span class="nc" id="L796">            log.debug('  Using the xdoc format')</span>
 
-<span class="nc bnc" id="L758" title="All 6 branches missed.">            if (!xmlOutputDirectory.exists() &amp;&amp; !xmlOutputDirectory.mkdirs()) {</span>
-<span class="nc" id="L759">                throw new MojoExecutionException('Cannot create xdoc output directory')</span>
+<span class="nc bnc" id="L798" title="All 6 branches missed.">            if (!xmlOutputDirectory.exists() &amp;&amp; !xmlOutputDirectory.mkdirs()) {</span>
+<span class="nc" id="L799">                throw new MojoExecutionException('Cannot create xdoc output directory')</span>
             }
 
-<span class="nc" id="L762">            XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)</span>
-<span class="nc" id="L763">            xDocsReporter.setOutputWriter(Files.newBufferedWriter(Path.of(&quot;${xmlOutputDirectory}/spotbugs.xml&quot;),</span>
-<span class="nc" id="L764">                Charset.forName(outputEncoding)))</span>
+<span class="nc" id="L802">            XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)</span>
+<span class="nc" id="L803">            xDocsReporter.setOutputWriter(Files.newBufferedWriter(Path.of(&quot;${xmlOutputDirectory}/spotbugs.xml&quot;),</span>
+<span class="nc" id="L804">                Charset.forName(outputEncoding)))</span>
 
-<span class="nc" id="L766">            XmlSlurper xmlSlurper = new XmlSlurper()</span>
-<span class="nc" id="L767">            xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)</span>
-<span class="nc" id="L768">            xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)</span>
+<span class="nc" id="L806">            XmlSlurper xmlSlurper = new XmlSlurper()</span>
+<span class="nc" id="L807">            xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)</span>
+<span class="nc" id="L808">            xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)</span>
 
-<span class="nc" id="L770">            xDocsReporter.setSpotbugsResults(xmlSlurper.parse(outputSpotbugsFile))</span>
-<span class="nc" id="L771">            xDocsReporter.setCompileSourceRoots(session.getCurrentProject().compileSourceRoots)</span>
-<span class="nc" id="L772">            xDocsReporter.setTestSourceRoots(session.getCurrentProject().testCompileSourceRoots)</span>
+<span class="nc" id="L810">            xDocsReporter.setSpotbugsResults(xmlSlurper.parse(outputSpotbugsFile))</span>
+<span class="nc" id="L811">            xDocsReporter.setCompileSourceRoots(session.getCurrentProject().compileSourceRoots)</span>
+<span class="nc" id="L812">            xDocsReporter.setTestSourceRoots(session.getCurrentProject().testCompileSourceRoots)</span>
 
-<span class="nc" id="L774">            xDocsReporter.generateReport()</span>
+<span class="nc" id="L814">            xDocsReporter.generateReport()</span>
         }
-<span class="nc" id="L776">    }</span>
+<span class="nc" id="L816">    }</span>
 
     /**
      * Returns the report output directory allowed to be not read only as defined in AbstractMavenParent.
@@ -785,7 +825,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Override
     protected String getOutputDirectory() {
-<span class="nc" id="L788">        return outputDirectory.getAbsolutePath()</span>
+<span class="fc" id="L828">        return outputDirectory.getAbsolutePath()</span>
     }
 
     /**
@@ -797,40 +837,40 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      *
      */
     protected boolean isJxrPluginEnabled() {
-<span class="nc bnc" id="L800" title="All 2 branches missed.">        if (xrefLocation.exists()) {</span>
-<span class="nc" id="L801">            return true</span>
+<span class="fc bfc" id="L840" title="All 2 branches covered.">        if (xrefLocation.exists()) {</span>
+<span class="fc" id="L841">            return true</span>
         }
 
-<span class="nc" id="L804">        List&lt;ReportPlugin&gt; reportPlugins = session.getCurrentProject().getModel().getReporting().getPlugins()</span>
+<span class="fc" id="L844">        List&lt;ReportPlugin&gt; reportPlugins = session.getCurrentProject().getModel().getReporting().getPlugins()</span>
 
-<span class="nc" id="L806">        boolean isEnabled</span>
+<span class="fc" id="L846">        boolean isEnabled</span>
 
-<span class="nc" id="L808">        reportPlugins.each() { ReportPlugin reportPlugin -&gt;</span>
+<span class="fc" id="L848">        reportPlugins.each() { ReportPlugin reportPlugin -&gt;</span>
 
-<span class="nc bnc" id="L810" title="All 2 branches missed.">            if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L811">                log.debug(&quot;report plugin -&gt; ${reportPlugin.getArtifactId()}&quot;)</span>
+<span class="pc bpc" id="L850" title="1 of 2 branches missed.">            if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L851">                log.debug(&quot;report plugin -&gt; ${reportPlugin.getArtifactId()}&quot;)</span>
             }
 
-<span class="nc bnc" id="L814" title="All 2 branches missed.">            if ('maven-jxr-plugin'.equals(reportPlugin.getArtifactId())) {</span>
-<span class="nc" id="L815">                isEnabled = true</span>
+<span class="fc bfc" id="L854" title="All 2 branches covered.">            if ('maven-jxr-plugin'.equals(reportPlugin.getArtifactId())) {</span>
+<span class="fc" id="L855">                isEnabled = true</span>
             }
-<span class="nc" id="L817">        }</span>
+<span class="fc" id="L857">        }</span>
 
-<span class="nc bnc" id="L819" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L820" title="All 2 branches missed.">            log.debug(&quot;jxr report links are ${isEnabled ? 'enabled' : 'disabled'}&quot;)</span>
+<span class="fc bfc" id="L859" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
+<span class="pc bpc" id="L860" title="1 of 2 branches missed.">            log.debug(&quot;jxr report links are ${isEnabled ? 'enabled' : 'disabled'}&quot;)</span>
         }
-<span class="nc" id="L822">        return isEnabled</span>
+<span class="fc" id="L862">        return isEnabled</span>
     }
 
     ResourceBundle getBundle(Locale locale) {
 
-<span class="nc" id="L827">        this.bundle = ResourceBundle.getBundle(SpotBugsInfo.BUNDLE_NAME, locale, SpotBugsMojo.class.getClassLoader())</span>
+<span class="fc" id="L867">        this.bundle = ResourceBundle.getBundle(SpotBugsInfo.BUNDLE_NAME, locale, SpotBugsMojo.class.getClassLoader())</span>
 
-<span class="nc bnc" id="L829" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L830">            log.debug('Mojo Locale is ' + this.bundle.getLocale().getLanguage())</span>
+<span class="pc bpc" id="L869" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L870">            log.debug('Mojo Locale is ' + this.bundle.getLocale().getLanguage())</span>
         }
 
-<span class="nc" id="L833">        return bundle</span>
+<span class="fc" id="L873">        return bundle</span>
     }
 
     /**
@@ -839,247 +879,294 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @param htmlTempFile Spotbugs html temp output file
      * @param xmlTempFile Spotbugs xml temp output file
      * @param sarifTempFile Spotbugs sarif temp output file
+     * @param auxClasspathFile Spotbugs auxclasspath file, or null if not needed
      *
      * @return Spotbugs command line arguments.
      *
      */
-    private ArrayList&lt;String&gt; getSpotbugsArgs(File htmlTempFile, File xmlTempFile, File sarifTempFile) {
-<span class="nc" id="L847">        ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)</span>
-<span class="nc" id="L848">        List&lt;String&gt; args = []</span>
+    private ArrayList&lt;String&gt; getSpotbugsArgs(File htmlTempFile, File xmlTempFile, File sarifTempFile,
+            File auxClasspathFile) {
+<span class="fc" id="L889">        ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)</span>
+<span class="fc" id="L890">        List&lt;String&gt; args = []</span>
 
-<span class="nc bnc" id="L850" title="All 2 branches missed.">        if (userPrefs) {</span>
-<span class="nc bnc" id="L851" title="All 2 branches missed.">            if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L852">                log.debug(&quot;  Adding User Preferences File -&gt; ${userPrefs}&quot;)</span>
+<span class="pc bpc" id="L892" title="1 of 2 branches missed.">        if (userPrefs) {</span>
+<span class="nc bnc" id="L893" title="All 2 branches missed.">            if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L894">                log.debug(&quot;  Adding User Preferences File -&gt; ${userPrefs}&quot;)</span>
             }
 
-<span class="nc" id="L855">            args &lt;&lt; '-userPrefs'</span>
-<span class="nc" id="L856">            args &lt;&lt; resourceHelper.getResourceFile(userPrefs.trim()).getAbsolutePath()</span>
+<span class="nc" id="L897">            args &lt;&lt; '-userPrefs'</span>
+<span class="nc" id="L898">            args &lt;&lt; resourceHelper.getResourceFile(userPrefs.trim()).getAbsolutePath()</span>
         }
 
-<span class="nc bnc" id="L859" title="All 2 branches missed.">        if (htmlOutput) {</span>
-<span class="nc" id="L860">            log.debug(&quot;  Adding 'htmlOutput'&quot;)</span>
-<span class="nc" id="L861">            args &lt;&lt; '-html=' + htmlTempFile.getAbsolutePath()</span>
+<span class="fc bfc" id="L901" title="All 2 branches covered.">        if (htmlOutput) {</span>
+<span class="fc" id="L902">            log.debug(&quot;  Adding 'htmlOutput'&quot;)</span>
+<span class="fc" id="L903">            args &lt;&lt; '-html=' + htmlTempFile.getAbsolutePath()</span>
         }
 
-<span class="nc" id="L864">        log.debug(&quot;  Adding 'xml:withMessages'&quot;)</span>
-<span class="nc" id="L865">        args &lt;&lt; '-xml:withMessages=' + xmlTempFile.getAbsolutePath()</span>
+<span class="fc" id="L906">        log.debug(&quot;  Adding 'xml:withMessages'&quot;)</span>
+<span class="fc" id="L907">        args &lt;&lt; '-xml:withMessages=' + xmlTempFile.getAbsolutePath()</span>
 
-<span class="nc bnc" id="L867" title="All 2 branches missed.">        if (sarifOutput) {</span>
-<span class="nc" id="L868">            log.debug(&quot;  Adding 'sarifOutput'&quot;)</span>
-<span class="nc" id="L869">            args &lt;&lt; '-sarif=' + sarifTempFile.getAbsolutePath()</span>
+<span class="fc bfc" id="L909" title="All 2 branches covered.">        if (sarifOutput) {</span>
+<span class="fc" id="L910">            log.debug(&quot;  Adding 'sarifOutput'&quot;)</span>
+<span class="fc" id="L911">            args &lt;&lt; '-sarif=' + sarifTempFile.getAbsolutePath()</span>
         }
 
-<span class="nc" id="L872">        File auxClasspathFile = createSpotbugsAuxClasspathFile()</span>
-
-<span class="nc bnc" id="L874" title="All 2 branches missed.">        if (auxClasspathFile) {</span>
-<span class="nc" id="L875">            log.debug(&quot;  Adding 'auxclasspathFromFile'&quot;)</span>
-<span class="nc" id="L876">            args &lt;&lt; '-auxclasspathFromFile'</span>
-<span class="nc" id="L877">            args &lt;&lt; auxClasspathFile.getAbsolutePath()</span>
+<span class="fc bfc" id="L914" title="All 2 branches covered.">        if (auxClasspathFile) {</span>
+<span class="fc" id="L915">            log.debug(&quot;  Adding 'auxclasspathFromFile'&quot;)</span>
+<span class="fc" id="L916">            args &lt;&lt; '-auxclasspathFromFile'</span>
+<span class="fc" id="L917">            args &lt;&lt; auxClasspathFile.getAbsolutePath()</span>
         }
 
-<span class="nc" id="L880">        log.debug(&quot;  Adding 'projectName'&quot;)</span>
-<span class="nc" id="L881">        args &lt;&lt; '-projectName'</span>
-<span class="nc" id="L882">        args &lt;&lt; project.name</span>
+<span class="fc" id="L920">        log.debug(&quot;  Adding 'projectName'&quot;)</span>
+<span class="fc" id="L921">        args &lt;&lt; '-projectName'</span>
+<span class="fc" id="L922">        args &lt;&lt; project.name</span>
 
-<span class="nc" id="L884">        log.debug(&quot;  Adding 'effortParameter'&quot;)</span>
-<span class="nc" id="L885">        args &lt;&lt; getEffortParameter()</span>
+<span class="fc" id="L924">        log.debug(&quot;  Adding 'effortParameter'&quot;)</span>
+<span class="fc" id="L925">        args &lt;&lt; getEffortParameter()</span>
 
-<span class="nc" id="L887">        log.debug(&quot;  Adding 'thresholdParameter'&quot;)</span>
-<span class="nc" id="L888">        args &lt;&lt; getThresholdParameter()</span>
+<span class="fc" id="L927">        log.debug(&quot;  Adding 'thresholdParameter'&quot;)</span>
+<span class="fc" id="L928">        args &lt;&lt; getThresholdParameter()</span>
 
-<span class="nc bnc" id="L890" title="All 2 branches missed.">        if (debug) {</span>
-<span class="nc" id="L891">            log.debug(&quot;  Adding 'progress'&quot;)</span>
-<span class="nc" id="L892">            args &lt;&lt; '-progress'</span>
+<span class="fc bfc" id="L930" title="All 2 branches covered.">        if (debug) {</span>
+<span class="fc" id="L931">            log.debug(&quot;  Adding 'progress'&quot;)</span>
+<span class="fc" id="L932">            args &lt;&lt; '-progress'</span>
         }
 
-<span class="nc bnc" id="L895" title="All 6 branches missed.">        if (pluginList || plugins) {</span>
-<span class="nc" id="L896">            log.debug(&quot;  Adding 'pluginList'&quot;)</span>
-<span class="nc" id="L897">            args &lt;&lt; '-pluginList'</span>
-<span class="nc" id="L898">            args &lt;&lt; getSpotbugsPlugins()</span>
+<span class="fc" id="L935">        String spotbugsPlugins = getSpotbugsPlugins()</span>
+<span class="pc bpc" id="L936" title="1 of 2 branches missed.">        if (spotbugsPlugins) {</span>
+<span class="nc" id="L937">            log.debug(&quot;  Adding 'pluginList'&quot;)</span>
+<span class="nc" id="L938">            args &lt;&lt; '-pluginList'</span>
+<span class="nc" id="L939">            args &lt;&lt; spotbugsPlugins</span>
         }
 
 
-<span class="nc bnc" id="L902" title="All 2 branches missed.">        if (visitors) {</span>
-<span class="nc" id="L903">            log.debug(&quot;  Adding 'visitors'&quot;)</span>
-<span class="nc" id="L904">            args &lt;&lt; '-visitors'</span>
-<span class="nc" id="L905">            args &lt;&lt; visitors</span>
+<span class="fc bfc" id="L943" title="All 2 branches covered.">        if (visitors) {</span>
+<span class="fc" id="L944">            log.debug(&quot;  Adding 'visitors'&quot;)</span>
+<span class="fc" id="L945">            args &lt;&lt; '-visitors'</span>
+<span class="fc" id="L946">            args &lt;&lt; visitors</span>
         }
 
-<span class="nc bnc" id="L908" title="All 2 branches missed.">        if (omitVisitors) {</span>
-<span class="nc" id="L909">            log.debug(&quot;  Adding 'omitVisitors'&quot;)</span>
-<span class="nc" id="L910">            args &lt;&lt; '-omitVisitors'</span>
-<span class="nc" id="L911">            args &lt;&lt; omitVisitors</span>
+<span class="fc bfc" id="L949" title="All 2 branches covered.">        if (omitVisitors) {</span>
+<span class="fc" id="L950">            log.debug(&quot;  Adding 'omitVisitors'&quot;)</span>
+<span class="fc" id="L951">            args &lt;&lt; '-omitVisitors'</span>
+<span class="fc" id="L952">            args &lt;&lt; omitVisitors</span>
         }
 
-<span class="nc bnc" id="L914" title="All 2 branches missed.">        if (chooseVisitors) {</span>
-<span class="nc" id="L915">            log.debug(&quot;  Adding 'chooseVisitors'&quot;)</span>
-<span class="nc" id="L916">            args &lt;&lt; '-chooseVisitors'</span>
-<span class="nc" id="L917">            args &lt;&lt; chooseVisitors</span>
+<span class="fc bfc" id="L955" title="All 2 branches covered.">        if (chooseVisitors) {</span>
+<span class="fc" id="L956">            log.debug(&quot;  Adding 'chooseVisitors'&quot;)</span>
+<span class="fc" id="L957">            args &lt;&lt; '-chooseVisitors'</span>
+<span class="fc" id="L958">            args &lt;&lt; chooseVisitors</span>
         }
 
-<span class="nc bnc" id="L920" title="All 2 branches missed.">        if (relaxed) {</span>
-<span class="nc" id="L921">            log.debug(&quot;  Adding 'relaxed'&quot;)</span>
-<span class="nc" id="L922">            args &lt;&lt; '-relaxed'</span>
+<span class="fc bfc" id="L961" title="All 2 branches covered.">        if (relaxed) {</span>
+<span class="fc" id="L962">            log.debug(&quot;  Adding 'relaxed'&quot;)</span>
+<span class="fc" id="L963">            args &lt;&lt; '-relaxed'</span>
         }
 
-<span class="nc bnc" id="L925" title="All 2 branches missed.">        if (nested) {</span>
-<span class="nc" id="L926">            log.debug(&quot;  Adding 'nested:true'&quot;)</span>
-<span class="nc" id="L927">            args &lt;&lt; '-nested:true'</span>
+<span class="fc bfc" id="L966" title="All 2 branches covered.">        if (nested) {</span>
+<span class="fc" id="L967">            log.debug(&quot;  Adding 'nested:true'&quot;)</span>
+<span class="fc" id="L968">            args &lt;&lt; '-nested:true'</span>
         } else {
-<span class="nc" id="L929">            log.debug(&quot;  Adding 'nested:false'&quot;)</span>
-<span class="nc" id="L930">            args &lt;&lt; '-nested:false'</span>
+<span class="fc" id="L970">            log.debug(&quot;  Adding 'nested:false'&quot;)</span>
+<span class="fc" id="L971">            args &lt;&lt; '-nested:false'</span>
         }
 
-<span class="nc bnc" id="L933" title="All 2 branches missed.">        if (onlyAnalyze) {</span>
-<span class="nc" id="L934">            log.debug(&quot;  Adding 'onlyAnalyze'&quot;)</span>
-<span class="nc" id="L935">            args &lt;&lt; '-onlyAnalyze'</span>
-<span class="nc" id="L936">            args &lt;&lt; Arrays.stream(onlyAnalyze.split(SpotBugsInfo.COMMA)).map { String string -&gt;</span>
-<span class="nc bnc" id="L937" title="All 2 branches missed.">                string.startsWith('file:') ? Files.lines(resourceHelper.getResourceFile(string.substring(5)).toPath())</span>
-<span class="nc" id="L938">                    .collect(Collectors.joining(SpotBugsInfo.COMMA)) : string</span>
-<span class="nc" id="L939">            }.collect(Collectors.joining(','))</span>
+<span class="pc bpc" id="L974" title="1 of 2 branches missed.">        if (onlyAnalyze) {</span>
+<span class="nc" id="L975">            log.debug(&quot;  Adding 'onlyAnalyze'&quot;)</span>
+<span class="nc" id="L976">            args &lt;&lt; '-onlyAnalyze'</span>
+<span class="nc" id="L977">            args &lt;&lt; Arrays.stream(onlyAnalyze.split(SpotBugsInfo.COMMA)).map { String string -&gt;</span>
+<span class="nc bnc" id="L978" title="All 2 branches missed.">                string.startsWith('file:') ? Files.lines(resourceHelper.getResourceFile(string.substring(5)).toPath())</span>
+<span class="nc" id="L979">                    .collect(Collectors.joining(SpotBugsInfo.COMMA)) : string</span>
+<span class="nc" id="L980">            }.collect(Collectors.joining(','))</span>
         }
 
-<span class="nc bnc" id="L942" title="All 2 branches missed.">        if (includeFilterFile) {</span>
-<span class="nc" id="L943">            log.debug('  Adding Include Filter File')</span>
+<span class="pc bpc" id="L983" title="1 of 2 branches missed.">        if (includeFilterFile) {</span>
+<span class="nc" id="L984">            log.debug('  Adding Include Filter File')</span>
 
-<span class="nc" id="L945">            List&lt;String&gt; includefilters = Arrays.asList(includeFilterFile.split(SpotBugsInfo.COMMA))</span>
+<span class="nc" id="L986">            List&lt;String&gt; includefilters = Arrays.asList(includeFilterFile.split(SpotBugsInfo.COMMA))</span>
 
-<span class="nc" id="L947">            includefilters.each { String includefilter -&gt;</span>
-<span class="nc" id="L948">                args &lt;&lt; '-include'</span>
-<span class="nc" id="L949">                args &lt;&lt; resourceHelper.getResourceFile(includefilter.trim()).getAbsolutePath()</span>
+<span class="nc" id="L988">            includefilters.each { String includefilter -&gt;</span>
+<span class="nc" id="L989">                args &lt;&lt; '-include'</span>
+<span class="nc" id="L990">                args &lt;&lt; resourceHelper.getResourceFile(includefilter.trim()).getAbsolutePath()</span>
             }
         }
 
-<span class="nc bnc" id="L953" title="All 2 branches missed.">        if (includeFilterFiles) {</span>
-<span class="nc" id="L954">            log.debug('  Adding Include Filter Files')</span>
+<span class="pc bpc" id="L994" title="1 of 2 branches missed.">        if (includeFilterFiles) {</span>
+<span class="nc" id="L995">            log.debug('  Adding Include Filter Files')</span>
 
-<span class="nc" id="L956">            includeFilterFiles.each { String includefilter -&gt;</span>
-<span class="nc" id="L957">                args &lt;&lt; '-include'</span>
-<span class="nc" id="L958">                args &lt;&lt; resourceHelper.getResourceFile(includefilter.trim()).getAbsolutePath()</span>
+<span class="nc" id="L997">            includeFilterFiles.each { String includefilter -&gt;</span>
+<span class="nc" id="L998">                args &lt;&lt; '-include'</span>
+<span class="nc" id="L999">                args &lt;&lt; resourceHelper.getResourceFile(includefilter.trim()).getAbsolutePath()</span>
             }
         }
 
-<span class="nc bnc" id="L962" title="All 2 branches missed.">        if (excludeFilterFile) {</span>
-<span class="nc" id="L963">            log.debug('  Adding Exclude Filter File')</span>
-<span class="nc" id="L964">            List&lt;String&gt; excludefilters = Arrays.asList(excludeFilterFile.split(SpotBugsInfo.COMMA))</span>
+<span class="pc bpc" id="L1003" title="1 of 2 branches missed.">        if (excludeFilterFile) {</span>
+<span class="nc" id="L1004">            log.debug('  Adding Exclude Filter File')</span>
+<span class="nc" id="L1005">            List&lt;String&gt; excludefilters = Arrays.asList(excludeFilterFile.split(SpotBugsInfo.COMMA))</span>
 
-<span class="nc" id="L966">            excludefilters.each { String excludeFilter -&gt;</span>
-<span class="nc" id="L967">                args &lt;&lt; '-exclude'</span>
-<span class="nc" id="L968">                args &lt;&lt; resourceHelper.getResourceFile(excludeFilter.trim()).getAbsolutePath()</span>
+<span class="nc" id="L1007">            excludefilters.each { String excludeFilter -&gt;</span>
+<span class="nc" id="L1008">                args &lt;&lt; '-exclude'</span>
+<span class="nc" id="L1009">                args &lt;&lt; resourceHelper.getResourceFile(excludeFilter.trim()).getAbsolutePath()</span>
             }
         }
 
-<span class="nc bnc" id="L972" title="All 2 branches missed.">        if (excludeFilterFiles) {</span>
-<span class="nc" id="L973">            log.debug('  Adding Exclude Filter Files')</span>
+<span class="pc bpc" id="L1013" title="1 of 2 branches missed.">        if (excludeFilterFiles) {</span>
+<span class="nc" id="L1014">            log.debug('  Adding Exclude Filter Files')</span>
 
-<span class="nc" id="L975">            excludeFilterFiles.each { String excludeFilter -&gt;</span>
-<span class="nc" id="L976">                args &lt;&lt; '-exclude'</span>
-<span class="nc" id="L977">                args &lt;&lt; resourceHelper.getResourceFile(excludeFilter.trim()).getAbsolutePath()</span>
+<span class="nc" id="L1016">            excludeFilterFiles.each { String excludeFilter -&gt;</span>
+<span class="nc" id="L1017">                args &lt;&lt; '-exclude'</span>
+<span class="nc" id="L1018">                args &lt;&lt; resourceHelper.getResourceFile(excludeFilter.trim()).getAbsolutePath()</span>
             }
         }
 
-<span class="nc bnc" id="L981" title="All 2 branches missed.">        if (excludeBugsFile) {</span>
-<span class="nc" id="L982">            log.debug('  Adding Exclude Bug File (Baselines)')</span>
-<span class="nc" id="L983">            List&lt;String&gt; excludeFiles = Arrays.asList(excludeBugsFile.split(SpotBugsInfo.COMMA))</span>
+<span class="pc bpc" id="L1022" title="1 of 2 branches missed.">        if (excludeBugsFile) {</span>
+<span class="nc" id="L1023">            log.debug('  Adding Exclude Bug File (Baselines)')</span>
+<span class="nc" id="L1024">            List&lt;String&gt; excludeFiles = Arrays.asList(excludeBugsFile.split(SpotBugsInfo.COMMA))</span>
 
-<span class="nc" id="L985">            excludeFiles.each() { String excludeFile -&gt;</span>
-<span class="nc" id="L986">                args &lt;&lt; '-excludeBugs'</span>
-<span class="nc" id="L987">                args &lt;&lt; resourceHelper.getResourceFile(excludeFile.trim()).getAbsolutePath()</span>
+<span class="nc" id="L1026">            excludeFiles.each() { String excludeFile -&gt;</span>
+<span class="nc" id="L1027">                args &lt;&lt; '-excludeBugs'</span>
+<span class="nc" id="L1028">                args &lt;&lt; resourceHelper.getResourceFile(excludeFile.trim()).getAbsolutePath()</span>
             }
         }
 
-<span class="nc bnc" id="L991" title="All 2 branches missed.">        if (excludeBugsFiles) {</span>
-<span class="nc" id="L992">            log.debug('  Adding Exclude Bug Files (Baselines)')</span>
+<span class="pc bpc" id="L1032" title="1 of 2 branches missed.">        if (excludeBugsFiles) {</span>
+<span class="nc" id="L1033">            log.debug('  Adding Exclude Bug Files (Baselines)')</span>
 
-<span class="nc" id="L994">            excludeBugsFiles.each() { String excludeFile -&gt;</span>
-<span class="nc" id="L995">                args &lt;&lt; '-excludeBugs'</span>
-<span class="nc" id="L996">                args &lt;&lt; resourceHelper.getResourceFile(excludeFile.trim()).getAbsolutePath()</span>
+<span class="nc" id="L1035">            excludeBugsFiles.each() { String excludeFile -&gt;</span>
+<span class="nc" id="L1036">                args &lt;&lt; '-excludeBugs'</span>
+<span class="nc" id="L1037">                args &lt;&lt; resourceHelper.getResourceFile(excludeFile.trim()).getAbsolutePath()</span>
             }
         }
 
-<span class="nc bnc" id="L1000" title="All 2 branches missed.">        if (addSourceDirs) {</span>
-<span class="nc" id="L1001">            log.debug('  Adding Source directories (To process source exclusions)')</span>
-<span class="nc" id="L1002">            args &lt;&lt; '-sourcepath'</span>
-<span class="nc" id="L1003">            String sourceRoots = ''</span>
-<span class="nc" id="L1004">            session.getCurrentProject().compileSourceRoots.each { String sourceRoot -&gt;</span>
-<span class="nc" id="L1005">                sourceRoots += sourceRoot + File.pathSeparator</span>
+<span class="fc bfc" id="L1041" title="All 2 branches covered.">        if (addSourceDirs) {</span>
+<span class="fc" id="L1042">            log.debug('  Adding Source directories (To process source exclusions)')</span>
+<span class="fc" id="L1043">            args &lt;&lt; '-sourcepath'</span>
+<span class="fc" id="L1044">            String sourceRoots = ''</span>
+<span class="fc" id="L1045">            session.getCurrentProject().compileSourceRoots.each { String sourceRoot -&gt;</span>
+<span class="fc" id="L1046">                sourceRoots += sourceRoot + File.pathSeparator</span>
             }
-<span class="nc bnc" id="L1007" title="All 2 branches missed.">            if (includeTests) {</span>
-<span class="nc" id="L1008">                session.getCurrentProject().testCompileSourceRoots.each { String testSourceRoot -&gt;</span>
-<span class="nc" id="L1009">                    sourceRoots += testSourceRoot + File.pathSeparator</span>
+<span class="pc bpc" id="L1048" title="1 of 2 branches missed.">            if (includeTests) {</span>
+<span class="nc" id="L1049">                session.getCurrentProject().testCompileSourceRoots.each { String testSourceRoot -&gt;</span>
+<span class="nc" id="L1050">                    sourceRoots += testSourceRoot + File.pathSeparator</span>
                 }
             }
-<span class="nc" id="L1012">            args &lt;&lt; sourceRoots.substring(0, sourceRoots.length() -1)</span>
+<span class="fc" id="L1053">            args &lt;&lt; sourceRoots.substring(0, sourceRoots.length() -1)</span>
         }
 
-<span class="nc bnc" id="L1015" title="All 4 branches missed.">        if (maxRank) {</span>
-<span class="nc" id="L1016">            log.debug(&quot;  Adding 'maxRank'&quot;)</span>
-<span class="nc" id="L1017">            args &lt;&lt; '-maxRank'</span>
-<span class="nc" id="L1018">            args &lt;&lt; String.valueOf(maxRank)</span>
+<span class="fc bfc" id="L1056" title="All 4 branches covered.">        if (maxRank) {</span>
+<span class="fc" id="L1057">            log.debug(&quot;  Adding 'maxRank'&quot;)</span>
+<span class="fc" id="L1058">            args &lt;&lt; '-maxRank'</span>
+<span class="fc" id="L1059">            args &lt;&lt; String.valueOf(maxRank)</span>
         }
 
-<span class="nc bnc" id="L1021" title="All 2 branches missed.">        if (noClassOk) {</span>
-<span class="nc" id="L1022">            log.debug(&quot;  Adding 'noClassOk'&quot;)</span>
-<span class="nc" id="L1023">            args &lt;&lt; '-noClassOk'</span>
+<span class="fc bfc" id="L1062" title="All 2 branches covered.">        if (noClassOk) {</span>
+<span class="fc" id="L1063">            log.debug(&quot;  Adding 'noClassOk'&quot;)</span>
+<span class="fc" id="L1064">            args &lt;&lt; '-noClassOk'</span>
         }
 
-<span class="nc bnc" id="L1026" title="All 2 branches missed.">        if (classFilesDirectory.isDirectory()) {</span>
-<span class="nc bnc" id="L1027" title="All 2 branches missed.">            if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1028">                log.debug('  Adding to Source Directory -&gt; ' + classFilesDirectory.absolutePath)</span>
+<span class="fc bfc" id="L1067" title="All 2 branches covered.">        if (classFilesDirectory.isDirectory()) {</span>
+<span class="pc bpc" id="L1068" title="1 of 2 branches missed.">            if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1069">                log.debug('  Adding to Source Directory -&gt; ' + classFilesDirectory.absolutePath)</span>
             }
-<span class="nc" id="L1030">            args &lt;&lt; classFilesDirectory.absolutePath</span>
+<span class="fc" id="L1071">            args &lt;&lt; classFilesDirectory.absolutePath</span>
         }
 
-<span class="nc bnc" id="L1033" title="All 6 branches missed.">        if (testClassFilesDirectory.isDirectory() &amp;&amp; includeTests) {</span>
-<span class="nc bnc" id="L1034" title="All 2 branches missed.">            if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1035">                log.debug('  Adding to Source Directory -&gt; ' + testClassFilesDirectory.absolutePath)</span>
+<span class="pc bpc" id="L1074" title="1 of 6 branches missed.">        if (testClassFilesDirectory.isDirectory() &amp;&amp; includeTests) {</span>
+<span class="pc bpc" id="L1075" title="1 of 2 branches missed.">            if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1076">                log.debug('  Adding to Source Directory -&gt; ' + testClassFilesDirectory.absolutePath)</span>
             }
-<span class="nc" id="L1037">            args &lt;&lt; testClassFilesDirectory.absolutePath</span>
+<span class="fc" id="L1078">            args &lt;&lt; testClassFilesDirectory.absolutePath</span>
         }
 
-<span class="nc" id="L1040">        return args</span>
+<span class="fc" id="L1081">        return args</span>
     }
 
     /**
-     * Create the Spotbugs AuxClasspath file.
+     * Create the Spotbugs AuxClasspath file in the project build directory.
+     * The caller is responsible for deleting the returned file when it is no longer needed.
      *
+     * @return the auxclasspath file, or null if no auxclasspath elements are available
      */
     private File createSpotbugsAuxClasspathFile() {
-<span class="nc" id="L1048">        List&lt;String&gt; auxClasspathElements</span>
+<span class="fc" id="L1091">        List&lt;String&gt; auxClasspathElements</span>
 
-<span class="nc bnc" id="L1050" title="All 6 branches missed.">        if (testClassFilesDirectory.isDirectory() &amp;&amp; includeTests) {</span>
-<span class="nc" id="L1051">            auxClasspathElements = session.getCurrentProject().testClasspathElements</span>
-<span class="nc bnc" id="L1052" title="All 2 branches missed.">        } else if (classFilesDirectory.isDirectory()) {</span>
-<span class="nc" id="L1053">            auxClasspathElements = session.getCurrentProject().compileClasspathElements</span>
+<span class="pc bpc" id="L1093" title="1 of 6 branches missed.">        if (testClassFilesDirectory.isDirectory() &amp;&amp; includeTests) {</span>
+<span class="fc" id="L1094">            auxClasspathElements = session.getCurrentProject().testClasspathElements</span>
+<span class="pc bpc" id="L1095" title="1 of 2 branches missed.">        } else if (classFilesDirectory.isDirectory()) {</span>
+<span class="fc" id="L1096">            auxClasspathElements = session.getCurrentProject().compileClasspathElements</span>
         }
 
-<span class="nc" id="L1056">        File auxClasspathFile = null</span>
+<span class="fc" id="L1099">        File auxClasspathFile = null</span>
 
-<span class="nc bnc" id="L1058" title="All 2 branches missed.">        if (auxClasspathElements) {</span>
-<span class="nc" id="L1059">            auxClasspathFile = File.createTempFile('auxclasspath', '.tmp')</span>
-<span class="nc" id="L1060">            auxClasspathFile.deleteOnExit()</span>
-<span class="nc bnc" id="L1061" title="All 2 branches missed.">            if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1062">                log.debug('  AuxClasspath Elements -&gt; ' + auxClasspathElements)</span>
+<span class="fc bfc" id="L1101" title="All 2 branches covered.">        if (auxClasspathElements) {</span>
+<span class="pc bpc" id="L1102" title="1 of 2 branches missed.">            if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1103">                log.debug('  AuxClasspath Elements -&gt; ' + auxClasspathElements)</span>
             }
 
-<span class="nc" id="L1065">            List&lt;String&gt; auxClasspathList = auxClasspathElements.findAll { String auxClasspath -&gt;</span>
-<span class="nc" id="L1066">                session.getCurrentProject().getBuild().outputDirectory != auxClasspath</span>
-            }
-<span class="nc bnc" id="L1068" title="All 2 branches missed.">            if (auxClasspathList.size() &gt; 0) {</span>
-<span class="nc bnc" id="L1069" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1070">                    log.debug('  Last AuxClasspath is -&gt; ' + auxClasspathList[auxClasspathList.size() - 1])</span>
+<span class="fc" id="L1106">            List&lt;String&gt; auxClasspathList = auxClasspathElements.findAll { String auxClasspath -&gt;</span>
+<span class="fc bfc" id="L1107" title="All 2 branches covered.">                if (session.getCurrentProject().getBuild().outputDirectory == auxClasspath) {</span>
+<span class="fc" id="L1108">                    return false</span>
                 }
-
-<span class="nc" id="L1073">                auxClasspathList.each() { String auxClasspathElement -&gt;</span>
-<span class="nc bnc" id="L1074" title="All 2 branches missed.">                    if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1075">                        log.debug('  Adding to AuxClasspath -&gt; ' + auxClasspathElement)</span>
+                // Exclude JAR files that contain classes in the java.* package. Such JARs (e.g.
+                // JavaCard API jars) provide partial re-implementations of bootstrap JDK classes.
+                // Including them in the auxClasspath causes SpotBugs to use the incomplete java.*
+                // versions instead of the real JDK classes, resulting in &quot;missing classes&quot; warnings
+                // for standard JDK types. The JDK always provides the authoritative java.* classes
+                // via the jrt:/ filesystem, so these JARs must never appear in the auxClasspath.
+<span class="fc bfc" id="L1116" title="All 2 branches covered.">                if (containsJdkClasses(auxClasspath)) {</span>
+<span class="pc bpc" id="L1117" title="1 of 2 branches missed.">                    if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1118">                        log.debug(&quot;  Excluding from auxClasspath (contains java.* class overrides): ${auxClasspath}&quot;)</span>
                     }
-<span class="nc" id="L1077">                    auxClasspathFile &lt;&lt; auxClasspathElement + SpotBugsInfo.EOL</span>
+<span class="fc" id="L1120">                    return false</span>
                 }
+<span class="fc" id="L1122">                return true</span>
+            }
+<span class="pc bpc" id="L1124" title="1 of 2 branches missed.">            if (auxClasspathList.size() &gt; 0) {</span>
+<span class="pc bpc" id="L1125" title="1 of 2 branches missed.">                if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1126">                    log.debug('  Last AuxClasspath is -&gt; ' + auxClasspathList[auxClasspathList.size() - 1])</span>
+                }
+
+<span class="fc" id="L1129">                auxClasspathFile = new File(project.build.directory, 'spotbugsAuxClasspath.tmp')</span>
+<span class="fc" id="L1130">                Files.createDirectories(auxClasspathFile.toPath().getParent())</span>
+
+<span class="pc bpc" id="L1132" title="1 of 2 branches missed.">                if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1133">                    auxClasspathList.each { String auxClasspathElement -&gt;</span>
+<span class="nc" id="L1134">                        log.debug('  Adding to AuxClasspath -&gt; ' + auxClasspathElement)</span>
+                    }
+                }
+<span class="fc" id="L1137">                auxClasspathFile.text = auxClasspathList.join(SpotBugsInfo.EOL) + SpotBugsInfo.EOL</span>
             }
         }
 
-<span class="nc" id="L1082">        return auxClasspathFile</span>
+<span class="fc" id="L1141">        return auxClasspathFile</span>
+    }
+
+    /**
+     * Checks whether the given path is a JAR file that contains class files in the
+     * {@code java.*} package. Such JARs shadow JDK bootstrap classes and must be
+     * excluded from the SpotBugs auxClasspath.
+     *
+     * @param path the filesystem path to check
+     * @return {@code true} if the path is a JAR containing {@code java.*} classes
+     */
+    private boolean containsJdkClasses(String path) {
+<span class="fc bfc" id="L1153" title="All 2 branches covered.">        if (!path.endsWith('.jar')) {</span>
+<span class="fc" id="L1154">            return false</span>
+        }
+<span class="fc" id="L1156">        File jarFile = new File(path)</span>
+<span class="pc bpc" id="L1157" title="1 of 2 branches missed.">        if (!jarFile.isFile()) {</span>
+<span class="nc" id="L1158">            return false</span>
+        }
+        try {
+<span class="fc" id="L1161">            new JarFile(jarFile).withCloseable { jar -&gt;</span>
+<span class="fc" id="L1162">                return jar.entries().asIterator().any { entry -&gt;</span>
+<span class="pc bpc" id="L1163" title="2 of 8 branches missed.">                    !entry.isDirectory() &amp;&amp; entry.name.startsWith('java/') &amp;&amp; entry.name.endsWith('.class')</span>
+                }
+            }
+        } catch (IOException e) {
+<span class="fc" id="L1167">            log.debug(&quot;Cannot inspect jar file for JDK class overrides: ${path}&quot;)</span>
+<span class="pc" id="L1168">            return false</span>
+        }
     }
 
     /**
@@ -1089,13 +1176,13 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @param file Destination file to create.
      */
     private static void forceFileCreation(File file) {
-<span class="nc bnc" id="L1092" title="All 2 branches missed.">        if (file.exists()) {</span>
-<span class="nc" id="L1093">            file.delete()</span>
+<span class="fc bfc" id="L1179" title="All 2 branches covered.">        if (file.exists()) {</span>
+<span class="fc" id="L1180">            file.delete()</span>
         }
 
-<span class="nc" id="L1096">        Files.createDirectories(file.toPath().getParent())</span>
-<span class="nc" id="L1097">        file.createNewFile()</span>
-<span class="nc" id="L1098">    }</span>
+<span class="fc" id="L1183">        Files.createDirectories(file.toPath().getParent())</span>
+<span class="fc" id="L1184">        file.createNewFile()</span>
+<span class="fc" id="L1185">    }</span>
 
     /**
      * Set up and run the Spotbugs engine.
@@ -1106,258 +1193,279 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     private void executeSpotbugs(File outputFile) {
 
-<span class="nc" id="L1109">        log.debug('****** SpotBugsMojo executeSpotbugs *******')</span>
+<span class="nc" id="L1196">        log.debug('****** SpotBugsMojo executeSpotbugs *******')</span>
 
-<span class="nc" id="L1111">        File htmlTempFile = new File(&quot;${outputDirectory}/spotbugs.html&quot;)</span>
-<span class="nc bnc" id="L1112" title="All 2 branches missed.">        if (htmlOutput) {</span>
-<span class="nc" id="L1113">            forceFileCreation(htmlTempFile)</span>
+<span class="nc" id="L1198">        File htmlTempFile = new File(&quot;${outputDirectory}/spotbugs.html&quot;)</span>
+<span class="nc bnc" id="L1199" title="All 2 branches missed.">        if (htmlOutput) {</span>
+<span class="nc" id="L1200">            forceFileCreation(htmlTempFile)</span>
         }
 
-<span class="nc" id="L1116">        File xmlTempFile = new File(&quot;${project.build.directory}/spotbugsTemp.xml&quot;)</span>
-<span class="nc" id="L1117">        forceFileCreation(xmlTempFile)</span>
+<span class="nc" id="L1203">        File xmlTempFile = new File(&quot;${project.build.directory}/spotbugsTemp.xml&quot;)</span>
+<span class="nc" id="L1204">        forceFileCreation(xmlTempFile)</span>
 
-<span class="nc" id="L1119">        File sarifTempFile = new File(&quot;${project.build.directory}/spotbugsTempSarif.json&quot;)</span>
-<span class="nc bnc" id="L1120" title="All 2 branches missed.">        if (sarifOutput) {</span>
-<span class="nc" id="L1121">            forceFileCreation(sarifTempFile)</span>
+<span class="nc" id="L1206">        File sarifTempFile = new File(&quot;${project.build.directory}/spotbugsTempSarif.json&quot;)</span>
+<span class="nc bnc" id="L1207" title="All 2 branches missed.">        if (sarifOutput) {</span>
+<span class="nc" id="L1208">            forceFileCreation(sarifTempFile)</span>
         }
 
-<span class="nc bnc" id="L1124" title="All 2 branches missed.">        outputEncoding = outputEncoding ?: StandardCharsets.UTF_8</span>
+<span class="nc bnc" id="L1211" title="All 2 branches missed.">        outputEncoding = outputEncoding ?: StandardCharsets.UTF_8</span>
 
-<span class="nc" id="L1126">        log.debug('****** Executing SpotBugsMojo *******')</span>
+<span class="nc" id="L1213">        log.debug('****** Executing SpotBugsMojo *******')</span>
 
-<span class="nc" id="L1128">        resourceManager.addSearchPath(FileResourceLoader.ID, session.getCurrentProject().getFile()</span>
+<span class="nc" id="L1215">        resourceManager.addSearchPath(FileResourceLoader.ID, session.getCurrentProject().getFile()</span>
             .getParentFile().getAbsolutePath())
-<span class="nc" id="L1130">        resourceManager.addSearchPath(SpotBugsInfo.URL, '')</span>
+<span class="nc" id="L1217">        resourceManager.addSearchPath(SpotBugsInfo.URL, '')</span>
 
-<span class="nc" id="L1132">        resourceManager.setOutputDirectory(new File(session.getCurrentProject().getBuild().directory))</span>
+<span class="nc" id="L1219">        resourceManager.setOutputDirectory(new File(session.getCurrentProject().getBuild().directory))</span>
 
-<span class="nc bnc" id="L1134" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1135">            log.debug(&quot;resourceManager.outputDirectory is ${resourceManager.outputDirectory}&quot;)</span>
-<span class="nc" id="L1136">            log.debug(&quot;Plugin Artifacts to be added -&gt; ${pluginArtifacts}&quot;)</span>
-<span class="nc" id="L1137">            log.debug(&quot;outputFile is ${outputFile.getCanonicalPath()}&quot;)</span>
-<span class="nc" id="L1138">            log.debug(&quot;output Directory is ${spotbugsXmlOutputDirectory.getAbsolutePath()}&quot;)</span>
-<span class="nc bnc" id="L1139" title="All 2 branches missed.">            if (htmlOutput) {</span>
-<span class="nc" id="L1140">                log.debug(&quot;HtmlTempFile is ${htmlTempFile.getCanonicalPath()}&quot;)</span>
+<span class="nc bnc" id="L1221" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1222">            log.debug(&quot;resourceManager.outputDirectory is ${resourceManager.outputDirectory}&quot;)</span>
+<span class="nc" id="L1223">            log.debug(&quot;Plugin Artifacts to be added -&gt; ${pluginArtifacts}&quot;)</span>
+<span class="nc" id="L1224">            log.debug(&quot;outputFile is ${outputFile.getCanonicalPath()}&quot;)</span>
+<span class="nc" id="L1225">            log.debug(&quot;output Directory is ${spotbugsXmlOutputDirectory.getAbsolutePath()}&quot;)</span>
+<span class="nc bnc" id="L1226" title="All 2 branches missed.">            if (htmlOutput) {</span>
+<span class="nc" id="L1227">                log.debug(&quot;HtmlTempFile is ${htmlTempFile.getCanonicalPath()}&quot;)</span>
             }
-<span class="nc" id="L1142">            log.debug(&quot;XmlTempFile is ${xmlTempFile.getCanonicalPath()}&quot;)</span>
-<span class="nc bnc" id="L1143" title="All 2 branches missed.">            if (sarifOutput) {</span>
-<span class="nc" id="L1144">                log.debug(&quot;SarifTempFile is ${sarifTempFile.getCanonicalPath()}&quot;)</span>
+<span class="nc" id="L1229">            log.debug(&quot;XmlTempFile is ${xmlTempFile.getCanonicalPath()}&quot;)</span>
+<span class="nc bnc" id="L1230" title="All 2 branches missed.">            if (sarifOutput) {</span>
+<span class="nc" id="L1231">                log.debug(&quot;SarifTempFile is ${sarifTempFile.getCanonicalPath()}&quot;)</span>
             }
         }
 
-<span class="nc bnc" id="L1148" title="All 2 branches missed.">        if (log.isInfoEnabled()) {</span>
-<span class="nc" id="L1149">            log.info(&quot;Fork Value is ${fork}&quot;)</span>
+<span class="nc bnc" id="L1235" title="All 2 branches missed.">        if (log.isInfoEnabled()) {</span>
+<span class="nc" id="L1236">            log.info(&quot;Fork Value is ${fork}&quot;)</span>
         }
 
-<span class="nc" id="L1152">        long startTime</span>
-<span class="nc bnc" id="L1153" title="All 2 branches missed.">        if (debug) {</span>
-<span class="nc" id="L1154">            startTime = System.nanoTime()</span>
+<span class="nc" id="L1239">        long startTime</span>
+<span class="nc bnc" id="L1240" title="All 2 branches missed.">        if (debug) {</span>
+<span class="nc" id="L1241">            startTime = System.nanoTime()</span>
         }
 
-<span class="nc" id="L1157">        List&lt;String&gt; spotbugsArgs = getSpotbugsArgs(htmlTempFile, xmlTempFile, sarifTempFile)</span>
+<span class="nc" id="L1244">        File auxClasspathFile = createSpotbugsAuxClasspathFile()</span>
 
-<span class="nc" id="L1159">        Charset effectiveEncoding</span>
-<span class="nc bnc" id="L1160" title="All 2 branches missed.">        if (sourceEncoding) {</span>
-<span class="nc" id="L1161">            effectiveEncoding = Charset.forName(sourceEncoding)</span>
+        try {
+<span class="nc" id="L1247">            List&lt;String&gt; spotbugsArgs = getSpotbugsArgs(htmlTempFile, xmlTempFile, sarifTempFile, auxClasspathFile)</span>
+
+<span class="nc" id="L1249">        Charset effectiveEncoding</span>
+<span class="nc bnc" id="L1250" title="All 2 branches missed.">        if (sourceEncoding) {</span>
+<span class="nc" id="L1251">            effectiveEncoding = Charset.forName(sourceEncoding)</span>
         } else {
-<span class="nc bnc" id="L1163" title="All 2 branches missed.">            effectiveEncoding = Charset.defaultCharset() ?: StandardCharsets.UTF_8</span>
+<span class="nc bnc" id="L1253" title="All 2 branches missed.">            effectiveEncoding = Charset.defaultCharset() ?: StandardCharsets.UTF_8</span>
         }
-<span class="nc bnc" id="L1165" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1166">            log.debug('File Encoding is ' + effectiveEncoding.name())</span>
+<span class="nc bnc" id="L1255" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1256">            log.debug('File Encoding is ' + effectiveEncoding.name())</span>
         }
 
-<span class="nc" id="L1169">        AntBuilder ant = new AntBuilder()</span>
-<span class="nc" id="L1170">        ant.java(classname: 'edu.umd.cs.findbugs.FindBugs2', fork: &quot;${fork}&quot;, failonerror: 'true',</span>
-                clonevm: 'false', timeout: timeout, maxmemory: &quot;${maxHeap}m&quot;) {
+<span class="nc" id="L1259">        AntBuilder ant = new AntBuilder()</span>
+<span class="nc" id="L1260">        Map&lt;String, Object&gt; javaTaskParams = [classname: 'edu.umd.cs.findbugs.FindBugs2', fork: &quot;${fork}&quot;,</span>
+                failonerror: 'true', clonevm: 'false', timeout: timeout, maxmemory: &quot;${maxHeap}m&quot;]
+<span class="nc bnc" id="L1262" title="All 2 branches missed.">        def toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)</span>
+<span class="nc bnc" id="L1263" title="All 2 branches missed.">        String javaExecutable = toolchain?.findTool('java')</span>
+<span class="nc bnc" id="L1264" title="All 2 branches missed.">        if (javaExecutable) {</span>
+<span class="nc bnc" id="L1265" title="All 2 branches missed.">            if (fork) {</span>
+<span class="nc" id="L1266">                log.info(&quot;Toolchain in spotbugs-maven-plugin: ${toolchain}&quot;)</span>
+<span class="nc" id="L1267">                javaTaskParams['executable'] = javaExecutable</span>
+            } else {
+<span class="nc" id="L1269">                log.warn('Toolchain is configured but fork is disabled. The toolchain JVM will not be used.')</span>
+            }
+        }
+<span class="nc" id="L1272">        ant.java(javaTaskParams) {</span>
 
-<span class="nc" id="L1173">            sysproperty(key: 'file.encoding', value: effectiveEncoding.name())</span>
+<span class="nc" id="L1274">            sysproperty(key: 'file.encoding', value: effectiveEncoding.name())</span>
 
-<span class="nc bnc" id="L1175" title="All 6 branches missed.">            if (jvmArgs &amp;&amp; fork) {</span>
-<span class="nc bnc" id="L1176" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1177">                    log.debug(&quot;Adding JVM Args =&gt; ${jvmArgs}&quot;)</span>
+<span class="nc bnc" id="L1276" title="All 6 branches missed.">            if (jvmArgs &amp;&amp; fork) {</span>
+<span class="nc bnc" id="L1277" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1278">                    log.debug(&quot;Adding JVM Args =&gt; ${jvmArgs}&quot;)</span>
                 }
 
-<span class="nc" id="L1180">                List&lt;String&gt; args = Arrays.asList(jvmArgs.split(SpotBugsInfo.BLANK))</span>
+<span class="nc" id="L1281">                List&lt;String&gt; args = Arrays.asList(jvmArgs.split(SpotBugsInfo.BLANK))</span>
 
-<span class="nc" id="L1182">                args.each() { String jvmArg -&gt;</span>
-<span class="nc bnc" id="L1183" title="All 2 branches missed.">                    if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1184">                        log.debug(&quot;Adding JVM Arg =&gt; ${jvmArg}&quot;)</span>
+<span class="nc" id="L1283">                args.each() { String jvmArg -&gt;</span>
+<span class="nc bnc" id="L1284" title="All 2 branches missed.">                    if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1285">                        log.debug(&quot;Adding JVM Arg =&gt; ${jvmArg}&quot;)</span>
                     }
-<span class="nc" id="L1186">                    jvmarg(value: jvmArg)</span>
+<span class="nc" id="L1287">                    jvmarg(value: jvmArg)</span>
                 }
             }
 
-<span class="nc bnc" id="L1190" title="All 6 branches missed.">            if (debug || trace) {</span>
-<span class="nc" id="L1191">                sysproperty(key: 'findbugs.debug', value: Boolean.TRUE)</span>
+<span class="nc bnc" id="L1291" title="All 6 branches missed.">            if (debug || trace) {</span>
+<span class="nc" id="L1292">                sysproperty(key: 'findbugs.debug', value: Boolean.TRUE)</span>
             }
 
-<span class="nc" id="L1194">            classpath() {</span>
+<span class="nc" id="L1295">            classpath() {</span>
 
-<span class="nc" id="L1196">                pluginArtifacts.each() { Artifact pluginArtifact -&gt;</span>
-<span class="nc bnc" id="L1197" title="All 2 branches missed.">                    if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1198">                        log.debug(&quot;  Adding to pluginArtifact -&gt; ${pluginArtifact.file}&quot;)</span>
+<span class="nc" id="L1297">                pluginArtifacts.each() { Artifact pluginArtifact -&gt;</span>
+<span class="nc bnc" id="L1298" title="All 2 branches missed.">                    if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1299">                        log.debug(&quot;  Adding to pluginArtifact -&gt; ${pluginArtifact.file}&quot;)</span>
                     }
 
-<span class="nc" id="L1201">                    pathelement(location: pluginArtifact.file)</span>
+<span class="nc" id="L1302">                    pathelement(location: pluginArtifact.file)</span>
                 }
             }
 
-<span class="nc" id="L1205">            spotbugsArgs.each { String spotbugsArg -&gt;</span>
-<span class="nc bnc" id="L1206" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1207">                    log.debug(&quot;Spotbugs arg is ${spotbugsArg}&quot;)</span>
+<span class="nc" id="L1306">            spotbugsArgs.each { String spotbugsArg -&gt;</span>
+<span class="nc bnc" id="L1307" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1308">                    log.debug(&quot;Spotbugs arg is ${spotbugsArg}&quot;)</span>
                 }
-<span class="nc" id="L1209">                arg(value: spotbugsArg)</span>
+<span class="nc" id="L1310">                arg(value: spotbugsArg)</span>
             }
 
-<span class="nc" id="L1212">            systemPropertyVariables.each { Map.Entry&lt;String, String&gt; sysProp -&gt;</span>
-<span class="nc bnc" id="L1213" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1214">                    log.debug(&quot;System property ${sysProp.key} is ${sysProp.value}&quot;)</span>
+<span class="nc" id="L1313">            systemPropertyVariables.each { Map.Entry&lt;String, String&gt; sysProp -&gt;</span>
+<span class="nc bnc" id="L1314" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1315">                    log.debug(&quot;System property ${sysProp.key} is ${sysProp.value}&quot;)</span>
                 }
-<span class="nc" id="L1216">                sysproperty(key: sysProp.key, value: sysProp.value)</span>
+<span class="nc" id="L1317">                sysproperty(key: sysProp.key, value: sysProp.value)</span>
             }
         }
 
-<span class="nc" id="L1220">        long duration</span>
-<span class="nc bnc" id="L1221" title="All 2 branches missed.">        if (debug) {</span>
-<span class="nc" id="L1222">            duration = (System.nanoTime() - startTime) / 1000000000.00</span>
-<span class="nc" id="L1223">            log.debug(&quot;SpotBugs duration is ${duration}&quot;)</span>
+<span class="nc" id="L1321">        long duration</span>
+<span class="nc bnc" id="L1322" title="All 2 branches missed.">        if (debug) {</span>
+<span class="nc" id="L1323">            duration = (System.nanoTime() - startTime) / 1000000000.00</span>
+<span class="nc" id="L1324">            log.debug(&quot;SpotBugs duration is ${duration}&quot;)</span>
         }
 
-<span class="nc" id="L1226">        log.info('Done SpotBugs Analysis....')</span>
+<span class="nc" id="L1327">        log.info('Done SpotBugs Analysis....')</span>
 
-<span class="nc bnc" id="L1228" title="All 10 branches missed.">        if (htmlTempFile.exists() &amp;&amp; htmlOutput &amp;&amp; htmlTempFile.size() &gt; 0) {</span>
+<span class="nc bnc" id="L1329" title="All 10 branches missed.">        if (htmlTempFile.exists() &amp;&amp; htmlOutput &amp;&amp; htmlTempFile.size() &gt; 0) {</span>
             // Do nothing more at this time
-<span class="nc" id="L1230">            log.debug('Html temp file exixts with content....')</span>
+<span class="nc" id="L1331">            log.debug('Html temp file exixts with content....')</span>
         }
 
-<span class="nc bnc" id="L1233" title="All 2 branches missed.">        if (xmlTempFile.exists()) {</span>
-<span class="nc bnc" id="L1234" title="All 2 branches missed.">            if (xmlTempFile.size() &gt; 0) {</span>
-<span class="nc" id="L1235">                XmlSlurper xmlSlurper = new XmlSlurper()</span>
-<span class="nc" id="L1236">                xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)</span>
-<span class="nc" id="L1237">                xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)</span>
+<span class="nc bnc" id="L1334" title="All 2 branches missed.">        if (xmlTempFile.exists()) {</span>
+<span class="nc bnc" id="L1335" title="All 2 branches missed.">            if (xmlTempFile.size() &gt; 0) {</span>
+<span class="nc" id="L1336">                XmlSlurper xmlSlurper = new XmlSlurper()</span>
+<span class="nc" id="L1337">                xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)</span>
+<span class="nc" id="L1338">                xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)</span>
 
-<span class="nc" id="L1239">                GPathResult path = xmlSlurper.parse(xmlTempFile)</span>
+<span class="nc" id="L1340">                GPathResult path = xmlSlurper.parse(xmlTempFile)</span>
 
-<span class="nc" id="L1241">                List&lt;NodeChild&gt; allNodes = path.depthFirst().toList()</span>
+<span class="nc" id="L1342">                List&lt;NodeChild&gt; allNodes = path.depthFirst().toList()</span>
 
-<span class="nc" id="L1243">                bugCount = allNodes.count { NodeChild node -&gt; node.name() == 'BugInstance' }</span>
-<span class="nc bnc" id="L1244" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1245">                    log.debug(&quot;BugInstance size is ${bugCount}&quot;)</span>
+<span class="nc" id="L1344">                bugCount = allNodes.count { NodeChild node -&gt; node.name() == 'BugInstance' }</span>
+<span class="nc bnc" id="L1345" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1346">                    log.debug(&quot;BugInstance size is ${bugCount}&quot;)</span>
                 }
 
-<span class="nc" id="L1248">                errorCount = allNodes.count { NodeChild node -&gt; node.name() == 'Error' }</span>
-<span class="nc bnc" id="L1249" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1250">                    log.debug(&quot;Error size is ${errorCount}&quot;)</span>
+<span class="nc" id="L1349">                errorCount = allNodes.count { NodeChild node -&gt; node.name() == 'Error' }</span>
+<span class="nc bnc" id="L1350" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1351">                    log.debug(&quot;Error size is ${errorCount}&quot;)</span>
                 }
 
-<span class="nc" id="L1253">                NodeChildren xmlProject = path.Project</span>
+<span class="nc" id="L1354">                NodeChildren xmlProject = path.Project</span>
 
-<span class="nc" id="L1255">                session.getCurrentProject().compileSourceRoots.each() { String compileSourceRoot -&gt;</span>
-<span class="nc" id="L1256">                    xmlProject.appendNode { SrcDir(compileSourceRoot) }</span>
+<span class="nc" id="L1356">                session.getCurrentProject().compileSourceRoots.each() { String compileSourceRoot -&gt;</span>
+<span class="nc" id="L1357">                    xmlProject.appendNode { SrcDir(compileSourceRoot) }</span>
                 }
 
-<span class="nc bnc" id="L1259" title="All 6 branches missed.">                if (testClassFilesDirectory.isDirectory() &amp;&amp; includeTests) {</span>
-<span class="nc" id="L1260">                    session.getCurrentProject().testCompileSourceRoots.each() { String testSourceRoot -&gt;</span>
-<span class="nc" id="L1261">                        xmlProject.appendNode { SrcDir(testSourceRoot) }</span>
+<span class="nc bnc" id="L1360" title="All 6 branches missed.">                if (testClassFilesDirectory.isDirectory() &amp;&amp; includeTests) {</span>
+<span class="nc" id="L1361">                    session.getCurrentProject().testCompileSourceRoots.each() { String testSourceRoot -&gt;</span>
+<span class="nc" id="L1362">                        xmlProject.appendNode { SrcDir(testSourceRoot) }</span>
                     }
                 }
 
                 // Fixes visitor problem
-<span class="nc" id="L1266">                path.SpotbugsResults.FindBugsSummary.'total_bugs' = bugCount</span>
+<span class="nc" id="L1367">                path.SpotbugsResults.FindBugsSummary.'total_bugs' = bugCount</span>
 
-<span class="nc" id="L1268">                xmlProject.appendNode {</span>
-<span class="nc" id="L1269">                    WrkDir(session.getCurrentProject().getBuild().directory)</span>
+<span class="nc" id="L1369">                xmlProject.appendNode {</span>
+<span class="nc" id="L1370">                    WrkDir(session.getCurrentProject().getBuild().directory)</span>
                 }
 
-<span class="nc" id="L1272">                StreamingMarkupBuilder xmlBuilder = new StreamingMarkupBuilder()</span>
+<span class="nc" id="L1373">                StreamingMarkupBuilder xmlBuilder = new StreamingMarkupBuilder()</span>
 
-<span class="nc bnc" id="L1274" title="All 2 branches missed.">                if (outputFile.exists()) {</span>
-<span class="nc" id="L1275">                    outputFile.delete()</span>
+<span class="nc bnc" id="L1375" title="All 2 branches missed.">                if (outputFile.exists()) {</span>
+<span class="nc" id="L1376">                    outputFile.delete()</span>
                 }
 
-<span class="nc" id="L1278">                Files.createDirectories(outputFile.toPath().getParent())</span>
-<span class="nc" id="L1279">                outputFile.createNewFile()</span>
+<span class="nc" id="L1379">                Files.createDirectories(outputFile.toPath().getParent())</span>
+<span class="nc" id="L1380">                outputFile.createNewFile()</span>
 
-<span class="nc" id="L1281">                BufferedWriter writer = Files.newBufferedWriter(outputFile.toPath(), effectiveEncoding)</span>
+<span class="nc" id="L1382">                BufferedWriter writer = Files.newBufferedWriter(outputFile.toPath(), effectiveEncoding)</span>
 
-<span class="nc bnc" id="L1283" title="All 2 branches missed.">                if (effectiveEncoding.name().equalsIgnoreCase('Cp1252')) {</span>
-<span class="nc" id="L1284">                    writer.write '&lt;?xml version=&quot;1.0&quot; encoding=&quot;windows-1252&quot;?&gt;'</span>
+<span class="nc bnc" id="L1384" title="All 2 branches missed.">                if (effectiveEncoding.name().equalsIgnoreCase('Cp1252')) {</span>
+<span class="nc" id="L1385">                    writer.write '&lt;?xml version=&quot;1.0&quot; encoding=&quot;windows-1252&quot;?&gt;'</span>
                 } else {
-<span class="nc" id="L1286">                    writer.write '&lt;?xml version=&quot;1.0&quot; encoding=&quot;' +</span>
-<span class="nc" id="L1287">                        effectiveEncoding.name().toLowerCase(Locale.getDefault()) + '&quot;?&gt;'</span>
+<span class="nc" id="L1387">                    writer.write '&lt;?xml version=&quot;1.0&quot; encoding=&quot;' +</span>
+<span class="nc" id="L1388">                        effectiveEncoding.name().toLowerCase(Locale.getDefault()) + '&quot;?&gt;'</span>
                 }
 
-<span class="nc" id="L1290">                writer.write SpotBugsInfo.EOL</span>
+<span class="nc" id="L1391">                writer.write SpotBugsInfo.EOL</span>
 
-<span class="nc" id="L1292">                writer &lt;&lt; xmlBuilder.bind { mkp.yield path }</span>
+<span class="nc" id="L1393">                writer &lt;&lt; xmlBuilder.bind { mkp.yield path }</span>
             } else {
-<span class="nc" id="L1294">                log.info('No bugs found')</span>
-<span class="nc bnc" id="L1295" title="All 2 branches missed.">                if (noClassOk) {</span>
-<span class="nc" id="L1296">                    log.info('No class files to analyze; creating empty output due to noClassOk=true')</span>
-<span class="nc bnc" id="L1297" title="All 2 branches missed.">                    Charset effectiveEncodingForEmpty = outputEncoding ?: StandardCharsets.UTF_8</span>
-<span class="nc" id="L1298">                    Files.createDirectories(outputFile.toPath().getParent())</span>
-<span class="nc" id="L1299">                    String minimalXml = '&lt;?xml version=&quot;1.0&quot; encoding=&quot;' +</span>
-<span class="nc" id="L1300">                        effectiveEncodingForEmpty.name().toLowerCase(Locale.ROOT) + '&quot;?&gt;' +</span>
+<span class="nc" id="L1395">                log.info('No bugs found')</span>
+<span class="nc bnc" id="L1396" title="All 2 branches missed.">                if (noClassOk) {</span>
+<span class="nc" id="L1397">                    log.info('No class files to analyze; creating empty output due to noClassOk=true')</span>
+<span class="nc bnc" id="L1398" title="All 2 branches missed.">                    Charset effectiveEncodingForEmpty = outputEncoding ?: StandardCharsets.UTF_8</span>
+<span class="nc" id="L1399">                    Files.createDirectories(outputFile.toPath().getParent())</span>
+<span class="nc" id="L1400">                    String minimalXml = '&lt;?xml version=&quot;1.0&quot; encoding=&quot;' +</span>
+<span class="nc" id="L1401">                        effectiveEncodingForEmpty.name().toLowerCase(Locale.ROOT) + '&quot;?&gt;' +</span>
                         SpotBugsInfo.EOL + '&lt;BugCollection&gt;&lt;/BugCollection&gt;'
-<span class="nc" id="L1302">                    Files.write(outputFile.toPath(), minimalXml.getBytes(effectiveEncodingForEmpty))</span>
+<span class="nc" id="L1403">                    Files.write(outputFile.toPath(), minimalXml.getBytes(effectiveEncodingForEmpty))</span>
                 }
             }
 
             // Do not delete file when running under debug mode
-<span class="nc bnc" id="L1307" title="All 2 branches missed.">            if (!debug) {</span>
-<span class="nc" id="L1308">                xmlTempFile.delete()</span>
+<span class="nc bnc" id="L1408" title="All 2 branches missed.">            if (!debug) {</span>
+<span class="nc" id="L1409">                xmlTempFile.delete()</span>
             }
         }
 
-<span class="nc bnc" id="L1312" title="All 10 branches missed.">        if (sarifTempFile &amp;&amp; sarifOutput &amp;&amp; sarifTempFile.size() &gt; 0) {</span>
+<span class="nc bnc" id="L1413" title="All 10 branches missed.">        if (sarifTempFile &amp;&amp; sarifOutput &amp;&amp; sarifTempFile.size() &gt; 0) {</span>
 
-<span class="nc" id="L1314">            Map&lt;String, Object&gt; slurpedResult = new JsonSlurper().parse(sarifTempFile)</span>
-<span class="nc" id="L1315">            JsonBuilder builder = new JsonBuilder(slurpedResult)</span>
+<span class="nc" id="L1415">            Map&lt;String, Object&gt; slurpedResult = new JsonSlurper().parse(sarifTempFile)</span>
+<span class="nc" id="L1416">            JsonBuilder builder = new JsonBuilder(slurpedResult)</span>
 
             // With -Dspotbugs.sarifFullPath=true
             // The location uri will be replace by path relative to the root of project
             // SomeFile.java =&gt; src/main/java/SomeFile.java
             // This change is required for some tool including Github code scanning API
-<span class="nc bnc" id="L1321" title="All 2 branches missed.">            if (sarifFullPath) {</span>
+<span class="nc bnc" id="L1422" title="All 2 branches missed.">            if (sarifFullPath) {</span>
 
-<span class="nc" id="L1323">                SourceFileIndexer indexer = new SourceFileIndexer()</span>
+<span class="nc" id="L1424">                SourceFileIndexer indexer = new SourceFileIndexer()</span>
 
-<span class="nc" id="L1325">                indexer.buildListSourceFiles(session)</span>
+<span class="nc" id="L1426">                indexer.buildListSourceFiles(session)</span>
 
-<span class="nc bnc" id="L1327" title="All 4 branches missed.">                for (result in slurpedResult.runs.results[0]) {</span>
+<span class="nc bnc" id="L1428" title="All 4 branches missed.">                for (result in slurpedResult.runs.results[0]) {</span>
 
-<span class="nc bnc" id="L1329" title="All 4 branches missed.">                    for (loc in result.locations) {</span>
-<span class="nc" id="L1330">                        String originalFullPath = loc.physicalLocation.artifactLocation.uri</span>
+<span class="nc bnc" id="L1430" title="All 4 branches missed.">                    for (loc in result.locations) {</span>
+<span class="nc" id="L1431">                        String originalFullPath = loc.physicalLocation.artifactLocation.uri</span>
 
                         //We replace relative path to the complete path
-<span class="nc" id="L1333">                        String newFileName = indexer.searchActualFilesLocation(originalFullPath)</span>
+<span class="nc" id="L1434">                        String newFileName = indexer.searchActualFilesLocation(originalFullPath)</span>
 
-<span class="nc bnc" id="L1335" title="All 2 branches missed.">                        if (newFileName != null) {</span>
-<span class="nc bnc" id="L1336" title="All 2 branches missed.">                            if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1337">                                log.debug(&quot;${originalFullPath} modified to ${newFileName}&quot;)</span>
+<span class="nc bnc" id="L1436" title="All 2 branches missed.">                        if (newFileName != null) {</span>
+<span class="nc bnc" id="L1437" title="All 2 branches missed.">                            if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L1438">                                log.debug(&quot;${originalFullPath} modified to ${newFileName}&quot;)</span>
                             }
-<span class="nc" id="L1339">                            loc.physicalLocation.artifactLocation.uri = newFileName</span>
-<span class="nc bnc" id="L1340" title="All 2 branches missed.">                        } else if (log.isWarnEnabled()) {</span>
-<span class="nc" id="L1341">                            log.warn(&quot;No source file found for ${originalFullPath}. &quot;</span>
+<span class="nc" id="L1440">                            loc.physicalLocation.artifactLocation.uri = newFileName</span>
+<span class="nc bnc" id="L1441" title="All 2 branches missed.">                        } else if (log.isWarnEnabled()) {</span>
+<span class="nc" id="L1442">                            log.warn(&quot;No source file found for ${originalFullPath}. &quot;</span>
                                 + 'The path include in the SARIF report could be incomplete.')
                         }
                     }
                 }
             }
 
-<span class="nc" id="L1348">            File sarifFinalFile = new File(sarifOutputDirectory, sarifOutputFilename)</span>
-<span class="nc" id="L1349">            forceFileCreation(sarifFinalFile)</span>
+<span class="nc" id="L1449">            File sarifFinalFile = new File(sarifOutputDirectory, sarifOutputFilename)</span>
+<span class="nc" id="L1450">            forceFileCreation(sarifFinalFile)</span>
 
-<span class="nc" id="L1351">            sarifFinalFile.withWriter { BufferedWriter writer -&gt;</span>
-<span class="nc" id="L1352">                builder.writeTo(writer)</span>
+<span class="nc" id="L1452">            sarifFinalFile.withWriter { BufferedWriter writer -&gt;</span>
+<span class="nc" id="L1453">                builder.writeTo(writer)</span>
             }
 
             // Do not delete file when running under debug mode
-<span class="nc bnc" id="L1356" title="All 2 branches missed.">            if (!debug) {</span>
-<span class="nc" id="L1357">                sarifTempFile.delete()</span>
+<span class="nc bnc" id="L1457" title="All 2 branches missed.">            if (!debug) {</span>
+<span class="nc" id="L1458">                sarifTempFile.delete()</span>
             }
         }
-<span class="nc" id="L1360">    }</span>
+
+        } finally {
+            // Delete the auxclasspath temp file regardless of success or failure
+<span class="nc bnc" id="L1464" title="All 6 branches missed.">            if (auxClasspathFile &amp;&amp; !debug) {</span>
+<span class="nc" id="L1465">                auxClasspathFile.delete()</span>
+            }
+        }
+<span class="nc" id="L1468">    }</span>
 
     /**
      * Returns the threshold parameter to use.
@@ -1367,38 +1475,38 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     protected String getThresholdParameter() {
 
-<span class="nc bnc" id="L1370" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1371">            log.debug(&quot;threshold is ${threshold}&quot;)</span>
+<span class="fc bfc" id="L1478" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L1479">            log.debug(&quot;threshold is ${threshold}&quot;)</span>
         }
 
-<span class="nc" id="L1374">        String thresholdParameter</span>
-<span class="nc" id="L1375">        switch (threshold) {</span>
-<span class="nc bnc" id="L1376" title="All 2 branches missed.">            case 'High':</span>
-<span class="nc" id="L1377">                thresholdParameter = '-high'</span>
-<span class="nc" id="L1378">                break</span>
+<span class="fc" id="L1482">        String thresholdParameter</span>
+<span class="fc" id="L1483">        switch (threshold) {</span>
+<span class="fc bfc" id="L1484" title="All 2 branches covered.">            case 'High':</span>
+<span class="fc" id="L1485">                thresholdParameter = '-high'</span>
+<span class="pc" id="L1486">                break</span>
 
-<span class="nc bnc" id="L1380" title="All 2 branches missed.">            case 'Exp':</span>
-<span class="nc" id="L1381">                thresholdParameter = '-experimental'</span>
-<span class="nc" id="L1382">                break</span>
+<span class="fc bfc" id="L1488" title="All 2 branches covered.">            case 'Exp':</span>
+<span class="fc" id="L1489">                thresholdParameter = '-experimental'</span>
+<span class="pc" id="L1490">                break</span>
 
-<span class="nc bnc" id="L1384" title="All 2 branches missed.">            case 'Low':</span>
-<span class="nc" id="L1385">                thresholdParameter = '-low'</span>
-<span class="nc" id="L1386">                break</span>
+<span class="fc bfc" id="L1492" title="All 2 branches covered.">            case 'Low':</span>
+<span class="fc" id="L1493">                thresholdParameter = '-low'</span>
+<span class="pc" id="L1494">                break</span>
 
-<span class="nc bnc" id="L1388" title="All 2 branches missed.">            case 'high':</span>
-<span class="nc" id="L1389">                thresholdParameter = '-high'</span>
-<span class="nc" id="L1390">                break</span>
+<span class="fc bfc" id="L1496" title="All 2 branches covered.">            case 'high':</span>
+<span class="fc" id="L1497">                thresholdParameter = '-high'</span>
+<span class="fc" id="L1498">                break</span>
 
             default:
-<span class="nc" id="L1393">                thresholdParameter = '-medium'</span>
-<span class="nc" id="L1394">                break</span>
+<span class="fc" id="L1501">                thresholdParameter = '-medium'</span>
+<span class="fc" id="L1502">                break</span>
         }
 
-<span class="nc bnc" id="L1397" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L1398">            log.debug(&quot;thresholdParameter is ${thresholdParameter}&quot;)</span>
+<span class="fc bfc" id="L1505" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L1506">            log.debug(&quot;thresholdParameter is ${thresholdParameter}&quot;)</span>
         }
 
-<span class="nc" id="L1401">        return thresholdParameter</span>
+<span class="fc" id="L1509">        return thresholdParameter</span>
     }
 
     /**
@@ -1408,8 +1516,24 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      */
     @Override
     void setReportOutputDirectory(File reportOutputDirectory) {
-<span class="nc" id="L1411">        super.setReportOutputDirectory(reportOutputDirectory)</span>
-<span class="nc" id="L1412">        this.outputDirectory = reportOutputDirectory</span>
-<span class="nc" id="L1413">    }</span>
+<span class="fc" id="L1519">        super.setReportOutputDirectory(reportOutputDirectory)</span>
+<span class="fc" id="L1520">        this.outputDirectory = reportOutputDirectory</span>
+<span class="fc" id="L1521">    }</span>
+
+    /**
+     * Gets the Java executable to use for the forked SpotBugs process.
+     * If a JDK toolchain is configured for the build, the executable from that toolchain is returned.
+     * Otherwise, returns {@code null} and the default JVM will be used.
+     *
+     * @return the java executable path from the toolchain, or {@code null} if no toolchain is configured
+     * @since 4.9.8.4
+     */
+    String getJavaExecutable() {
+<span class="fc bfc" id="L1532" title="All 2 branches covered.">        def toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)</span>
+<span class="fc bfc" id="L1533" title="All 2 branches covered.">        if (toolchain) {</span>
+<span class="fc" id="L1534">            return toolchain.findTool('java')</span>
+        }
+<span class="fc" id="L1536">        return null</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

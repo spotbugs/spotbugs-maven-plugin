@@ -15,7 +15,12 @@
  */
 package org.codehaus.mojo.spotbugs
 
+import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
+import groovy.xml.XmlSlurper
+
+import java.util.jar.JarEntry
+import java.util.jar.JarFile
 
 import org.apache.maven.RepositoryUtils
 import org.apache.maven.artifact.Artifact
@@ -25,6 +30,7 @@ import org.apache.maven.plugin.MojoExecutionException
 import org.codehaus.plexus.resource.ResourceManager
 import org.eclipse.aether.resolution.ArtifactRequest
 import org.eclipse.aether.resolution.ArtifactResult
+import org.xml.sax.SAXException
 
 /**
  * SpotBugs plugin support for Mojos.
@@ -46,6 +52,7 @@ trait SpotBugsPluginsTrait {
     // when fixed, should move pluginList and plugins properties here
     abstract String getPluginList()
     abstract List&lt;PluginArtifact&gt; getPlugins()
+    abstract List&lt;Artifact&gt; getPluginArtifacts()
     abstract String getEffort()
     abstract MavenSession getSession()
 
@@ -54,7 +61,7 @@ trait SpotBugsPluginsTrait {
      *
      */
     String getSpotbugsPlugins() {
-        ResourceHelper resourceHelper = new ResourceHelper(log, spotbugsXmlOutputDirectory, resourceManager)
+        ResourceHelper resourceHelper = new ResourceHelper(log, new File(spotbugsXmlOutputDirectory, &quot;spotbugs&quot;), resourceManager)
 
         List&lt;String&gt; urlPlugins = []
 
@@ -62,20 +69,20 @@ trait SpotBugsPluginsTrait {
             log.debug('  Adding Plugins ')
 
             pluginList.split(SpotBugsInfo.COMMA).each { String pluginJar -&gt;
-<span class="nc" id="L65">                String pluginFileName = pluginJar.trim()</span>
+<span class="fc" id="L72">                String pluginFileName = pluginJar.trim()</span>
 
-<span class="nc bnc" id="L67" title="All 4 branches missed.">                if (!pluginFileName.endsWith('.jar')) {</span>
-<span class="nc" id="L68">                    throw new MojoExecutionException(&quot;Plugin File is not a Jar file: ${pluginFileName}&quot;)</span>
+<span class="pc bpc" id="L74" title="2 of 4 branches missed.">                if (!pluginFileName.endsWith('.jar')) {</span>
+<span class="nc" id="L75">                    throw new MojoExecutionException(&quot;Plugin File is not a Jar file: ${pluginFileName}&quot;)</span>
                 }
 
                 try {
-<span class="nc bnc" id="L72" title="All 2 branches missed.">                    if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L73">                        log.debug(&quot;  Processing Plugin: ${pluginFileName}&quot;)</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">                    if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L80">                        log.debug(&quot;  Processing Plugin: ${pluginFileName}&quot;)</span>
                     }
 
-<span class="nc" id="L76">                    urlPlugins &lt;&lt; resourceHelper.getResourceFile(pluginFileName).absolutePath</span>
+<span class="pc" id="L83">                    urlPlugins &lt;&lt; resourceHelper.getResourceFile(pluginFileName).absolutePath</span>
                 } catch (MalformedURLException e) {
-<span class="nc" id="L78">                    throw new MojoExecutionException('The addin plugin has an invalid URL', e)</span>
+<span class="nc" id="L85">                    throw new MojoExecutionException('The addin plugin has an invalid URL', e)</span>
                 }
             }
         }
@@ -88,25 +95,51 @@ trait SpotBugsPluginsTrait {
 
             plugins.each { PluginArtifact plugin -&gt;
 
-<span class="nc bnc" id="L91" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L92">                    log.debug(&quot;  Processing Plugin: ${plugin}&quot;)</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L99">                    log.debug(&quot;  Processing Plugin: ${plugin}&quot;)</span>
                 }
 
-<span class="nc bnc" id="L95" title="All 4 branches missed.">                Artifact pomArtifact = plugin.classifier == null ?</span>
-<span class="nc" id="L96">                    this.factory.createArtifact(plugin.groupId, plugin.artifactId, plugin.version, &quot;&quot;, plugin.type) :</span>
-<span class="nc" id="L97">                    this.factory.createArtifactWithClassifier(plugin.groupId, plugin.artifactId, plugin.version, plugin.type, plugin.classifier)</span>
+<span class="nc bnc" id="L102" title="All 4 branches missed.">                Artifact pomArtifact = plugin.classifier == null ?</span>
+<span class="nc" id="L103">                    this.factory.createArtifact(plugin.groupId, plugin.artifactId, plugin.version, &quot;&quot;, plugin.type) :</span>
+<span class="nc" id="L104">                    this.factory.createArtifactWithClassifier(plugin.groupId, plugin.artifactId, plugin.version, plugin.type, plugin.classifier)</span>
 
-<span class="nc bnc" id="L99" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L100">                    log.debug(&quot;  Added Artifact: ${pomArtifact}&quot;)</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">                if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L107">                    log.debug(&quot;  Added Artifact: ${pomArtifact}&quot;)</span>
                 }
 
-<span class="nc" id="L103">                ArtifactRequest request = new ArtifactRequest(RepositoryUtils.toArtifact(pomArtifact), session.getCurrentProject().getRemoteProjectRepositories(), null)</span>
-<span class="nc" id="L104">                ArtifactResult result = this.repositorySystem.resolveArtifact(session.getRepositorySession(), request)</span>
+<span class="nc" id="L110">                ArtifactRequest request = new ArtifactRequest(RepositoryUtils.toArtifact(pomArtifact), session.getCurrentProject().getRemoteProjectRepositories(), null)</span>
+<span class="nc" id="L111">                ArtifactResult result = this.repositorySystem.resolveArtifact(session.getRepositorySession(), request)</span>
 
-<span class="nc" id="L106">                pomArtifact.setFile(result.getArtifact().getFile())</span>
+<span class="nc" id="L113">                pomArtifact.setFile(result.getArtifact().getFile())</span>
 
-<span class="nc" id="L108">                urlPlugins &lt;&lt; resourceHelper.getResourceFile(pomArtifact.file.absolutePath).absolutePath</span>
+<span class="nc" id="L115">                urlPlugins &lt;&lt; resourceHelper.getResourceFile(pomArtifact.file.absolutePath).absolutePath</span>
             }
+        }
+
+        // Auto-detect SpotBugs extension plugins added as standard Maven &lt;dependencies&gt; to the plugin.
+        // Any artifact on the plugin classpath (pluginArtifacts) that contains findbugs.xml
+        // and is not part of the SpotBugs core (com.github.spotbugs group) is treated as a plugin extension.
+        if (pluginArtifacts) {
+            if (log.isDebugEnabled()) {
+                log.debug('  Scanning plugin artifacts for SpotBugs extension plugins (added via &lt;dependencies&gt;)')
+            }
+
+            // Collect file names already in the plugin list to avoid adding the same JAR twice
+            // (e.g. when a plugin is declared both via &lt;plugins&gt; config and as a &lt;dependency&gt;).
+<span class="nc" id="L129">            Set&lt;String&gt; addedFileNames = urlPlugins.collect { new File(it).name } as Set</span>
+
+            pluginArtifacts.each { Artifact artifact -&gt;
+<span class="pc bpc" id="L132" title="2 of 12 branches missed.">                if ('com.github.spotbugs' != artifact.groupId &amp;&amp; artifact.file != null &amp;&amp; isSpotBugsPlugin(artifact.file)) {</span>
+<span class="fc" id="L133">                    String jarFileName = artifact.file.name</span>
+<span class="pc bpc" id="L134" title="2 of 4 branches missed.">                    if (!addedFileNames.contains(jarFileName)) {</span>
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">                        if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L136">                            log.debug(&quot;  Auto-detected SpotBugs extension plugin from dependency: ${artifact}&quot;)</span>
+                        }
+<span class="fc" id="L138">                        addedFileNames &lt;&lt; jarFileName</span>
+<span class="fc" id="L139">                        urlPlugins &lt;&lt; resourceHelper.getResourceFile(artifact.file.absolutePath).absolutePath</span>
+                    }
+                }
+<span class="fc" id="L142">            }</span>
         }
 
         String pluginListStr = urlPlugins.join(File.pathSeparator)
@@ -116,6 +149,105 @@ trait SpotBugsPluginsTrait {
         }
 
         return pluginListStr
+    }
+
+    /**
+     * Determines whether the given file is a SpotBugs extension plugin by checking
+     * if it is a JAR containing {@code findbugs.xml} at the root.
+     *
+     * @param file the artifact file to inspect
+     * @return {@code true} if the file is a SpotBugs plugin JAR, {@code false} otherwise
+     */
+    boolean isSpotBugsPlugin(File file) {
+        if (file == null || !file.exists() || !file.name.endsWith('.jar')) {
+            return false
+        }
+        try {
+            new JarFile(file).withCloseable { jar -&gt;
+<span class="fc bfc" id="L167" title="All 2 branches covered.">                return jar.getEntry('findbugs.xml') != null</span>
+            }
+        } catch (IOException ignored) {
+            return false
+        }
+    }
+
+    /**
+     * Builds a mapping from bug type codes to their documentation URLs by reading
+     * the {@code findbugs.xml} descriptor from each resolved SpotBugs plugin JAR.
+     * &lt;p&gt;
+     * The method inspects JARs from two sources:
+     * &lt;ol&gt;
+     *   &lt;li&gt;Plugin JARs listed in {@code pluginList} (comma-separated file paths).&lt;/li&gt;
+     *   &lt;li&gt;Plugin JARs discovered automatically from {@code pluginArtifacts} (Maven dependencies).&lt;/li&gt;
+     * &lt;/ol&gt;
+     * Built-in documentation URL templates are provided for the following well-known plugins:
+     * &lt;ul&gt;
+     *   &lt;li&gt;{@code com.mebigfatguy.fbcontrib} &amp;rarr; fb-contrib / sb-contrib&lt;/li&gt;
+     *   &lt;li&gt;{@code com.h3xstream.findsecbugs} &amp;rarr; Find Security Bugs&lt;/li&gt;
+     * &lt;/ul&gt;
+     * User-supplied entries in {@code userPluginDocUrls} override the built-in defaults.
+     * URL templates may contain the placeholder {@code {type}} which will be replaced with
+     * the bug type code (e.g. {@code https://example.com/bugs.html#{type}}).
+     *
+     * @param userPluginDocUrls optional user-configured map of plugin IDs to URL templates
+     * @return a map from bug type code to fully-resolved documentation URL
+     */
+    @CompileDynamic
+    Map&lt;String, String&gt; buildBugTypeUrlMap(Map&lt;String, String&gt; userPluginDocUrls) {
+        Map&lt;String, String&gt; defaults = [
+            'com.mebigfatguy.fbcontrib'   : 'https://fb-contrib.sourceforge.net/bugdescriptions.html#{type}',
+            'com.h3xstream.findsecbugs'   : 'https://find-sec-bugs.github.io/bugs.htm#{type}',
+        ]
+
+        Map&lt;String, String&gt; effectiveUrls = defaults + (userPluginDocUrls ?: [:])
+        Map&lt;String, String&gt; bugTypeUrlMap = [:]
+
+        // Collect all candidate JAR files from pluginList and pluginArtifacts.
+        // We read the JARs directly (without copying) since we only need their metadata.
+        Set&lt;File&gt; pluginJars = []
+
+        if (pluginList) {
+            pluginList.split(SpotBugsInfo.COMMA).each { String path -&gt;
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">                String trimmed = path?.trim()</span>
+<span class="pc bpc" id="L212" title="1 of 2 branches missed.">                if (trimmed) {</span>
+<span class="fc" id="L213">                    File jar = new File(trimmed)</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">                    if (jar.exists()) pluginJars &lt;&lt; jar</span>
+                }
+<span class="nc" id="L216">            }</span>
+        }
+
+        if (pluginArtifacts) {
+            pluginArtifacts.each { Artifact artifact -&gt;
+<span class="pc bpc" id="L221" title="2 of 10 branches missed.">                if ('com.github.spotbugs' != artifact.groupId &amp;&amp; artifact.file != null &amp;&amp; artifact.file.exists()) {</span>
+<span class="fc" id="L222">                    pluginJars &lt;&lt; artifact.file</span>
+                }
+<span class="fc" id="L224">            }</span>
+        }
+
+        pluginJars.each { File pluginJar -&gt;
+            try {
+<span class="fc" id="L229">                new JarFile(pluginJar).withCloseable { JarFile jar -&gt;</span>
+<span class="fc" id="L230">                    JarEntry entry = jar.getEntry('findbugs.xml')</span>
+<span class="pc bpc" id="L231" title="1 of 2 branches missed.">                    if (!entry) return</span>
+
+<span class="fc" id="L233">                    def xml = new XmlSlurper().parse(jar.getInputStream(entry))</span>
+<span class="fc" id="L234">                    String pluginId = xml.@pluginid.text()</span>
+<span class="fc" id="L235">                    String urlTemplate = effectiveUrls[pluginId]</span>
+<span class="fc bfc" id="L236" title="All 2 branches covered.">                    if (!urlTemplate) return</span>
+
+<span class="fc" id="L238">                    xml.BugPattern.each { bugPattern -&gt;</span>
+<span class="fc" id="L239">                        String type = bugPattern.@type.text()</span>
+<span class="pc bpc" id="L240" title="1 of 2 branches missed.">                        if (type) {</span>
+<span class="fc" id="L241">                            bugTypeUrlMap[type] = urlTemplate.replace('{type}', type)</span>
+                        }
+<span class="nc" id="L243">                    }</span>
+                }
+            } catch (IOException | SAXException e) {
+<span class="pc" id="L246">                log.warn(&quot;Failed to read SpotBugs plugin JAR for URL mapping: ${pluginJar}: ${e.message}&quot;)</span>
+            }
+        }
+
+        return bugTypeUrlMap
     }
 
     /**

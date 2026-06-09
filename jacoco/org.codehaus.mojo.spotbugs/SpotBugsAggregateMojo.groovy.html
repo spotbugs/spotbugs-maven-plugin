@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SpotBugsAggregateMojo.groovy</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spotbugs-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.codehaus.mojo.spotbugs</a> &gt; <span class="el_source">SpotBugsAggregateMojo.groovy</span></div><h1>SpotBugsAggregateMojo.groovy</h1><pre class="source lang-java linenums">/*
+ * Copyright 2005-2026 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.codehaus.mojo.spotbugs
+
+import groovy.xml.StreamingMarkupBuilder
+import groovy.xml.XmlSlurper
+import groovy.xml.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.NodeChild
+
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
+
+import org.xml.sax.SAXException
+
+import org.apache.maven.plugin.MojoExecutionException
+import org.apache.maven.plugins.annotations.Mojo
+import org.apache.maven.plugins.annotations.Parameter
+import org.apache.maven.plugins.annotations.ResolutionScope
+import org.apache.maven.project.MavenProject
+import org.apache.maven.reporting.AbstractMavenReport
+import org.apache.maven.reporting.MavenReport
+
+/**
+ * Generates an aggregate SpotBugs report for multi-module projects when the site plugin is run.
+ * The HTML report is generated from the individual SpotBugs XML results of each module.
+ * Run {@code spotbugs:spotbugs} on each module before using this goal.
+ *
+ * @since 4.9.4.2
+ */
+@Mojo(name = 'spotbugs-aggregate', aggregator = true, requiresDependencyResolution = ResolutionScope.TEST,
+        requiresProject = true, threadSafe = true)
+class SpotBugsAggregateMojo extends AbstractMavenReport {
+
+    /** Location where the generated HTML aggregate report will be created. */
+    @Parameter(defaultValue = '${project.reporting.outputDirectory}', required = true)
+    File outputDirectory
+
+    /**
+     * The file encoding to use when creating the HTML reports. If the property
+     * &lt;code&gt;project.reporting.outputEncoding&lt;/code&gt; is not set, utf-8 is used.
+     *
+     * @since 4.9.4.2
+     */
+    @Parameter(defaultValue = '${project.reporting.outputEncoding}', property = 'outputEncoding')
+    String outputEncoding
+
+    /** Threshold of minimum bug severity to report. Valid values are High, Default, Low, Ignore, and Exp (for experimental). */
+    @Parameter(defaultValue = 'Default', property = 'spotbugs.threshold')
+    String threshold
+
+    /**
+     * Effort of the bug finders. Valid values are Min, Default and Max.
+     *
+     * @since 4.9.4.2
+     */
+    @Parameter(defaultValue = 'Default', property = 'spotbugs.effort')
+    String effort
+
+    /** Turn on Spotbugs debugging. */
+    @Parameter(defaultValue = 'false', property = 'spotbugs.debug')
+    boolean debug
+
+    /**
+     * Skip entire check.
+     *
+     * @since 4.9.4.2
+     */
+    @Parameter(defaultValue = 'false', property = 'spotbugs.skip')
+    boolean skip
+
+    /**
+     * Specifies the directory where the Spotbugs native XML output will be generated in each module.
+     * The aggregate mojo looks for this filename in each reactor project's build directory.
+     *
+     * @since 4.9.4.2
+     */
+    @Parameter(defaultValue = 'spotbugsXml.xml', property = 'spotbugs.outputXmlFilename')
+    String spotbugsXmlOutputFilename
+
+    /**
+     * Skip the Spotbugs HTML report generation if there are no violations found. Defaults to
+     * &lt;code&gt;false&lt;/code&gt;.
+     *
+     * @since 4.9.4.2
+     */
+    @Parameter(defaultValue = 'false', property = 'spotbugs.skipEmptyReport')
+    boolean skipEmptyReport
+
+    /** The resource bundle. */
+    ResourceBundle bundle
+
+    /**
+     * Checks whether prerequisites for generating this report are given.
+     *
+     * @return true if the report can be generated, otherwise false
+     * @see AbstractMavenReport#canGenerateReport()
+     */
+    @Override
+    boolean canGenerateReport() {
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (skip) {</span>
+<span class="fc" id="L115">            log.info('Spotbugs aggregate plugin skipped')</span>
+<span class="fc" id="L116">            return false</span>
+        }
+
+<span class="fc" id="L119">        boolean anyResults = reactorProjects.any { MavenProject p -&gt;</span>
+<span class="fc" id="L120">            File xmlFile = new File(p.build.directory, spotbugsXmlOutputFilename)</span>
+<span class="fc bfc" id="L121" title="All 4 branches covered.">            xmlFile.exists() &amp;&amp; xmlFile.size() &gt; 0</span>
+        }
+
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        if (!anyResults) {</span>
+<span class="fc" id="L125">            log.info('No SpotBugs XML results found in any reactor project. ' +</span>
+                'Run spotbugs:spotbugs on each module before generating the aggregate report.')
+        }
+
+<span class="fc" id="L129">        return anyResults</span>
+    }
+
+    /**
+     * Returns the plugins description for the &quot;generated reports&quot; overview page.
+     *
+     * @param locale the locale the report should be generated for
+     * @return description of the report
+     * @see MavenReport#getDescription(Locale)
+     */
+    @Override
+    String getDescription(Locale locale) {
+<span class="fc" id="L141">        return getBundle(locale).getString(SpotBugsInfo.AGGREGATE_DESCRIPTION_KEY)</span>
+    }
+
+    /**
+     * Returns the plugins name for the &quot;generated reports&quot; overview page and the menu.
+     *
+     * @param locale the locale the report should be generated for
+     * @return name of the report
+     * @see MavenReport#getName(Locale)
+     */
+    @Override
+    String getName(Locale locale) {
+<span class="fc" id="L153">        return getBundle(locale).getString(SpotBugsInfo.AGGREGATE_NAME_KEY)</span>
+    }
+
+    /**
+     * Returns report output file name, without the extension.
+     *
+     * @return name of the generated page
+     * @see {@link MavenReport#getOutputName()}
+     *
+     * @deprecated Method name does not properly reflect its purpose. Implement and use
+     * {@link #getOutputPath()} instead. This is waiting on maven to switch in report
+     * plugin before we can remove it.
+     */
+    @Override
+    @Deprecated
+    String getOutputName() {
+<span class="nc" id="L169">        return SpotBugsInfo.PLUGIN_NAME</span>
+    }
+
+    /**
+     * Returns report output file name, without the extension.
+     *
+     * @return name of the generated page
+     * @see {@link MavenReport#getOutputPath()}
+     */
+    @Override
+    String getOutputPath() {
+<span class="nc" id="L180">        return SpotBugsInfo.PLUGIN_NAME</span>
+    }
+
+    /**
+     * Executes the generation of the aggregate report.
+     *
+     * @param locale the wanted locale to generate the report, could be null.
+     * @see AbstractMavenReport#executeReport(Locale)
+     */
+    @Override
+    void executeReport(Locale locale) {
+<span class="fc" id="L191">        log.debug('****** SpotBugsAggregateMojo executeReport *******')</span>
+
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">        if (!canGenerateReport()) {</span>
+<span class="fc" id="L194">            return</span>
+        }
+
+<span class="nc bnc" id="L197" title="All 6 branches missed.">        if (!outputDirectory.exists() &amp;&amp; !outputDirectory.mkdirs()) {</span>
+<span class="nc" id="L198">            throw new MojoExecutionException('Cannot create html output directory')</span>
+        }
+
+<span class="nc bnc" id="L201" title="All 2 branches missed.">        Charset effectiveEncoding = outputEncoding ?</span>
+<span class="nc" id="L202">            Charset.forName(outputEncoding) : StandardCharsets.UTF_8</span>
+
+<span class="nc bnc" id="L204" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L205">            log.debug(&quot;Output Directory is ${outputDirectory}&quot;)</span>
+<span class="nc" id="L206">            log.debug(&quot;Output Encoding is ${effectiveEncoding.name()}&quot;)</span>
+<span class="nc" id="L207">            log.debug(&quot;Reactor projects: ${reactorProjects*.name}&quot;)</span>
+        }
+
+<span class="nc" id="L210">        File aggregatedXmlFile = buildAggregatedXml(effectiveEncoding)</span>
+
+<span class="nc bnc" id="L212" title="All 6 branches missed.">        if (aggregatedXmlFile == null || !aggregatedXmlFile.exists()) {</span>
+<span class="nc" id="L213">            log.warn('No SpotBugs XML results could be aggregated.')</span>
+<span class="nc" id="L214">            return</span>
+        }
+
+<span class="nc" id="L217">        XmlSlurper xmlSlurper = new XmlSlurper()</span>
+<span class="nc" id="L218">        xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)</span>
+<span class="nc" id="L219">        xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)</span>
+
+<span class="nc" id="L221">        GPathResult aggregatedResults = xmlSlurper.parse(aggregatedXmlFile)</span>
+
+<span class="nc" id="L223">        int bugCount = aggregatedResults.BugInstance.size()</span>
+
+<span class="nc bnc" id="L225" title="All 8 branches missed.">        if (skipEmptyReport &amp;&amp; bugCount == 0) {</span>
+<span class="nc" id="L226">            log.info('Skipping generation of SpotBugs aggregate HTML report since there are no bugs found.')</span>
+<span class="nc" id="L227">            return</span>
+        }
+
+<span class="nc" id="L230">        log.debug('Generating SpotBugs aggregate HTML report')</span>
+
+<span class="nc" id="L232">        SpotbugsReportGenerator generator = new SpotbugsReportGenerator(getSink(), getBundle(locale))</span>
+
+<span class="nc" id="L234">        generator.setIsJXRReportEnabled(false)</span>
+<span class="nc" id="L235">        generator.setLog(log)</span>
+<span class="nc" id="L236">        generator.threshold = threshold</span>
+<span class="nc" id="L237">        generator.effort = effort</span>
+<span class="nc" id="L238">        generator.setSpotbugsResults(aggregatedResults)</span>
+<span class="nc" id="L239">        generator.setOutputDirectory(outputDirectory)</span>
+<span class="nc" id="L240">        generator.generateReport()</span>
+
+<span class="nc bnc" id="L242" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L243">            log.debug(&quot;Aggregate SpotBugs report generated with ${bugCount} bugs&quot;)</span>
+        }
+<span class="nc" id="L245">    }</span>
+
+    /**
+     * Collects and merges SpotBugs XML files from all reactor projects into a single aggregate XML file.
+     *
+     * @param effectiveEncoding the charset to use for writing the output file
+     * @return the merged XML file, or null if no XML files were found
+     */
+    private File buildAggregatedXml(Charset effectiveEncoding) {
+<span class="fc" id="L254">        XmlSlurper xmlSlurper = new XmlSlurper()</span>
+<span class="fc" id="L255">        xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)</span>
+<span class="fc" id="L256">        xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)</span>
+
+<span class="fc" id="L258">        List&lt;GPathResult&gt; allResults = []</span>
+
+<span class="fc" id="L260">        reactorProjects.each { MavenProject p -&gt;</span>
+<span class="fc" id="L261">            File xmlFile = new File(p.build.directory, spotbugsXmlOutputFilename)</span>
+<span class="pc bpc" id="L262" title="3 of 6 branches missed.">            if (xmlFile.exists() &amp;&amp; xmlFile.size() &gt; 0) {</span>
+<span class="pc bpc" id="L263" title="1 of 2 branches missed.">                if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L264">                    log.debug(&quot;Adding SpotBugs results from ${p.name}: ${xmlFile}&quot;)</span>
+                }
+                try {
+<span class="fc" id="L267">                    allResults.add(xmlSlurper.parse(xmlFile))</span>
+                } catch (SAXException | IOException e) {
+<span class="pc" id="L269">                    log.warn(&quot;Failed to parse SpotBugs XML from ${xmlFile}: ${e.message}&quot;)</span>
+                }
+<span class="nc bnc" id="L271" title="All 2 branches missed.">            } else if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L272">                log.debug(&quot;No SpotBugs XML found for module ${p.name} at ${xmlFile}&quot;)</span>
+            }
+<span class="nc" id="L274">        }</span>
+
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (allResults.empty) {</span>
+<span class="fc" id="L277">            return null</span>
+        }
+
+        // Collect all source directories from all modules
+<span class="fc" id="L281">        List&lt;String&gt; allSrcDirs = []</span>
+<span class="fc" id="L282">        allResults.each { GPathResult result -&gt;</span>
+<span class="fc" id="L283">            result.Project.SrcDir.each { srcDir -&gt;</span>
+<span class="fc" id="L284">                String dir = srcDir.text()</span>
+<span class="pc bpc" id="L285" title="1 of 6 branches missed.">                if (dir &amp;&amp; !allSrcDirs.contains(dir)) {</span>
+<span class="fc" id="L286">                    allSrcDirs.add(dir)</span>
+                }
+<span class="fc" id="L288">            }</span>
+        }
+
+        // Count all bugs
+<span class="fc" id="L292">        int totalBugs = allResults.sum(0) { GPathResult result -&gt;</span>
+<span class="fc" id="L293">            result.BugInstance.size()</span>
+        }
+
+        // Count total classes from FindBugsSummary attributes
+<span class="fc" id="L297">        int totalClasses = allResults.sum(0) { GPathResult result -&gt;</span>
+<span class="fc" id="L298">            String totalClassesStr = result.FindBugsSummary.@total_classes.text()</span>
+<span class="pc bpc" id="L299" title="1 of 2 branches missed.">            totalClassesStr ? totalClassesStr.toInteger() : 0</span>
+        }
+
+        // Sum error counts
+<span class="fc" id="L303">        int totalErrors = allResults.sum(0) { GPathResult result -&gt;</span>
+<span class="fc" id="L304">            String errorsStr = result.Errors.@errors.text()</span>
+<span class="pc bpc" id="L305" title="1 of 2 branches missed.">            errorsStr ? errorsStr.toInteger() : 0</span>
+        }
+
+<span class="fc" id="L308">        int totalMissingClasses = allResults.sum(0) { GPathResult result -&gt;</span>
+<span class="fc" id="L309">            String missingStr = result.Errors.@missingClasses.text()</span>
+<span class="pc bpc" id="L310" title="1 of 2 branches missed.">            missingStr ? missingStr.toInteger() : 0</span>
+        }
+
+<span class="pc bpc" id="L313" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L314">            log.debug(&quot;Aggregating ${totalBugs} bugs, ${totalClasses} classes from ${allResults.size()} modules&quot;)</span>
+        }
+
+        // Write merged XML file
+<span class="fc" id="L318">        File outputDir = new File(project.build.directory)</span>
+<span class="fc" id="L319">        Files.createDirectories(outputDir.toPath())</span>
+<span class="fc" id="L320">        File aggregatedXmlFile = new File(outputDir, spotbugsXmlOutputFilename)</span>
+
+<span class="fc" id="L322">        StreamingMarkupBuilder xmlBuilder = new StreamingMarkupBuilder()</span>
+<span class="fc" id="L323">        xmlBuilder.encoding = effectiveEncoding.name()</span>
+
+<span class="fc" id="L325">        BufferedWriter writer = Files.newBufferedWriter(aggregatedXmlFile.toPath(), effectiveEncoding)</span>
+
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">        if (effectiveEncoding.name().equalsIgnoreCase('Cp1252')) {</span>
+<span class="nc" id="L328">            writer.write '&lt;?xml version=&quot;1.0&quot; encoding=&quot;windows-1252&quot;?&gt;'</span>
+        } else {
+<span class="fc" id="L330">            writer.write '&lt;?xml version=&quot;1.0&quot; encoding=&quot;' +</span>
+<span class="fc" id="L331">                effectiveEncoding.name().toLowerCase(Locale.getDefault()) + '&quot;?&gt;'</span>
+        }
+<span class="fc" id="L333">        writer.write SpotBugsInfo.EOL</span>
+
+<span class="fc" id="L335">        def markup = xmlBuilder.bind { builder -&gt;</span>
+<span class="fc" id="L336">            BugCollection {</span>
+<span class="fc" id="L337">                Project(name: project.name) {</span>
+<span class="fc" id="L338">                    allSrcDirs.each { String srcDir -&gt;</span>
+<span class="fc" id="L339">                        SrcDir(srcDir)</span>
+                    }
+<span class="fc" id="L341">                    WrkDir(project.build.directory)</span>
+                }
+<span class="fc" id="L343">                allResults.each { GPathResult result -&gt;</span>
+<span class="fc" id="L344">                    result.BugInstance.each { NodeChild bugInstance -&gt;</span>
+<span class="fc" id="L345">                        mkp.yield bugInstance</span>
+                    }
+                }
+<span class="fc" id="L348">                Errors(errors: totalErrors, missingClasses: totalMissingClasses)</span>
+<span class="fc" id="L349">                FindBugsSummary(total_bugs: totalBugs, total_classes: totalClasses) {</span>
+<span class="fc" id="L350">                    allResults.each { GPathResult result -&gt;</span>
+<span class="fc" id="L351">                        result.FindBugsSummary.PackageStats.each { NodeChild packageStats -&gt;</span>
+<span class="fc" id="L352">                            mkp.yield packageStats</span>
+                        }
+                    }
+                }
+            }
+        }
+
+<span class="fc" id="L359">        writer &lt;&lt; markup</span>
+<span class="fc" id="L360">        writer.close()</span>
+
+<span class="fc" id="L362">        return aggregatedXmlFile</span>
+    }
+
+    /**
+     * Returns the report output directory.
+     *
+     * @return full path to the directory where the files in the site get copied to
+     * @see AbstractMavenReport#getOutputDirectory()
+     */
+    @Override
+    protected String getOutputDirectory() {
+<span class="fc" id="L373">        return outputDirectory.absolutePath</span>
+    }
+
+    /**
+     * Sets the report output directory.
+     *
+     * @see AbstractMavenReport#setReportOutputDirectory(File)
+     */
+    @Override
+    void setReportOutputDirectory(File reportOutputDirectory) {
+<span class="fc" id="L383">        super.setReportOutputDirectory(reportOutputDirectory)</span>
+<span class="fc" id="L384">        this.outputDirectory = reportOutputDirectory</span>
+<span class="fc" id="L385">    }</span>
+
+    ResourceBundle getBundle(Locale locale) {
+<span class="fc" id="L388">        this.bundle = ResourceBundle.getBundle(SpotBugsInfo.BUNDLE_NAME, locale,</span>
+<span class="fc" id="L389">            SpotBugsAggregateMojo.class.getClassLoader())</span>
+
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L392">            log.debug('Aggregate Mojo Locale is ' + this.bundle.getLocale().getLanguage())</span>
+        }
+
+<span class="fc" id="L395">        return bundle</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

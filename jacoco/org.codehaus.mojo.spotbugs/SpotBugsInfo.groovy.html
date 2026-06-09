@@ -36,6 +36,12 @@ interface SpotBugsInfo {
     /** The key to get the description of the Plug-In from the bundle. */
     static final String DESCRIPTION_KEY = 'report.spotbugs.description'
 
+    /** The key to get the name of the aggregate report from the bundle. */
+    static final String AGGREGATE_NAME_KEY = 'report.spotbugs.aggregate.name'
+
+    /** The key to get the description of the aggregate report from the bundle. */
+    static final String AGGREGATE_DESCRIPTION_KEY = 'report.spotbugs.aggregate.description'
+
     /** The extensions to search files for. */
     static final String[] EXTENSIONS = ['class']
 
@@ -52,7 +58,7 @@ interface SpotBugsInfo {
     static final String PERIOD = '.'
 
     /** The end of line separator. */
-<span class="fc" id="L55">    static final EOL = System.lineSeparator()</span>
+<span class="fc" id="L61">    static final EOL = System.lineSeparator()</span>
 
     /** The url static string. */
     static final String URL = 'url'
@@ -73,7 +79,7 @@ interface SpotBugsInfo {
     Map&lt;String, String&gt; spotbugsThresholds = [High: 'high', Exp: 'experimental', Low: 'low', Medium: 'medium', Default: 'medium']
 
     /** The spotbugs priority as unknown, high, medium, and low. */
-<span class="fc" id="L76">    List&lt;String&gt; spotbugsPriority = ['unknown', 'High', 'Medium', 'Low' ]</span>
+<span class="fc" id="L82">    List&lt;String&gt; spotbugsPriority = ['unknown', 'High', 'Medium', 'Low' ]</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -69,8 +69,8 @@ class XDocsReporter {
      *            The Resource Bundle to use
      */
 <span class="fc" id="L71">    XDocsReporter(ResourceBundle bundle, Log log, String threshold, String effort, String outputEncoding) {</span>
-<span class="pc bpc" id="L72" title="9 of 18 branches missed.">        if (!bundle || !log || !threshold || !effort || !outputEncoding) {</span>
-<span class="nc" id="L73">            throw new IllegalArgumentException('All constructor arguments must be provided')</span>
+<span class="pc bpc" id="L72" title="2 of 18 branches missed.">        if (!bundle || !log || !threshold || !effort || !outputEncoding) {</span>
+<span class="fc" id="L73">            throw new IllegalArgumentException('All constructor arguments must be provided')</span>
         }
 
 <span class="fc" id="L76">        this.bundle = bundle</span>
@@ -113,15 +113,15 @@ class XDocsReporter {
 
 <span class="fc" id="L114">        outputWriter &lt;&lt; xmlBuilder.bind {</span>
 <span class="fc" id="L115">            mkp.xmlDeclaration()</span>
-<span class="pc bpc" id="L116" title="1 of 2 branches missed.">            if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L117">                log.debug(&quot;generateReport spotbugsResults is ${spotbugsResults}&quot;)</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">            if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L117">                log.debug(&quot;generateReport spotbugsResults is ${spotbugsResults}&quot;)</span>
             }
 
 <span class="fc" id="L120">            BugCollection(version: getSpotBugsVersion(), threshold: SpotBugsInfo.spotbugsThresholds[threshold],</span>
 <span class="fc" id="L121">                    effort: SpotBugsInfo.spotbugsEfforts[effort]) {</span>
 
-<span class="pc bpc" id="L123" title="1 of 2 branches missed.">                if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L124">                    log.debug(&quot;spotbugsResults.FindBugsSummary total_bugs is ${spotbugsResults.FindBugsSummary.@total_bugs.text()}&quot;)</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">                if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L124">                    log.debug(&quot;spotbugsResults.FindBugsSummary total_bugs is ${spotbugsResults.FindBugsSummary.@total_bugs.text()}&quot;)</span>
                 }
 
 <span class="fc" id="L127">                spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() { NodeChild classStats -&gt;</span>
@@ -129,39 +129,39 @@ class XDocsReporter {
 <span class="fc" id="L129">                    String classStatsValue = classStats.'@class'.text()</span>
 <span class="fc" id="L130">                    String classStatsBugCount = classStats.'@bugs'.text()</span>
 
-<span class="pc bpc" id="L132" title="1 of 2 branches missed.">                    if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L133">                        log.debug('classStats...')</span>
-<span class="nc" id="L134">                        log.debug(&quot;classStatsValue is ${classStatsValue}&quot;)</span>
-<span class="nc" id="L135">                        log.debug(&quot;classStatsBugCount is ${classStatsBugCount}&quot;)</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">                    if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L133">                        log.debug('classStats...')</span>
+<span class="fc" id="L134">                        log.debug(&quot;classStatsValue is ${classStatsValue}&quot;)</span>
+<span class="fc" id="L135">                        log.debug(&quot;classStatsBugCount is ${classStatsBugCount}&quot;)</span>
                     }
 
-<span class="pc bpc" id="L138" title="1 of 2 branches missed.">                    if (Integer.parseInt(classStatsBugCount) &gt; 0) {</span>
-<span class="nc" id="L139">                        bugClasses &lt;&lt; classStatsValue</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">                    if (Integer.parseInt(classStatsBugCount) &gt; 0) {</span>
+<span class="fc" id="L139">                        bugClasses &lt;&lt; classStatsValue</span>
                     }
 <span class="fc" id="L141">                }</span>
 
 <span class="fc" id="L143">                bugClasses.each() { String bugClass -&gt;</span>
-<span class="nc bnc" id="L144" title="All 2 branches missed.">                    if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L145">                        log.debug(&quot;finish bugClass is ${bugClass}&quot;)</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">                    if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L145">                        log.debug(&quot;finish bugClass is ${bugClass}&quot;)</span>
                     }
-<span class="nc" id="L147">                    file(classname: bugClass) {</span>
-<span class="nc" id="L148">                        spotbugsResults.BugInstance.each() { NodeChild bugInstance -&gt;</span>
+<span class="fc" id="L147">                    file(classname: bugClass) {</span>
+<span class="fc" id="L148">                        spotbugsResults.BugInstance.each() { NodeChild bugInstance -&gt;</span>
 
-<span class="nc bnc" id="L150" title="All 2 branches missed.">                            if (bugInstance.Class.find { NodeChild classNode -&gt; classNode.@primary == &quot;true&quot; }.@classname.text() != bugClass) {</span>
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">                            if (bugInstance.Class.find { NodeChild classNode -&gt; classNode.@primary == &quot;true&quot; }.@classname.text() != bugClass) {</span>
 <span class="nc" id="L151">                                return</span>
                             }
 
-<span class="nc" id="L154">                            String type = bugInstance.@type.text()</span>
-<span class="nc" id="L155">                            String category = bugInstance.@category.text()</span>
-<span class="nc" id="L156">                            String message = bugInstance.LongMessage.text()</span>
-<span class="nc" id="L157">                            String priority = evaluateThresholdParameter(bugInstance.@priority.text())</span>
-<span class="nc" id="L158">                            String line = bugInstance.SourceLine.@start[0].text()</span>
-<span class="nc bnc" id="L159" title="All 2 branches missed.">                            if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L160">                                log.debug(&quot;BugInstance message is ${message}&quot;)</span>
+<span class="fc" id="L154">                            String type = bugInstance.@type.text()</span>
+<span class="fc" id="L155">                            String category = bugInstance.@category.text()</span>
+<span class="fc" id="L156">                            String message = bugInstance.LongMessage.text()</span>
+<span class="fc" id="L157">                            String priority = evaluateThresholdParameter(bugInstance.@priority.text())</span>
+<span class="fc" id="L158">                            String line = bugInstance.SourceLine.@start[0].text()</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">                            if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L160">                                log.debug(&quot;BugInstance message is ${message}&quot;)</span>
                             }
 
-<span class="nc" id="L163">                            BugInstance(type: type, priority: priority, category: category, message: message,</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">                                    lineNumber: ((line) ? line: &quot;-1&quot;))</span>
+<span class="fc" id="L163">                            BugInstance(type: type, priority: priority, category: category, message: message,</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">                                    lineNumber: ((line) ? line: &quot;-1&quot;))</span>
                         }
                     }
                 }
@@ -185,22 +185,22 @@ class XDocsReporter {
 
 <span class="pc bpc" id="L186" title="1 of 2 branches missed.">                    if (!compileSourceRoots.isEmpty()) {</span>
 <span class="fc" id="L187">                        compileSourceRoots.each() { String srcDir -&gt;</span>
-<span class="pc bpc" id="L188" title="1 of 2 branches missed.">                            if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L189">                                log.debug(&quot;SrcDir is ${srcDir}&quot;)</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">                            if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L189">                                log.debug(&quot;SrcDir is ${srcDir}&quot;)</span>
                             }
 <span class="fc" id="L191">                            SrcDir(srcDir)</span>
                         }
                     }
 
-<span class="pc bpc" id="L195" title="1 of 2 branches missed.">                    if (!testSourceRoots.isEmpty()) {</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">                    if (!testSourceRoots.isEmpty()) {</span>
 <span class="fc" id="L196">                        testSourceRoots.each() { String srcDir -&gt;</span>
-<span class="pc bpc" id="L197" title="1 of 2 branches missed.">                            if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L198">                                log.debug(&quot;SrcDir is ${srcDir}&quot;)</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">                            if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L198">                                log.debug(&quot;SrcDir is ${srcDir}&quot;)</span>
                             }
 <span class="fc" id="L200">                            SrcDir(srcDir)</span>
                         }
                     }
-<span class="nc" id="L203">                }</span>
+<span class="fc" id="L203">                }</span>
             }
         }
 

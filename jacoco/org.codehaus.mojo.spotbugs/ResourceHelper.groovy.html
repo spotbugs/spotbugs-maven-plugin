@@ -61,25 +61,25 @@ final class ResourceHelper {
         // Normalize path separator to always use forward slash for resource lookup
 <span class="fc" id="L62">        String normalizedResource = resource.replace('\\', '/')</span>
 <span class="fc" id="L63">        int lastSeparatorIndex = normalizedResource.lastIndexOf('/')</span>
-<span class="pc bpc" id="L64" title="2 of 4 branches missed.">        if (lastSeparatorIndex != -1) {</span>
+<span class="fc bfc" id="L64" title="All 4 branches covered.">        if (lastSeparatorIndex != -1) {</span>
 <span class="fc" id="L65">            location = normalizedResource.substring(0, lastSeparatorIndex)</span>
 <span class="fc" id="L66">            artifact = normalizedResource.substring(lastSeparatorIndex + 1)</span>
         } else {
-<span class="nc" id="L68">            artifact = normalizedResource</span>
+<span class="fc" id="L68">            artifact = normalizedResource</span>
         }
 
         // replace all occurrences of the following characters:  ? : &amp; =
-<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        location = location != null ? SANITIZE_PATTERN.matcher(location).replaceAll('_') : null</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        location = location != null ? SANITIZE_PATTERN.matcher(location).replaceAll('_') : null</span>
 <span class="fc" id="L73">        artifact = SANITIZE_PATTERN.matcher(artifact).replaceAll('_')</span>
 
-<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
 <span class="fc" id="L76">            log.debug(&quot;resource is '${normalizedResource}'&quot; + &quot;, location is '${location}'&quot; +</span>
                 &quot;, artifact is '${artifact}'&quot; + &quot;, outputDirectory is '${outputDirectory}'&quot;)
         }
 
 <span class="fc" id="L80">        Path resourcePath = getResourceAsFile(normalizedResource, artifact)</span>
 
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
 <span class="fc" id="L83">            log.debug(&quot;location of resourceFile file is ${resourcePath.toAbsolutePath()}&quot;)</span>
         }
 
@@ -92,14 +92,14 @@ final class ResourceHelper {
         // Checking if the resource is already a file
 <span class="fc bfc" id="L93" title="All 2 branches covered.">        if (new File(name).exists()) {</span>
             // Avoid copying the file onto itself
-<span class="pc bpc" id="L95" title="1 of 2 branches missed.">            if (Path.of(name).toAbsolutePath().normalize().equals(outputResourcePath.toAbsolutePath().normalize())) {</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            if (Path.of(name).toAbsolutePath().normalize().equals(outputResourcePath.toAbsolutePath().normalize())) {</span>
 <span class="fc" id="L96">                return outputResourcePath</span>
             }
 
-<span class="nc" id="L99">            createParentDirectories(outputResourcePath)</span>
+<span class="fc" id="L99">            createParentDirectories(outputResourcePath)</span>
 
             // Copy existing file (not a URL)
-<span class="nc" id="L102">            return Files.copy(Path.of(name), outputResourcePath, StandardCopyOption.REPLACE_EXISTING,</span>
+<span class="fc" id="L102">            return Files.copy(Path.of(name), outputResourcePath, StandardCopyOption.REPLACE_EXISTING,</span>
                 StandardCopyOption.COPY_ATTRIBUTES)
         }
 
@@ -107,7 +107,7 @@ final class ResourceHelper {
         try {
 <span class="fc" id="L108">            createParentDirectories(outputResourcePath)</span>
 
-<span class="pc" id="L110">            resourceManager.getResourceAsInputStream(name).withCloseable { InputStream is -&gt;</span>
+<span class="fc" id="L110">            resourceManager.getResourceAsInputStream(name).withCloseable { InputStream is -&gt;</span>
 <span class="fc" id="L111">                new BufferedInputStream(is).withCloseable { BufferedInputStream bis -&gt;</span>
 <span class="fc" id="L112">                    Files.newOutputStream(outputResourcePath).withCloseable { OutputStream os -&gt;</span>
 <span class="fc" id="L113">                        new BufferedOutputStream(os).withCloseable { BufferedOutputStream bos -&gt;</span>
@@ -117,7 +117,7 @@ final class ResourceHelper {
                 }
             }
         } catch (IOException e) {
-<span class="nc" id="L120">            log.error('Unable to create file-based resource for ' + name + ' in ' + outputResourcePath, e)</span>
+<span class="fc" id="L120">            log.error('Unable to create file-based resource for ' + name + ' in ' + outputResourcePath, e)</span>
 <span class="pc" id="L121">            throw new MojoExecutionException('Cannot create file-based resource.', e)</span>
         }
 
@@ -126,8 +126,8 @@ final class ResourceHelper {
 
     private static createParentDirectories(Path outputResourcePath) {
 <span class="fc" id="L128">        Path parent = outputResourcePath.getParent()</span>
-<span class="pc bpc" id="L129" title="3 of 6 branches missed.">        if (parent != null &amp;&amp; Files.notExists(parent)) {</span>
-<span class="nc" id="L130">            Files.createDirectories(parent)</span>
+<span class="pc bpc" id="L129" title="1 of 6 branches missed.">        if (parent != null &amp;&amp; Files.notExists(parent)) {</span>
+<span class="fc" id="L130">            Files.createDirectories(parent)</span>
         }
 <span class="fc" id="L132">    }</span>
 

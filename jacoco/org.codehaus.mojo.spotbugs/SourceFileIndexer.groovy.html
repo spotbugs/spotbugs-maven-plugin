@@ -58,8 +58,8 @@ class SourceFileIndexer {
 <span class="fc" id="L58">                scanDirectory(Path.of(resource.directory), basePath)</span>
             }
 
-<span class="pc bpc" id="L61" title="2 of 4 branches missed.">            for (Resource resource in project.getTestResources()) {</span>
-<span class="nc" id="L62">                scanDirectory(Path.of(resource.directory), basePath)</span>
+<span class="pc bpc" id="L61" title="1 of 4 branches missed.">            for (Resource resource in project.getTestResources()) {</span>
+<span class="fc" id="L62">                scanDirectory(Path.of(resource.directory), basePath)</span>
             }
 
             // Source files
@@ -67,8 +67,8 @@ class SourceFileIndexer {
 <span class="fc" id="L67">                scanDirectory(Path.of(sourceRoot), basePath)</span>
             }
 
-<span class="pc bpc" id="L70" title="2 of 4 branches missed.">            for (String sourceRoot in project.getTestCompileSourceRoots()) {</span>
-<span class="nc" id="L71">                scanDirectory(Path.of(sourceRoot), basePath)</span>
+<span class="pc bpc" id="L70" title="1 of 4 branches missed.">            for (String sourceRoot in project.getTestCompileSourceRoots()) {</span>
+<span class="fc" id="L71">                scanDirectory(Path.of(sourceRoot), basePath)</span>
             }
 
             // While not perfect, add the following paths will add basic support for Groovy, Kotlin, Scala and Webapp sources.
@@ -101,8 +101,8 @@ class SourceFileIndexer {
         }
 
 <span class="pc bpc" id="L103" title="1 of 4 branches missed.">        for (File child : directory.toFile().listFiles()) {</span>
-<span class="pc bpc" id="L104" title="1 of 2 branches missed.">            if (child.isDirectory()) {</span>
-<span class="nc" id="L105">                scanDirectory(child.toPath(), baseDirectory)</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">            if (child.isDirectory()) {</span>
+<span class="fc" id="L105">                scanDirectory(child.toPath(), baseDirectory)</span>
             } else {
 <span class="fc" id="L107">                String newSourceFile = normalizePath(child.getCanonicalPath())</span>
 <span class="fc" id="L108">                lock.lock()</span>
@@ -152,17 +152,17 @@ class SourceFileIndexer {
 <span class="fc" id="L152">                throw new MojoExecutionException('Source files cache must be built prior to searches.')</span>
             }
 
-<span class="pc bpc" id="L155" title="2 of 4 branches missed.">            for (String fileFound in allSourceFiles) {</span>
-<span class="pc bpc" id="L156" title="1 of 2 branches missed.">                if (fileFound.endsWith(filename)) {</span>
+<span class="pc bpc" id="L155" title="1 of 4 branches missed.">            for (String fileFound in allSourceFiles) {</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">                if (fileFound.endsWith(filename)) {</span>
 <span class="fc" id="L157">                    return fileFound</span>
                 }
             }
         } finally {
-<span class="pc" id="L161">            lock.unlock()</span>
+<span class="fc" id="L161">            lock.unlock()</span>
         }
 
         // Not found
-<span class="nc" id="L165">        return null</span>
+<span class="fc" id="L165">        return null</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
