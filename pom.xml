@@ -117,7 +117,7 @@
         <testSourceDirectory>${project.basedir}/src/test/groovy</testSourceDirectory>
 
         <!-- Reproducible Builds: override timestamp value from parent -->
-        <project.build.outputTimestamp>1780966818</project.build.outputTimestamp>
+        <project.build.outputTimestamp>1781027207</project.build.outputTimestamp>
 
         <jacoco.minimum.coverage>0.54</jacoco.minimum.coverage>
 
