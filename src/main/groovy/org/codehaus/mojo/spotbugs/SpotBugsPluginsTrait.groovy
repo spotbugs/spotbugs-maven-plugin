@@ -218,7 +218,7 @@ trait SpotBugsPluginsTrait {
 
         if (pluginArtifacts) {
             pluginArtifacts.each { Artifact artifact ->
-                if ('com.github.spotbugs' != artifact.groupId && artifact.file != null && artifact.file.exists()) {
+                if ('com.github.spotbugs' != artifact.groupId && artifact.file != null && artifact.file.exists() && artifact.file.name.endsWith('.jar')) {
                     pluginJars << artifact.file
                 }
             }

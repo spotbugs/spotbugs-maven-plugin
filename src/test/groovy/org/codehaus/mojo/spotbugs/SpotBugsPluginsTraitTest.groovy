@@ -444,6 +444,32 @@ class SpotBugsPluginsTraitTest extends Specification {
         tempOutputDir.toFile().deleteDir()
     }
 
+    void "buildBugTypeUrlMap skips non-JAR pluginArtifacts (e.g. XML exclude filter files)"() {
+        given:
+        Log log = Mock()
+        SpotBugsPluginsTraitImpl impl = new SpotBugsPluginsTraitImpl("default", log, Mock(ResourceManager),
+            Mock(org.eclipse.aether.RepositorySystem), Mock(org.apache.maven.repository.RepositorySystem), Mock(MavenSession))
+
+        // Simulate an XML exclude filter file passed as a plugin artifact (not a JAR)
+        Path xmlFile = Files.createTempFile("exclude-filter", ".xml")
+        xmlFile.toFile().text = "<FindBugsFilter></FindBugsFilter>"
+
+        Artifact artifact = Mock(Artifact)
+        artifact.groupId >> "com.example"
+        artifact.file >> xmlFile.toFile()
+        impl.pluginArtifacts = [artifact]
+
+        when:
+        Map<String, String> result = impl.buildBugTypeUrlMap(null)
+
+        then:
+        result.isEmpty()
+        0 * log.warn(_)
+
+        cleanup:
+        Files.deleteIfExists(xmlFile)
+    }
+
     void "buildBugTypeUrlMap logs warning for corrupt JAR covers catch block"() {
         given:
         Log log = Mock()
