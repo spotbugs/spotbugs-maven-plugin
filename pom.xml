@@ -1245,15 +1245,6 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <!-- Maven compiler plugin 4.x does not place Error Prone's classpath-processor dependency on
-                                 the javac plugin path, so -Xplugin:ErrorProne fails with "plug-in not found".
-                                 Keep Maven 4 compilerArgs empty until that combination is supported. -->
-                            <compilerArgs combine.self="override" />
-                        </configuration>
-                    </plugin>
-                    <plugin>
                         <groupId>org.codehaus.gmavenplus</groupId>
                         <artifactId>gmavenplus-plugin</artifactId>
                         <!-- gmavenplus reads maven.compiler.target for targetBytecode; base-parent's Maven 4 profile clears
