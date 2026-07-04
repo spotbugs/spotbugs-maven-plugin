@@ -19,6 +19,7 @@ import groovy.xml.slurpersupport.NodeChild
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.charset.StandardCharsets
 
 //  check module 1
 
@@ -43,7 +44,7 @@ println '******************'
 
 String effortLevel = 'default'
 
-assert spotbugsHtml.text.contains('<i>' + effortLevel + '</i>')
+assert spotbugsHtml.getText(StandardCharsets.UTF_8.name()).contains('<i>' + effortLevel + '</i>')
 
 XmlSlurper xmlSlurper = new XmlSlurper()
 xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
@@ -112,7 +113,7 @@ println '******************'
 println 'Checking HTML file'
 println '******************'
 
-assert spotbugsHtml.text.contains('<i>' + effortLevel + '</i>')
+assert spotbugsHtml.getText(StandardCharsets.UTF_8.name()).contains('<i>' + effortLevel + '</i>')
 
 // Temporarily allow DOCTYPE for HTML parsing
 xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', false)
