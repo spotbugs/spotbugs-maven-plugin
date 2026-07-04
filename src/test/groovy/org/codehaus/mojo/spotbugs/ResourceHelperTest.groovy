@@ -176,6 +176,30 @@ class ResourceHelperTest extends Specification {
         Files.deleteIfExists(outputDirectory)
     }
 
+    void 'getResourceFile sanitizes special characters in resource path'() {
+        given:
+        Log log = Mock(Log) {
+            isDebugEnabled() >> true
+        }
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-sanitize')
+        ResourceManager resourceManager = Mock(ResourceManager) {
+            getResourceAsInputStream(_) >> new ByteArrayInputStream('data'.bytes)
+        }
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
+        // Resource path contains characters that should be sanitized: ? : & =
+        String resource = 'http://example.com?key=val&other=x/filter.xml'
+
+        when:
+        File result = helper.getResourceFile(resource)
+
+        then:
+        result.exists()
+
+        cleanup:
+        result?.delete()
+        Files.deleteIfExists(outputDirectory)
+    }
+
     void 'getResourceFile throws MojoExecutionException when reading the resource stream throws IOException'() {
         given:
         Log log = Mock(Log) {

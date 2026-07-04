@@ -336,6 +336,16 @@ class SpotBugsAggregateMojoTest extends Specification {
         org.apache.maven.reporting.AbstractMavenReport.isAssignableFrom(SpotBugsAggregateMojo)
     }
 
+    void 'getOutputName returns spotbugs plugin name'() {
+        expect:
+        new SpotBugsAggregateMojo().getOutputName() == SpotBugsInfo.PLUGIN_NAME
+    }
+
+    void 'getOutputPath returns spotbugs plugin name'() {
+        expect:
+        new SpotBugsAggregateMojo().getOutputPath() == SpotBugsInfo.PLUGIN_NAME
+    }
+
     // -------------------------------------------------------------------------
     // Property defaults
     // -------------------------------------------------------------------------
@@ -380,6 +390,88 @@ class SpotBugsAggregateMojoTest extends Specification {
     // canGenerateReport() - additional coverage
     // -------------------------------------------------------------------------
 
+    void 'canGenerateReport returns false and logs info when skip=true'() {
+        given:
+        Log log = Mock(Log)
+        SpotBugsAggregateMojo mojo = new SpotBugsAggregateMojo()
+        mojo.skip = true
+        mojo.log = log
+        mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
+        mojo.metaClass.getReactorProjects = { -> [] }
+
+        when:
+        boolean result = mojo.canGenerateReport()
+
+        then:
+        !result
+        1 * log.info('Spotbugs aggregate plugin skipped')
+    }
+
+    void 'canGenerateReport returns false when no reactor project has an XML file'() {
+        given:
+        Log log = Mock(Log)
+
+        MavenProject moduleA = buildMavenProject(new File(tempDir, 'module-a'))
+
+        SpotBugsAggregateMojo mojo = new SpotBugsAggregateMojo()
+        mojo.log = log
+        mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
+        mojo.metaClass.getReactorProjects = { -> [moduleA] }
+
+        when:
+        boolean result = mojo.canGenerateReport()
+
+        then:
+        !result
+        1 * log.info({ String msg -> msg.contains('No SpotBugs XML results found') })
+    }
+
+    void 'canGenerateReport returns false when reactor project XML file is empty'() {
+        given:
+        Log log = Mock(Log)
+
+        File moduleDir = new File(tempDir, 'module-empty')
+        moduleDir.mkdirs()
+        // Create an empty XML file
+        new File(moduleDir, 'spotbugsXml.xml').createNewFile()
+
+        MavenProject moduleA = buildMavenProject(moduleDir)
+
+        SpotBugsAggregateMojo mojo = new SpotBugsAggregateMojo()
+        mojo.log = log
+        mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
+        mojo.metaClass.getReactorProjects = { -> [moduleA] }
+
+        when:
+        boolean result = mojo.canGenerateReport()
+
+        then:
+        !result
+        1 * log.info({ String msg -> msg.contains('No SpotBugs XML results found') })
+    }
+
+    void 'canGenerateReport returns true when at least one reactor project has a non-empty XML file'() {
+        given:
+        Log log = Mock(Log)
+
+        File moduleDir = new File(tempDir, 'module-with-xml')
+        moduleDir.mkdirs()
+        new File(moduleDir, 'spotbugsXml.xml').text = SPOTBUGS_XML_NO_BUGS
+
+        MavenProject moduleA = buildMavenProject(moduleDir)
+
+        SpotBugsAggregateMojo mojo = new SpotBugsAggregateMojo()
+        mojo.log = log
+        mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
+        mojo.metaClass.getReactorProjects = { -> [moduleA] }
+
+        when:
+        boolean result = mojo.canGenerateReport()
+
+        then:
+        result
+    }
+
     void 'canGenerateReport returns true when only some reactor projects have XML files'() {
         given:
         Log log = Mock(Log)
@@ -398,7 +490,7 @@ class SpotBugsAggregateMojoTest extends Specification {
         SpotBugsAggregateMojo mojo = new SpotBugsAggregateMojo()
         mojo.log = log
         mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
-        setReactorProjects(mojo, [moduleA, moduleB])
+        mojo.metaClass.getReactorProjects = { -> [moduleA, moduleB] }
 
         when:
         boolean result = mojo.canGenerateReport()
