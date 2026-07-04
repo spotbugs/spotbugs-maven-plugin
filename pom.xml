@@ -156,7 +156,6 @@
         <l10nPluginVersion>1.2.0</l10nPluginVersion>
         <codenarcPluginVersion>0.1</codenarcPluginVersion>
         <gmavenPluginVersion>5.1.0</gmavenPluginVersion>
-        <invokerPluginVersion>3.10.1</invokerPluginVersion>
         <scmPluginVersion>2.2.1</scmPluginVersion>
 
         <spotbugsTestDebug>false</spotbugsTestDebug>
@@ -1049,7 +1048,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-invoker-plugin</artifactId>
-                        <version>${invokerPluginVersion}</version>
                         <dependencies>
                             <!-- Keep groovy at same version we are using -->
                             <dependency>
