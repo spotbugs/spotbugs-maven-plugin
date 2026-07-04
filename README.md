@@ -57,7 +57,7 @@ Continue to use `FindBugsFilter` when needed as the spotbugs project has not yet
 
 ## Running Tests ##
 
-Run all tests
+Run all tests [preferred]
 ```
 mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=8"
 ```
