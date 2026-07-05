@@ -156,7 +156,6 @@
         <l10nPluginVersion>1.2.0</l10nPluginVersion>
         <codenarcPluginVersion>0.1</codenarcPluginVersion>
         <gmavenPluginVersion>5.1.0</gmavenPluginVersion>
-        <invokerPluginVersion>3.10.1</invokerPluginVersion>
         <scmPluginVersion>2.2.1</scmPluginVersion>
 
         <spotbugsTestDebug>false</spotbugsTestDebug>
@@ -1049,7 +1048,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-invoker-plugin</artifactId>
-                        <version>${invokerPluginVersion}</version>
                         <dependencies>
                             <!-- Keep groovy at same version we are using -->
                             <dependency>
@@ -1245,15 +1243,6 @@
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <!-- Maven compiler plugin 4.x does not place Error Prone's classpath-processor dependency on
-                                 the javac plugin path, so -Xplugin:ErrorProne fails with "plug-in not found".
-                                 Keep Maven 4 compilerArgs empty until that combination is supported. -->
-                            <compilerArgs combine.self="override" />
-                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.codehaus.gmavenplus</groupId>
