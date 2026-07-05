@@ -120,13 +120,13 @@
         <spotbugs.plugin>4.10.2.0</spotbugs.plugin>
 
         <!-- Use 'master' branch or '${spotbugs.version}' tag for integration test source pull from spotbugs. -->
-        <!-- <spotbugs-scm.version>master</spotbugs-scm.version> -->
         <spotbugs-scm.version>${spotbugs.version}</spotbugs-scm.version>
         <spotbugs-scm.type>tags</spotbugs-scm.type>
 
         <byte-buddy.version>1.18.11</byte-buddy.version>
         <javabean-tester.version>2.12.2</javabean-tester.version>
         <junitVersion>6.1.1</junitVersion>
+        <log4j2.version>2.26.1</log4j2.version>
         <slf4jVersion>2.0.18</slf4jVersion>
 
         <antVersion>1.10.17</antVersion>
@@ -437,7 +437,7 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-to-slf4j</artifactId>
-            <version>2.26.1</version>
+            <version>${log4j2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -567,12 +567,10 @@
         <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-core</artifactId>
-            <version>${doxiaVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-sink-api</artifactId>
-            <version>${doxiaVersion}</version>
         </dependency>
 
         <!-- plexus -->
@@ -598,12 +596,6 @@
             <groupId>org.apache.maven.plugin-testing</groupId>
             <artifactId>maven-plugin-testing-harness</artifactId>
             <version>${maven-plugin-testing-harness.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-compat</artifactId>
-            <version>${mavenVersion}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
