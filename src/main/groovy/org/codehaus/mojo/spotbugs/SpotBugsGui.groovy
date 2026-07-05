@@ -21,6 +21,7 @@ import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
+import org.apache.maven.toolchain.Toolchain
 import org.apache.maven.toolchain.ToolchainManager
 import org.codehaus.plexus.resource.ResourceManager
 
@@ -158,7 +159,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
         ant.project.setProperty('basedir', spotbugsXmlOutputDirectory.getAbsolutePath())
         ant.project.setProperty('verbose', 'true')
 
-        def toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
+        Toolchain toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
         Map<String, Object> javaTaskParams = [classname: 'edu.umd.cs.findbugs.LaunchAppropriateUI',
                 fork: 'true', failonerror: 'true', clonevm: 'true', maxmemory: "${maxHeap}m"]
         if (toolchain) {

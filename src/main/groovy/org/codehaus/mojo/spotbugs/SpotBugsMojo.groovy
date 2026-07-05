@@ -33,6 +33,7 @@ import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
 import org.apache.maven.reporting.AbstractMavenReport
 import org.apache.maven.reporting.MavenReport
+import org.apache.maven.toolchain.Toolchain
 import org.apache.maven.toolchain.ToolchainManager
 import org.codehaus.plexus.resource.ResourceManager
 import org.codehaus.plexus.resource.loader.FileResourceLoader
@@ -1250,7 +1251,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         AntBuilder ant = new AntBuilder()
         Map<String, Object> javaTaskParams = [classname: 'edu.umd.cs.findbugs.FindBugs2', fork: "${fork}",
                 failonerror: 'true', clonevm: 'false', timeout: timeout, maxmemory: "${maxHeap}m"]
-        def toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
+        Toolchain toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
         String javaExecutable = toolchain?.findTool('java')
         if (javaExecutable) {
             if (fork) {
@@ -1520,7 +1521,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * @since 4.9.8.4
      */
     String getJavaExecutable() {
-        def toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
+        Toolchain toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
         if (toolchain) {
             return toolchain.findTool('java')
         }

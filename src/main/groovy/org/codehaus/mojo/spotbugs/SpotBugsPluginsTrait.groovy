@@ -9,6 +9,7 @@ package org.codehaus.mojo.spotbugs
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import groovy.xml.XmlSlurper
+import groovy.xml.slurpersupport.GPathResult
 
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
@@ -221,7 +222,7 @@ trait SpotBugsPluginsTrait {
                     JarEntry entry = jar.getEntry('findbugs.xml')
                     if (!entry) return
 
-                    def xml = new XmlSlurper().parse(jar.getInputStream(entry))
+                    GPathResult xml = new XmlSlurper().parse(jar.getInputStream(entry))
                     String pluginId = xml.@pluginid.text()
                     String urlTemplate = effectiveUrls[pluginId]
                     if (!urlTemplate) return

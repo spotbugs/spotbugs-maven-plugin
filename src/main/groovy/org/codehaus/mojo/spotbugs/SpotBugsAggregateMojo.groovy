@@ -323,7 +323,7 @@ class SpotBugsAggregateMojo extends AbstractMavenReport {
         }
         writer.write SpotBugsInfo.EOL
 
-        def markup = xmlBuilder.bind { builder ->
+        Writable markup = xmlBuilder.bind { GroovyObject builder ->
             BugCollection {
                 Project(name: project.name) {
                     allSrcDirs.each { String srcDir ->

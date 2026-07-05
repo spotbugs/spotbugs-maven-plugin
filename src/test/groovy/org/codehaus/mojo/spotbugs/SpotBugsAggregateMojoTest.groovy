@@ -13,6 +13,9 @@ import org.apache.maven.project.MavenProject
 import spock.lang.Specification
 import spock.lang.TempDir
 
+import java.lang.reflect.Field
+import java.lang.reflect.Method
+import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 
@@ -159,7 +162,7 @@ class SpotBugsAggregateMojoTest extends Specification {
         setReactorProjects(mojo, [])
 
         when:
-        def method = SpotBugsAggregateMojo.class.getDeclaredMethod('buildAggregatedXml', java.nio.charset.Charset)
+        Method method = SpotBugsAggregateMojo.class.getDeclaredMethod('buildAggregatedXml', Charset)
         method.setAccessible(true)
         File result = method.invoke(mojo, StandardCharsets.UTF_8) as File
 
@@ -201,7 +204,7 @@ class SpotBugsAggregateMojoTest extends Specification {
         setField(mojo, 'project', rootProject)
 
         when:
-        def method = SpotBugsAggregateMojo.class.getDeclaredMethod('buildAggregatedXml', java.nio.charset.Charset)
+        Method method = SpotBugsAggregateMojo.class.getDeclaredMethod('buildAggregatedXml', Charset)
         method.setAccessible(true)
         File result = method.invoke(mojo, StandardCharsets.UTF_8) as File
 
@@ -241,7 +244,7 @@ class SpotBugsAggregateMojoTest extends Specification {
         setField(mojo, 'project', rootProject)
 
         when:
-        def method = SpotBugsAggregateMojo.class.getDeclaredMethod('buildAggregatedXml', java.nio.charset.Charset)
+        Method method = SpotBugsAggregateMojo.class.getDeclaredMethod('buildAggregatedXml', Charset)
         method.setAccessible(true)
         File result = method.invoke(mojo, StandardCharsets.UTF_8) as File
 
@@ -580,7 +583,7 @@ class SpotBugsAggregateMojoTest extends Specification {
         Class<?> clazz = target.getClass()
         while (clazz != null) {
             try {
-                def field = clazz.getDeclaredField(fieldName)
+                Field field = clazz.getDeclaredField(fieldName)
                 field.setAccessible(true)
                 field.set(target, value)
                 return
