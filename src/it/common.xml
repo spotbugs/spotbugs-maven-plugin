@@ -51,7 +51,7 @@
   </properties>
 
   <build>
-    <sourceDirectory>@project.build.directory@/it-src-spotbugs/spotbugsTestCases/src/java</sourceDirectory>
+    <sourceDirectory>@project.build.directory@/spotbugs-@spotbugs-scm.version@/spotbugsTestCases/src/java</sourceDirectory>
     <testSourceDirectory>@project.basedir@/src/it-src/test/java</testSourceDirectory>
     <pluginManagement>
       <plugins>
