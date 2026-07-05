@@ -154,6 +154,7 @@
 
         <download-plugin.version>2.1.0</download-plugin.version>
         <execPluginVersion>3.6.3</execPluginVersion>
+        <find-and-replace-plugin.version>1.0.5</find-and-replace-plugin.version>
         <pluginPluginVersion>3.15.2</pluginPluginVersion>
         <l10nPluginVersion>1.2.0</l10nPluginVersion>
         <codenarcPluginVersion>0.1</codenarcPluginVersion>
@@ -817,33 +818,39 @@
             </plugin>
 
             <!-- Strip non-reproducible timestamps from GroovyDoc HTML before JAR packaging -->
+            <!-- Exists until https://github.com/groovy/GMavenPlus/issues/342 is resolved -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
+                <groupId>software.xdev</groupId>
+                <artifactId>find-and-replace-maven-plugin</artifactId>
+                <version>${find-and-replace-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>strip-groovydoc-timestamps</id>
+                        <id>strip-groovydoc-comment-timestamps</id>
                         <goals>
-                            <goal>run</goal>
+                            <goal>file-contents</goal>
                         </goals>
                         <phase>prepare-package</phase>
                         <configuration>
-                            <target>
-                                <!-- Remove " on <date>" from GroovyDoc generated HTML comments -->
-                                <replaceregexp byline="true">
-                                    <regexp pattern=" on \w+ \w+ +\d+ \d+:\d+:\d+ \S+ \d+" />
-                                    <substitution expression="" />
-                                    <fileset dir="${project.reporting.outputDirectory}/gapidocs" erroronmissingdir="false" includes="**/*.html" />
-                                    <fileset dir="${project.reporting.outputDirectory}/testgapidocs" erroronmissingdir="false" includes="**/*.html" />
-                                </replaceregexp>
-                                <!-- Remove meta date tags from GroovyDoc generated HTML -->
-                                <replaceregexp byline="true">
-                                    <regexp pattern="&lt;meta name=&quot;date&quot; content=&quot;[0-9-]+&quot;&gt;" />
-                                    <substitution expression="" />
-                                    <fileset dir="${project.reporting.outputDirectory}/gapidocs" erroronmissingdir="false" includes="**/*.html" />
-                                    <fileset dir="${project.reporting.outputDirectory}/testgapidocs" erroronmissingdir="false" includes="**/*.html" />
-                                </replaceregexp>
-                            </target>
+                            <baseDir>${project.reporting.outputDirectory}</baseDir>
+                            <recursive>true</recursive>
+                            <fileMask>.html</fileMask>
+                            <findRegex>on \w+ \w+ +\d+ \d+:\d+:\d+ \S+ \d+</findRegex>
+                            <replaceValue />
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>strip-groovydoc-meta-date-tags</id>
+                        <goals>
+                            <goal>file-contents</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <baseDir>${project.reporting.outputDirectory}</baseDir>
+                            <recursive>true</recursive>
+                            <fileMask>.html</fileMask>
+                            <findRegex>&lt;meta name="date" content="[0-9-]+"\&gt;</findRegex>
+                            <replaceValue />
                         </configuration>
                     </execution>
                 </executions>
