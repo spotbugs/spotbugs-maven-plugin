@@ -148,3 +148,10 @@ E.g. to set the findbugs.assertionmethods analyzer property:
     </configuration>
 </plugin>
 ```
+## Reproduciblity ##
+
+To run reproducibility checks, you can execute the following.
+
+```
+mvn clean verify artifact:compare -D"reference.repo=https://repo.maven.apache.org/maven2/"
+```
