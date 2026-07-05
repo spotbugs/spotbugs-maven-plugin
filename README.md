@@ -150,7 +150,7 @@ E.g. to set the findbugs.assertionmethods analyzer property:
 ```
 ## Reproduciblity ##
 
-To run reproducibility checks, you can execute the following.
+To run reproducibility checks, you can execute the following.  Its best to checkout the 'tag' first and make sure your maven and jdk revisions match what was used for the release.
 
 ```
 mvn clean verify artifact:compare -D"reference.repo=https://repo.maven.apache.org/maven2/"
