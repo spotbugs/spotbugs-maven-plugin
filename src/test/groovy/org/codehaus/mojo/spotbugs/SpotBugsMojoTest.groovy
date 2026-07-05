@@ -6,6 +6,8 @@
  */
 package org.codehaus.mojo.spotbugs
 
+import java.lang.reflect.Field
+import java.lang.reflect.Method
 import java.util.jar.JarEntry
 import java.util.jar.JarOutputStream
 
@@ -73,7 +75,7 @@ class SpotBugsMojoTest extends Specification {
         }
 
         when:
-        def method = SpotBugsMojo.class.getDeclaredMethod('containsJdkClasses', String.class)
+        Method method = SpotBugsMojo.class.getDeclaredMethod('containsJdkClasses', String.class)
         method.setAccessible(true)
         boolean result = method.invoke(mojo, jarWithJdkClasses.absolutePath)
 
@@ -94,7 +96,7 @@ class SpotBugsMojoTest extends Specification {
         }
 
         when:
-        def method = SpotBugsMojo.class.getDeclaredMethod('containsJdkClasses', String.class)
+        Method method = SpotBugsMojo.class.getDeclaredMethod('containsJdkClasses', String.class)
         method.setAccessible(true)
         boolean result = method.invoke(mojo, regularJar.absolutePath)
 
@@ -111,7 +113,7 @@ class SpotBugsMojoTest extends Specification {
         classesDir.mkdirs()
 
         when:
-        def method = SpotBugsMojo.class.getDeclaredMethod('containsJdkClasses', String.class)
+        Method method = SpotBugsMojo.class.getDeclaredMethod('containsJdkClasses', String.class)
         method.setAccessible(true)
         boolean result = method.invoke(mojo, classesDir.absolutePath)
 
@@ -843,7 +845,7 @@ class SpotBugsMojoTest extends Specification {
         setField(mojo, 'project', project)
 
         when:
-        def method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
+        Method method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
         method.setAccessible(true)
         File result = method.invoke(mojo) as File
 
@@ -878,7 +880,7 @@ class SpotBugsMojoTest extends Specification {
         setField(mojo, 'project', project)
 
         when:
-        def method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
+        Method method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
         method.setAccessible(true)
         File result = method.invoke(mojo) as File
 
@@ -916,7 +918,7 @@ class SpotBugsMojoTest extends Specification {
         setField(mojo, 'project', project)
 
         when:
-        def method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
+        Method method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
         method.setAccessible(true)
         File result = method.invoke(mojo) as File
 
@@ -959,7 +961,7 @@ class SpotBugsMojoTest extends Specification {
         setField(mojo, 'project', project)
 
         when:
-        def method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
+        Method method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
         method.setAccessible(true)
         File result = method.invoke(mojo) as File
 
@@ -1014,7 +1016,7 @@ class SpotBugsMojoTest extends Specification {
         setField(mojo, 'project', project)
 
         when:
-        def method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
+        Method method = SpotBugsMojo.class.getDeclaredMethod('createSpotbugsAuxClasspathFile')
         method.setAccessible(true)
         File result = method.invoke(mojo) as File
 
@@ -1039,7 +1041,7 @@ class SpotBugsMojoTest extends Specification {
         File target = new File(tempDir, 'nested/subdir/output.xml')
 
         when:
-        def method = SpotBugsMojo.class.getDeclaredMethod('forceFileCreation', File)
+        Method method = SpotBugsMojo.class.getDeclaredMethod('forceFileCreation', File)
         method.setAccessible(true)
         method.invoke(null, target)
 
@@ -1054,7 +1056,7 @@ class SpotBugsMojoTest extends Specification {
         target.text = 'old content'
 
         when:
-        def method = SpotBugsMojo.class.getDeclaredMethod('forceFileCreation', File)
+        Method method = SpotBugsMojo.class.getDeclaredMethod('forceFileCreation', File)
         method.setAccessible(true)
         method.invoke(null, target)
 
@@ -1128,7 +1130,7 @@ class SpotBugsMojoTest extends Specification {
 
     private static List<String> invokeGetSpotbugsArgs(SpotBugsMojo mojo, File htmlFile, File xmlFile,
             File sarifFile, File auxFile) {
-        def method = SpotBugsMojo.class.getDeclaredMethod('getSpotbugsArgs',
+        Method method = SpotBugsMojo.class.getDeclaredMethod('getSpotbugsArgs',
             File, File, File, File)
         method.setAccessible(true)
         return method.invoke(mojo, htmlFile, xmlFile, sarifFile, auxFile) as List<String>
@@ -1138,7 +1140,7 @@ class SpotBugsMojoTest extends Specification {
         Class<?> clazz = target.getClass()
         while (clazz != null) {
             try {
-                def field = clazz.getDeclaredField(fieldName)
+                Field field = clazz.getDeclaredField(fieldName)
                 field.setAccessible(true)
                 field.set(target, value)
                 return

@@ -6,8 +6,11 @@
  */
 package com.github.spotbugs.spotbugs_maven_plugin
 
+import java.lang.reflect.Field
+
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.logging.Log
+
 import spock.lang.Specification
 
 class HelpMojoTest extends Specification {
@@ -29,7 +32,7 @@ class HelpMojoTest extends Specification {
     }
 
     private static void setField(Object obj, String fieldName, Object value) {
-        def field = obj.getClass().getDeclaredField(fieldName)
+        Field field = obj.getClass().getDeclaredField(fieldName)
         field.setAccessible(true)
         field.set(obj, value)
     }
