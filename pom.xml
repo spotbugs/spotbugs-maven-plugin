@@ -187,7 +187,7 @@
         <jaxen.version>2.0.6</jaxen.version>
         <lang3.version>3.20.0</lang3.version>
         <logging.version>1.4.0</logging.version>
-        <saxon.he.version>12.9</saxon.he.version>
+        <saxon.he.version>12.10</saxon.he.version>
         <velocity.version>2.4.1</velocity.version>
 
         <!-- Automatic Module Name -->
