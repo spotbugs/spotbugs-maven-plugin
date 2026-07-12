@@ -1512,19 +1512,4 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         this.outputDirectory = reportOutputDirectory
     }
 
-    /**
-     * Gets the Java executable to use for the forked SpotBugs process.
-     * If a JDK toolchain is configured for the build, the executable from that toolchain is returned.
-     * Otherwise, returns {@code null} and the default JVM will be used.
-     *
-     * @return the java executable path from the toolchain, or {@code null} if no toolchain is configured
-     * @since 4.9.8.4
-     */
-    String getJavaExecutable() {
-        Toolchain toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
-        if (toolchain) {
-            return toolchain.findTool('java')
-        }
-        return null
-    }
 }
