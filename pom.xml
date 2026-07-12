@@ -791,26 +791,12 @@
                         <phase>prepare-package</phase>
                     </execution>
                     <execution>
-                        <id>generate-groovydoc-jars</id>
-                        <goals>
-                            <goal>groovydoc-jar</goal>
-                            <goal>groovydocTests-jar</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <!-- Do not re-invoke groovydoc: HTML was already generated and timestamps stripped -->
-                            <invokeGroovyDoc>false</invokeGroovyDoc>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>site</id>
                         <goals>
                             <goal>generateStubs</goal>
                             <goal>generateTestStubs</goal>
                             <goal>groovydoc</goal>
                             <goal>groovydocTests</goal>
-                            <goal>groovydoc-jar</goal>
-                            <goal>groovydocTests-jar</goal>
                         </goals>
                         <phase>site</phase>
                     </execution>
@@ -888,6 +874,38 @@
                             <arguments>
                                 <argument>${project.build.directory}/generated-sources/groovy-stubs/test</argument>
                             </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>package-reproducible-groovydoc-jar</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <classifier>groovydoc</classifier>
+                            <classesDirectory>${project.build.directory}/site/gapidocs</classesDirectory>
+                            <skipIfEmpty>true</skipIfEmpty>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>package-reproducible-test-groovydoc-jar</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <classifier>test-groovydoc</classifier>
+                            <classesDirectory>${project.build.directory}/site/testgapidocs</classesDirectory>
+                            <skipIfEmpty>true</skipIfEmpty>
                         </configuration>
                     </execution>
                 </executions>

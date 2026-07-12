@@ -148,10 +148,18 @@ E.g. to set the findbugs.assertionmethods analyzer property:
     </configuration>
 </plugin>
 ```
-## Reproduciblity ##
 
-To run reproducibility checks, you can execute the following.  Its best to checkout the 'tag' first and make sure your maven and jdk revisions match what was used for the release.
+## Reproducible Builds ##
+
+To run reproducibility checks against an official release, execute the following command. It is best to check out the specific release tag first and ensure your Maven and JDK versions match what was used for that release:
 
 ```
 mvn clean verify artifact:compare -D"reference.repo=https://repo.maven.apache.org/maven2/"
+```
+
+To validate reproducibility locally on your current branch before a release, execute this two-step loop. This uses your local .m2 cache as a reference baseline without overwriting it on the second pass:
+
+```
+ mvn clean install
+ mvn clean verify artifact:compare -D"reference.repo=file:///${user.home}/.m2/repository/"
 ```
