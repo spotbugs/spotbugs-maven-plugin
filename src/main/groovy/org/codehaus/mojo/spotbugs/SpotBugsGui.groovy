@@ -164,10 +164,10 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
         Toolchain toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
 
-        String javaExecutable = "java"
+        String javaExecutable = 'java'
 
         if (toolchain != null) {
-            String toolchainPath = toolchain?.findTool('java')
+            String toolchainPath = toolchain.findTool('java')
             if (toolchainPath != null) {
                 log.info("Toolchain in spotbugs-maven-plugin: ${toolchain}")
                 javaExecutable = toolchainPath

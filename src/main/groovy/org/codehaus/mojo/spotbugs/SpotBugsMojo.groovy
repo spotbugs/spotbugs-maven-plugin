@@ -1255,7 +1255,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         String javaExecutable = 'java'
 
         if (toolchain != null) {
-            String toolchainPath = toolchain?.findTool('java')
+            String toolchainPath = toolchain.findTool('java')
             if (toolchainPath != null) {
                 if (fork) {
                     log.info("Toolchain in spotbugs-maven-plugin: ${toolchain}")
