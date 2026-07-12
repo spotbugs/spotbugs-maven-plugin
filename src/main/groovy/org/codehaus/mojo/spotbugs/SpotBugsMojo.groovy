@@ -1074,8 +1074,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     }
 
     /**
-     * Create the Spotbugs AuxClasspath file in the project build directory.
-     * The caller is responsible for deleting the returned file when it is no longer needed.
+     * Create the Temporary Spotbugs AuxClasspath file in the project build directory.
      *
      * @return the auxclasspath file, or null if no auxclasspath elements are available
      */
@@ -1118,7 +1117,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                     log.debug('  Last AuxClasspath is -> ' + auxClasspathList[auxClasspathList.size() - 1])
                 }
 
-                auxClasspathFile = new File(project.build.directory, 'spotbugsAuxClasspath.tmp')
+                auxClasspathFile = Files.createTempFile(Path.of(project.build.directory), 'spotbugsAuxClasspath', '.tmp').toFile()
                 Files.createDirectories(auxClasspathFile.toPath().getParent())
 
                 if (log.isDebugEnabled()) {
@@ -1235,8 +1234,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         File auxClasspathFile = createSpotbugsAuxClasspathFile()
 
-        try {
-            List<String> spotbugsArgs = getSpotbugsArgs(htmlTempFile, xmlTempFile, sarifTempFile, auxClasspathFile)
+        List<String> spotbugsArgs = getSpotbugsArgs(htmlTempFile, xmlTempFile, sarifTempFile, auxClasspathFile)
 
         Charset effectiveEncoding
         if (sourceEncoding) {
@@ -1457,13 +1455,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             // Do not delete file when running under debug mode
             if (!debug) {
                 sarifTempFile.delete()
-            }
-        }
-
-        } finally {
-            // Delete the auxclasspath temp file regardless of success or failure
-            if (auxClasspathFile && !debug) {
-                auxClasspathFile.delete()
             }
         }
     }
