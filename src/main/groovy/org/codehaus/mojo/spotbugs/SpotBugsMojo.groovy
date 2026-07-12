@@ -6,7 +6,6 @@
  */
 package org.codehaus.mojo.spotbugs
 
-import groovy.ant.AntBuilder
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovy.xml.XmlSlurper
@@ -19,6 +18,7 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.concurrent.TimeUnit
 import java.util.function.Predicate
 import java.util.jar.JarFile
 import java.util.stream.Collectors
@@ -437,14 +437,15 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     /**
      * Fork a VM for Spotbugs analysis.  This will allow you to set timeouts and heap size.
      *
+     * @deprecated Parameter 'fork' is deprecated and ignored. SpotBugs is always executed in a separate process.
      * @since 2.3.2
      */
+    @Deprecated(forRemoval = true, since = '4.10.3.0')
     @Parameter(defaultValue = 'true', property = 'spotbugs.fork')
     boolean fork
 
     /**
      * Maximum Java heap size in megabytes  (default=512).
-     * This only works if the <b>fork</b> parameter is set <b>true</b>.
      *
      * @since 2.2
      */
@@ -455,7 +456,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
      * Specifies the amount of time, in milliseconds, that Spotbugs may run before
      * it is assumed to be hung and is terminated.
      * The default is 600,000 milliseconds, which is ten minutes.
-     * This only works if the <b>fork</b> parameter is set <b>true</b>.
      *
      * @since 2.2
      */
@@ -463,7 +463,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     int timeout
 
     /**
-     * The arguments to pass to the forked VM (ignored if fork is disabled).
+     * The arguments to pass to the forked VM.
      *
      * @since 2.4.1
      */
@@ -493,7 +493,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     String userPrefs
 
     /**
-     * System properties to set in the VM (or the forked VM if fork is enabled).
+     * System properties to set in the VM.
      *
      * @since 4.3.0
      */
@@ -1223,10 +1223,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
         }
 
-        if (log.isInfoEnabled()) {
-            log.info("Fork Value is ${fork}")
-        }
-
         long startTime
         if (debug) {
             startTime = System.nanoTime()
@@ -1246,10 +1242,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             log.debug('File Encoding is ' + effectiveEncoding.name())
         }
 
-        AntBuilder ant = new AntBuilder()
-        Map<String, Object> javaTaskParams = [classname: 'edu.umd.cs.findbugs.FindBugs2', fork: "${fork}",
-                failonerror: 'true', clonevm: 'false', timeout: timeout, maxmemory: "${maxHeap}m"]
-
         Toolchain toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
 
         String javaExecutable = 'java'
@@ -1257,63 +1249,73 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (toolchain != null) {
             String toolchainPath = toolchain.findTool('java')
             if (toolchainPath != null) {
-                if (fork) {
-                    log.info("Toolchain in spotbugs-maven-plugin: ${toolchain}")
-                    javaExecutable = toolchainPath
-                } else {
-                    log.warn('Toolchain is configured but fork is disabled. The toolchain JVM will not be used.')
-                }
+                log.info("Toolchain in spotbugs-maven-plugin: ${toolchain}")
+                javaExecutable = toolchainPath
             }
         }
 
-        javaTaskParams['jvm'] = javaExecutable
+        // Build classpath from pluginArtifacts
+        List<String> classpathElements = pluginArtifacts.collect { Artifact pluginArtifact -> pluginArtifact.file.getAbsolutePath() }
+        String classpath = classpathElements.join(File.pathSeparator)
 
-        ant.java(javaTaskParams) {
-
-            sysproperty(key: 'file.encoding', value: effectiveEncoding.name())
-
-            if (jvmArgs && fork) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Adding JVM Args => ${jvmArgs}")
-                }
-
-                List<String> args = Arrays.asList(jvmArgs.split(SpotBugsInfo.BLANK))
-
-                args.each() { String jvmArg ->
-                    if (log.isDebugEnabled()) {
-                        log.debug("Adding JVM Arg => ${jvmArg}")
-                    }
-                    jvmarg(value: jvmArg)
-                }
+        // Build JVM args
+        List<String> jvmArgsList = []
+        if (jvmArgs) {
+            if (log.isDebugEnabled()) {
+                log.debug("Adding JVM Args => ${jvmArgs}")
             }
-
-            if (debug || trace) {
-                sysproperty(key: 'findbugs.debug', value: Boolean.TRUE)
+            jvmArgsList.addAll(jvmArgs.split(SpotBugsInfo.BLANK))
+        }
+        jvmArgsList << "-Dfile.encoding=${effectiveEncoding.name()}"
+        if (debug || trace) {
+            jvmArgsList << "-Dfindbugs.debug=true"
+        }
+        systemPropertyVariables.each { Map.Entry<String, String> sysProp ->
+            if (log.isDebugEnabled()) {
+                log.debug("System property ${sysProp.key} is ${sysProp.value}")
             }
+            jvmArgsList << "-D${sysProp.key}=${sysProp.value}"
+        }
 
-            classpath() {
+        // Build command
+        List<String> command = []
+        command << javaExecutable
+        command << "-Xmx${maxHeap}m"
+        command.addAll(jvmArgsList)
+        command << '-cp'
+        command << classpath
+        command << 'edu.umd.cs.findbugs.FindBugs2'
+        command.addAll(spotbugsArgs)
 
-                pluginArtifacts.each() { Artifact pluginArtifact ->
-                    if (log.isDebugEnabled()) {
-                        log.debug("  Adding to pluginArtifact -> ${pluginArtifact.file}")
-                    }
+        List<String> sanitizedCommand = command.collect(Object::toString)
 
-                    pathelement(location: pluginArtifact.file)
-                }
-            }
+        if (log.isDebugEnabled()) {
+            log.debug("SpotBugs command: ${sanitizedCommand}")
+        }
 
-            spotbugsArgs.each { String spotbugsArg ->
-                if (log.isDebugEnabled()) {
-                    log.debug("Spotbugs arg is ${spotbugsArg}")
-                }
-                arg(value: spotbugsArg)
-            }
+        ProcessBuilder pb = new ProcessBuilder(sanitizedCommand)
+        pb.redirectErrorStream(true)
+        // Redirect the sub-process output straight to Maven's console logs dynamically
+        pb.redirectOutput(ProcessBuilder.Redirect.INHERIT)
+        pb.directory(new File(session.getCurrentProject().getBuild().directory))
 
-            systemPropertyVariables.each { Map.Entry<String, String> sysProp ->
-                if (log.isDebugEnabled()) {
-                    log.debug("System property ${sysProp.key} is ${sysProp.value}")
-                }
-                sysproperty(key: sysProp.key, value: sysProp.value)
+        Process process = pb.start()
+
+        long waitTime = (timeout > 0) ? (long) timeout : Long.MAX_VALUE
+        boolean finished = process.waitFor(waitTime, TimeUnit.MILLISECONDS)
+
+        if (!finished) {
+            process.destroyForcibly()
+            log.error('Timeout: killed the sub-process')
+            throw new MojoExecutionException("SpotBugs execution timed out.")
+        }
+
+        int exitCode = process.exitValue()
+
+        if (exitCode != 0) {
+            log.error("SpotBugs execution failed with exit code ${exitCode}")
+            if (failOnError) {
+                throw new MojoExecutionException("SpotBugs failed with exit code ${exitCode}")
             }
         }
 

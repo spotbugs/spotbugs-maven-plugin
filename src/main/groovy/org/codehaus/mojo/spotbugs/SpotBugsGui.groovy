@@ -6,8 +6,6 @@
  */
 package org.codehaus.mojo.spotbugs
 
-import groovy.ant.AntBuilder
-
 import java.awt.GraphicsEnvironment
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
@@ -155,12 +153,13 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
             spotbugsArgs << getSpotbugsPlugins()
         }
 
-        AntBuilder ant = new AntBuilder()
-        ant.project.setProperty('basedir', spotbugsXmlOutputDirectory.getAbsolutePath())
-        ant.project.setProperty('verbose', 'true')
-
-        Map<String, Object> javaTaskParams = [classname: 'edu.umd.cs.findbugs.LaunchAppropriateUI',
-                fork: 'true', failonerror: 'true', clonevm: 'true', maxmemory: "${maxHeap}m"]
+        Path spotbugsXml = spotbugsXmlOutputDirectory.toPath().resolve(spotbugsXmlOutputFilename)
+        if (Files.exists(spotbugsXml)) {
+            if (log.isDebugEnabled()) {
+                log.debug("  Found an SpotBugs XML at -> ${spotbugsXml}")
+            }
+            spotbugsArgs << spotbugsXml.toString()
+        }
 
         Toolchain toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
 
@@ -174,41 +173,41 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
             }
         }
 
-        javaTaskParams['jvm'] = javaExecutable
+        // Build classpath
+        List<String> classpathElements = pluginArtifacts.collect { Artifact pluginArtifact -> pluginArtifact.file.getAbsolutePath() }
+        String classpath = classpathElements.join(File.pathSeparator)
 
-        ant.java(javaTaskParams) {
+        // Build command
+        List<String> command = []
+        command << javaExecutable
+        command << "-Xmx${maxHeap}m"
+        command << "-Dfile.encoding=${effectiveEncoding.name()}"
+        command << '-Dfindbugs.launchUI=gui2'
+        command << '-cp'
+        command << classpath
+        command << 'edu.umd.cs.findbugs.LaunchAppropriateUI'
+        command.addAll(spotbugsArgs)
 
-            sysproperty(key: 'file.encoding' , value: effectiveEncoding.name())
+        List<String> sanitizedCommand = command.collect(Object::toString)
 
-            // spotbugs assumes that multiple arguments (because of options) means text mode, so need to request gui explicitly
-            jvmarg(value: '-Dfindbugs.launchUI=gui2')
+        if (debug && log.isInfoEnabled()) {
+            log.info("Launching SpotBugs GUI with command: ${sanitizedCommand}")
+        }
 
-            spotbugsArgs.each { String spotbugsArg ->
-                if (log.isDebugEnabled()) {
-                    log.debug("Spotbugs arg is ${spotbugsArg}")
-                }
-                arg(value: spotbugsArg)
-            }
-
-            Path spotbugsXml = spotbugsXmlOutputDirectory.toPath().resolve(spotbugsXmlOutputFilename)
-
-            if (Files.exists(spotbugsXml)) {
-                if (log.isDebugEnabled()) {
-                    log.debug("  Found an SpotBugs XML at -> ${spotbugsXml}")
-                }
-                arg(value: spotbugsXml)
-            }
-
-            classpath() {
-
-                pluginArtifacts.each() { Artifact pluginArtifact ->
-                    if (debug && log.isInfoEnabled()) {
-                        log.info("  Trying to Add to pluginArtifact -> ${pluginArtifact.file}")
-                    }
-
-                    pathelement(location: pluginArtifact.file)
+        ProcessBuilder pb = new ProcessBuilder(sanitizedCommand)
+        pb.directory(spotbugsXmlOutputDirectory)
+        pb.redirectErrorStream(true)
+        Process process = pb.start()
+        process.inputStream.withReader(effectiveEncoding.name()) { reader ->
+            reader.eachLine { line ->
+                if (log.isInfoEnabled()) {
+                    log.info(line)
                 }
             }
+        }
+        int exitCode = process.waitFor()
+        if (exitCode != 0) {
+            log.error("SpotBugs GUI exited with code: ${exitCode}")
         }
     }
 }

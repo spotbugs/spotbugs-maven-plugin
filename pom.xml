@@ -129,7 +129,6 @@
         <log4j2.version>2.26.1</log4j2.version>
         <slf4jVersion>2.0.18</slf4jVersion>
 
-        <antVersion>1.10.17</antVersion>
         <groovyVersion>5.0.7</groovyVersion>
         <javaparserVersion>3.28.2</javaparserVersion>
 
@@ -264,13 +263,6 @@
                 <groupId>net.sf.saxon</groupId>
                 <artifactId>Saxon-HE</artifactId>
                 <version>${saxon.he.version}</version>
-            </dependency>
-
-            <!-- Override 'ant' used in groovy to latest -->
-            <dependency>
-                <groupId>org.apache.ant</groupId>
-                <artifactId>ant</artifactId>
-                <version>${antVersion}</version>
             </dependency>
 
             <!-- Commons -->
@@ -453,22 +445,6 @@
         <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.groovy</groupId>
-            <artifactId>groovy-ant</artifactId>
-            <exclusions>
-                <!-- We do not need these items from groovy ant -->
-                <exclusion>
-                    <groupId>org.apache.ant</groupId>
-                    <artifactId>ant-antlr</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.ant</groupId>
-                    <artifactId>ant-junit</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- Groovy quirk requires compile scope so optional makes it not show up in consumer builds. -->
