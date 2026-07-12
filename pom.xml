@@ -1132,6 +1132,9 @@
                                 <configuration>
                                     <projectsDirectory>${project.basedir}/src/it</projectsDirectory>
                                     <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+                                    <filterProperties>
+                                        <java.specification.version>${java.specification.version}</java.specification.version>
+                                    </filterProperties>
                                     <showVersion>true</showVersion>
                                     <pomIncludes>
                                         <pomInclude>*/pom.xml</pomInclude>
