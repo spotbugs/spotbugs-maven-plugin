@@ -1251,16 +1251,25 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         AntBuilder ant = new AntBuilder()
         Map<String, Object> javaTaskParams = [classname: 'edu.umd.cs.findbugs.FindBugs2', fork: "${fork}",
                 failonerror: 'true', clonevm: 'false', timeout: timeout, maxmemory: "${maxHeap}m"]
+
         Toolchain toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
-        String javaExecutable = toolchain?.findTool('java')
-        if (javaExecutable) {
-            if (fork) {
-                log.info("Toolchain in spotbugs-maven-plugin: ${toolchain}")
-                javaTaskParams['jvm'] = javaExecutable
-            } else {
-                log.warn('Toolchain is configured but fork is disabled. The toolchain JVM will not be used.')
+
+        String javaExecutable = 'java'
+
+        if (toolchain != null) {
+            String toolchainPath = toolchain?.findTool('java')
+            if (toolchainPath != null) {
+                if (fork) {
+                    log.info("Toolchain in spotbugs-maven-plugin: ${toolchain}")
+                    javaExecutable = toolchainPath
+                } else {
+                    log.warn('Toolchain is configured but fork is disabled. The toolchain JVM will not be used.')
+                }
             }
         }
+
+        javaTaskParams['jvm'] = javaExecutable
+
         ant.java(javaTaskParams) {
 
             sysproperty(key: 'file.encoding', value: effectiveEncoding.name())
@@ -1512,19 +1521,4 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         this.outputDirectory = reportOutputDirectory
     }
 
-    /**
-     * Gets the Java executable to use for the forked SpotBugs process.
-     * If a JDK toolchain is configured for the build, the executable from that toolchain is returned.
-     * Otherwise, returns {@code null} and the default JVM will be used.
-     *
-     * @return the java executable path from the toolchain, or {@code null} if no toolchain is configured
-     * @since 4.9.8.4
-     */
-    String getJavaExecutable() {
-        Toolchain toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
-        if (toolchain) {
-            return toolchain.findTool('java')
-        }
-        return null
-    }
 }

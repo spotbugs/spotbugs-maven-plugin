@@ -258,57 +258,6 @@ class SpotBugsMojoTest extends Specification {
         new SpotBugsMojo().getOutputPath() == SpotBugsInfo.PLUGIN_NAME
     }
 
-    void 'getJavaExecutable returns null when no toolchain is configured'() {
-        given:
-        MavenSession session = Mock(MavenSession)
-        ToolchainManager toolchainManager = Mock(ToolchainManager) {
-            getToolchainFromBuildContext('jdk', session) >> null
-        }
-        SpotBugsMojo mojo = new SpotBugsMojo()
-        mojo.session = session
-        mojo.toolchainManager = toolchainManager
-
-        when:
-        String result = mojo.getJavaExecutable()
-
-        then:
-        result == null
-    }
-
-    void 'getJavaExecutable returns null when toolchainManager is null'() {
-        given:
-        SpotBugsMojo mojo = new SpotBugsMojo()
-        mojo.session = Mock(MavenSession)
-        mojo.toolchainManager = null
-
-        when:
-        String result = mojo.getJavaExecutable()
-
-        then:
-        result == null
-    }
-
-    void 'getJavaExecutable returns java executable from configured toolchain'() {
-        given:
-        String expectedJavaPath = '/usr/lib/jvm/java-11/bin/java'
-        MavenSession session = Mock(MavenSession)
-        Toolchain toolchain = Mock(Toolchain) {
-            findTool('java') >> expectedJavaPath
-        }
-        ToolchainManager toolchainManager = Mock(ToolchainManager) {
-            getToolchainFromBuildContext('jdk', session) >> toolchain
-        }
-        SpotBugsMojo mojo = new SpotBugsMojo()
-        mojo.session = session
-        mojo.toolchainManager = toolchainManager
-
-        when:
-        String result = mojo.getJavaExecutable()
-
-        then:
-        result == expectedJavaPath
-    }
-
     // -------------------------------------------------------------------------
     // getThresholdParameter() – threshold value mapping
     // -------------------------------------------------------------------------
