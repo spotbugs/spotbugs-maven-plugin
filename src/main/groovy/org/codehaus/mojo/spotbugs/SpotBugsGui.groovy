@@ -159,16 +159,23 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
         ant.project.setProperty('basedir', spotbugsXmlOutputDirectory.getAbsolutePath())
         ant.project.setProperty('verbose', 'true')
 
-        Toolchain toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
         Map<String, Object> javaTaskParams = [classname: 'edu.umd.cs.findbugs.LaunchAppropriateUI',
                 fork: 'true', failonerror: 'true', clonevm: 'true', maxmemory: "${maxHeap}m"]
-        if (toolchain) {
-            String javaExecutable = toolchain.findTool('java')
-            if (javaExecutable) {
+
+        Toolchain toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
+
+        String javaExecutable = "java"
+
+        if (toolchain != null) {
+            String toolchainPath = toolchain?.findTool('java')
+            if (toolchainPath != null) {
                 log.info("Toolchain in spotbugs-maven-plugin: ${toolchain}")
-                javaTaskParams['jvm'] = javaExecutable
+                javaExecutable = toolchainPath
             }
         }
+
+        javaTaskParams['jvm'] = javaExecutable
+
         ant.java(javaTaskParams) {
 
             sysproperty(key: 'file.encoding' , value: effectiveEncoding.name())

@@ -1251,16 +1251,25 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         AntBuilder ant = new AntBuilder()
         Map<String, Object> javaTaskParams = [classname: 'edu.umd.cs.findbugs.FindBugs2', fork: "${fork}",
                 failonerror: 'true', clonevm: 'false', timeout: timeout, maxmemory: "${maxHeap}m"]
+
         Toolchain toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
-        String javaExecutable = toolchain?.findTool('java')
-        if (javaExecutable) {
-            if (fork) {
-                log.info("Toolchain in spotbugs-maven-plugin: ${toolchain}")
-                javaTaskParams['jvm'] = javaExecutable
-            } else {
-                log.warn('Toolchain is configured but fork is disabled. The toolchain JVM will not be used.')
+
+        String javaExecutable = 'java'
+
+        if (toolchain != null) {
+            String toolchainPath = toolchain?.findTool('java')
+            if (toolchainPath != null) {
+                if (fork) {
+                    log.info("Toolchain in spotbugs-maven-plugin: ${toolchain}")
+                    javaExecutable = toolchainPath
+                } else {
+                    log.warn('Toolchain is configured but fork is disabled. The toolchain JVM will not be used.')
+                }
             }
         }
+
+        javaTaskParams['jvm'] = javaExecutable
+
         ant.java(javaTaskParams) {
 
             sysproperty(key: 'file.encoding', value: effectiveEncoding.name())
