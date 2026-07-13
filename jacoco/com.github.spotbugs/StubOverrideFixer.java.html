@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StubOverrideFixer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spotbugs-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">com.github.spotbugs</a> &gt; <span class="el_source">StubOverrideFixer.java</span></div><h1>StubOverrideFixer.java</h1><pre class="source lang-java linenums">/*
+ * SPDX-License-Identifier: Apache-2.0
+ * See LICENSE file for details.
+ *
  * Copyright 2005-2026 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package com.github.spotbugs;
 
@@ -33,13 +24,13 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class StubOverrideFixer.
  */
-<span class="nc" id="L36">public class StubOverrideFixer {</span>
+<span class="nc" id="L27">public class StubOverrideFixer {</span>
 
     /** The logger. */
-<span class="fc" id="L39">    private static final Logger logger = LoggerFactory.getLogger(StubOverrideFixer.class);</span>
+<span class="fc" id="L30">    private static final Logger logger = LoggerFactory.getLogger(StubOverrideFixer.class);</span>
 
     /** The Constant GROOVY_METHODS. */
-<span class="fc" id="L42">    private static final Set&lt;String&gt; GROOVY_METHODS = Set.of(&quot;getMetaClass&quot;, &quot;setMetaClass&quot;, &quot;invokeMethod&quot;,</span>
+<span class="fc" id="L33">    private static final Set&lt;String&gt; GROOVY_METHODS = Set.of(&quot;getMetaClass&quot;, &quot;setMetaClass&quot;, &quot;invokeMethod&quot;,</span>
             &quot;getProperty&quot;, &quot;setProperty&quot;);
 
     /**
@@ -49,11 +40,11 @@ import org.slf4j.LoggerFactory;
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static void main(String[] args) throws IOException {
-<span class="fc" id="L52">        Path stubsDir = Path.of(args[0]);</span>
-<span class="fc" id="L53">        try (Stream&lt;Path&gt; stream = Files.walk(stubsDir)) {</span>
-<span class="fc" id="L54">            stream.filter(p -&gt; p.toString().endsWith(&quot;.java&quot;)).forEach(StubOverrideFixer::processStub);</span>
+<span class="fc" id="L43">        Path stubsDir = Path.of(args[0]);</span>
+<span class="fc" id="L44">        try (Stream&lt;Path&gt; stream = Files.walk(stubsDir)) {</span>
+<span class="fc" id="L45">            stream.filter(p -&gt; p.toString().endsWith(&quot;.java&quot;)).forEach(StubOverrideFixer::processStub);</span>
         }
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L47">    }</span>
 
     /**
      * Process stub.
@@ -62,19 +53,19 @@ import org.slf4j.LoggerFactory;
      */
     private static void processStub(Path filePath) {
         try {
-<span class="fc" id="L65">            CompilationUnit cu = StaticJavaParser.parse(filePath);</span>
+<span class="fc" id="L56">            CompilationUnit cu = StaticJavaParser.parse(filePath);</span>
 
-<span class="fc" id="L67">            cu.findAll(MethodDeclaration.class).forEach(method -&gt; {</span>
-<span class="fc bfc" id="L68" title="All 2 branches covered.">                if (shouldHaveOverride(method)) {</span>
-<span class="fc" id="L69">                    method.addAnnotation(&quot;java.lang.Override&quot;);</span>
+<span class="fc" id="L58">            cu.findAll(MethodDeclaration.class).forEach(method -&gt; {</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">                if (shouldHaveOverride(method)) {</span>
+<span class="fc" id="L60">                    method.addAnnotation(&quot;java.lang.Override&quot;);</span>
                 }
-<span class="fc" id="L71">            });</span>
+<span class="fc" id="L62">            });</span>
 
-<span class="fc" id="L73">            Files.write(filePath, cu.toString().getBytes(StandardCharsets.UTF_8));</span>
-<span class="nc" id="L74">        } catch (IOException | ParseProblemException e) {</span>
-<span class="nc" id="L75">            logger.error(&quot;Error processing: {} - {}&quot;, filePath, e.getMessage());</span>
-<span class="fc" id="L76">        }</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L64">            Files.write(filePath, cu.toString().getBytes(StandardCharsets.UTF_8));</span>
+<span class="nc" id="L65">        } catch (IOException | ParseProblemException e) {</span>
+<span class="nc" id="L66">            logger.error(&quot;Error processing: {} - {}&quot;, filePath, e.getMessage());</span>
+<span class="fc" id="L67">        }</span>
+<span class="fc" id="L68">    }</span>
 
     /**
      * Should have override.
@@ -83,7 +74,7 @@ import org.slf4j.LoggerFactory;
      * @return true, if successful
      */
     private static boolean shouldHaveOverride(MethodDeclaration method) {
-<span class="fc" id="L86">        return GROOVY_METHODS.contains(method.getNameAsString());</span>
+<span class="fc" id="L77">        return GROOVY_METHODS.contains(method.getNameAsString());</span>
     }
 
 }

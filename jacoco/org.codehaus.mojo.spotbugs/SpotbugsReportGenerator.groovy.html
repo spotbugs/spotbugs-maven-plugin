@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SpotbugsReportGenerator.groovy</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spotbugs-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.codehaus.mojo.spotbugs</a> &gt; <span class="el_source">SpotbugsReportGenerator.groovy</span></div><h1>SpotbugsReportGenerator.groovy</h1><pre class="source lang-java linenums">/*
+ * SPDX-License-Identifier: Apache-2.0
+ * See LICENSE file for details.
+ *
  * Copyright 2005-2026 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package org.codehaus.mojo.spotbugs
 
@@ -132,7 +123,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
     int fileCount
 
     /** The Set of missing classes names reported. */
-<span class="fc" id="L135">    Set missingClassSet = new HashSet()</span>
+<span class="fc" id="L126">    Set missingClassSet = new HashSet()</span>
 
     /** The running total of errors reported. */
     int errorCount
@@ -159,7 +150,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
     GPathResult spotbugsResults
 
     /** Bug classes. */
-<span class="fc" id="L162">    List&lt;String&gt; bugClasses = []</span>
+<span class="fc" id="L153">    List&lt;String&gt; bugClasses = []</span>
 
     /**
      * Map from bug type code to its documentation URL. Populated from SpotBugs addon plugin
@@ -169,7 +160,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
     Map&lt;String, String&gt; bugTypeUrlMap = [:]
 
     /** Pre-compiled pattern for removing inner class suffixes. */
-<span class="fc" id="L172">    private static final Pattern INNER_CLASS_PATTERN = Pattern.compile('\\$.*')</span>
+<span class="fc" id="L163">    private static final Pattern INNER_CLASS_PATTERN = Pattern.compile('\\$.*')</span>
 
     /**
      * Default constructor.
@@ -179,84 +170,84 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      * @param bundle
      *            The resource bundle to get the messages from.
      */
-<span class="fc" id="L182">    SpotbugsReportGenerator(Sink sink, ResourceBundle bundle) {</span>
-<span class="fc bfc" id="L183" title="All 6 branches covered.">        if (!sink || !bundle) {</span>
-<span class="fc" id="L184">            throw new IllegalArgumentException('All constructor arguments must be provided')</span>
+<span class="fc" id="L173">    SpotbugsReportGenerator(Sink sink, ResourceBundle bundle) {</span>
+<span class="fc bfc" id="L174" title="All 6 branches covered.">        if (!sink || !bundle) {</span>
+<span class="fc" id="L175">            throw new IllegalArgumentException('All constructor arguments must be provided')</span>
         }
 
-<span class="fc" id="L187">        this.sink = sink</span>
-<span class="fc" id="L188">        this.bundle = bundle</span>
-<span class="fc" id="L189">    }</span>
+<span class="fc" id="L178">        this.sink = sink</span>
+<span class="fc" id="L179">        this.bundle = bundle</span>
+<span class="fc" id="L180">    }</span>
 
     /**
      * @see edu.umd.cs.findbugs.BugReporter#finish()
      */
     void printBody() {
-<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
-<span class="fc" id="L196">            log.debug('Finished searching for bugs!...')</span>
-<span class="fc" id="L197">            log.debug('sink is ' + sink)</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L187">            log.debug('Finished searching for bugs!...')</span>
+<span class="fc" id="L188">            log.debug('sink is ' + sink)</span>
         }
 
-<span class="fc" id="L200">        bugClasses.each() { String bugClass -&gt;</span>
-<span class="fc bfc" id="L201" title="All 2 branches covered.">            if (log.isDebugEnabled()) {</span>
-<span class="fc" id="L202">                log.debug(&quot;finish bugClass is ${bugClass}&quot;)</span>
+<span class="fc" id="L191">        bugClasses.each() { String bugClass -&gt;</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">            if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L193">                log.debug(&quot;finish bugClass is ${bugClass}&quot;)</span>
             }
 
-<span class="fc" id="L205">            printBug(bugClass)</span>
+<span class="fc" id="L196">            printBug(bugClass)</span>
         }
 
         // close the report, write it
-<span class="fc" id="L209">        sink.body_()</span>
-<span class="fc" id="L210">    }</span>
+<span class="fc" id="L200">        sink.body_()</span>
+<span class="fc" id="L201">    }</span>
 
     /**
      * Prints the top header sections of the report.
      */
     private void doHeading() {
-<span class="fc" id="L216">        sink.head()</span>
-<span class="fc" id="L217">        sink.title()</span>
-<span class="fc" id="L218">        sink.text(getReportTitle())</span>
-<span class="fc" id="L219">        sink.title_()</span>
-<span class="fc" id="L220">        sink.head_()</span>
+<span class="fc" id="L207">        sink.head()</span>
+<span class="fc" id="L208">        sink.title()</span>
+<span class="fc" id="L209">        sink.text(getReportTitle())</span>
+<span class="fc" id="L210">        sink.title_()</span>
+<span class="fc" id="L211">        sink.head_()</span>
 
-<span class="fc" id="L222">        sink.body()</span>
+<span class="fc" id="L213">        sink.body()</span>
 
         // the title of the report
-<span class="fc" id="L225">        sink.section1()</span>
-<span class="fc" id="L226">        sink.sectionTitle1()</span>
-<span class="fc" id="L227">        sink.text(getReportTitle())</span>
-<span class="fc" id="L228">        sink.sectionTitle1_()</span>
+<span class="fc" id="L216">        sink.section1()</span>
+<span class="fc" id="L217">        sink.sectionTitle1()</span>
+<span class="fc" id="L218">        sink.text(getReportTitle())</span>
+<span class="fc" id="L219">        sink.sectionTitle1_()</span>
 
         // information about SpotBugs
-<span class="fc" id="L231">        sink.paragraph()</span>
-<span class="fc" id="L232">        sink.text(bundle.getString(LINKTITLE_KEY) + SpotBugsInfo.BLANK)</span>
-<span class="fc" id="L233">        sink.link(bundle.getString(LINK_KEY))</span>
-<span class="fc" id="L234">        sink.text(bundle.getString(SpotBugsInfo.NAME_KEY))</span>
-<span class="fc" id="L235">        sink.link_()</span>
-<span class="fc" id="L236">        sink.paragraph_()</span>
+<span class="fc" id="L222">        sink.paragraph()</span>
+<span class="fc" id="L223">        sink.text(bundle.getString(LINKTITLE_KEY) + SpotBugsInfo.BLANK)</span>
+<span class="fc" id="L224">        sink.link(bundle.getString(LINK_KEY))</span>
+<span class="fc" id="L225">        sink.text(bundle.getString(SpotBugsInfo.NAME_KEY))</span>
+<span class="fc" id="L226">        sink.link_()</span>
+<span class="fc" id="L227">        sink.paragraph_()</span>
 
-<span class="fc" id="L238">        sink.paragraph()</span>
-<span class="fc" id="L239">        sink.text(bundle.getString(VERSIONTITLE_KEY) + SpotBugsInfo.BLANK)</span>
-<span class="fc" id="L240">        sink.italic()</span>
-<span class="fc" id="L241">        sink.text(edu.umd.cs.findbugs.Version.VERSION_STRING)</span>
-<span class="fc" id="L242">        sink.italic_()</span>
-<span class="fc" id="L243">        sink.paragraph_()</span>
+<span class="fc" id="L229">        sink.paragraph()</span>
+<span class="fc" id="L230">        sink.text(bundle.getString(VERSIONTITLE_KEY) + SpotBugsInfo.BLANK)</span>
+<span class="fc" id="L231">        sink.italic()</span>
+<span class="fc" id="L232">        sink.text(edu.umd.cs.findbugs.Version.VERSION_STRING)</span>
+<span class="fc" id="L233">        sink.italic_()</span>
+<span class="fc" id="L234">        sink.paragraph_()</span>
 
-<span class="fc" id="L245">        sink.paragraph()</span>
-<span class="fc" id="L246">        sink.text(bundle.getString(THRESHOLD_KEY) + SpotBugsInfo.BLANK)</span>
-<span class="fc" id="L247">        sink.italic()</span>
-<span class="fc" id="L248">        sink.text(SpotBugsInfo.spotbugsThresholds.get(threshold))</span>
-<span class="fc" id="L249">        sink.italic_()</span>
-<span class="fc" id="L250">        sink.paragraph_()</span>
+<span class="fc" id="L236">        sink.paragraph()</span>
+<span class="fc" id="L237">        sink.text(bundle.getString(THRESHOLD_KEY) + SpotBugsInfo.BLANK)</span>
+<span class="fc" id="L238">        sink.italic()</span>
+<span class="fc" id="L239">        sink.text(SpotBugsInfo.spotbugsThresholds.get(threshold))</span>
+<span class="fc" id="L240">        sink.italic_()</span>
+<span class="fc" id="L241">        sink.paragraph_()</span>
 
-<span class="fc" id="L252">        sink.paragraph()</span>
-<span class="fc" id="L253">        sink.text(bundle.getString(EFFORT_KEY) + SpotBugsInfo.BLANK)</span>
-<span class="fc" id="L254">        sink.italic()</span>
-<span class="fc" id="L255">        sink.text(SpotBugsInfo.spotbugsEfforts.get(effort))</span>
-<span class="fc" id="L256">        sink.italic_()</span>
-<span class="fc" id="L257">        sink.paragraph_()</span>
-<span class="fc" id="L258">        sink.section1_()</span>
-<span class="fc" id="L259">    }</span>
+<span class="fc" id="L243">        sink.paragraph()</span>
+<span class="fc" id="L244">        sink.text(bundle.getString(EFFORT_KEY) + SpotBugsInfo.BLANK)</span>
+<span class="fc" id="L245">        sink.italic()</span>
+<span class="fc" id="L246">        sink.text(SpotBugsInfo.spotbugsEfforts.get(effort))</span>
+<span class="fc" id="L247">        sink.italic_()</span>
+<span class="fc" id="L248">        sink.paragraph_()</span>
+<span class="fc" id="L249">        sink.section1_()</span>
+<span class="fc" id="L250">    }</span>
 
     /**
      * Print the bug collection to a line in the table
@@ -265,79 +256,79 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      *            the bug to print
      */
     protected void printBug(String bugClass) {
-<span class="fc bfc" id="L268" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
-<span class="fc" id="L269">            log.debug(&quot;printBug bugClass is ${bugClass}&quot;)</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L260">            log.debug(&quot;printBug bugClass is ${bugClass}&quot;)</span>
         }
 
-<span class="fc" id="L272">        openClassReportSection(bugClass)</span>
+<span class="fc" id="L263">        openClassReportSection(bugClass)</span>
 
-<span class="fc bfc" id="L274" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
-<span class="fc" id="L275">            log.debug(&quot;printBug spotbugsResults is ${spotbugsResults}&quot;)</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L266">            log.debug(&quot;printBug spotbugsResults is ${spotbugsResults}&quot;)</span>
         }
 
-<span class="fc" id="L278">        spotbugsResults.BugInstance.each() { GPathResult bugInstance -&gt;</span>
+<span class="fc" id="L269">        spotbugsResults.BugInstance.each() { GPathResult bugInstance -&gt;</span>
 
-<span class="fc bfc" id="L280" title="All 2 branches covered.">            if (log.isDebugEnabled()) {</span>
-<span class="fc" id="L281">                log.debug(&quot;bugInstance ---&gt;  ${bugInstance}&quot;)</span>
+<span class="fc bfc" id="L271" title="All 2 branches covered.">            if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L272">                log.debug(&quot;bugInstance ---&gt;  ${bugInstance}&quot;)</span>
             }
 
-<span class="pc bpc" id="L284" title="1 of 2 branches missed.">            if (bugInstance.Class[0].@classname.text() != bugClass) {</span>
-<span class="nc" id="L285">                return</span>
+<span class="pc bpc" id="L275" title="1 of 2 branches missed.">            if (bugInstance.Class[0].@classname.text() != bugClass) {</span>
+<span class="nc" id="L276">                return</span>
             }
 
-<span class="fc" id="L288">            String type = bugInstance.@type.text()</span>
-<span class="fc" id="L289">            String category = bugInstance.@category.text()</span>
-<span class="fc" id="L290">            String message = bugInstance.LongMessage.text()</span>
-<span class="fc" id="L291">            String priority = bugInstance.@priority.text()</span>
-<span class="fc" id="L292">            GPathResult line = bugInstance.SourceLine[0]</span>
-<span class="fc bfc" id="L293" title="All 2 branches covered.">            if (log.isDebugEnabled()) {</span>
-<span class="fc" id="L294">                log.debug(&quot;BugInstance message is ${message}&quot;)</span>
+<span class="fc" id="L279">            String type = bugInstance.@type.text()</span>
+<span class="fc" id="L280">            String category = bugInstance.@category.text()</span>
+<span class="fc" id="L281">            String message = bugInstance.LongMessage.text()</span>
+<span class="fc" id="L282">            String priority = bugInstance.@priority.text()</span>
+<span class="fc" id="L283">            GPathResult line = bugInstance.SourceLine[0]</span>
+<span class="fc bfc" id="L284" title="All 2 branches covered.">            if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L285">                log.debug(&quot;BugInstance message is ${message}&quot;)</span>
             }
 
-<span class="fc" id="L297">            sink.tableRow()</span>
+<span class="fc" id="L288">            sink.tableRow()</span>
 
             // bug
-<span class="fc" id="L300">            sink.tableCell()</span>
-<span class="fc" id="L301">            sink.text(message)</span>
-<span class="fc" id="L302">            sink.tableCell_()</span>
+<span class="fc" id="L291">            sink.tableCell()</span>
+<span class="fc" id="L292">            sink.text(message)</span>
+<span class="fc" id="L293">            sink.tableCell_()</span>
 
             // category
-<span class="fc" id="L305">            sink.tableCell()</span>
-<span class="fc" id="L306">            sink.text(category)</span>
-<span class="fc" id="L307">            sink.tableCell_()</span>
+<span class="fc" id="L296">            sink.tableCell()</span>
+<span class="fc" id="L297">            sink.text(category)</span>
+<span class="fc" id="L298">            sink.tableCell_()</span>
 
             // description link
-<span class="fc" id="L310">            sink.tableCell()</span>
-<span class="fc" id="L311">            sink.link(getBugDetailsUrl(type))</span>
-<span class="fc" id="L312">            sink.text(type)</span>
-<span class="fc" id="L313">            sink.link_()</span>
-<span class="fc" id="L314">            sink.tableCell_()</span>
+<span class="fc" id="L301">            sink.tableCell()</span>
+<span class="fc" id="L302">            sink.link(getBugDetailsUrl(type))</span>
+<span class="fc" id="L303">            sink.text(type)</span>
+<span class="fc" id="L304">            sink.link_()</span>
+<span class="fc" id="L305">            sink.tableCell_()</span>
 
             // line
-<span class="fc" id="L317">            sink.tableCell()</span>
+<span class="fc" id="L308">            sink.tableCell()</span>
 
-<span class="fc bfc" id="L319" title="All 2 branches covered.">            if (isJXRReportEnabled) {</span>
-<span class="fc" id="L320">                log.debug('isJXRReportEnabled is enabled')</span>
-<span class="fc" id="L321">                sink.rawText(assembleJxrHyperlink(line))</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">            if (isJXRReportEnabled) {</span>
+<span class="fc" id="L311">                log.debug('isJXRReportEnabled is enabled')</span>
+<span class="fc" id="L312">                sink.rawText(assembleJxrHyperlink(line))</span>
             } else {
-<span class="fc" id="L323">                sink.text(line.@start.text())</span>
+<span class="fc" id="L314">                sink.text(line.@start.text())</span>
             }
 
-<span class="fc" id="L326">            sink.tableCell_()</span>
+<span class="fc" id="L317">            sink.tableCell_()</span>
 
             // priority
-<span class="fc" id="L329">            sink.tableCell()</span>
-<span class="fc" id="L330">            sink.text(spotbugsPriority[priority.toInteger()])</span>
-<span class="fc" id="L331">            sink.tableCell_()</span>
+<span class="fc" id="L320">            sink.tableCell()</span>
+<span class="fc" id="L321">            sink.text(spotbugsPriority[priority.toInteger()])</span>
+<span class="fc" id="L322">            sink.tableCell_()</span>
 
-<span class="fc" id="L333">            sink.tableRow_()</span>
+<span class="fc" id="L324">            sink.tableRow_()</span>
         }
 
-<span class="fc" id="L336">        sink.tableRows_()</span>
-<span class="fc" id="L337">        sink.table_()</span>
+<span class="fc" id="L327">        sink.tableRows_()</span>
+<span class="fc" id="L328">        sink.table_()</span>
 
-<span class="fc" id="L339">        sink.section2_()</span>
-<span class="fc" id="L340">    }</span>
+<span class="fc" id="L330">        sink.section2_()</span>
+<span class="fc" id="L331">    }</span>
 
     /**
      * Returns the documentation URL for the given bug type. If a URL is registered in
@@ -348,8 +339,8 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      * @return the documentation URL for the bug type
      */
     protected String getBugDetailsUrl(String type) {
-<span class="pc bpc" id="L351" title="1 of 2 branches missed.">        String url = bugTypeUrlMap?.get(type)</span>
-<span class="fc bfc" id="L352" title="All 2 branches covered.">        return url ?: (bundle.getString(DETAILSLINK_KEY) + '#' + type)</span>
+<span class="pc bpc" id="L342" title="1 of 2 branches missed.">        String url = bugTypeUrlMap?.get(type)</span>
+<span class="fc bfc" id="L343" title="All 2 branches covered.">        return url ?: (bundle.getString(DETAILSLINK_KEY) + '#' + type)</span>
     }
 
     /**
@@ -363,49 +354,49 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      *
      */
     protected String assembleJxrHyperlink(GPathResult line) {
-<span class="pc bpc" id="L366" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
-<span class="nc" id="L367">            log.debug('Inside assembleJxrHyperlink')</span>
-<span class="nc" id="L368">            log.debug('line is ' + line.text())</span>
-<span class="nc" id="L369">            log.debug('outputDirectory is ' + outputDirectory.getAbsolutePath())</span>
-<span class="nc" id="L370">            log.debug('xrefLocation is ' + xrefLocation.getAbsolutePath())</span>
-<span class="nc" id="L371">            log.debug('xrefTestLocation is ' + xrefTestLocation.getAbsolutePath())</span>
+<span class="pc bpc" id="L357" title="1 of 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L358">            log.debug('Inside assembleJxrHyperlink')</span>
+<span class="nc" id="L359">            log.debug('line is ' + line.text())</span>
+<span class="nc" id="L360">            log.debug('outputDirectory is ' + outputDirectory.getAbsolutePath())</span>
+<span class="nc" id="L361">            log.debug('xrefLocation is ' + xrefLocation.getAbsolutePath())</span>
+<span class="nc" id="L362">            log.debug('xrefTestLocation is ' + xrefTestLocation.getAbsolutePath())</span>
         }
 
-<span class="fc" id="L374">        String prefix</span>
-<span class="fc" id="L375">        compileSourceRoots.each { String compileSourceRoot -&gt;</span>
-<span class="fc" id="L376">            Path sourcePath = Path.of(compileSourceRoot).resolve(line.@sourcepath.text())</span>
-<span class="pc bpc" id="L377" title="1 of 2 branches missed.">            if (Files.notExists(sourcePath)) {</span>
-<span class="fc" id="L378">                return</span>
+<span class="fc" id="L365">        String prefix</span>
+<span class="fc" id="L366">        compileSourceRoots.each { String compileSourceRoot -&gt;</span>
+<span class="fc" id="L367">            Path sourcePath = Path.of(compileSourceRoot).resolve(line.@sourcepath.text())</span>
+<span class="pc bpc" id="L368" title="1 of 2 branches missed.">            if (Files.notExists(sourcePath)) {</span>
+<span class="fc" id="L369">                return</span>
             }
-<span class="nc" id="L380">            prefix = outputDirectory.toPath().relativize(xrefLocation.toPath())</span>
-<span class="nc bnc" id="L381" title="All 2 branches missed.">            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD</span>
+<span class="nc" id="L371">            prefix = outputDirectory.toPath().relativize(xrefLocation.toPath())</span>
+<span class="nc bnc" id="L372" title="All 2 branches missed.">            prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD</span>
         }
 
-<span class="pc bpc" id="L384" title="4 of 6 branches missed.">        if (includeTests &amp;&amp; !prefix) {</span>
-<span class="nc" id="L385">            testSourceRoots.each { String testSourceRoot -&gt;</span>
-<span class="nc" id="L386">                Path testSourcePath = Path.of(testSourceRoot).resolve(line.@sourcepath.text())</span>
-<span class="nc bnc" id="L387" title="All 2 branches missed.">                if (Files.notExists(testSourcePath)) {</span>
-<span class="nc" id="L388">                    return</span>
+<span class="pc bpc" id="L375" title="4 of 6 branches missed.">        if (includeTests &amp;&amp; !prefix) {</span>
+<span class="nc" id="L376">            testSourceRoots.each { String testSourceRoot -&gt;</span>
+<span class="nc" id="L377">                Path testSourcePath = Path.of(testSourceRoot).resolve(line.@sourcepath.text())</span>
+<span class="nc bnc" id="L378" title="All 2 branches missed.">                if (Files.notExists(testSourcePath)) {</span>
+<span class="nc" id="L379">                    return</span>
                 }
-<span class="nc" id="L390">                prefix = outputDirectory.toPath().relativize(xrefTestLocation.toPath())</span>
-<span class="nc bnc" id="L391" title="All 2 branches missed.">                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD</span>
+<span class="nc" id="L381">                prefix = outputDirectory.toPath().relativize(xrefTestLocation.toPath())</span>
+<span class="nc bnc" id="L382" title="All 2 branches missed.">                prefix = prefix ? prefix + SpotBugsInfo.URL_SEPARATOR : SpotBugsInfo.PERIOD</span>
             }
         }
 
-<span class="fc" id="L395">        String className = line.@classname.text().replace('.', '/')</span>
-<span class="fc" id="L396">        Matcher matcher = INNER_CLASS_PATTERN.matcher(className)</span>
-<span class="fc" id="L397">        String cleanClassName = matcher.replaceFirst('')</span>
-<span class="fc" id="L398">        String path = prefix + cleanClassName</span>
-<span class="fc" id="L399">        String lineNumber = valueForLine(line)</span>
+<span class="fc" id="L386">        String className = line.@classname.text().replace('.', '/')</span>
+<span class="fc" id="L387">        Matcher matcher = INNER_CLASS_PATTERN.matcher(className)</span>
+<span class="fc" id="L388">        String cleanClassName = matcher.replaceFirst('')</span>
+<span class="fc" id="L389">        String path = prefix + cleanClassName</span>
+<span class="fc" id="L390">        String lineNumber = valueForLine(line)</span>
 
-<span class="fc" id="L401">        String hyperlink</span>
-<span class="pc bpc" id="L402" title="1 of 2 branches missed.">        if (lineNumber != bundle.getString(NOLINE_KEY)) {</span>
-<span class="fc" id="L403">            hyperlink = '&lt;a href=&quot;' + path + '.html#L' + line.@start.text() + '&quot;&gt;' + lineNumber + '&lt;/a&gt;'</span>
+<span class="fc" id="L392">        String hyperlink</span>
+<span class="pc bpc" id="L393" title="1 of 2 branches missed.">        if (lineNumber != bundle.getString(NOLINE_KEY)) {</span>
+<span class="fc" id="L394">            hyperlink = '&lt;a href=&quot;' + path + '.html#L' + line.@start.text() + '&quot;&gt;' + lineNumber + '&lt;/a&gt;'</span>
         } else {
-<span class="nc" id="L405">            hyperlink = lineNumber</span>
+<span class="nc" id="L396">            hyperlink = lineNumber</span>
         }
 
-<span class="fc" id="L408">        return hyperlink</span>
+<span class="fc" id="L399">        return hyperlink</span>
     }
 
     /**
@@ -415,222 +406,222 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      *
      */
     protected String getReportTitle() {
-<span class="fc" id="L418">        return bundle.getString(REPORT_TITLE_KEY)</span>
+<span class="fc" id="L409">        return bundle.getString(REPORT_TITLE_KEY)</span>
     }
 
     /**
      * Initialized a bug report section in the report for a particular class.
      */
     protected void openClassReportSection(String bugClass) {
-<span class="fc" id="L425">        String columnBugText = bundle.getString(COLUMN_BUG_KEY)</span>
-<span class="fc" id="L426">        String columnBugCategory = bundle.getString(COLUMN_CATEGORY_KEY)</span>
-<span class="fc" id="L427">        String columnDescriptionLink = bundle.getString(COLUMN_DETAILS_KEY)</span>
-<span class="fc" id="L428">        String columnLineText = bundle.getString(COLUMN_LINE_KEY)</span>
-<span class="fc" id="L429">        String priorityText = bundle.getString(COLUMN_PRIORITY_KEY)</span>
+<span class="fc" id="L416">        String columnBugText = bundle.getString(COLUMN_BUG_KEY)</span>
+<span class="fc" id="L417">        String columnBugCategory = bundle.getString(COLUMN_CATEGORY_KEY)</span>
+<span class="fc" id="L418">        String columnDescriptionLink = bundle.getString(COLUMN_DETAILS_KEY)</span>
+<span class="fc" id="L419">        String columnLineText = bundle.getString(COLUMN_LINE_KEY)</span>
+<span class="fc" id="L420">        String priorityText = bundle.getString(COLUMN_PRIORITY_KEY)</span>
 
-<span class="fc bfc" id="L431" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
-<span class="fc" id="L432">            log.debug(&quot;openClassReportSection bugClass is ${bugClass}&quot;)</span>
-<span class="fc" id="L433">            log.debug('Opening Class Report Section')</span>
+<span class="fc bfc" id="L422" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L423">            log.debug(&quot;openClassReportSection bugClass is ${bugClass}&quot;)</span>
+<span class="fc" id="L424">            log.debug('Opening Class Report Section')</span>
         }
 
         // Dollar '$' for nested classes is not valid character in sink.anchor() and therefore it is ignored
         // https://github.com/spotbugs/spotbugs-maven-plugin/issues/236
-<span class="fc" id="L438">        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_START].toArray(),</span>
-<span class="fc" id="L439">            new SinkEventAttributeSet(SinkEventAttributes.NAME, bugClass))</span>
-<span class="fc" id="L440">        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_END].toArray(), null)</span>
+<span class="fc" id="L429">        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_START].toArray(),</span>
+<span class="fc" id="L430">            new SinkEventAttributeSet(SinkEventAttributes.NAME, bugClass))</span>
+<span class="fc" id="L431">        sink.unknown(HtmlMarkup.A.toString(), [HtmlMarkup.TAG_TYPE_END].toArray(), null)</span>
 
-<span class="fc" id="L442">        sink.section2()</span>
-<span class="fc" id="L443">        sink.sectionTitle2()</span>
-<span class="fc" id="L444">        sink.text(bugClass)</span>
-<span class="fc" id="L445">        sink.sectionTitle2_()</span>
-<span class="fc" id="L446">        sink.table()</span>
-<span class="fc" id="L447">        sink.tableRows(null, false)</span>
-<span class="fc" id="L448">        sink.tableRow()</span>
+<span class="fc" id="L433">        sink.section2()</span>
+<span class="fc" id="L434">        sink.sectionTitle2()</span>
+<span class="fc" id="L435">        sink.text(bugClass)</span>
+<span class="fc" id="L436">        sink.sectionTitle2_()</span>
+<span class="fc" id="L437">        sink.table()</span>
+<span class="fc" id="L438">        sink.tableRows(null, false)</span>
+<span class="fc" id="L439">        sink.tableRow()</span>
 
         // bug
-<span class="fc" id="L451">        sink.tableHeaderCell()</span>
-<span class="fc" id="L452">        sink.text(columnBugText)</span>
-<span class="fc" id="L453">        sink.tableHeaderCell_()</span>
+<span class="fc" id="L442">        sink.tableHeaderCell()</span>
+<span class="fc" id="L443">        sink.text(columnBugText)</span>
+<span class="fc" id="L444">        sink.tableHeaderCell_()</span>
 
         // category
-<span class="fc" id="L456">        sink.tableHeaderCell()</span>
-<span class="fc" id="L457">        sink.text(columnBugCategory)</span>
-<span class="fc" id="L458">        sink.tableHeaderCell_()</span>
+<span class="fc" id="L447">        sink.tableHeaderCell()</span>
+<span class="fc" id="L448">        sink.text(columnBugCategory)</span>
+<span class="fc" id="L449">        sink.tableHeaderCell_()</span>
 
         // description link
-<span class="fc" id="L461">        sink.tableHeaderCell()</span>
-<span class="fc" id="L462">        sink.text(columnDescriptionLink)</span>
-<span class="fc" id="L463">        sink.tableHeaderCell_()</span>
+<span class="fc" id="L452">        sink.tableHeaderCell()</span>
+<span class="fc" id="L453">        sink.text(columnDescriptionLink)</span>
+<span class="fc" id="L454">        sink.tableHeaderCell_()</span>
 
         // line
-<span class="fc" id="L466">        sink.tableHeaderCell()</span>
-<span class="fc" id="L467">        sink.text(columnLineText)</span>
-<span class="fc" id="L468">        sink.tableHeaderCell_()</span>
+<span class="fc" id="L457">        sink.tableHeaderCell()</span>
+<span class="fc" id="L458">        sink.text(columnLineText)</span>
+<span class="fc" id="L459">        sink.tableHeaderCell_()</span>
 
         // priority
-<span class="fc" id="L471">        sink.tableHeaderCell()</span>
-<span class="fc" id="L472">        sink.text(priorityText)</span>
-<span class="fc" id="L473">        sink.tableHeaderCell_()</span>
+<span class="fc" id="L462">        sink.tableHeaderCell()</span>
+<span class="fc" id="L463">        sink.text(priorityText)</span>
+<span class="fc" id="L464">        sink.tableHeaderCell_()</span>
 
-<span class="fc" id="L475">        sink.tableRow_()</span>
-<span class="fc" id="L476">    }</span>
+<span class="fc" id="L466">        sink.tableRow_()</span>
+<span class="fc" id="L467">    }</span>
 
     /**
      * Print the Summary Section.
      */
     protected void printSummary() {
-<span class="fc" id="L482">        log.debug('Entering printSummary')</span>
+<span class="fc" id="L473">        log.debug('Entering printSummary')</span>
 
-<span class="fc" id="L484">        sink.section1()</span>
+<span class="fc" id="L475">        sink.section1()</span>
 
         // the summary section
-<span class="fc" id="L487">        sink.sectionTitle1()</span>
-<span class="fc" id="L488">        sink.text(bundle.getString(SUMMARY_KEY))</span>
-<span class="fc" id="L489">        sink.sectionTitle1_()</span>
+<span class="fc" id="L478">        sink.sectionTitle1()</span>
+<span class="fc" id="L479">        sink.text(bundle.getString(SUMMARY_KEY))</span>
+<span class="fc" id="L480">        sink.sectionTitle1_()</span>
 
-<span class="fc" id="L491">        sink.table()</span>
-<span class="fc" id="L492">        sink.tableRows(null, false)</span>
-<span class="fc" id="L493">        sink.tableRow()</span>
+<span class="fc" id="L482">        sink.table()</span>
+<span class="fc" id="L483">        sink.tableRows(null, false)</span>
+<span class="fc" id="L484">        sink.tableRow()</span>
 
         // classes
-<span class="fc" id="L496">        sink.tableHeaderCell()</span>
-<span class="fc" id="L497">        sink.text(bundle.getString(COLUMN_CLASSES_KEY))</span>
-<span class="fc" id="L498">        sink.tableHeaderCell_()</span>
+<span class="fc" id="L487">        sink.tableHeaderCell()</span>
+<span class="fc" id="L488">        sink.text(bundle.getString(COLUMN_CLASSES_KEY))</span>
+<span class="fc" id="L489">        sink.tableHeaderCell_()</span>
 
         // bugs
-<span class="fc" id="L501">        sink.tableHeaderCell()</span>
-<span class="fc" id="L502">        sink.text(bundle.getString(COLUMN_BUGS_KEY))</span>
-<span class="fc" id="L503">        sink.tableHeaderCell_()</span>
+<span class="fc" id="L492">        sink.tableHeaderCell()</span>
+<span class="fc" id="L493">        sink.text(bundle.getString(COLUMN_BUGS_KEY))</span>
+<span class="fc" id="L494">        sink.tableHeaderCell_()</span>
 
         // Errors
-<span class="fc" id="L506">        sink.tableHeaderCell()</span>
-<span class="fc" id="L507">        sink.text(bundle.getString(COLUMN_ERRORS_KEY))</span>
-<span class="fc" id="L508">        sink.tableHeaderCell_()</span>
+<span class="fc" id="L497">        sink.tableHeaderCell()</span>
+<span class="fc" id="L498">        sink.text(bundle.getString(COLUMN_ERRORS_KEY))</span>
+<span class="fc" id="L499">        sink.tableHeaderCell_()</span>
 
         // Missing Classes
-<span class="fc" id="L511">        sink.tableHeaderCell()</span>
-<span class="fc" id="L512">        sink.text(bundle.getString(COLUMN_MISSINGCLASSES_KEY))</span>
-<span class="fc" id="L513">        sink.tableHeaderCell_()</span>
+<span class="fc" id="L502">        sink.tableHeaderCell()</span>
+<span class="fc" id="L503">        sink.text(bundle.getString(COLUMN_MISSINGCLASSES_KEY))</span>
+<span class="fc" id="L504">        sink.tableHeaderCell_()</span>
 
-<span class="fc" id="L515">        sink.tableRow_()</span>
+<span class="fc" id="L506">        sink.tableRow_()</span>
 
-<span class="fc" id="L517">        sink.tableRow()</span>
+<span class="fc" id="L508">        sink.tableRow()</span>
 
         // files
-<span class="fc" id="L520">        sink.tableCell()</span>
-<span class="fc" id="L521">        sink.text(spotbugsResults.FindBugsSummary.@total_classes.text())</span>
-<span class="fc" id="L522">        sink.tableCell_()</span>
+<span class="fc" id="L511">        sink.tableCell()</span>
+<span class="fc" id="L512">        sink.text(spotbugsResults.FindBugsSummary.@total_classes.text())</span>
+<span class="fc" id="L513">        sink.tableCell_()</span>
 
         // bug
-<span class="fc" id="L525">        sink.tableCell()</span>
-<span class="fc" id="L526">        sink.text(spotbugsResults.FindBugsSummary.@total_bugs.text())</span>
-<span class="fc" id="L527">        sink.tableCell_()</span>
+<span class="fc" id="L516">        sink.tableCell()</span>
+<span class="fc" id="L517">        sink.text(spotbugsResults.FindBugsSummary.@total_bugs.text())</span>
+<span class="fc" id="L518">        sink.tableCell_()</span>
 
         // Errors
-<span class="fc" id="L530">        sink.tableCell()</span>
-<span class="fc" id="L531">        sink.text(spotbugsResults.Errors.@errors.text())</span>
-<span class="fc" id="L532">        sink.tableCell_()</span>
+<span class="fc" id="L521">        sink.tableCell()</span>
+<span class="fc" id="L522">        sink.text(spotbugsResults.Errors.@errors.text())</span>
+<span class="fc" id="L523">        sink.tableCell_()</span>
 
         // Missing Classes
-<span class="fc" id="L535">        sink.tableCell()</span>
-<span class="fc" id="L536">        sink.text(spotbugsResults.Errors.@missingClasses.text())</span>
-<span class="fc" id="L537">        sink.tableCell_()</span>
+<span class="fc" id="L526">        sink.tableCell()</span>
+<span class="fc" id="L527">        sink.text(spotbugsResults.Errors.@missingClasses.text())</span>
+<span class="fc" id="L528">        sink.tableCell_()</span>
 
-<span class="fc" id="L539">        sink.tableRow_()</span>
-<span class="fc" id="L540">        sink.tableRows_()</span>
-<span class="fc" id="L541">        sink.table_()</span>
+<span class="fc" id="L530">        sink.tableRow_()</span>
+<span class="fc" id="L531">        sink.tableRows_()</span>
+<span class="fc" id="L532">        sink.table_()</span>
 
-<span class="fc" id="L543">        sink.section1_()</span>
+<span class="fc" id="L534">        sink.section1_()</span>
 
-<span class="fc" id="L545">        log.debug('Exiting printSummary')</span>
-<span class="fc" id="L546">    }</span>
+<span class="fc" id="L536">        log.debug('Exiting printSummary')</span>
+<span class="fc" id="L537">    }</span>
 
     /**
      * Print the File Summary Section.
      */
     protected void printFilesSummary() {
-<span class="fc" id="L552">        log.debug('Entering printFilesSummary')</span>
+<span class="fc" id="L543">        log.debug('Entering printFilesSummary')</span>
 
-<span class="fc" id="L554">        sink.section1()</span>
+<span class="fc" id="L545">        sink.section1()</span>
 
         // the Files section
-<span class="fc" id="L557">        sink.sectionTitle1()</span>
-<span class="fc" id="L558">        sink.text(bundle.getString(FILES_KEY))</span>
-<span class="fc" id="L559">        sink.sectionTitle1_()</span>
+<span class="fc" id="L548">        sink.sectionTitle1()</span>
+<span class="fc" id="L549">        sink.text(bundle.getString(FILES_KEY))</span>
+<span class="fc" id="L550">        sink.sectionTitle1_()</span>
 
         /**
          * Class Summary
          */
-<span class="fc" id="L564">        sink.table()</span>
-<span class="fc" id="L565">        sink.tableRows(null, false)</span>
-<span class="fc" id="L566">        sink.tableRow()</span>
+<span class="fc" id="L555">        sink.table()</span>
+<span class="fc" id="L556">        sink.tableRows(null, false)</span>
+<span class="fc" id="L557">        sink.tableRow()</span>
 
         // files
-<span class="fc" id="L569">        sink.tableHeaderCell()</span>
-<span class="fc" id="L570">        sink.text(bundle.getString(COLUMN_CLASS_KEY))</span>
-<span class="fc" id="L571">        sink.tableHeaderCell_()</span>
+<span class="fc" id="L560">        sink.tableHeaderCell()</span>
+<span class="fc" id="L561">        sink.text(bundle.getString(COLUMN_CLASS_KEY))</span>
+<span class="fc" id="L562">        sink.tableHeaderCell_()</span>
 
         // bugs
-<span class="fc" id="L574">        sink.tableHeaderCell()</span>
-<span class="fc" id="L575">        sink.text(bundle.getString(COLUMN_BUGS_KEY))</span>
-<span class="fc" id="L576">        sink.tableHeaderCell_()</span>
+<span class="fc" id="L565">        sink.tableHeaderCell()</span>
+<span class="fc" id="L566">        sink.text(bundle.getString(COLUMN_BUGS_KEY))</span>
+<span class="fc" id="L567">        sink.tableHeaderCell_()</span>
 
-<span class="fc" id="L578">        sink.tableRow_()</span>
+<span class="fc" id="L569">        sink.tableRow_()</span>
 
-<span class="fc" id="L580">        spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() { NodeChild classStats -&gt;</span>
+<span class="fc" id="L571">        spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() { NodeChild classStats -&gt;</span>
 
-<span class="fc" id="L582">            String classStatsValue = classStats.'@class'.text()</span>
-<span class="fc" id="L583">            String classStatsBugCount = classStats.'@bugs'.text()</span>
+<span class="fc" id="L573">            String classStatsValue = classStats.'@class'.text()</span>
+<span class="fc" id="L574">            String classStatsBugCount = classStats.'@bugs'.text()</span>
 
-<span class="pc bpc" id="L585" title="1 of 2 branches missed.">            if (Integer.parseInt(classStatsBugCount) == 0) {</span>
-<span class="nc" id="L586">                return</span>
+<span class="pc bpc" id="L576" title="1 of 2 branches missed.">            if (Integer.parseInt(classStatsBugCount) == 0) {</span>
+<span class="nc" id="L577">                return</span>
             }
 
-<span class="fc" id="L589">            sink.tableRow()</span>
+<span class="fc" id="L580">            sink.tableRow()</span>
 
             // class name
-<span class="fc" id="L592">            sink.tableCell()</span>
-<span class="fc" id="L593">            sink.link(&quot;#&quot; + classStatsValue)</span>
-<span class="fc" id="L594">            sink.text(classStatsValue)</span>
-<span class="fc" id="L595">            sink.link_()</span>
-<span class="fc" id="L596">            sink.tableCell_()</span>
+<span class="fc" id="L583">            sink.tableCell()</span>
+<span class="fc" id="L584">            sink.link(&quot;#&quot; + classStatsValue)</span>
+<span class="fc" id="L585">            sink.text(classStatsValue)</span>
+<span class="fc" id="L586">            sink.link_()</span>
+<span class="fc" id="L587">            sink.tableCell_()</span>
 
             // class bug total count
-<span class="fc" id="L599">            sink.tableCell()</span>
-<span class="fc" id="L600">            sink.text(classStatsBugCount)</span>
-<span class="fc" id="L601">            sink.tableCell_()</span>
+<span class="fc" id="L590">            sink.tableCell()</span>
+<span class="fc" id="L591">            sink.text(classStatsBugCount)</span>
+<span class="fc" id="L592">            sink.tableCell_()</span>
 
-<span class="fc" id="L603">            sink.tableRow_()</span>
+<span class="fc" id="L594">            sink.tableRow_()</span>
 
-<span class="fc" id="L605">            bugClasses &lt;&lt; classStatsValue</span>
+<span class="fc" id="L596">            bugClasses &lt;&lt; classStatsValue</span>
         }
 
-<span class="fc" id="L608">        sink.tableRows_()</span>
-<span class="fc" id="L609">        sink.table_()</span>
+<span class="fc" id="L599">        sink.tableRows_()</span>
+<span class="fc" id="L600">        sink.table_()</span>
 
-<span class="fc" id="L611">        sink.section1_()</span>
+<span class="fc" id="L602">        sink.section1_()</span>
 
-<span class="fc" id="L613">        log.debug(&quot;Exiting printFilesSummary&quot;)</span>
-<span class="fc" id="L614">    }</span>
+<span class="fc" id="L604">        log.debug(&quot;Exiting printFilesSummary&quot;)</span>
+<span class="fc" id="L605">    }</span>
 
     void generateReport() {
-<span class="fc bfc" id="L617" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
-<span class="fc" id="L618">            log.debug('Reporter Locale is ' + this.bundle.getLocale().getLanguage())</span>
+<span class="fc bfc" id="L608" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L609">            log.debug('Reporter Locale is ' + this.bundle.getLocale().getLanguage())</span>
         }
 
-<span class="fc" id="L621">        doHeading()</span>
+<span class="fc" id="L612">        doHeading()</span>
 
-<span class="fc" id="L623">        printSummary()</span>
+<span class="fc" id="L614">        printSummary()</span>
 
-<span class="fc" id="L625">        printFilesSummary()</span>
+<span class="fc" id="L616">        printFilesSummary()</span>
 
-<span class="fc" id="L627">        printBody()</span>
+<span class="fc" id="L618">        printBody()</span>
 
-<span class="fc" id="L629">        log.debug('Closing up report....................')</span>
+<span class="fc" id="L620">        log.debug('Closing up report....................')</span>
 
-<span class="fc" id="L631">        sink.flush()</span>
-<span class="fc" id="L632">        sink.close()</span>
-<span class="fc" id="L633">    }</span>
+<span class="fc" id="L622">        sink.flush()</span>
+<span class="fc" id="L623">        sink.close()</span>
+<span class="fc" id="L624">    }</span>
 
     /**
      * Return the value to display. If SpotBugs does not provide a line number, a default message is returned. The line
@@ -642,26 +633,26 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      *
      */
     protected String valueForLine(GPathResult line) {
-<span class="fc" id="L645">        String value</span>
+<span class="fc" id="L636">        String value</span>
 
-<span class="pc bpc" id="L647" title="1 of 2 branches missed.">        if (line) {</span>
-<span class="fc" id="L648">            String startLine = line.@start.text()</span>
-<span class="fc" id="L649">            String endLine = line.@end.text()</span>
+<span class="pc bpc" id="L638" title="1 of 2 branches missed.">        if (line) {</span>
+<span class="fc" id="L639">            String startLine = line.@start.text()</span>
+<span class="fc" id="L640">            String endLine = line.@end.text()</span>
 
-<span class="pc bpc" id="L651" title="1 of 2 branches missed.">            if (startLine == endLine) {</span>
-<span class="pc bpc" id="L652" title="1 of 2 branches missed.">                if (startLine) {</span>
-<span class="fc" id="L653">                    value = startLine</span>
+<span class="pc bpc" id="L642" title="1 of 2 branches missed.">            if (startLine == endLine) {</span>
+<span class="pc bpc" id="L643" title="1 of 2 branches missed.">                if (startLine) {</span>
+<span class="fc" id="L644">                    value = startLine</span>
                 } else {
-<span class="pc" id="L655">                    value = bundle.getString(NOLINE_KEY)</span>
+<span class="pc" id="L646">                    value = bundle.getString(NOLINE_KEY)</span>
                 }
             } else {
-<span class="pc" id="L658">                value = startLine + '-' + endLine</span>
+<span class="pc" id="L649">                value = startLine + '-' + endLine</span>
             }
         } else {
-<span class="nc" id="L661">            value = bundle.getString(NOLINE_KEY)</span>
+<span class="nc" id="L652">            value = bundle.getString(NOLINE_KEY)</span>
         }
 
-<span class="fc" id="L664">        return value</span>
+<span class="fc" id="L655">        return value</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

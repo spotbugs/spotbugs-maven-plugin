@@ -275,10 +275,10 @@ import java.util.List;
         }
 <span class="fc" id="L276">        append( sb, parameterName + parameterDefaultValue, 2 );</span>
 <span class="fc" id="L277">        Node deprecated = findSingleChild( parameter, &quot;deprecated&quot; );</span>
-<span class="pc bpc" id="L278" title="3 of 4 branches missed.">        if ( ( deprecated != null ) &amp;&amp; isNotEmpty( deprecated.getTextContent() ) )</span>
+<span class="pc bpc" id="L278" title="1 of 4 branches missed.">        if ( ( deprecated != null ) &amp;&amp; isNotEmpty( deprecated.getTextContent() ) )</span>
         {
-<span class="nc" id="L280">            append( sb, &quot;Deprecated. &quot; + deprecated.getTextContent(), 3 );</span>
-<span class="nc" id="L281">            append( sb, &quot;&quot;, 0 );</span>
+<span class="fc" id="L280">            append( sb, &quot;Deprecated. &quot; + deprecated.getTextContent(), 3 );</span>
+<span class="fc" id="L281">            append( sb, &quot;&quot;, 0 );</span>
         }
 <span class="fc bfc" id="L283" title="All 2 branches covered.">        if ( isNotEmpty( parameterDescription ) ) {</span>
 <span class="fc" id="L284">            append( sb, parameterDescription, 3 );</span>

@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseViolationCheckMojo.groovy</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spotbugs-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.codehaus.mojo.spotbugs</a> &gt; <span class="el_source">BaseViolationCheckMojo.groovy</span></div><h1>BaseViolationCheckMojo.groovy</h1><pre class="source lang-java linenums">/*
+ * SPDX-License-Identifier: Apache-2.0
+ * See LICENSE file for details.
+ *
  * Copyright 2005-2026 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package org.codehaus.mojo.spotbugs
 
@@ -101,160 +92,160 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     @Override
     void execute() {
-<span class="fc" id="L104">        log.debug('Executing spotbugs mojo')</span>
+<span class="fc" id="L95">        log.debug('Executing spotbugs mojo')</span>
 
-<span class="fc bfc" id="L106" title="All 2 branches covered.">        if (skip) {</span>
-<span class="fc" id="L107">            log.info('Spotbugs plugin skipped')</span>
-<span class="fc" id="L108">            return</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (skip) {</span>
+<span class="fc" id="L98">            log.info('Spotbugs plugin skipped')</span>
+<span class="fc" id="L99">            return</span>
         }
 
-<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (!doSourceFilesExist()) {</span>
-<span class="fc" id="L112">            log.debug('Nothing for SpotBugs to do here.')</span>
-<span class="fc" id="L113">            return</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        if (!doSourceFilesExist()) {</span>
+<span class="fc" id="L103">            log.debug('Nothing for SpotBugs to do here.')</span>
+<span class="fc" id="L104">            return</span>
         }
 
-<span class="fc" id="L116">        log.debug('Files found to process spotbugs')</span>
+<span class="fc" id="L107">        log.debug('Files found to process spotbugs')</span>
 
-<span class="fc" id="L118">        Path outputDir = spotbugsXmlOutputDirectory.toPath()</span>
+<span class="fc" id="L109">        Path outputDir = spotbugsXmlOutputDirectory.toPath()</span>
 
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (Files.notExists(outputDir)) {</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (Files.notExists(outputDir)) {</span>
             try {
-<span class="pc" id="L122">                Files.createDirectories(outputDir)</span>
+<span class="pc" id="L113">                Files.createDirectories(outputDir)</span>
             } catch (IOException e) {
-<span class="pc" id="L124">                throw new MojoExecutionException('Cannot create xml output directory', e)</span>
+<span class="pc" id="L115">                throw new MojoExecutionException('Cannot create xml output directory', e)</span>
             }
         }
 
-<span class="fc" id="L128">        Path outputFile = outputDir.resolve(spotbugsXmlOutputFilename)</span>
+<span class="fc" id="L119">        Path outputFile = outputDir.resolve(spotbugsXmlOutputFilename)</span>
 
-<span class="fc bfc" id="L130" title="All 2 branches covered.">        if (Files.notExists(outputFile)) {</span>
-<span class="fc" id="L131">            log.warn('Output file does not exist!')</span>
-<span class="fc" id="L132">            return</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (Files.notExists(outputFile)) {</span>
+<span class="fc" id="L122">            log.warn('Output file does not exist!')</span>
+<span class="fc" id="L123">            return</span>
         }
 
-<span class="fc" id="L135">        Node xml = new XmlParser().parse(outputFile.toFile())</span>
+<span class="fc" id="L126">        Node xml = new XmlParser().parse(outputFile.toFile())</span>
 
-<span class="fc" id="L137">        NodeList bugs = xml.BugInstance</span>
-<span class="fc" id="L138">        int bugCount = bugs.size()</span>
-<span class="fc" id="L139">        int errorCount = xml.Error.size()</span>
-<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        if (log.isInfoEnabled()) {</span>
-<span class="fc" id="L141">            log.info(&quot;BugInstance size is ${bugCount}&quot;)</span>
-<span class="fc" id="L142">            log.info(&quot;Error size is ${errorCount}&quot;)</span>
+<span class="fc" id="L128">        NodeList bugs = xml.BugInstance</span>
+<span class="fc" id="L129">        int bugCount = bugs.size()</span>
+<span class="fc" id="L130">        int errorCount = xml.Error.size()</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        if (log.isInfoEnabled()) {</span>
+<span class="fc" id="L132">            log.info(&quot;BugInstance size is ${bugCount}&quot;)</span>
+<span class="fc" id="L133">            log.info(&quot;Error size is ${errorCount}&quot;)</span>
         }
 
-<span class="fc bfc" id="L145" title="All 4 branches covered.">        if (bugCount &lt;= 0) {</span>
-<span class="fc" id="L146">            log.info('No errors/warnings found')</span>
-<span class="pc" id="L147">            return</span>
-<span class="fc bfc" id="L148" title="All 10 branches covered.">        } else if (maxAllowedViolations &gt; 0 &amp;&amp; bugCount &lt;= maxAllowedViolations) {</span>
-<span class="pc bpc" id="L149" title="1 of 2 branches missed.">            if (log.isInfoEnabled()) {</span>
-<span class="fc" id="L150">                log.info(&quot;Total ${bugCount} violations are found as acceptable using configured property maxAllowedViolations &quot; +</span>
+<span class="fc bfc" id="L136" title="All 4 branches covered.">        if (bugCount &lt;= 0) {</span>
+<span class="fc" id="L137">            log.info('No errors/warnings found')</span>
+<span class="pc" id="L138">            return</span>
+<span class="fc bfc" id="L139" title="All 10 branches covered.">        } else if (maxAllowedViolations &gt; 0 &amp;&amp; bugCount &lt;= maxAllowedViolations) {</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">            if (log.isInfoEnabled()) {</span>
+<span class="fc" id="L141">                log.info(&quot;Total ${bugCount} violations are found as acceptable using configured property maxAllowedViolations &quot; +</span>
                     &quot;:${maxAllowedViolations}.${SpotBugsInfo.EOL}Below are list of bugs ignored :${SpotBugsInfo.EOL}&quot;)
             }
-<span class="fc" id="L153">            printBugs(bugs)</span>
-<span class="fc" id="L154">            return</span>
+<span class="fc" id="L144">            printBugs(bugs)</span>
+<span class="fc" id="L145">            return</span>
         }
 
-<span class="pc bpc" id="L157" title="1 of 2 branches missed.">        if (log.isInfoEnabled()) {</span>
-<span class="fc" id="L158">            log.info('Total bugs: ' + bugCount)</span>
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (log.isInfoEnabled()) {</span>
+<span class="fc" id="L149">            log.info('Total bugs: ' + bugCount)</span>
         }
 
-<span class="fc bfc" id="L161" title="All 2 branches covered.">        int priorityThresholdNum = failThreshold ? SpotBugsInfo.spotbugsPriority.indexOf(failThreshold) : Integer.MAX_VALUE</span>
-<span class="fc bfc" id="L162" title="All 2 branches covered.">        if (priorityThresholdNum == -1) {</span>
-<span class="fc" id="L163">            throw new MojoExecutionException(&quot;Invalid value for failThreshold: ${failThreshold}&quot;)</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        int priorityThresholdNum = failThreshold ? SpotBugsInfo.spotbugsPriority.indexOf(failThreshold) : Integer.MAX_VALUE</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        if (priorityThresholdNum == -1) {</span>
+<span class="fc" id="L154">            throw new MojoExecutionException(&quot;Invalid value for failThreshold: ${failThreshold}&quot;)</span>
         }
 
-<span class="fc" id="L166">        int bugCountAboveThreshold = 0</span>
-<span class="fc" id="L167">        bugs.each { Node bug -&gt;</span>
-<span class="fc" id="L168">            int priorityNum = bug.'@priority'.toInteger()</span>
+<span class="fc" id="L157">        int bugCountAboveThreshold = 0</span>
+<span class="fc" id="L158">        bugs.each { Node bug -&gt;</span>
+<span class="fc" id="L159">            int priorityNum = bug.'@priority'.toInteger()</span>
             // lower is more severe
-<span class="fc bfc" id="L170" title="All 2 branches covered.">            if (priorityNum &lt;= priorityThresholdNum) {</span>
-<span class="fc" id="L171">                bugCountAboveThreshold++</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">            if (priorityNum &lt;= priorityThresholdNum) {</span>
+<span class="fc" id="L162">                bugCountAboveThreshold++</span>
             }
 
-<span class="pc bpc" id="L174" title="2 of 10 branches missed.">            if (!quiet &amp;&amp; (log.isErrorEnabled() || log.isInfoEnabled())) {</span>
-<span class="fc" id="L175">                String logMsg = SpotBugsInfo.spotbugsPriority[priorityNum] + ': ' + bugLog(bug)</span>
+<span class="pc bpc" id="L165" title="2 of 10 branches missed.">            if (!quiet &amp;&amp; (log.isErrorEnabled() || log.isInfoEnabled())) {</span>
+<span class="fc" id="L166">                String logMsg = SpotBugsInfo.spotbugsPriority[priorityNum] + ': ' + bugLog(bug)</span>
 
                 // lower is more severe
-<span class="fc bfc" id="L178" title="All 2 branches covered.">                if (priorityNum &lt;= priorityThresholdNum) {</span>
-<span class="pc bpc" id="L179" title="1 of 2 branches missed.">                    if (log.isErrorEnabled()) {</span>
-<span class="pc" id="L180">                        log.error(logMsg)</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">                if (priorityNum &lt;= priorityThresholdNum) {</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">                    if (log.isErrorEnabled()) {</span>
+<span class="pc" id="L171">                        log.error(logMsg)</span>
                     }
-<span class="pc bpc" id="L182" title="1 of 2 branches missed.">                } else if (log.isInfoEnabled()) {</span>
-<span class="fc" id="L183">                    log.info(logMsg)</span>
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">                } else if (log.isInfoEnabled()) {</span>
+<span class="fc" id="L174">                    log.info(logMsg)</span>
                 }
             }
-<span class="fc" id="L186">        }</span>
+<span class="fc" id="L177">        }</span>
 
-<span class="pc bpc" id="L188" title="1 of 2 branches missed.">        if (log.isInfoEnabled()) {</span>
-<span class="fc" id="L189">            log.info(SpotBugsInfo.EOL + SpotBugsInfo.EOL + SpotBugsInfo.EOL +</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        if (log.isInfoEnabled()) {</span>
+<span class="fc" id="L180">            log.info(SpotBugsInfo.EOL + SpotBugsInfo.EOL + SpotBugsInfo.EOL +</span>
                 'To see bug detail using the Spotbugs GUI, use the following command &quot;mvn spotbugs:gui&quot;' +
                 SpotBugsInfo.EOL + SpotBugsInfo.EOL + SpotBugsInfo.EOL)
         }
 
-<span class="pc bpc" id="L194" title="1 of 10 branches missed.">        if ((bugCountAboveThreshold || errorCount) &amp;&amp; failOnError) {</span>
-<span class="fc" id="L195">            throw new MojoExecutionException(&quot;failed with ${bugCountAboveThreshold} bugs and ${errorCount} errors&quot;)</span>
+<span class="pc bpc" id="L185" title="1 of 10 branches missed.">        if ((bugCountAboveThreshold || errorCount) &amp;&amp; failOnError) {</span>
+<span class="fc" id="L186">            throw new MojoExecutionException(&quot;failed with ${bugCountAboveThreshold} bugs and ${errorCount} errors&quot;)</span>
         }
-<span class="fc" id="L197">    }</span>
+<span class="fc" id="L188">    }</span>
 
     private boolean doSourceFilesExist() {
-<span class="fc" id="L200">        boolean foundClassFiles = false</span>
-<span class="fc" id="L201">        List&lt;String&gt; classFilesList = []</span>
-<span class="fc bfc" id="L202" title="All 2 branches covered.">        if (this.classFilesDirectory.isDirectory()) {</span>
-<span class="fc" id="L203">            foundClassFiles = walkFiles(classFilesList, classFilesDirectory, foundClassFiles)</span>
+<span class="fc" id="L191">        boolean foundClassFiles = false</span>
+<span class="fc" id="L192">        List&lt;String&gt; classFilesList = []</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (this.classFilesDirectory.isDirectory()) {</span>
+<span class="fc" id="L194">            foundClassFiles = walkFiles(classFilesList, classFilesDirectory, foundClassFiles)</span>
         }
 
-<span class="fc" id="L206">        boolean foundTestFiles = false</span>
-<span class="fc" id="L207">        List&lt;String&gt; testFilesList = []</span>
-<span class="pc bpc" id="L208" title="1 of 6 branches missed.">        if (this.includeTests &amp;&amp; this.testClassFilesDirectory.isDirectory()) {</span>
-<span class="fc" id="L209">            foundTestFiles = walkFiles(testFilesList, testClassFilesDirectory, foundTestFiles)</span>
+<span class="fc" id="L197">        boolean foundTestFiles = false</span>
+<span class="fc" id="L198">        List&lt;String&gt; testFilesList = []</span>
+<span class="pc bpc" id="L199" title="1 of 6 branches missed.">        if (this.includeTests &amp;&amp; this.testClassFilesDirectory.isDirectory()) {</span>
+<span class="fc" id="L200">            foundTestFiles = walkFiles(testFilesList, testClassFilesDirectory, foundTestFiles)</span>
         }
 
-<span class="fc bfc" id="L212" title="All 4 branches covered.">        return foundClassFiles || foundTestFiles</span>
+<span class="fc bfc" id="L203" title="All 4 branches covered.">        return foundClassFiles || foundTestFiles</span>
     }
 
     private boolean walkFiles(List filesList, File filesDirectory, boolean foundFiles) {
-<span class="fc bfc" id="L216" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
-<span class="fc" id="L217">            log.debug('looking for files with extensions: ' + SpotBugsInfo.EXTENSIONS)</span>
-<span class="fc" id="L218">            Files.walk(filesDirectory.toPath()).filter { Path path -&gt;</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L208">            log.debug('looking for files with extensions: ' + SpotBugsInfo.EXTENSIONS)</span>
+<span class="fc" id="L209">            Files.walk(filesDirectory.toPath()).filter { Path path -&gt;</span>
+<span class="fc" id="L210">                SpotBugsInfo.EXTENSIONS.any { String ext -&gt;</span>
+<span class="fc" id="L211">                    path.toString().toLowerCase(Locale.getDefault()).endsWith(ext)</span>
+                }
+            }.forEach { Path path -&gt;
+<span class="fc" id="L214">                filesList.add(path.toString())</span>
+            }
+<span class="fc" id="L216">            foundFiles = !filesList.isEmpty()</span>
+        } else {
+<span class="fc" id="L218">            foundFiles = Files.walk(filesDirectory.toPath()).anyMatch { Path path -&gt;</span>
 <span class="fc" id="L219">                SpotBugsInfo.EXTENSIONS.any { String ext -&gt;</span>
 <span class="fc" id="L220">                    path.toString().toLowerCase(Locale.getDefault()).endsWith(ext)</span>
                 }
-            }.forEach { Path path -&gt;
-<span class="fc" id="L223">                filesList.add(path.toString())</span>
-            }
-<span class="fc" id="L225">            foundFiles = !filesList.isEmpty()</span>
-        } else {
-<span class="fc" id="L227">            foundFiles = Files.walk(filesDirectory.toPath()).anyMatch { Path path -&gt;</span>
-<span class="fc" id="L228">                SpotBugsInfo.EXTENSIONS.any { String ext -&gt;</span>
-<span class="fc" id="L229">                    path.toString().toLowerCase(Locale.getDefault()).endsWith(ext)</span>
-                }
             }
         }
 
-<span class="fc bfc" id="L234" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
-<span class="fc" id="L235">            log.debug(&quot;SourceFiles found flag: ${foundFiles} with count: ${filesList.size()}&quot;)</span>
-<span class="pc bpc" id="L236" title="1 of 2 branches missed.">            if (!filesList.isEmpty()) {</span>
-<span class="fc" id="L237">                log.debug(&quot;Files found: &quot; + filesList)</span>
+<span class="fc bfc" id="L225" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
+<span class="fc" id="L226">            log.debug(&quot;SourceFiles found flag: ${foundFiles} with count: ${filesList.size()}&quot;)</span>
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">            if (!filesList.isEmpty()) {</span>
+<span class="fc" id="L228">                log.debug(&quot;Files found: &quot; + filesList)</span>
             }
         }
 
-<span class="fc" id="L241">        return foundFiles</span>
+<span class="fc" id="L232">        return foundFiles</span>
     }
 
     private void printBugs(NodeList bugs) {
-<span class="pc bpc" id="L245" title="1 of 2 branches missed.">        if (log.isErrorEnabled()) {</span>
-<span class="fc" id="L246">            StringBuilder sb = new StringBuilder()</span>
-<span class="fc" id="L247">            bugs.each { Node bug -&gt;</span>
-<span class="fc" id="L248">                sb.append(bugLog(bug)).append(SpotBugsInfo.EOL)</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        if (log.isErrorEnabled()) {</span>
+<span class="fc" id="L237">            StringBuilder sb = new StringBuilder()</span>
+<span class="fc" id="L238">            bugs.each { Node bug -&gt;</span>
+<span class="fc" id="L239">                sb.append(bugLog(bug)).append(SpotBugsInfo.EOL)</span>
             }
-<span class="fc" id="L250">            log.error(sb.toString())</span>
+<span class="fc" id="L241">            log.error(sb.toString())</span>
         }
-<span class="fc" id="L252">    }</span>
+<span class="fc" id="L243">    }</span>
 
     // Protected to allow groovy closure to see this method
     protected static String bugLog(Node bug) {
-<span class="fc" id="L256">        return bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +</span>
-<span class="fc" id="L257">            bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type'</span>
+<span class="fc" id="L247">        return bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +</span>
+<span class="fc" id="L248">            bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type'</span>
     }
 
 }
