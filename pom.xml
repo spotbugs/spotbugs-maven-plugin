@@ -116,7 +116,7 @@
         <jacoco.minimum.coverage>0.54</jacoco.minimum.coverage>
 
         <!-- Override spotbugs to this version from base-parent -->
-        <spotbugs.version>4.10.2</spotbugs.version>
+        <spotbugs.version>4.10.3</spotbugs.version>
         <spotbugs.plugin>4.10.2.0</spotbugs.plugin>
 
         <!-- Use 'master' branch or '${spotbugs.version}' tag for integration test source pull from spotbugs. -->
