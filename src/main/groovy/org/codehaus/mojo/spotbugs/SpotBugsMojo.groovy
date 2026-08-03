@@ -600,9 +600,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         if (canGenerate && outputSpotbugsFile == null) {
             outputSpotbugsFile = spotbugsXmlOutputDirectory.toPath().resolve(spotbugsXmlOutputFilename).toFile()
             executeSpotbugs(outputSpotbugsFile)
-            if (skipEmptyReport && bugCount == 0) {
-                canGenerate = false
-            }
         }
 
         if (log.isDebugEnabled()) {
@@ -619,17 +616,18 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             }
         }
 
-        if (canGenerate) {
+        boolean mustGenerate = !(bugCount == 0 && skipEmptyReport)
+        if (canGenerate && mustGenerate) {
             if (!isSiteLifecycle) {
                 // Only generate xdoc report, skip site pages
                 generateXDoc(getLocale())
                 return false
             }
-        } else {
-            log.info('No files found to run spotbugs; check compile phase has been run.')
+        } else if (!canGenerate && mustGenerate) {
+            log.warn('No files found to generate report on. Check if compile phase has been run.')
         }
 
-        return canGenerate
+        return canGenerate && mustGenerate
     }
 
     /**
