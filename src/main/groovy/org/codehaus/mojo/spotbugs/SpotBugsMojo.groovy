@@ -168,15 +168,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     MavenSession session
 
     /**
-     * The file encoding to use when reading the source files. If the property <code>project.build.sourceEncoding</code>
-     * is not set, the platform default encoding is used.
-     *
-     * @since 2.2
-     */
-    @Parameter(defaultValue = '${project.build.sourceEncoding}', property = 'encoding')
-    String sourceEncoding
-
-    /**
      * The file encoding to use when creating the HTML reports. If the property <code>project.reporting.outputEncoding</code>
      * is not set, utf-8 is used.
      *
@@ -789,9 +780,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 throw new MojoExecutionException('Cannot create xdoc output directory')
             }
 
-            XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, outputEncoding)
+            Charset effectiveEncoding = outputEncoding != null ?
+                Charset.forName(outputEncoding) : StandardCharsets.UTF_8
+
+            XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, effectiveEncoding)
             xDocsReporter.setOutputWriter(Files.newBufferedWriter(Path.of("${xmlOutputDirectory}/spotbugs.xml"),
-                Charset.forName(outputEncoding)))
+                effectiveEncoding))
 
             XmlSlurper xmlSlurper = new XmlSlurper()
             xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
@@ -1197,8 +1191,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             forceFileCreation(sarifTempFile)
         }
 
-        outputEncoding = outputEncoding ?: StandardCharsets.UTF_8
-
         log.debug('****** Executing SpotBugsMojo *******')
 
         resourceManager.addSearchPath(FileResourceLoader.ID, session.getCurrentProject().getFile()
@@ -1230,12 +1222,8 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         List<String> spotbugsArgs = getSpotbugsArgs(htmlTempFile, xmlTempFile, sarifTempFile, auxClasspathFile)
 
-        Charset effectiveEncoding
-        if (sourceEncoding) {
-            effectiveEncoding = Charset.forName(sourceEncoding)
-        } else {
-            effectiveEncoding = Charset.defaultCharset() ?: StandardCharsets.UTF_8
-        }
+        Charset effectiveEncoding = outputEncoding != null ?
+            Charset.forName(outputEncoding) : StandardCharsets.UTF_8
         if (log.isDebugEnabled()) {
             log.debug('File Encoding is ' + effectiveEncoding.name())
         }
@@ -1394,12 +1382,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 log.info('No bugs found')
                 if (noClassOk) {
                     log.info('No class files to analyze; creating empty output due to noClassOk=true')
-                    Charset effectiveEncodingForEmpty = outputEncoding ?: StandardCharsets.UTF_8
                     Files.createDirectories(outputFile.toPath().getParent())
                     String minimalXml = '<?xml version="1.0" encoding="' +
-                        effectiveEncodingForEmpty.name().toLowerCase(Locale.ROOT) + '"?>' +
+                        effectiveEncoding.name().toLowerCase(Locale.ROOT) + '"?>' +
                         SpotBugsInfo.EOL + '<BugCollection></BugCollection>'
-                    Files.write(outputFile.toPath(), minimalXml.getBytes(effectiveEncodingForEmpty))
+                    Files.write(outputFile.toPath(), minimalXml.getBytes(effectiveEncoding))
                 }
             }
 

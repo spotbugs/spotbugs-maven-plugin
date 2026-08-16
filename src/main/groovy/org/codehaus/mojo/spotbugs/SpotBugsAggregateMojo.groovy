@@ -189,7 +189,7 @@ class SpotBugsAggregateMojo extends AbstractMavenReport {
             throw new MojoExecutionException('Cannot create html output directory')
         }
 
-        Charset effectiveEncoding = outputEncoding ?
+        Charset effectiveEncoding = outputEncoding != null ?
             Charset.forName(outputEncoding) : StandardCharsets.UTF_8
 
         if (log.isDebugEnabled()) {

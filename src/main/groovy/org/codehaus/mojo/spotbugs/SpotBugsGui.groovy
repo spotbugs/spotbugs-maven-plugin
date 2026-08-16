@@ -130,12 +130,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
             log.info("  Plugin Artifacts to be added -> ${pluginArtifacts}")
         }
 
-        Charset effectiveEncoding
-        if (encoding) {
-            effectiveEncoding = Charset.forName(encoding)
-        } else {
-            effectiveEncoding = Charset.defaultCharset() ?: StandardCharsets.UTF_8
-        }
+        Charset effectiveEncoding = encoding != null ? Charset.forName(encoding) : StandardCharsets.UTF_8
         if (log.isInfoEnabled()) {
             log.info('File Encoding is ' + effectiveEncoding.name())
         }

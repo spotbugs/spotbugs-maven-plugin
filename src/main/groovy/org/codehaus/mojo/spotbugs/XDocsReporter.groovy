@@ -59,7 +59,7 @@ class XDocsReporter {
      * @param bundle
      *            The Resource Bundle to use
      */
-    XDocsReporter(ResourceBundle bundle, Log log, String threshold, String effort, String outputEncoding) {
+    XDocsReporter(ResourceBundle bundle, Log log, String threshold, String effort, Charset outputEncoding) {
         if (!bundle || !log || !threshold || !effort || !outputEncoding) {
             throw new IllegalArgumentException('All constructor arguments must be provided')
         }
@@ -68,7 +68,7 @@ class XDocsReporter {
         this.log = log
         this.threshold = threshold
         this.effort = effort
-        this.outputEncoding = Charset.forName(outputEncoding)
+        this.outputEncoding = outputEncoding
     }
 
     /**
