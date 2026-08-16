@@ -1109,6 +1109,181 @@ class SpotBugsMojoTest extends Specification {
     }
 
     // -------------------------------------------------------------------------
+    // executeSpotbugs() – forks and runs the real SpotBugs engine
+    // -------------------------------------------------------------------------
+    //
+    // These tests invoke the private executeSpotbugs(File) via reflection. Some tests
+    // use the real test classpath (SpotBugs core is a compile dependency of this module)
+    // to exercise a genuine successful analysis/toolchain/timeout run, while others use an
+    // empty classpath to deterministically and quickly trigger the failure / noClassOk /
+    // debug-retention branches without depending on a real SpotBugs execution succeeding.
+
+    void 'executeSpotbugs runs a real SpotBugs analysis and writes xml output with bug count'() {
+        given:
+        File classesDir = compileBuggyClass(tempDir)
+        SpotBugsMojo mojo = buildExecuteSpotbugsMojo(tempDir, classesDir, realClasspathArtifacts())
+        File outputFile = new File(tempDir, 'spotbugsXml.xml')
+
+        when:
+        invokeExecuteSpotbugs(mojo, outputFile)
+
+        then:
+        outputFile.exists()
+        outputFile.text.contains('BugInstance')
+        mojo.bugCount >= 1
+        mojo.errorCount == 0
+    }
+
+    void 'executeSpotbugs writes html and sarif temp output when both are enabled'() {
+        given:
+        File classesDir = compileBuggyClass(tempDir)
+        SpotBugsMojo mojo = buildExecuteSpotbugsMojo(tempDir, classesDir, realClasspathArtifacts())
+        mojo.htmlOutput = true
+        mojo.sarifOutput = true
+        mojo.sarifOutputDirectory = tempDir
+        mojo.sarifOutputFilename = 'spotbugsSarif.json'
+        File outputFile = new File(tempDir, 'spotbugsXml.xml')
+
+        when:
+        invokeExecuteSpotbugs(mojo, outputFile)
+
+        then:
+        outputFile.exists()
+        new File(tempDir, 'spotbugsSarif.json').exists()
+    }
+
+    void 'executeSpotbugs uses toolchain-provided java executable when available'() {
+        given:
+        File classesDir = compileBuggyClass(tempDir)
+        SpotBugsMojo mojo = buildExecuteSpotbugsMojo(tempDir, classesDir, realClasspathArtifacts())
+        String javaBin = new File(System.getProperty('java.home'), 'bin/java').absolutePath
+        org.apache.maven.toolchain.Toolchain toolchain = Mock(org.apache.maven.toolchain.Toolchain) {
+            findTool('java') >> javaBin
+        }
+        mojo.toolchainManager = Mock(org.apache.maven.toolchain.ToolchainManager) {
+            getToolchainFromBuildContext('jdk', _) >> toolchain
+        }
+        File outputFile = new File(tempDir, 'spotbugsXml.xml')
+
+        when:
+        invokeExecuteSpotbugs(mojo, outputFile)
+
+        then:
+        outputFile.exists()
+        mojo.bugCount >= 1
+    }
+
+    void 'executeSpotbugs includes custom jvmArgs and systemPropertyVariables without error'() {
+        given:
+        File classesDir = compileBuggyClass(tempDir)
+        SpotBugsMojo mojo = buildExecuteSpotbugsMojo(tempDir, classesDir, realClasspathArtifacts())
+        mojo.jvmArgs = '-Dcustom.arg=true'
+        mojo.systemPropertyVariables = ['my.sys.prop': 'value']
+        File outputFile = new File(tempDir, 'spotbugsXml.xml')
+
+        when:
+        invokeExecuteSpotbugs(mojo, outputFile)
+
+        then:
+        outputFile.exists()
+    }
+
+    void 'executeSpotbugs throws MojoExecutionException on timeout'() {
+        given:
+        File classesDir = compileBuggyClass(tempDir)
+        SpotBugsMojo mojo = buildExecuteSpotbugsMojo(tempDir, classesDir, realClasspathArtifacts())
+        mojo.timeout = 1
+
+        when:
+        invokeExecuteSpotbugs(mojo, new File(tempDir, 'spotbugsXml.xml'))
+
+        then:
+        org.apache.maven.plugin.MojoExecutionException ex = thrown(org.apache.maven.plugin.MojoExecutionException)
+        ex.message.contains('timed out')
+    }
+
+    void 'executeSpotbugs throws MojoExecutionException when SpotBugs process fails and failOnError is true'() {
+        given:
+        File classesDir = new File(tempDir, 'classes-broken-1')
+        classesDir.mkdirs()
+        SpotBugsMojo mojo = buildExecuteSpotbugsMojo(tempDir, classesDir, [])
+        mojo.failOnError = true
+
+        when:
+        invokeExecuteSpotbugs(mojo, new File(tempDir, 'spotbugsXml.xml'))
+
+        then:
+        thrown(org.apache.maven.plugin.MojoExecutionException)
+    }
+
+    void 'executeSpotbugs does not throw when SpotBugs process fails and failOnError is false'() {
+        given:
+        File classesDir = new File(tempDir, 'classes-broken-2')
+        classesDir.mkdirs()
+        SpotBugsMojo mojo = buildExecuteSpotbugsMojo(tempDir, classesDir, [])
+        mojo.failOnError = false
+        File outputFile = new File(tempDir, 'spotbugsXml.xml')
+
+        when:
+        invokeExecuteSpotbugs(mojo, outputFile)
+
+        then:
+        noExceptionThrown()
+        // xmlTempFile ends up empty (process never ran SpotBugs), and noClassOk=false,
+        // so the final xml output file is never written.
+        !outputFile.exists()
+    }
+
+    void 'executeSpotbugs writes minimal BugCollection xml when noClassOk=true and analysis produced no output'() {
+        given:
+        File classesDir = new File(tempDir, 'classes-broken-3')
+        classesDir.mkdirs()
+        SpotBugsMojo mojo = buildExecuteSpotbugsMojo(tempDir, classesDir, [])
+        mojo.failOnError = false
+        mojo.noClassOk = true
+        File outputFile = new File(tempDir, 'spotbugsXml.xml')
+
+        when:
+        invokeExecuteSpotbugs(mojo, outputFile)
+
+        then:
+        outputFile.exists()
+        outputFile.text.contains('<BugCollection')
+    }
+
+    void 'executeSpotbugs keeps xml temp file when debug is true'() {
+        given:
+        File classesDir = new File(tempDir, 'classes-broken-4')
+        classesDir.mkdirs()
+        SpotBugsMojo mojo = buildExecuteSpotbugsMojo(tempDir, classesDir, [])
+        mojo.failOnError = false
+        mojo.debug = true
+        File xmlTempFile = new File(tempDir, 'spotbugsTemp.xml')
+
+        when:
+        invokeExecuteSpotbugs(mojo, new File(tempDir, 'spotbugsXml.xml'))
+
+        then:
+        xmlTempFile.exists()
+    }
+
+    void 'executeSpotbugs does not create html or sarif temp files when both outputs disabled'() {
+        given:
+        File classesDir = new File(tempDir, 'classes-broken-5')
+        classesDir.mkdirs()
+        SpotBugsMojo mojo = buildExecuteSpotbugsMojo(tempDir, classesDir, [])
+        mojo.failOnError = false
+        mojo.htmlOutput = false
+        mojo.sarifOutput = false
+
+        when:
+        invokeExecuteSpotbugs(mojo, new File(tempDir, 'spotbugsXml.xml'))
+
+        then:
+        !new File(tempDir, 'spotbugs.html').exists()
+    }
+
+    // -------------------------------------------------------------------------
     // Helper methods
     // -------------------------------------------------------------------------
 
@@ -1168,6 +1343,117 @@ class SpotBugsMojoTest extends Specification {
             }
         }
         throw new NoSuchFieldException("Field '${fieldName}' not found in ${target.getClass().name} hierarchy")
+    }
+
+    /**
+     * Builds a SpotBugsMojo wired with minimal mocks sufficient to invoke the private
+     * executeSpotbugs(File) method end-to-end (real ProcessBuilder fork).
+     */
+    private SpotBugsMojo buildExecuteSpotbugsMojo(File baseDir, File classesDir, List<Artifact> pluginArtifactsList) {
+        org.apache.maven.model.Build build = Mock(org.apache.maven.model.Build) {
+            getDirectory() >> baseDir.absolutePath
+        }
+        MavenProject project = Mock(MavenProject) {
+            getName() >> 'test-project'
+            getCompileSourceRoots() >> []
+            getTestCompileSourceRoots() >> []
+            getCompileClasspathElements() >> []
+            getTestClasspathElements() >> []
+            getBuild() >> build
+            getFile() >> new File(baseDir, 'pom.xml')
+            getRemoteProjectRepositories() >> []
+        }
+        MavenSession session = Mock(MavenSession) {
+            getCurrentProject() >> project
+        }
+
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        mojo.log = Mock(Log) { isDebugEnabled() >> false }
+        mojo.session = session
+        mojo.resourceManager = Mock(org.codehaus.plexus.resource.ResourceManager)
+        mojo.pluginArtifacts = pluginArtifactsList
+        mojo.classFilesDirectory = classesDir
+        mojo.testClassFilesDirectory = new File(baseDir, 'nonexistent-test-classes')
+        mojo.includeTests = false
+        mojo.outputDirectory = baseDir
+        mojo.spotbugsXmlOutputDirectory = baseDir
+        mojo.effort = 'Default'
+        mojo.threshold = 'Default'
+        mojo.outputEncoding = 'UTF-8'
+        mojo.systemPropertyVariables = [:]
+        mojo.maxHeap = 256
+        mojo.timeout = 0
+        mojo.failOnError = true
+        setField(mojo, 'project', project)
+
+        return mojo
+    }
+
+    /**
+     * Builds an Artifact list mirroring the real test JVM's classpath, so the forked
+     * SpotBugs process can actually locate and run edu.umd.cs.findbugs.FindBugs2
+     * (SpotBugs core is a compile dependency of this module, so it is already present).
+     */
+    private List<Artifact> realClasspathArtifacts() {
+        String cp = System.getProperty('java.class.path')
+        return cp.split(File.pathSeparator).findAll { String path -> new File(path).exists() }.collect { String path ->
+            return Mock(Artifact) {
+                getFile() >> new File(path)
+                // Avoid the extension-plugin auto-detection loop opening every real jar on the classpath.
+                getGroupId() >> 'com.github.spotbugs'
+            }
+        }
+    }
+
+    /**
+     * Compiles a tiny Java class containing a guaranteed, default-severity SpotBugs
+     * finding (DLS_DEAD_LOCAL_STORE) into a fresh classes directory under baseDir.
+     */
+    private static File compileBuggyClass(File baseDir) {
+        File srcDir = new File(baseDir, 'src')
+        srcDir.mkdirs()
+        File srcFile = new File(srcDir, 'Buggy.java')
+        srcFile.text = '''
+            public class Buggy {
+                public void bug() {
+                    String s = null;
+                    s.length();
+                }
+            }
+        '''.stripIndent()
+
+        File classesDir = new File(baseDir, 'classes')
+        classesDir.mkdirs()
+
+        javax.tools.JavaCompiler compiler = javax.tools.ToolProvider.getSystemJavaCompiler()
+        javax.tools.StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null)
+        try {
+            Iterable<? extends javax.tools.JavaFileObject> units = fileManager.getJavaFileObjectsFromFiles([srcFile])
+            List<String> options = ['-d', classesDir.absolutePath]
+            boolean success = compiler.getTask(null, fileManager, null, options, null, units).call()
+            if (!success) {
+                throw new IllegalStateException('Failed to compile Buggy.java test fixture')
+            }
+        } finally {
+            fileManager.close()
+        }
+
+        return classesDir
+    }
+
+    /**
+     * Invokes the private executeSpotbugs(File) method via reflection, unwrapping and
+     * rethrowing the original (possibly checked) exception rather than the reflection
+     * InvocationTargetException wrapper, so Spock's thrown() works naturally.
+     */
+    private static void invokeExecuteSpotbugs(SpotBugsMojo mojo, File outputFile) {
+        Method method = SpotBugsMojo.class.getDeclaredMethod('executeSpotbugs', File)
+        method.setAccessible(true)
+        try {
+            method.invoke(mojo, outputFile)
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            throw e.cause
+        }
     }
 
 }
