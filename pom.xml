@@ -129,7 +129,7 @@
         <log4j2.version>2.26.1</log4j2.version>
         <slf4jVersion>2.0.18</slf4jVersion>
 
-        <groovyVersion>5.0.8</groovyVersion>
+        <groovyVersion>5.1.0</groovyVersion>
         <javaparserVersion>3.28.2</javaparserVersion>
 
         <doxiaVersion>2.1.0</doxiaVersion>
