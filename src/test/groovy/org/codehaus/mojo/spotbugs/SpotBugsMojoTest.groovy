@@ -11,6 +11,7 @@ import java.lang.reflect.Method
 import java.util.jar.JarEntry
 import java.util.jar.JarOutputStream
 
+import org.apache.maven.artifact.Artifact
 import org.apache.maven.execution.MavenExecutionRequest
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.model.Model
@@ -21,6 +22,7 @@ import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecution
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.MavenProject
+
 import spock.lang.Specification
 import spock.lang.TempDir
 
