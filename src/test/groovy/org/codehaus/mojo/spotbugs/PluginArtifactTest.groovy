@@ -10,6 +10,9 @@ import com.codebox.bean.JavaBeanTester
 
 import spock.lang.Specification
 
+/**
+ * The Class PluginArtifactTest.
+ */
 class PluginArtifactTest extends Specification {
 
     void "should satisfy JavaBean contract"() {

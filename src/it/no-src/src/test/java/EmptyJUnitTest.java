@@ -8,13 +8,22 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 
+/**
+ * The Class EmptyJUnitTest.
+ */
 public class EmptyJUnitTest {
 
+    /**
+     * Set up.
+     */
     @BeforeEach
     void setUp() {
         // Do nothing
     }
 
+    /**
+     * Tear down.
+     */
     @AfterEach
     void tearDown() {
         // Do nothing

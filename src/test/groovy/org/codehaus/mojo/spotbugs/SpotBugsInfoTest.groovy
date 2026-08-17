@@ -9,6 +9,9 @@ package org.codehaus.mojo.spotbugs
 import org.codehaus.mojo.spotbugs.SpotBugsInfo
 import spock.lang.Specification
 
+/**
+ * The Class SpotBugsInfoTest.
+ */
 class SpotBugsInfoTest extends Specification {
 
     // Dummy implementation to access instance properties

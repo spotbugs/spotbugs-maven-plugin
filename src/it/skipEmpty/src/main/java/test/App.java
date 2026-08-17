@@ -17,12 +17,21 @@ import org.slf4j.LoggerFactory;
  */
 public class App {
 
+    /** The logger. */
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
+    /**
+     * Instantiates a new app.
+     */
     private App() {
         // Do not allow instantiation
     }
 
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
     public static void main(String[] args) {
         if (Objects.isNull(args)) {
             logger.warn("Input args is null");

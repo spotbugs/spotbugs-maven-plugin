@@ -25,9 +25,11 @@ import java.nio.file.Files
  */
 class SpotBugsAggregateMojoTest extends Specification {
 
+    /** The temp dir. */
     @TempDir
     File tempDir
 
+    /** The spotbugs xml no bugs. */
     private static final String SPOTBUGS_XML_NO_BUGS = '''\
 <?xml version="1.0" encoding="UTF-8"?>
 <BugCollection version="4.9.8" threshold="medium" effort="default">
@@ -41,6 +43,7 @@ class SpotBugsAggregateMojoTest extends Specification {
 </BugCollection>
 '''
 
+    /** The spotbugs xml with bugs. */
     private static final String SPOTBUGS_XML_WITH_BUGS = '''\
 <?xml version="1.0" encoding="UTF-8"?>
 <BugCollection version="4.9.8" threshold="medium" effort="default">
@@ -565,6 +568,12 @@ class SpotBugsAggregateMojoTest extends Specification {
     // Helpers
     // -------------------------------------------------------------------------
 
+    /**
+     * Build maven project.
+     *
+     * @param buildDir the build dir
+     * @return the maven project
+     */
     private static MavenProject buildMavenProject(File buildDir) {
         Build build = new Build()
         build.directory = buildDir.absolutePath
@@ -575,10 +584,23 @@ class SpotBugsAggregateMojoTest extends Specification {
         return project
     }
 
+    /**
+     * Set reactor projects.
+     *
+     * @param mojo the mojo
+     * @param projects the projects
+     */
     private void setReactorProjects(SpotBugsAggregateMojo mojo, List<MavenProject> projects) {
         setField(mojo, 'reactorProjects', projects)
     }
 
+    /**
+     * Set field.
+     *
+     * @param target the target
+     * @param fieldName the field name
+     * @param value the value
+     */
     private static void setField(Object target, String fieldName, Object value) {
         Class<?> clazz = target.getClass()
         while (clazz != null) {
@@ -594,6 +616,12 @@ class SpotBugsAggregateMojoTest extends Specification {
         throw new NoSuchFieldException("Field '${fieldName}' not found in ${target.getClass().name} hierarchy")
     }
 
+    /**
+     * Minimal spotbugs xml.
+     *
+     * @param bugCount the bug count
+     * @return the string
+     */
     private static String minimalSpotbugsXml(int bugCount) {
         String bugs = (1..bugCount).collect {
             """    <BugInstance type="NP_NULL_ON_SOME_PATH" priority="1" rank="1" abbrev="NP" category="CORRECTNESS">

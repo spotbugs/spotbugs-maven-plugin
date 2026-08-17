@@ -6,6 +6,9 @@
  */
 package org.codehaus.mojo.spotbugs
 
+/**
+ * The Class PluginArtifact.
+ */
 class PluginArtifact {
 
     /** The group id. */

@@ -58,6 +58,10 @@ class XDocsReporter {
      *
      * @param bundle
      *            The Resource Bundle to use
+     * @param log the log
+     * @param threshold the threshold
+     * @param effort the effort
+     * @param outputEncoding the output encoding
      */
     XDocsReporter(ResourceBundle bundle, Log log, String threshold, String effort, Charset outputEncoding) {
         if (!bundle || !log || !threshold || !effort || !outputEncoding) {
@@ -98,6 +102,9 @@ class XDocsReporter {
         return Version.VERSION_STRING
     }
 
+    /**
+     * Generate report.
+     */
     void generateReport() {
         StreamingMarkupBuilder xmlBuilder = new StreamingMarkupBuilder()
         xmlBuilder.encoding = outputEncoding.name()

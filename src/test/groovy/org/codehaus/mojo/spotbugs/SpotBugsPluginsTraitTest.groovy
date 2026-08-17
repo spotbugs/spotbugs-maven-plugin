@@ -19,6 +19,9 @@ import org.eclipse.aether.RepositorySystem
 
 import spock.lang.Specification
 
+/**
+ * The Class SpotBugsPluginsTraitTest.
+ */
 class SpotBugsPluginsTraitTest extends Specification {
 
     void "getEffortParameter returns correct effort string"() {
@@ -513,17 +516,38 @@ class SpotBugsPluginsTraitTest extends Specification {
         tempOutputDir.toFile().deleteDir()
     }
 
+    /**
+     * The Class SpotBugsPluginsTraitImpl.
+     */
     static class SpotBugsPluginsTraitImpl implements SpotBugsPluginsTrait {
+        /** The effort. */
         String effort
+        /** The plugin list. */
         String pluginList = ""
+        /** The plugins. */
         List<PluginArtifact> plugins = []
+        /** The plugin artifacts. */
         List<Artifact> pluginArtifacts = []
+        /** The log. */
         Log log
+        /** The spotbugs xml output directory. */
         File spotbugsXmlOutputDirectory = new File(".")
+        /** The resource manager. */
         ResourceManager resourceManager
+        /** The repository system. */
         RepositorySystem repositorySystem
+        /** The session. */
         MavenSession session
 
+        /**
+         * Instantiates a new spot bugs plugins trait impl.
+         *
+         * @param effort the effort
+         * @param log the log
+         * @param resourceManager the resource manager
+         * @param repositorySystem the repository system
+         * @param session the session
+         */
         SpotBugsPluginsTraitImpl(
             String effort,
             Log log,

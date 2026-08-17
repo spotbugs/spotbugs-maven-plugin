@@ -16,6 +16,9 @@ import spock.lang.Specification
 import java.nio.file.Files
 import java.nio.file.Path
 
+/**
+ * The Class SourceFileIndexerTest.
+ */
 class SourceFileIndexerTest extends Specification {
 
     void "buildListSourceFiles and searchActualFilesLocation work as expected"() {
@@ -239,6 +242,12 @@ class SourceFileIndexerTest extends Specification {
         [fileA, fileB, srcDir, baseDir]*.deleteDir()
     }
 
+    /**
+     * Resource.
+     *
+     * @param dir the dir
+     * @return the resource
+     */
     private static Resource resource(File dir) {
         Resource res = new Resource()
         res.setDirectory(dir.getAbsolutePath())

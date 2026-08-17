@@ -13,6 +13,9 @@ import org.apache.maven.plugin.logging.Log
 import spock.lang.Specification
 import spock.lang.TempDir
 
+/**
+ * The Class BaseViolationCheckMojoTest.
+ */
 class BaseViolationCheckMojoTest extends Specification {
 
     @TempDir

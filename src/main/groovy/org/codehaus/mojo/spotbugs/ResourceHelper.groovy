@@ -15,6 +15,9 @@ import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugin.MojoExecutionException
 import org.codehaus.plexus.resource.ResourceManager
 
+/**
+ * The Class ResourceHelper.
+ */
 final class ResourceHelper {
 
     /** The log. */
@@ -29,6 +32,13 @@ final class ResourceHelper {
     /** Precompiled regex pattern for resource name sanitization. */
     private static final Pattern SANITIZE_PATTERN = Pattern.compile('[?:&=%]')
 
+    /**
+     * Instantiates a new resource helper.
+     *
+     * @param log the log
+     * @param outputDirectory the output directory
+     * @param resourceManager the resource manager
+     */
     ResourceHelper(final Log log, final File outputDirectory, final ResourceManager resourceManager) {
         this.log = Objects.requireNonNull(log, "log must not be null")
         this.outputDirectory = outputDirectory
@@ -77,6 +87,13 @@ final class ResourceHelper {
         return resourcePath.toFile()
     }
 
+    /**
+     * Get resource as file.
+     *
+     * @param name the name
+     * @param outputPath the output path
+     * @return the path
+     */
     private Path getResourceAsFile(final String name, final String outputPath) {
         Path outputResourcePath = outputDirectory == null ? Path.of(outputPath) : outputDirectory.toPath().resolve(outputPath)
 
@@ -115,6 +132,11 @@ final class ResourceHelper {
         return outputResourcePath
     }
 
+    /**
+     * Create parent directories.
+     *
+     * @param outputResourcePath the output resource path
+     */
     private static createParentDirectories(Path outputResourcePath) {
         Path parent = outputResourcePath.getParent()
         if (parent != null && Files.notExists(parent)) {

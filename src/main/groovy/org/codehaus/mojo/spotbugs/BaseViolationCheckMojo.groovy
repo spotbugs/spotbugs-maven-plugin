@@ -15,6 +15,9 @@ import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugins.annotations.Parameter
 
+/**
+ * The Class BaseViolationCheckMojo.
+ */
 abstract class BaseViolationCheckMojo extends AbstractMojo {
 
     /**
@@ -187,6 +190,11 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         }
     }
 
+    /**
+     * Do source files exist.
+     *
+     * @return true, if successful
+     */
     private boolean doSourceFilesExist() {
         boolean foundClassFiles = false
         List<String> classFilesList = []
@@ -203,6 +211,14 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         return foundClassFiles || foundTestFiles
     }
 
+    /**
+     * Walk files.
+     *
+     * @param filesList the files list
+     * @param filesDirectory the files directory
+     * @param foundFiles the found files
+     * @return true, if successful
+     */
     private boolean walkFiles(List filesList, File filesDirectory, boolean foundFiles) {
         if (log.isDebugEnabled()) {
             log.debug('looking for files with extensions: ' + SpotBugsInfo.EXTENSIONS)
@@ -232,6 +248,11 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         return foundFiles
     }
 
+    /**
+     * Print bugs.
+     *
+     * @param bugs the bugs
+     */
     private void printBugs(NodeList bugs) {
         if (log.isErrorEnabled()) {
             StringBuilder sb = new StringBuilder()
@@ -242,7 +263,12 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
         }
     }
 
-    // Protected to allow groovy closure to see this method
+    /**
+     * Bug log. Protected to allow groovy closure to see this method.
+     *
+     * @param bug the bug
+     * @return the string
+     */
     protected static String bugLog(Node bug) {
         return bug.LongMessage.text() + SpotBugsInfo.BLANK + bug.SourceLine.'@classname' + SpotBugsInfo.BLANK +
             bug.SourceLine.Message.text() + SpotBugsInfo.BLANK + bug.'@type'

@@ -13,8 +13,17 @@ import org.apache.maven.plugin.logging.Log
 
 import spock.lang.Specification
 
+/**
+ * The Class HelpMojoTest.
+ */
 class HelpMojoTest extends Specification {
 
+    /**
+     * Create mojo.
+     *
+     * @param detail the detail
+     * @return the help mojo
+     */
     private HelpMojo createMojo(boolean detail = false, String goal = null, int lineLength = 80, int indentSize = 2) {
         HelpMojo mojo = new HelpMojo()
         mojo.setLog(Mock(Log) {
@@ -31,6 +40,13 @@ class HelpMojoTest extends Specification {
         return mojo
     }
 
+    /**
+     * Set field.
+     *
+     * @param obj the obj
+     * @param fieldName the field name
+     * @param value the value
+     */
     private static void setField(Object obj, String fieldName, Object value) {
         Field field = obj.getClass().getDeclaredField(fieldName)
         field.setAccessible(true)

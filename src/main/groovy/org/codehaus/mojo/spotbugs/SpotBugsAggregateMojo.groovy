@@ -375,6 +375,12 @@ class SpotBugsAggregateMojo extends AbstractMavenReport {
         this.outputDirectory = reportOutputDirectory
     }
 
+    /**
+     * Get bundle.
+     *
+     * @param locale the locale
+     * @return the resource bundle
+     */
     ResourceBundle getBundle(Locale locale) {
         this.bundle = ResourceBundle.getBundle(SpotBugsInfo.BUNDLE_NAME, locale,
             SpotBugsAggregateMojo.class.getClassLoader())

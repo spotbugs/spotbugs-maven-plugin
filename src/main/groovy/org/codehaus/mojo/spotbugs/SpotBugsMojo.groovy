@@ -750,6 +750,9 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
     }
 
+    /**
+     * Execute check.
+     */
     private void executeCheck() {
         log.debug('****** SpotBugsMojo executeCheck *******')
 
@@ -760,6 +763,11 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
     }
 
+    /**
+     * Generate x doc.
+     *
+     * @param locale the locale
+     */
     private void generateXDoc(Locale locale) {
         log.debug('****** SpotBugsMojo generateXDoc *******')
 
@@ -844,6 +852,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         return isEnabled
     }
 
+    /**
+     * Get bundle.
+     *
+     * @param locale the locale
+     * @return the resource bundle
+     */
     ResourceBundle getBundle(Locale locale) {
 
         this.bundle = ResourceBundle.getBundle(SpotBugsInfo.BUNDLE_NAME, locale, SpotBugsMojo.class.getClassLoader())

@@ -15,6 +15,9 @@ import org.apache.maven.plugin.logging.Log
 
 import spock.lang.Specification
 
+/**
+ * The Class XDocsReporterTest.
+ */
 class XDocsReporterTest extends Specification {
 
     void 'evaluateThresholdParameter returns correct threshold name'() {

@@ -24,8 +24,10 @@ import static org.junit.jupiter.api.Assertions.*
 @MojoTest
 class VerifyMojoHarnessTest {
 
+    /** The pom. */
     private static final String POM = 'src/test/resources/unit/check-mojo/minimal-pom.xml'
 
+    /** The spotbugs xml no bugs. */
     private static final String SPOTBUGS_XML_NO_BUGS = '''\
 <?xml version="1.0" encoding="UTF-8"?>
 <BugCollection version="4.9.8" threshold="medium" effort="default">
@@ -37,6 +39,7 @@ class VerifyMojoHarnessTest {
 </BugCollection>
 '''
 
+    /** The spotbugs xml with bugs. */
     private static final String SPOTBUGS_XML_WITH_BUGS = '''\
 <?xml version="1.0" encoding="UTF-8"?>
 <BugCollection version="4.9.8" threshold="medium" effort="default">
@@ -52,6 +55,7 @@ class VerifyMojoHarnessTest {
 </BugCollection>
 '''
 
+    /** The spotbugs xml two bugs. */
     private static final String SPOTBUGS_XML_TWO_BUGS = '''\
 <?xml version="1.0" encoding="UTF-8"?>
 <BugCollection version="4.9.8" threshold="medium" effort="default">
@@ -76,6 +80,8 @@ class VerifyMojoHarnessTest {
     /**
      * Verifies that the harness can load the verify mojo from the test POM and that
      * the mojo is an instance of {@link VerifyMojo}.
+     *
+     * @param mojo the mojo
      */
     @Test
     @InjectMojo(goal = 'verify', pom = POM)
@@ -87,6 +93,8 @@ class VerifyMojoHarnessTest {
 
     /**
      * Verifies that loaded mojo has expected parameter values from the test POM.
+     *
+     * @param mojo the mojo
      */
     @Test
     @InjectMojo(goal = 'verify', pom = POM)
@@ -103,6 +111,9 @@ class VerifyMojoHarnessTest {
     /**
      * Verifies that the verify mojo exits early when there are no class files to
      * inspect (the class directory does not exist).
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'verify', pom = POM)
@@ -118,6 +129,9 @@ class VerifyMojoHarnessTest {
     /**
      * Verifies that executing the verify mojo with an empty class directory exits
      * early without error.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'verify', pom = POM)
@@ -135,6 +149,9 @@ class VerifyMojoHarnessTest {
     /**
      * Verifies that when class files exist but the SpotBugs XML output file is absent
      * the mojo logs a warning and returns gracefully.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'verify', pom = POM)
@@ -155,6 +172,9 @@ class VerifyMojoHarnessTest {
     /**
      * Verifies that when the SpotBugs XML reports zero bugs the mojo completes
      * without throwing.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'verify', pom = POM)
@@ -177,6 +197,9 @@ class VerifyMojoHarnessTest {
     /**
      * Verifies that a report containing bugs causes the mojo to throw
      * {@link MojoExecutionException} when {@code failOnError=true}.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'verify', pom = POM)
@@ -199,6 +222,9 @@ class VerifyMojoHarnessTest {
 
     /**
      * Verifies that bugs do not trigger a build failure when {@code failOnError=false}.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'verify', pom = POM)
@@ -222,6 +248,9 @@ class VerifyMojoHarnessTest {
     /**
      * Verifies that when the number of bugs is within {@code maxAllowedViolations}
      * the mojo does not throw.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'verify', pom = POM)
@@ -244,6 +273,9 @@ class VerifyMojoHarnessTest {
 
     /**
      * Verifies that the mojo skip flag prevents any processing.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'verify', pom = POM)
@@ -258,6 +290,9 @@ class VerifyMojoHarnessTest {
 
     /**
      * Verifies that an invalid {@code failThreshold} value causes the mojo to throw.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'verify', pom = POM)

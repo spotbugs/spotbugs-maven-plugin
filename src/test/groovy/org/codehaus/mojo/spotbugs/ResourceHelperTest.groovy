@@ -16,6 +16,9 @@ import org.apache.maven.plugin.logging.Log
 
 import spock.lang.Specification
 
+/**
+ * The Class ResourceHelperTest.
+ */
 class ResourceHelperTest extends Specification {
 
     void 'getResourceFile returns a file with content from resource and logs debug info'() {
