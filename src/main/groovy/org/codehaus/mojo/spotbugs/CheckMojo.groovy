@@ -12,7 +12,7 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.ResolutionScope
 
 /**
- * Fail the build if there were any SpotBugs violations in the source code.
+ * The Class CheckMojo to fail the build if there were any SpotBugs violations in the source code.
  * An XML report is put out by default in the target directory with the errors.
  * To see more documentation about SpotBugs' options,
  * please see the <a href="https://spotbugs.readthedocs.io/en/latest/" class="externalLink">SpotBugs Manual.</a>.

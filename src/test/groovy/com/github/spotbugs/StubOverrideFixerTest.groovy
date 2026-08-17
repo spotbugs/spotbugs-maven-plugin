@@ -13,8 +13,12 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 
+/**
+ * The Class StubOverrideFixerTest.
+ */
 class StubOverrideFixerTest extends Specification {
 
+    /** The temp dir. */
     @TempDir
     Path tempDir
 

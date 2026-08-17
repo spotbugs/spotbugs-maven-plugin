@@ -13,6 +13,9 @@ import org.apache.maven.plugin.logging.Log
 
 import spock.lang.Specification
 
+/**
+ * The Class SpotbugsReportGeneratorTest.
+ */
 class SpotbugsReportGeneratorTest extends Specification {
 
     // Simple stub for ResourceBundle

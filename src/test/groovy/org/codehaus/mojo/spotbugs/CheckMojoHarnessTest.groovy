@@ -22,8 +22,10 @@ import static org.junit.jupiter.api.Assertions.*
 @MojoTest
 class CheckMojoHarnessTest {
 
+    /** The pom. */
     private static final String POM = 'src/test/resources/unit/check-mojo/minimal-pom.xml'
 
+    /** The spotbugs xml no bugs. */
     private static final String SPOTBUGS_XML_NO_BUGS = '''\
 <?xml version="1.0" encoding="UTF-8"?>
 <BugCollection version="4.9.8" threshold="medium" effort="default">
@@ -35,6 +37,7 @@ class CheckMojoHarnessTest {
 </BugCollection>
 '''
 
+    /** The spotbugs xml with bugs. */
     private static final String SPOTBUGS_XML_WITH_BUGS = '''\
 <?xml version="1.0" encoding="UTF-8"?>
 <BugCollection version="4.9.8" threshold="medium" effort="default">
@@ -50,6 +53,7 @@ class CheckMojoHarnessTest {
 </BugCollection>
 '''
 
+    /** The spotbugs xml two bugs. */
     private static final String SPOTBUGS_XML_TWO_BUGS = '''\
 <?xml version="1.0" encoding="UTF-8"?>
 <BugCollection version="4.9.8" threshold="medium" effort="default">
@@ -74,6 +78,8 @@ class CheckMojoHarnessTest {
     /**
      * Verifies that the harness can load the check mojo from the test POM and that
      * key parameters have their expected defaults.
+     *
+     * @param mojo the mojo
      */
     @Test
     @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
@@ -95,6 +101,9 @@ class CheckMojoHarnessTest {
     /**
      * Verifies that executing the check mojo against a class directory that does not
      * exist causes the mojo to exit early without error (nothing to analyse).
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
@@ -110,6 +119,9 @@ class CheckMojoHarnessTest {
     /**
      * Verifies that executing the check mojo against an empty class directory
      * causes the mojo to exit early without error.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
@@ -128,6 +140,9 @@ class CheckMojoHarnessTest {
     /**
      * Verifies that when class files exist but the SpotBugs XML output file is absent
      * the mojo logs a warning and returns gracefully.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
@@ -148,6 +163,9 @@ class CheckMojoHarnessTest {
     /**
      * Verifies that when the SpotBugs XML reports zero bugs the mojo completes
      * without throwing and logs that no bugs were found.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
@@ -171,6 +189,9 @@ class CheckMojoHarnessTest {
     /**
      * Verifies that a report containing bugs causes the mojo to throw
      * {@link MojoExecutionException} when {@code failOnError=true}.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
@@ -193,6 +214,9 @@ class CheckMojoHarnessTest {
 
     /**
      * Verifies that bugs do not trigger a build failure when {@code failOnError=false}.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
@@ -216,6 +240,9 @@ class CheckMojoHarnessTest {
     /**
      * Verifies that when the number of bugs is within {@code maxAllowedViolations}
      * the mojo logs them but does not throw.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
@@ -239,6 +266,9 @@ class CheckMojoHarnessTest {
 
     /**
      * Verifies that an invalid {@code failThreshold} value causes the mojo to throw.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
@@ -264,6 +294,9 @@ class CheckMojoHarnessTest {
     /**
      * Verifies that {@code failThreshold=Low} passes bugs that are at or above Low
      * priority (i.e. all bugs) and fails the build when failOnError is set.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')
@@ -288,6 +321,9 @@ class CheckMojoHarnessTest {
 
     /**
      * Verifies that the mojo skip flag prevents any processing.
+     *
+     * @param mojo the mojo
+     * @param tempDir the temp dir
      */
     @Test
     @InjectMojo(goal = 'check', pom = 'src/test/resources/unit/check-mojo/minimal-pom.xml')

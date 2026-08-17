@@ -10,6 +10,9 @@ import org.apache.maven.plugin.logging.Log
 
 import spock.lang.Specification
 
+/**
+ * The Class VerifyMojoTest.
+ */
 class VerifyMojoTest extends Specification {
 
     void 'should extend BaseViolationCheckMojo'() {

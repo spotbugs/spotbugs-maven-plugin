@@ -26,8 +26,12 @@ import org.apache.maven.project.MavenProject
 import spock.lang.Specification
 import spock.lang.TempDir
 
+/**
+ * The Class SpotBugsMojoTest.
+ */
 class SpotBugsMojoTest extends Specification {
 
+    /** The temp dir. */
     @TempDir
     File tempDir
 
@@ -124,6 +128,7 @@ class SpotBugsMojoTest extends Specification {
     // canGenerateReport() – skip / no class directory paths
     // -------------------------------------------------------------------------
 
+    /** The cannot gen but must gen report gap warn msg. */
     static final String CANNOT_GEN_BUT_MUST_GEN_REPORT_GAP_WARN_MSG = "No files found to generate report on. Check if compile phase has been run."
 
     void 'canGenerateReport returns false when skip=true'() {
@@ -1289,6 +1294,9 @@ class SpotBugsMojoTest extends Specification {
 
     /**
      * Builds a SpotBugsMojo wired with minimal mocks sufficient for getSpotbugsArgs to run.
+
+     * @param baseDir the base dir
+     * @return the spot bugs mojo
      */
     private SpotBugsMojo buildMinimalMojoForArgs(File baseDir) {
         File xmlOutputDir = new File(baseDir, 'spotbugs-output')
@@ -1322,6 +1330,16 @@ class SpotBugsMojoTest extends Specification {
         return mojo
     }
 
+    /**
+     * Invoke get spotbugs args.
+     *
+     * @param mojo the mojo
+     * @param htmlFile the html file
+     * @param xmlFile the xml file
+     * @param sarifFile the sarif file
+     * @param auxFile the aux file
+     * @return the list
+     */
     private static List<String> invokeGetSpotbugsArgs(SpotBugsMojo mojo, File htmlFile, File xmlFile,
             File sarifFile, File auxFile) {
         Method method = SpotBugsMojo.class.getDeclaredMethod('getSpotbugsArgs',
@@ -1330,6 +1348,13 @@ class SpotBugsMojoTest extends Specification {
         return method.invoke(mojo, htmlFile, xmlFile, sarifFile, auxFile) as List<String>
     }
 
+    /**
+     * Set field.
+     *
+     * @param target the target
+     * @param fieldName the field name
+     * @param value the value
+     */
     private static void setField(Object target, String fieldName, Object value) {
         Class<?> clazz = target.getClass()
         while (clazz != null) {
@@ -1348,6 +1373,11 @@ class SpotBugsMojoTest extends Specification {
     /**
      * Builds a SpotBugsMojo wired with minimal mocks sufficient to invoke the private
      * executeSpotbugs(File) method end-to-end (real ProcessBuilder fork).
+     *
+     * @param baseDir the base dir
+     * @param classesDir the classes dir
+     * @param pluginArtifactsList the plugin artifacts list
+     * @return the spot bugs mojo
      */
     private SpotBugsMojo buildExecuteSpotbugsMojo(File baseDir, File classesDir, List<Artifact> pluginArtifactsList) {
         org.apache.maven.model.Build build = Mock(org.apache.maven.model.Build) {
@@ -1393,6 +1423,8 @@ class SpotBugsMojoTest extends Specification {
      * Builds an Artifact list mirroring the real test JVM's classpath, so the forked
      * SpotBugs process can actually locate and run edu.umd.cs.findbugs.FindBugs2
      * (SpotBugs core is a compile dependency of this module, so it is already present).
+     *
+     * @return the list
      */
     private List<Artifact> realClasspathArtifacts() {
         String cp = System.getProperty('java.class.path')
@@ -1408,6 +1440,9 @@ class SpotBugsMojoTest extends Specification {
     /**
      * Compiles a tiny Java class containing a guaranteed, default-severity SpotBugs
      * finding (DLS_DEAD_LOCAL_STORE) into a fresh classes directory under baseDir.
+     *
+     * @param baseDir the base dir
+     * @return the file
      */
     private static File compileBuggyClass(File baseDir) {
         File srcDir = new File(baseDir, 'src')
@@ -1445,6 +1480,9 @@ class SpotBugsMojoTest extends Specification {
      * Invokes the private executeSpotbugs(File) method via reflection, unwrapping and
      * rethrowing the original (possibly checked) exception rather than the reflection
      * InvocationTargetException wrapper, so Spock's thrown() works naturally.
+     *
+     * @param mojo the mojo
+     * @param outputFile the output file
      */
     private static void invokeExecuteSpotbugs(SpotBugsMojo mojo, File outputFile) {
         Method method = SpotBugsMojo.class.getDeclaredMethod('executeSpotbugs', File)

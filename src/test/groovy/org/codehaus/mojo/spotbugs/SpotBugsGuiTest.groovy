@@ -15,6 +15,9 @@ import spock.lang.Specification
 
 import java.nio.charset.StandardCharsets
 
+/**
+ * The Class SpotBugsGuiTest.
+ */
 class SpotBugsGuiTest extends Specification {
 
     void "execute logs encoding and skips launch in headless mode when explicit encoding is set"() {
