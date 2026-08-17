@@ -11,17 +11,19 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
+
 import javax.inject.Inject
 
-import org.apache.maven.artifact.Artifact
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
+import org.apache.maven.artifact.Artifact
 import org.apache.maven.toolchain.Toolchain
 import org.apache.maven.toolchain.ToolchainManager
 import org.codehaus.plexus.resource.ResourceManager
+import org.eclipse.aether.RepositorySystem
 
 /**
  * Launch the Spotbugs GUI.
@@ -69,11 +71,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
     /** Artifact resolver, needed to download the plugin jars. */
     @Inject
-    org.eclipse.aether.RepositorySystem repositorySystem
-
-    /** Used to look up Artifacts in the remote repository. */
-    @Inject
-    org.apache.maven.repository.RepositorySystem factory
+    RepositorySystem repositorySystem
 
     /** Toolchain manager used to retrieve the JDK toolchain. */
     @Inject
