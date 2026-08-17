@@ -16,12 +16,21 @@ import org.slf4j.LoggerFactory;
  */
 public class App implements Cloneable {
 
+    /** The logger. */
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
+    /**
+     * Instantiates a new app.
+     */
     private App() {
         // Do not allow instantiation
     }
 
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
     public static void main(String[] args) {
         if (Objects.isNull(args)) {
             logger.warn("Input args is null");
@@ -29,6 +38,11 @@ public class App implements Cloneable {
         logger.info("Hello World!");
     }
 
+    /**
+     * Clone.
+     *
+     * @return the object
+     */
     public Object clone() {
         return null; // Does not call 'super.clone()'.
     }

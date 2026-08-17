@@ -17,11 +17,17 @@ import org.junit.jupiter.api.Disabled;
  */
 class FooTest {
 
+    /**
+     * This always passes.
+     */
     @Test
     void thisAlwaysPasses() {
         // Do nothing
     }
 
+    /**
+     * This is ignored.
+     */
     @Disabled
     @Test
     void thisIsIgnored() {
