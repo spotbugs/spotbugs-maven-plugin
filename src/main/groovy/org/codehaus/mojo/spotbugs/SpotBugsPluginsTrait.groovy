@@ -122,9 +122,7 @@ trait SpotBugsPluginsTrait {
         // Any artifact on the plugin classpath (pluginArtifacts) that contains findbugs.xml
         // and is not part of the SpotBugs core (com.github.spotbugs group) is treated as a plugin extension.
         if (pluginArtifacts) {
-            if (log.isDebugEnabled()) {
-                log.debug('  Scanning plugin artifacts for SpotBugs extension plugins (added via <dependencies>)')
-            }
+            log.debug('  Scanning plugin artifacts for SpotBugs extension plugins (added via <dependencies>)')
 
             // Collect file names already in the plugin list to avoid adding the same JAR twice
             // (e.g. when a plugin is declared both via <plugins> config and as a <dependency>).
