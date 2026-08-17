@@ -14,4 +14,4 @@ release.properties
 .factorypath
 .groovy
 .pmd
-spotbugs/
+/spotbugs/

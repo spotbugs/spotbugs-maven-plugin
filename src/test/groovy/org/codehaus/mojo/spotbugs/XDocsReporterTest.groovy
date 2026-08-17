@@ -1,17 +1,8 @@
 /*
+ * SPDX-License-Identifier: Apache-2.0
+ * See LICENSE file for details.
+ *
  * Copyright 2005-2026 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package org.codehaus.mojo.spotbugs
 
@@ -28,7 +19,7 @@ class XDocsReporterTest extends Specification {
 
     void 'evaluateThresholdParameter returns correct threshold name'() {
         given:
-        XDocsReporter reporter = new XDocsReporter(Mock(ResourceBundle), Mock(Log), '1', 'max', StandardCharsets.UTF_8.name())
+        XDocsReporter reporter = new XDocsReporter(Mock(ResourceBundle), Mock(Log), '1', 'max', StandardCharsets.UTF_8)
 
         expect:
         reporter.evaluateThresholdParameter(input) == expected
@@ -48,7 +39,7 @@ class XDocsReporterTest extends Specification {
         ResourceBundle bundle = Mock(ResourceBundle)
         Log log = Mock(Log)
         StringWriter writer = new StringWriter()
-        XDocsReporter reporter = new XDocsReporter(bundle, log, '1', 'max', StandardCharsets.UTF_8.name())
+        XDocsReporter reporter = new XDocsReporter(bundle, log, '1', 'max', StandardCharsets.UTF_8)
         reporter.outputWriter = writer
         reporter.compileSourceRoots = ['src/main/java']
         reporter.testSourceRoots = ['src/test/java']
@@ -100,7 +91,7 @@ class XDocsReporterTest extends Specification {
         ResourceBundle bundle = Mock(ResourceBundle)
         Log log = Mock(Log) { isDebugEnabled() >> false }
         StringWriter writer = new StringWriter()
-        XDocsReporter reporter = new XDocsReporter(bundle, log, '1', 'max', StandardCharsets.UTF_8.name())
+        XDocsReporter reporter = new XDocsReporter(bundle, log, '1', 'max', StandardCharsets.UTF_8)
         reporter.outputWriter = writer
         reporter.compileSourceRoots = ['src/main/java']
         reporter.testSourceRoots = []
@@ -150,7 +141,7 @@ class XDocsReporterTest extends Specification {
         ResourceBundle bundle = Mock(ResourceBundle)
         Log log = Mock(Log) { isDebugEnabled() >> true }
         StringWriter writer = new StringWriter()
-        XDocsReporter reporter = new XDocsReporter(bundle, log, '1', 'max', StandardCharsets.UTF_8.name())
+        XDocsReporter reporter = new XDocsReporter(bundle, log, '1', 'max', StandardCharsets.UTF_8)
         reporter.outputWriter = writer
         reporter.compileSourceRoots = ['src/main/java']
         reporter.testSourceRoots = ['src/test/java']
@@ -193,7 +184,7 @@ class XDocsReporterTest extends Specification {
         ResourceBundle bundle = Mock(ResourceBundle)
         Log log = Mock(Log) { isDebugEnabled() >> false }
         StringWriter writer = new StringWriter()
-        XDocsReporter reporter = new XDocsReporter(bundle, log, '1', 'max', StandardCharsets.UTF_8.name())
+        XDocsReporter reporter = new XDocsReporter(bundle, log, '1', 'max', StandardCharsets.UTF_8)
         reporter.outputWriter = writer
         reporter.compileSourceRoots = ['src/main/java']
         reporter.testSourceRoots = ['src/test/java']
@@ -225,7 +216,7 @@ class XDocsReporterTest extends Specification {
 
     void 'XDocsReporter constructor rejects null bundle'() {
         when:
-        new XDocsReporter(null, Mock(Log), '1', 'max', StandardCharsets.UTF_8.name())
+        new XDocsReporter(null, Mock(Log), '1', 'max', StandardCharsets.UTF_8)
 
         then:
         thrown(IllegalArgumentException)
@@ -233,7 +224,7 @@ class XDocsReporterTest extends Specification {
 
     void 'XDocsReporter constructor rejects null log'() {
         when:
-        new XDocsReporter(Mock(ResourceBundle), null, '1', 'max', StandardCharsets.UTF_8.name())
+        new XDocsReporter(Mock(ResourceBundle), null, '1', 'max', StandardCharsets.UTF_8)
 
         then:
         thrown(IllegalArgumentException)
@@ -241,7 +232,7 @@ class XDocsReporterTest extends Specification {
 
     void 'XDocsReporter constructor rejects null threshold'() {
         when:
-        new XDocsReporter(Mock(ResourceBundle), Mock(Log), null, 'max', StandardCharsets.UTF_8.name())
+        new XDocsReporter(Mock(ResourceBundle), Mock(Log), null, 'max', StandardCharsets.UTF_8)
 
         then:
         thrown(IllegalArgumentException)

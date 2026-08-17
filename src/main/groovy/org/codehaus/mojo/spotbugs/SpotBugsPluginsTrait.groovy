@@ -1,33 +1,26 @@
 /*
+ * SPDX-License-Identifier: Apache-2.0
+ * See LICENSE file for details.
+ *
  * Copyright 2005-2026 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package org.codehaus.mojo.spotbugs
 
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import groovy.xml.XmlSlurper
+import groovy.xml.slurpersupport.GPathResult
 
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 
-import org.apache.maven.RepositoryUtils
-import org.apache.maven.artifact.Artifact
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugin.MojoExecutionException
 import org.codehaus.plexus.resource.ResourceManager
+import org.eclipse.aether.RepositorySystem
+import org.eclipse.aether.artifact.Artifact
+import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.resolution.ArtifactRequest
 import org.eclipse.aether.resolution.ArtifactResult
 import org.xml.sax.SAXException
@@ -40,8 +33,7 @@ trait SpotBugsPluginsTrait {
 
     // the trait needs certain objects to work, this need is expressed as abstract getters
     // classes implement them with implicitly generated property getters
-    abstract org.eclipse.aether.RepositorySystem getRepositorySystem()
-    abstract org.apache.maven.repository.RepositorySystem getFactory()
+    abstract RepositorySystem getRepositorySystem()
     abstract File getSpotbugsXmlOutputDirectory()
     abstract Log getLog()
     abstract ResourceManager getResourceManager()
@@ -52,7 +44,7 @@ trait SpotBugsPluginsTrait {
     // when fixed, should move pluginList and plugins properties here
     abstract String getPluginList()
     abstract List<PluginArtifact> getPlugins()
-    abstract List<Artifact> getPluginArtifacts()
+    abstract List<org.apache.maven.artifact.Artifact> getPluginArtifacts()
     abstract String getEffort()
     abstract MavenSession getSession()
 
@@ -100,20 +92,30 @@ trait SpotBugsPluginsTrait {
                     log.debug("  Processing Plugin: ${plugin}")
                 }
 
-                Artifact pomArtifact = plugin.classifier == null ?
-                    this.factory.createArtifact(plugin.groupId, plugin.artifactId, plugin.version, "", plugin.type) :
-                    this.factory.createArtifactWithClassifier(plugin.groupId, plugin.artifactId, plugin.version, plugin.type, plugin.classifier)
+                Artifact pomArtifact = new DefaultArtifact(
+                    plugin.groupId,
+                    plugin.artifactId,
+                    plugin.classifier,
+                    plugin.type,
+                    plugin.version
+                )
 
                 if (log.isDebugEnabled()) {
                     log.debug("  Added Artifact: ${pomArtifact}")
                 }
 
-                ArtifactRequest request = new ArtifactRequest(RepositoryUtils.toArtifact(pomArtifact), session.getCurrentProject().getRemoteProjectRepositories(), null)
-                ArtifactResult result = this.repositorySystem.resolveArtifact(session.getRepositorySession(), request)
+                ArtifactRequest request = new ArtifactRequest(
+                    pomArtifact,
+                    session.getCurrentProject().getRemoteProjectRepositories(),
+                    null
+                )
 
-                pomArtifact.setFile(result.getArtifact().getFile())
+                ArtifactResult result = this.repositorySystem.resolveArtifact(
+                    session.getRepositorySession(),
+                    request
+                )
 
-                urlPlugins << resourceHelper.getResourceFile(pomArtifact.file.absolutePath).absolutePath
+                urlPlugins << resourceHelper.getResourceFile(result.artifact.file.absolutePath).absolutePath
             }
         }
 
@@ -121,15 +123,13 @@ trait SpotBugsPluginsTrait {
         // Any artifact on the plugin classpath (pluginArtifacts) that contains findbugs.xml
         // and is not part of the SpotBugs core (com.github.spotbugs group) is treated as a plugin extension.
         if (pluginArtifacts) {
-            if (log.isDebugEnabled()) {
-                log.debug('  Scanning plugin artifacts for SpotBugs extension plugins (added via <dependencies>)')
-            }
+            log.debug('  Scanning plugin artifacts for SpotBugs extension plugins (added via <dependencies>)')
 
             // Collect file names already in the plugin list to avoid adding the same JAR twice
             // (e.g. when a plugin is declared both via <plugins> config and as a <dependency>).
             Set<String> addedFileNames = urlPlugins.collect { new File(it).name } as Set
 
-            pluginArtifacts.each { Artifact artifact ->
+            pluginArtifacts.each { org.apache.maven.artifact.Artifact artifact ->
                 if ('com.github.spotbugs' != artifact.groupId && artifact.file != null && isSpotBugsPlugin(artifact.file)) {
                     String jarFileName = artifact.file.name
                     if (!addedFileNames.contains(jarFileName)) {
@@ -218,8 +218,8 @@ trait SpotBugsPluginsTrait {
         }
 
         if (pluginArtifacts) {
-            pluginArtifacts.each { Artifact artifact ->
-                if ('com.github.spotbugs' != artifact.groupId && artifact.file != null && artifact.file.exists()) {
+            pluginArtifacts.each { org.apache.maven.artifact.Artifact artifact ->
+                if ('com.github.spotbugs' != artifact.groupId && artifact.file != null && artifact.file.exists() && artifact.file.name.endsWith('.jar')) {
                     pluginJars << artifact.file
                 }
             }
@@ -231,7 +231,7 @@ trait SpotBugsPluginsTrait {
                     JarEntry entry = jar.getEntry('findbugs.xml')
                     if (!entry) return
 
-                    def xml = new XmlSlurper().parse(jar.getInputStream(entry))
+                    GPathResult xml = new XmlSlurper().parse(jar.getInputStream(entry))
                     String pluginId = xml.@pluginid.text()
                     String urlTemplate = effectiveUrls[pluginId]
                     if (!urlTemplate) return

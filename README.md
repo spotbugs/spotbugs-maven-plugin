@@ -12,8 +12,9 @@ Maven Mojo Plug-In to generate reports based on the [SpotBugs](https://github.co
 
 ## Building spotbugs-maven-plugin Requirements ##
 
-* Java 21+ is required to build the spotbugs maven plugin.  Usage allowed to currently supported jdks (ie 11, 17, 21, 25, 26-ea).
-* Maven 3.9.11 is required to build the spotbugs maven plugin.
+* Java 21+ is required to build the spotbugs maven plugin.
+* Usage allowed to currently supported jdks (ie 11, 17, 21, 25, 26, 27-ea).
+* Maven 3.9.16 is required to build the spotbugs maven plugin.
 
 ## Running spotbugs-maven-plugin Requirements ##
 
@@ -56,7 +57,7 @@ Continue to use `FindBugsFilter` when needed as the spotbugs project has not yet
 
 ## Running Tests ##
 
-Run all tests
+Run all tests [preferred]
 ```
 mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=8"
 ```
@@ -146,4 +147,19 @@ E.g. to set the findbugs.assertionmethods analyzer property:
         <jvmArgs>-Dfindbugs.assertionmethods=org.apache.commons.lang3.Validate.notNull</jvmArgs>
     </configuration>
 </plugin>
+```
+
+## Reproducible Builds ##
+
+To run reproducibility checks against an official release, execute the following command. It is best to check out the specific release tag first and ensure your Maven and JDK versions match what was used for that release:
+
+```
+mvn clean verify artifact:compare -D"reference.repo=https://repo.maven.apache.org/maven2/"
+```
+
+To validate reproducibility locally on your current branch before a release, execute this two-step loop. This uses your local .m2 cache as a reference baseline without overwriting it on the second pass:
+
+```
+ mvn clean install
+ mvn clean verify artifact:compare -D"reference.repo=file:///${user.home}/.m2/repository/"
 ```

@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
+    SPDX-License-Identifier: Apache-2.0
+    See LICENSE file for details.
+
     Copyright 2005-2026 the original author or authors.
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -23,30 +14,33 @@
     <parent>
         <groupId>com.github.hazendaz</groupId>
         <artifactId>base-parent</artifactId>
-        <version>58</version>
+        <version>60</version>
         <relativePath />
     </parent>
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.9.8.4-SNAPSHOT</version>
+    <version>4.10.3.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
     <description>This Plug-In generates reports based on the SpotBugs Library</description>
     <url>https://spotbugs.github.io/spotbugs-maven-plugin/</url>
     <inceptionYear>2005</inceptionYear>
+
     <organization>
         <name>Spotbugs</name>
         <url>https://spotbugs.github.io/</url>
     </organization>
+
     <licenses>
         <license>
-            <name>Apache 2.0</name>
+            <name>Apache License, Version 2.0</name>
             <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
+
     <developers>
         <developer>
             <id>jlandis</id>
@@ -117,34 +111,34 @@
         <testSourceDirectory>${project.basedir}/src/test/groovy</testSourceDirectory>
 
         <!-- Reproducible Builds: override timestamp value from parent -->
-        <project.build.outputTimestamp>1774744232</project.build.outputTimestamp>
+        <project.build.outputTimestamp>1783904398</project.build.outputTimestamp>
 
-        <jacoco.minimum.coverage>0.11</jacoco.minimum.coverage>
+        <jacoco.minimum.coverage>0.54</jacoco.minimum.coverage>
 
         <!-- Override spotbugs to this version from base-parent -->
-        <spotbugs.version>4.9.8</spotbugs.version>
-        <spotbugs.plugin>4.9.8.3</spotbugs.plugin>
+        <spotbugs.version>4.10.3</spotbugs.version>
+        <spotbugs.plugin>4.10.2.0</spotbugs.plugin>
 
         <!-- Use 'master' branch or '${spotbugs.version}' tag for integration test source pull from spotbugs. -->
-        <!-- <spotbugs-scm.version>master</spotbugs-scm.version> -->
         <spotbugs-scm.version>${spotbugs.version}</spotbugs-scm.version>
+        <spotbugs-scm.type>tags</spotbugs-scm.type>
 
-        <byte-buddy.version>1.18.7</byte-buddy.version>
-        <javabean-tester.version>2.12.0</javabean-tester.version>
-        <junitVersion>6.0.3</junitVersion>
-        <slf4jVersion>2.0.17</slf4jVersion>
+        <byte-buddy.version>1.18.12</byte-buddy.version>
+        <javabean-tester.version>2.12.2</javabean-tester.version>
+        <junitVersion>6.1.3</junitVersion>
+        <log4j2.version>2.26.1</log4j2.version>
+        <slf4jVersion>2.0.18</slf4jVersion>
 
-        <antVersion>1.10.17</antVersion>
-        <groovyVersion>5.0.5</groovyVersion>
-        <javaparserVersion>3.28.0</javaparserVersion>
+        <groovyVersion>5.1.0</groovyVersion>
+        <javaparserVersion>3.28.2</javaparserVersion>
 
         <doxiaVersion>2.1.0</doxiaVersion>
-        <doxiaSiteToolsVersion>2.0.0</doxiaSiteToolsVersion>
+        <doxiaSiteToolsVersion>2.1.0</doxiaSiteToolsVersion>
 
         <mavenSharedUtilsVersion>3.4.2</mavenSharedUtilsVersion>
         <mavenReportingApiVersion>4.0.0</mavenReportingApiVersion>
         <mavenReportingVersion>4.0.0</mavenReportingVersion>
-        <mavenVersion>3.9.15</mavenVersion>
+        <mavenVersion>3.9.16</mavenVersion>
 
         <!-- Maven minimum version -->
         <maven.min-version>${mavenVersion}</maven.min-version>
@@ -157,19 +151,17 @@
         <plexusVelocityVersion>2.3.0</plexusVelocityVersion>
         <plexusXmlVersion>3.0.2</plexusXmlVersion>
 
+        <download-plugin.version>2.1.0</download-plugin.version>
         <execPluginVersion>3.6.3</execPluginVersion>
+        <find-and-replace-plugin.version>1.0.5</find-and-replace-plugin.version>
         <pluginPluginVersion>3.15.2</pluginPluginVersion>
         <l10nPluginVersion>1.2.0</l10nPluginVersion>
         <codenarcPluginVersion>0.1</codenarcPluginVersion>
-        <gmavenPluginVersion>4.3.1</gmavenPluginVersion>
-        <invokerPluginVersion>3.9.1</invokerPluginVersion>
-        <scmPluginVersion>2.2.1</scmPluginVersion>
+        <gmavenPluginVersion>5.1.0</gmavenPluginVersion>
 
         <spotbugsTestDebug>false</spotbugsTestDebug>
-        <integrationTestSrc>${project.build.directory}/it-src-spotbugs</integrationTestSrc>
         <localTestSrc>${user.dir}/SpotBugs</localTestSrc>
-        <remoteTestSrc>scm:git:https://github.com/spotbugs/spotbugs/</remoteTestSrc>
-        <includesTestSrcPattern>**spotbugsTestCases/src/java/A*.java, **spotbugsTestCases/src/java/Use*.java, **spotbugsTestCases/src/java/annotations/*.java</includesTestSrcPattern>
+        <remoteTestSrc>https://github.com/spotbugs/spotbugs/archive/refs/${spotbugs-scm.type}/${spotbugs-scm.version}.zip</remoteTestSrc>
         <testSrc>remote</testSrc>
 
         <!-- Tests -->
@@ -181,22 +173,20 @@
         <servletApiVersion>6.1.0</servletApiVersion>
         <sb-contrib.version>7.6.10</sb-contrib.version>
 
-        <jgit.version>7.6.0.202603022253-r</jgit.version>
-
         <!-- Targeted patches -->
-        <asm.version>9.9.1</asm.version>
+        <asm.version>9.10.1</asm.version>
         <bcel.version>6.12.0</bcel.version>
         <beanutils.version>1.11.0</beanutils.version>
-        <codec.version>1.21.0</codec.version>
-        <codenarc.version>3.7.0-groovy-4.0</codenarc.version>
+        <codec.version>1.22.1</codec.version>
+        <codenarc.version>4.0.0</codenarc.version>
         <collections.version>3.2.2</collections.version>
-        <gson.version>2.13.2</gson.version>
+        <gson.version>2.14.0</gson.version>
         <inject.version>1</inject.version>
-        <io.version>2.21.0</io.version>
-        <jaxen.version>2.0.1</jaxen.version>
+        <io.version>2.22.0</io.version>
+        <jaxen.version>2.0.6</jaxen.version>
         <lang3.version>3.20.0</lang3.version>
-        <logging.version>1.3.6</logging.version>
-        <saxon.he.version>12.9</saxon.he.version>
+        <logging.version>1.4.0</logging.version>
+        <saxon.he.version>12.10</saxon.he.version>
         <velocity.version>2.4.1</velocity.version>
 
         <!-- Automatic Module Name -->
@@ -275,13 +265,6 @@
                 <version>${saxon.he.version}</version>
             </dependency>
 
-            <!-- Override 'ant' used in groovy to latest -->
-            <dependency>
-                <groupId>org.apache.ant</groupId>
-                <artifactId>ant</artifactId>
-                <version>${antVersion}</version>
-            </dependency>
-
             <!-- Commons -->
             <dependency>
                 <groupId>commons-beanutils</groupId>
@@ -348,6 +331,11 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.doxia</groupId>
+                <artifactId>doxia-site-model</artifactId>
+                <version>${doxiaSiteToolsVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.doxia</groupId>
                 <artifactId>doxia-site-renderer</artifactId>
                 <version>${doxiaSiteToolsVersion}</version>
                 <exclusions>
@@ -392,6 +380,26 @@
                 <version>${plexusXmlVersion}</version>
             </dependency>
 
+            <!-- Align plexus-interpolation with doxia-integration-tools requirements -->
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-interpolation</artifactId>
+                <version>1.29</version>
+            </dependency>
+
+            <!-- Align sisu with doxia-integration-tools requirements -->
+            <dependency>
+                <groupId>org.eclipse.sisu</groupId>
+                <artifactId>org.eclipse.sisu.plexus</artifactId>
+                <version>1.1.0</version>
+            </dependency>
+            <!-- Maven 4 manages org.eclipse.sisu.inject to 0.9.0.M3, but org.eclipse.sisu.plexus:0.9.0.M4 requires 0.9.0.M4 -->
+            <dependency>
+                <groupId>org.eclipse.sisu</groupId>
+                <artifactId>org.eclipse.sisu.inject</artifactId>
+                <version>1.1.0</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
@@ -422,7 +430,7 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-to-slf4j</artifactId>
-            <version>2.25.4</version>
+            <version>${log4j2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -437,22 +445,6 @@
         <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.groovy</groupId>
-            <artifactId>groovy-ant</artifactId>
-            <exclusions>
-                <!-- We do not need these items from groovy ant -->
-                <exclusion>
-                    <groupId>org.apache.ant</groupId>
-                    <artifactId>ant-antlr</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.ant</groupId>
-                    <artifactId>ant-junit</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- Groovy quirk requires compile scope so optional makes it not show up in consumer builds. -->
@@ -552,12 +544,10 @@
         <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-core</artifactId>
-            <version>${doxiaVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-sink-api</artifactId>
-            <version>${doxiaVersion}</version>
         </dependency>
 
         <!-- plexus -->
@@ -583,12 +573,6 @@
             <groupId>org.apache.maven.plugin-testing</groupId>
             <artifactId>maven-plugin-testing-harness</artifactId>
             <version>${maven-plugin-testing-harness.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-compat</artifactId>
-            <version>${mavenVersion}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -783,26 +767,12 @@
                         <phase>prepare-package</phase>
                     </execution>
                     <execution>
-                        <id>generate-groovydoc-jars</id>
-                        <goals>
-                            <goal>groovydoc-jar</goal>
-                            <goal>groovydocTests-jar</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <!-- Do not re-invoke groovydoc: HTML was already generated and timestamps stripped -->
-                            <invokeGroovyDoc>false</invokeGroovyDoc>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>site</id>
                         <goals>
                             <goal>generateStubs</goal>
                             <goal>generateTestStubs</goal>
                             <goal>groovydoc</goal>
                             <goal>groovydocTests</goal>
-                            <goal>groovydoc-jar</goal>
-                            <goal>groovydocTests-jar</goal>
                         </goals>
                         <phase>site</phase>
                     </execution>
@@ -810,33 +780,39 @@
             </plugin>
 
             <!-- Strip non-reproducible timestamps from GroovyDoc HTML before JAR packaging -->
+            <!-- Exists until https://github.com/groovy/GMavenPlus/issues/342 is resolved -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
+                <groupId>software.xdev</groupId>
+                <artifactId>find-and-replace-maven-plugin</artifactId>
+                <version>${find-and-replace-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>strip-groovydoc-timestamps</id>
-                        <phase>prepare-package</phase>
+                        <id>strip-groovydoc-comment-timestamps</id>
                         <goals>
-                            <goal>run</goal>
+                            <goal>file-contents</goal>
                         </goals>
+                        <phase>prepare-package</phase>
                         <configuration>
-                            <target>
-                                <!-- Remove " on <date>" from GroovyDoc generated HTML comments -->
-                                <replaceregexp byline="true">
-                                    <regexp pattern=" on \w+ \w+ +\d+ \d+:\d+:\d+ \S+ \d+"/>
-                                    <substitution expression=""/>
-                                    <fileset dir="${project.reporting.outputDirectory}/gapidocs" erroronmissingdir="false" includes="**/*.html"/>
-                                    <fileset dir="${project.reporting.outputDirectory}/testgapidocs" erroronmissingdir="false" includes="**/*.html"/>
-                                </replaceregexp>
-                                <!-- Remove meta date tags from GroovyDoc generated HTML -->
-                                <replaceregexp byline="true">
-                                    <regexp pattern="&lt;meta name=&quot;date&quot; content=&quot;[0-9-]+&quot;&gt;"/>
-                                    <substitution expression=""/>
-                                    <fileset dir="${project.reporting.outputDirectory}/gapidocs" erroronmissingdir="false" includes="**/*.html"/>
-                                    <fileset dir="${project.reporting.outputDirectory}/testgapidocs" erroronmissingdir="false" includes="**/*.html"/>
-                                </replaceregexp>
-                            </target>
+                            <baseDir>${project.reporting.outputDirectory}</baseDir>
+                            <recursive>true</recursive>
+                            <fileMask>.html</fileMask>
+                            <findRegex>on \w+ \w+ +\d+ \d+:\d+:\d+ \S+ \d+</findRegex>
+                            <replaceValue />
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>strip-groovydoc-meta-date-tags</id>
+                        <goals>
+                            <goal>file-contents</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <baseDir>${project.reporting.outputDirectory}</baseDir>
+                            <recursive>true</recursive>
+                            <fileMask>.html</fileMask>
+                            <findRegex>&lt;meta name="date" content="[0-9-]+"\&gt;</findRegex>
+                            <replaceValue />
                         </configuration>
                     </execution>
                 </executions>
@@ -874,6 +850,38 @@
                             <arguments>
                                 <argument>${project.build.directory}/generated-sources/groovy-stubs/test</argument>
                             </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>package-reproducible-groovydoc-jar</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <classifier>groovydoc</classifier>
+                            <classesDirectory>${project.build.directory}/site/gapidocs</classesDirectory>
+                            <skipIfEmpty>true</skipIfEmpty>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>package-reproducible-test-groovydoc-jar</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <classifier>test-groovydoc</classifier>
+                            <classesDirectory>${project.build.directory}/site/testgapidocs</classesDirectory>
+                            <skipIfEmpty>true</skipIfEmpty>
                         </configuration>
                     </execution>
                 </executions>
@@ -1029,8 +1037,38 @@
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>strip-unnecessary-test-cases</id>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                                <phase>integration-test</phase>
+                                <configuration>
+                                    <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                                    <filesets>
+                                        <fileset>
+                                            <directory>${project.build.directory}/spotbugs-${spotbugs-scm.version}</directory>
+                                            <includes>
+                                                <include>**/*</include>
+                                            </includes>
+                                            <excludes>
+                                                <exclude>**/spotbugsTestCases/src/java/A*.java</exclude>
+                                                <exclude>**/spotbugsTestCases/src/java/Use*.java</exclude>
+                                                <exclude>**/spotbugsTestCases/src/java/annotations/*.java</exclude>
+                                            </excludes>
+                                            <followSymlinks>false</followSymlinks>
+                                        </fileset>
+                                    </filesets>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-invoker-plugin</artifactId>
-                        <version>${invokerPluginVersion}</version>
                         <dependencies>
                             <!-- Keep groovy at same version we are using -->
                             <dependency>
@@ -1088,6 +1126,9 @@
                                 <configuration>
                                     <projectsDirectory>${project.basedir}/src/it</projectsDirectory>
                                     <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+                                    <filterProperties>
+                                        <java.specification.version>${java.specification.version}</java.specification.version>
+                                    </filterProperties>
                                     <showVersion>true</showVersion>
                                     <pomIncludes>
                                         <pomInclude>*/pom.xml</pomInclude>
@@ -1115,42 +1156,22 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-scm-plugin</artifactId>
-                        <version>${scmPluginVersion}</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.apache.maven.scm</groupId>
-                                <artifactId>maven-scm-provider-jgit</artifactId>
-                                <version>${scmPluginVersion}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.eclipse.jgit</groupId>
-                                <artifactId>org.eclipse.jgit</artifactId>
-                                <version>${jgit.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.eclipse.jgit</groupId>
-                                <artifactId>org.eclipse.jgit.ssh.jsch</artifactId>
-                                <version>${jgit.version}</version>
-                            </dependency>
-                        </dependencies>
+                        <groupId>io.github.download-maven-plugin</groupId>
+                        <artifactId>download-maven-plugin</artifactId>
+                        <version>${download-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>prepare-integration-test-remote-spotbugs-src</id>
                                 <goals>
-                                    <goal>checkout</goal>
+                                    <goal>wget</goal>
                                 </goals>
                                 <phase>pre-integration-test</phase>
                                 <configuration>
-                                    <connectionUrl>${remoteTestSrc}</connectionUrl>
-                                    <checkoutDirectory>${integrationTestSrc}</checkoutDirectory>
-                                    <providerImplementations>
-                                        <git>jgit</git>
-                                    </providerImplementations>
-                                    <includes>${includesTestSrcPattern}</includes>
-                                    <scmVersion>${spotbugs-scm.version}</scmVersion>
-                                    <scmVersionType>tag</scmVersionType>
+                                    <alwaysVerifyChecksum>false</alwaysVerifyChecksum>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
+                                    <overwrite>true</overwrite>
+                                    <url>${remoteTestSrc}</url>
+                                    <unpack>true</unpack>
                                 </configuration>
                             </execution>
                         </executions>
@@ -1167,30 +1188,30 @@
                     <value>local</value>
                 </property>
             </activation>
+            <properties>
+                <spotbugs-scm.version>local</spotbugs-scm.version>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
+                        <artifactId>maven-resources-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>prepare-integration-test-local-spotbugs-src</id>
                                 <goals>
-                                    <goal>run</goal>
+                                    <goal>copy-resources</goal>
                                 </goals>
                                 <phase>pre-integration-test</phase>
                                 <configuration>
-                                    <target>
-                                        <echo level="debug">Copying Source for Tests......</echo>
-                                        <echo level="debug">Making ${integrationTestSrc}</echo>
-                                        <mkdir dir="${integrationTestSrc}" />
-                                        <echo level="debug">Copying to ${integrationTestSrc}</echo>
-                                        <echo level="debug">from ${localTestSrc}</echo>
-                                        <echo level="debug">for ${includesTestSrcPattern}</echo>
-                                        <copy todir="${integrationTestSrc}">
-                                            <fileset dir="${localTestSrc}" includes="${includesTestSrcPattern}" />
-                                        </copy>
-                                    </target>
+                                    <outputDirectory>${project.build.directory}/spotbugs-${spotbugs-scm.version}</outputDirectory>
+
+                                    <resources>
+                                        <resource>
+                                            <directory>${localTestSrc}</directory>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                    </resources>
                                 </configuration>
                             </execution>
                         </executions>
@@ -1207,26 +1228,22 @@
                     <value>4.0.0-rc-5</value>
                 </property>
             </activation>
-            <properties>
-                <!-- maven-compiler-plugin 4.x does not allow using both ..source/..target and ..release simultaneously.
-                     Clear source and target to avoid "option ..source cannot be used together with ..release". -->
-                <maven.compiler.source/>
-                <maven.compiler.target/>
-                <maven.compiler.testSource/>
-                <maven.compiler.testTarget/>
-            </properties>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
+                        <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>compile-stubfixer</id>
-                                <configuration combine.self="override">
-                                    <!-- Maven 4: compileSourceRoots is deprecated (replaced by project-wide sources)
-                                         and outputDirectory is read-only. The src/stubfixer/java source directory is
-                                         already registered via build-helper-maven-plugin add-source goal. -->
+                                <id>compile-stubfixer-main</id>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <phase>generate-sources</phase>
+                                <configuration>
+                                    <target>
+                                        <mkdir dir="${project.build.outputDirectory}" />
+                                        <javac classpathref="maven.compile.classpath" destdir="${project.build.outputDirectory}" encoding="${project.build.sourceEncoding}" includeantruntime="false" release="${java.release.version}" srcdir="${project.basedir}/src/stubfixer/java" />
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
@@ -1234,9 +1251,9 @@
                     <plugin>
                         <groupId>org.codehaus.gmavenplus</groupId>
                         <artifactId>gmavenplus-plugin</artifactId>
-                        <!-- gmavenplus reads maven.compiler.target for targetBytecode; since the maven4 profile clears
-                             maven.compiler.source/target to avoid conflicts with maven-compiler-plugin 4.x, we must
-                             set targetBytecode directly so gmavenplus uses the correct bytecode version. -->
+                        <!-- gmavenplus reads maven.compiler.target for targetBytecode; base-parent's Maven 4 profile clears
+                             maven.compiler.source/target to avoid compiler-plugin 4.x conflicts, so set targetBytecode
+                             directly to keep Groovy compilation aligned with the configured Java release. -->
                         <configuration>
                             <targetBytecode>${java.release.version}</targetBytecode>
                         </configuration>

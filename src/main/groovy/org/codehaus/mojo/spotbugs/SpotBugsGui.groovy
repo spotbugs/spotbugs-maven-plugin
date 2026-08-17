@@ -1,36 +1,29 @@
 /*
+ * SPDX-License-Identifier: Apache-2.0
+ * See LICENSE file for details.
+ *
  * Copyright 2005-2026 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package org.codehaus.mojo.spotbugs
 
-import groovy.ant.AntBuilder
-
+import java.awt.GraphicsEnvironment
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
+
 import javax.inject.Inject
 
-import org.apache.maven.artifact.Artifact
 import org.apache.maven.execution.MavenSession
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
+import org.apache.maven.artifact.Artifact
+import org.apache.maven.toolchain.Toolchain
 import org.apache.maven.toolchain.ToolchainManager
 import org.codehaus.plexus.resource.ResourceManager
+import org.eclipse.aether.RepositorySystem
 
 /**
  * Launch the Spotbugs GUI.
@@ -78,11 +71,7 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
 
     /** Artifact resolver, needed to download the plugin jars. */
     @Inject
-    org.eclipse.aether.RepositorySystem repositorySystem
-
-    /** Used to look up Artifacts in the remote repository. */
-    @Inject
-    org.apache.maven.repository.RepositorySystem factory
+    RepositorySystem repositorySystem
 
     /** Toolchain manager used to retrieve the JDK toolchain. */
     @Inject
@@ -139,14 +128,14 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
             log.info("  Plugin Artifacts to be added -> ${pluginArtifacts}")
         }
 
-        Charset effectiveEncoding
-        if (encoding) {
-            effectiveEncoding = Charset.forName(encoding)
-        } else {
-            effectiveEncoding = Charset.defaultCharset() ?: StandardCharsets.UTF_8
-        }
+        Charset effectiveEncoding = encoding != null ? Charset.forName(encoding) : StandardCharsets.UTF_8
         if (log.isInfoEnabled()) {
             log.info('File Encoding is ' + effectiveEncoding.name())
+        }
+
+        if (GraphicsEnvironment.isHeadless()) {
+            log.warn('Skipping SpotBugs GUI launch in headless environment')
+            return
         }
 
         // options must be added before the spotbugsXml path
@@ -157,53 +146,61 @@ class SpotBugsGui extends AbstractMojo implements SpotBugsPluginsTrait {
             spotbugsArgs << getSpotbugsPlugins()
         }
 
-        AntBuilder ant = new AntBuilder()
-        ant.project.setProperty('basedir', spotbugsXmlOutputDirectory.getAbsolutePath())
-        ant.project.setProperty('verbose', 'true')
+        Path spotbugsXml = spotbugsXmlOutputDirectory.toPath().resolve(spotbugsXmlOutputFilename)
+        if (Files.exists(spotbugsXml)) {
+            if (log.isDebugEnabled()) {
+                log.debug("  Found an SpotBugs XML at -> ${spotbugsXml}")
+            }
+            spotbugsArgs << spotbugsXml.toString()
+        }
 
-        def toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
-        Map<String, Object> javaTaskParams = [classname: 'edu.umd.cs.findbugs.LaunchAppropriateUI',
-                fork: 'true', failonerror: 'true', clonevm: 'true', maxmemory: "${maxHeap}m"]
-        if (toolchain) {
-            String javaExecutable = toolchain.findTool('java')
-            if (javaExecutable) {
+        Toolchain toolchain = toolchainManager?.getToolchainFromBuildContext('jdk', session)
+
+        String javaExecutable = ProcessHandle.current().info().command().orElse("java");
+
+        if (toolchain != null) {
+            String toolchainPath = toolchain.findTool('java')
+            if (toolchainPath != null) {
                 log.info("Toolchain in spotbugs-maven-plugin: ${toolchain}")
-                javaTaskParams['executable'] = javaExecutable
+                javaExecutable = toolchainPath
             }
         }
-        ant.java(javaTaskParams) {
 
-            sysproperty(key: 'file.encoding' , value: effectiveEncoding.name())
+        // Build classpath
+        List<String> classpathElements = pluginArtifacts.collect { Artifact pluginArtifact -> pluginArtifact.file.getAbsolutePath() }
+        String classpath = classpathElements.join(File.pathSeparator)
 
-            // spotbugs assumes that multiple arguments (because of options) means text mode, so need to request gui explicitly
-            jvmarg(value: '-Dfindbugs.launchUI=gui2')
+        // Build command
+        List<String> command = []
+        command << javaExecutable
+        command << "-Xmx${maxHeap}m"
+        command << "-Dfile.encoding=${effectiveEncoding.name()}"
+        command << '-Dfindbugs.launchUI=gui2'
+        command << '-cp'
+        command << classpath
+        command << 'edu.umd.cs.findbugs.LaunchAppropriateUI'
+        command.addAll(spotbugsArgs)
 
-            spotbugsArgs.each { String spotbugsArg ->
-                if (log.isDebugEnabled()) {
-                    log.debug("Spotbugs arg is ${spotbugsArg}")
+        List<String> sanitizedCommand = command.collect(Object::toString)
+
+        if (debug && log.isInfoEnabled()) {
+            log.info("Launching SpotBugs GUI with command: ${sanitizedCommand}")
+        }
+
+        ProcessBuilder pb = new ProcessBuilder(sanitizedCommand)
+        pb.directory(spotbugsXmlOutputDirectory)
+        pb.redirectErrorStream(true)
+        Process process = pb.start()
+        process.inputStream.withReader(effectiveEncoding.name()) { reader ->
+            reader.eachLine { line ->
+                if (log.isInfoEnabled()) {
+                    log.info(line)
                 }
-                arg(value: spotbugsArg)
             }
-
-            Path spotbugsXml = spotbugsXmlOutputDirectory.toPath().resolve(spotbugsXmlOutputFilename)
-
-            if (Files.exists(spotbugsXml)) {
-                if (log.isDebugEnabled()) {
-                    log.debug("  Found an SpotBugs XML at -> ${spotbugsXml}")
-                }
-                arg(value: spotbugsXml)
-            }
-
-            classpath() {
-
-                pluginArtifacts.each() { Artifact pluginArtifact ->
-                    if (debug && log.isInfoEnabled()) {
-                        log.info("  Trying to Add to pluginArtifact -> ${pluginArtifact.file}")
-                    }
-
-                    pathelement(location: pluginArtifact.file)
-                }
-            }
+        }
+        int exitCode = process.waitFor()
+        if (exitCode != 0) {
+            log.error("SpotBugs GUI exited with code: ${exitCode}")
         }
     }
 }

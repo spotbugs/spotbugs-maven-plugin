@@ -1,17 +1,8 @@
 /*
+ * SPDX-License-Identifier: Apache-2.0
+ * See LICENSE file for details.
+ *
  * Copyright 2005-2026 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package org.codehaus.mojo.spotbugs
 
@@ -20,19 +11,18 @@ import org.apache.maven.execution.MavenSession
 import org.apache.maven.project.MavenProject
 import org.apache.maven.plugin.logging.Log
 import org.codehaus.plexus.resource.ResourceManager
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.nio.charset.StandardCharsets
 
-// TODO Disabled until we get rid of groovy-ant as we need headless off here and groovy-ant will fail if we do that.
-@Ignore
 class SpotBugsGuiTest extends Specification {
 
-    void "execute sets up AntBuilder and logs encoding"() {
+    void "execute logs encoding and skips launch in headless mode when explicit encoding is set"() {
         given:
         System.setProperty("java.awt.headless", "true")
-        Log log = Mock(Log)
+        Log log = Mock(Log) {
+            isInfoEnabled() >> true
+        }
         MavenProject project = Mock(MavenProject)
         project.getCompileClasspathElements() >> ["foo.jar"]
         MavenSession session = Mock(MavenSession)
@@ -59,17 +49,19 @@ class SpotBugsGuiTest extends Specification {
 
         then:
         1 * log.info({ it.contains("File Encoding is") })
-        _ * log.debug(_)
+        1 * log.warn('Skipping SpotBugs GUI launch in headless environment')
 
         cleanup:
         outputDir.deleteDir()
         classFilesDir.deleteDir()
     }
 
-    void "execute uses default encoding if not set"() {
+    void "execute uses default encoding and skips launch in headless mode when encoding is not set"() {
         given:
         System.setProperty("java.awt.headless", "true")
-        Log log = Mock(Log)
+        Log log = Mock(Log) {
+            isInfoEnabled() >> true
+        }
         MavenProject project = Mock(MavenProject)
         project.getCompileClasspathElements() >> ["foo.jar"]
         MavenSession session = Mock(MavenSession)
@@ -96,6 +88,7 @@ class SpotBugsGuiTest extends Specification {
 
         then:
         1 * log.info({ it.contains("File Encoding is") })
+        1 * log.warn('Skipping SpotBugs GUI launch in headless environment')
 
         cleanup:
         outputDir.deleteDir()

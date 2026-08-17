@@ -1,17 +1,8 @@
 /*
+ * SPDX-License-Identifier: Apache-2.0
+ * See LICENSE file for details.
+ *
  * Copyright 2005-2026 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package org.codehaus.mojo.spotbugs
 
@@ -68,7 +59,7 @@ class XDocsReporter {
      * @param bundle
      *            The Resource Bundle to use
      */
-    XDocsReporter(ResourceBundle bundle, Log log, String threshold, String effort, String outputEncoding) {
+    XDocsReporter(ResourceBundle bundle, Log log, String threshold, String effort, Charset outputEncoding) {
         if (!bundle || !log || !threshold || !effort || !outputEncoding) {
             throw new IllegalArgumentException('All constructor arguments must be provided')
         }
@@ -77,7 +68,7 @@ class XDocsReporter {
         this.log = log
         this.threshold = threshold
         this.effort = effort
-        this.outputEncoding = Charset.forName(outputEncoding)
+        this.outputEncoding = outputEncoding
     }
 
     /**

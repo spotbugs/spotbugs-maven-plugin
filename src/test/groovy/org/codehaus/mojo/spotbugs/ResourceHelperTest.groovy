@@ -1,17 +1,8 @@
 /*
+ * SPDX-License-Identifier: Apache-2.0
+ * See LICENSE file for details.
+ *
  * Copyright 2005-2026 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package org.codehaus.mojo.spotbugs
 
@@ -90,30 +81,6 @@ class ResourceHelperTest extends Specification {
         Files.deleteIfExists(outputDirectory)
     }
 
-    void 'getResourceFile handles resource without directory separator'() {
-        given:
-        Log log = Mock(Log) {
-            isDebugEnabled() >> true
-        }
-        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-nodir')
-        ResourceManager resourceManager = Mock(ResourceManager) {
-            getResourceAsInputStream(_) >> new ByteArrayInputStream('content'.bytes)
-        }
-        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
-        String resource = 'plainfile.txt'
-
-        when:
-        File result = helper.getResourceFile(resource)
-
-        then:
-        result.exists()
-        result.name == 'plainfile.txt'
-
-        cleanup:
-        result?.delete()
-        Files.deleteIfExists(outputDirectory)
-    }
-
     void 'getResourceFile sanitizes special characters in path components'() {
         given:
         Log log = Mock(Log) {
@@ -124,8 +91,8 @@ class ResourceHelperTest extends Specification {
             getResourceAsInputStream(_) >> new ByteArrayInputStream('data'.bytes)
         }
         ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
-        // Classpath path with special chars (? : & =) that should be sanitized in the location portion
-        String resource = 'classpath:some/path?id=1&ver=2/output.xml'
+        // Path with special chars that should be sanitized to underscores
+        String resource = 'http://example.com:8080/path?param=value/output.xml'
 
         when:
         File result = helper.getResourceFile(resource)
@@ -139,28 +106,121 @@ class ResourceHelperTest extends Specification {
         outputDirectory.toFile().deleteDir()
     }
 
-    void 'getResourceFile wraps IOException from resourceManager in MojoExecutionException'() {
+   void 'constructor throws NullPointerException when log is null'() {
+        given:
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-null-log')
+        ResourceManager resourceManager = Mock(ResourceManager)
+
+        when:
+        new ResourceHelper(null, outputDirectory.toFile(), resourceManager)
+
+        then:
+        thrown(NullPointerException)
+
+        cleanup:
+        Files.deleteIfExists(outputDirectory)
+    }
+
+    void 'constructor throws NullPointerException when resourceManager is null'() {
+        given:
+        Log log = Mock(Log)
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-null-rm')
+
+        when:
+        new ResourceHelper(log, outputDirectory.toFile(), null)
+
+        then:
+        thrown(NullPointerException)
+
+        cleanup:
+        Files.deleteIfExists(outputDirectory)
+    }
+
+    void 'getResourceFile throws NullPointerException when resource is null'() {
+        given:
+        Log log = Mock(Log)
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-null-res')
+        ResourceManager resourceManager = Mock(ResourceManager)
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
+
+        when:
+        helper.getResourceFile(null)
+
+        then:
+        thrown(NullPointerException)
+
+        cleanup:
+        Files.deleteIfExists(outputDirectory)
+    }
+
+    void 'getResourceFile handles resource without path separator'() {
         given:
         Log log = Mock(Log) {
             isDebugEnabled() >> false
-            error(*_) >> {}
+        }
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-no-sep')
+        ResourceManager resourceManager = Mock(ResourceManager) {
+            getResourceAsInputStream(_) >> new ByteArrayInputStream('content'.bytes)
+        }
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
+
+        when:
+        File result = helper.getResourceFile('resource.txt')
+
+        then:
+        result.exists()
+        Files.readString(result.toPath()) == 'content'
+
+        cleanup:
+        result?.delete()
+        Files.deleteIfExists(outputDirectory)
+    }
+
+    void 'getResourceFile sanitizes special characters in resource path'() {
+        given:
+        Log log = Mock(Log) {
+            isDebugEnabled() >> true
+        }
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-sanitize')
+        ResourceManager resourceManager = Mock(ResourceManager) {
+            getResourceAsInputStream(_) >> new ByteArrayInputStream('data'.bytes)
+        }
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
+        // Classpath path with special chars (? : & =) that should be sanitized in the location portion
+        String resource = 'classpath:some/path?id=1&ver=2/output.xml'
+
+        when:
+        File result = helper.getResourceFile(resource)
+
+        then:
+        result.exists()
+
+        cleanup:
+        result?.delete()
+        Files.deleteIfExists(outputDirectory)
+    }
+
+    void 'getResourceFile throws MojoExecutionException when reading the resource stream throws IOException'() {
+        given:
+        Log log = Mock(Log) {
+            isDebugEnabled() >> false
+            isErrorEnabled() >> true
         }
         Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-ioex')
-        // Use a real InputStream that throws IOException on read, avoiding mock proxy wrapping
+        // Return an InputStream whose read() immediately throws IOException
         InputStream failingStream = new InputStream() {
             @Override
             int read() throws IOException {
-                throw new IOException('simulated IO failure')
+                throw new IOException('simulated read error')
             }
         }
         ResourceManager resourceManager = Mock(ResourceManager) {
             getResourceAsInputStream(_) >> failingStream
         }
         ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
-        String resource = 'missing/resource.xml'
 
         when:
-        helper.getResourceFile(resource)
+        helper.getResourceFile('some/path/resource.xml')
 
         then:
         thrown(org.apache.maven.plugin.MojoExecutionException)
@@ -370,15 +430,28 @@ class ResourceHelperTest extends Specification {
         thrown(NullPointerException)
     }
 
-    void 'getResourceFile rejects null resource name'() {
+    void 'getResourceFile works without debug logging enabled'() {
         given:
-        ResourceHelper helper = new ResourceHelper(Mock(Log), new File('.'), Mock(ResourceManager))
+        Log log = Mock(Log) {
+            isDebugEnabled() >> false
+        }
+        Path outputDirectory = Files.createTempDirectory('ResourceHelperTest-no-debug')
+        ResourceManager resourceManager = Mock(ResourceManager) {
+            getResourceAsInputStream(_) >> new ByteArrayInputStream('nodebug'.bytes)
+        }
+        ResourceHelper helper = new ResourceHelper(log, outputDirectory.toFile(), resourceManager)
 
         when:
-        helper.getResourceFile(null)
+        File result = helper.getResourceFile('some/path/resource.txt')
 
         then:
-        thrown(NullPointerException)
+        result.exists()
+        Files.readString(result.toPath()) == 'nodebug'
+        0 * log.debug(_)
+
+        cleanup:
+        result?.delete()
+        Files.deleteIfExists(outputDirectory)
     }
 
 }
