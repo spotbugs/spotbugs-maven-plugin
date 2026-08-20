@@ -20,7 +20,7 @@
 
     <groupId>com.github.spotbugs</groupId>
     <artifactId>spotbugs-maven-plugin</artifactId>
-    <version>4.10.3.1-SNAPSHOT</version>
+    <version>4.10.4.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>spotbugs-maven-plugin</name>
@@ -116,8 +116,8 @@
         <jacoco.minimum.coverage>0.54</jacoco.minimum.coverage>
 
         <!-- Override spotbugs to this version from base-parent -->
-        <spotbugs.version>4.10.3</spotbugs.version>
-        <spotbugs.plugin>4.10.2.0</spotbugs.plugin>
+        <spotbugs.version>4.10.4</spotbugs.version>
+        <spotbugs.plugin>4.10.3.0</spotbugs.plugin>
 
         <!-- Use 'master' branch or '${spotbugs.version}' tag for integration test source pull from spotbugs. -->
         <spotbugs-scm.version>${spotbugs.version}</spotbugs-scm.version>
