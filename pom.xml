@@ -384,7 +384,7 @@
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-interpolation</artifactId>
-                <version>1.29</version>
+                <version>1.30.0</version>
             </dependency>
 
             <!-- Align sisu with doxia-integration-tools requirements -->
