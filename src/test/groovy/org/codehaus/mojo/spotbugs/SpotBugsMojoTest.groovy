@@ -1409,7 +1409,6 @@ class SpotBugsMojoTest extends Specification {
         mojo.spotbugsXmlOutputDirectory = baseDir
         mojo.effort = 'Default'
         mojo.threshold = 'Default'
-        mojo.outputEncoding = 'UTF-8'
         mojo.systemPropertyVariables = [:]
         mojo.maxHeap = 256
         mojo.timeout = 0

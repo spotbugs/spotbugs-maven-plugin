@@ -40,15 +40,6 @@ class SpotBugsAggregateMojo extends AbstractMavenReport {
     @Parameter(defaultValue = '${project.reporting.outputDirectory}', required = true)
     File outputDirectory
 
-    /**
-     * The file encoding to use when creating the HTML reports. If the property
-     * <code>project.reporting.outputEncoding</code> is not set, utf-8 is used.
-     *
-     * @since 4.9.4.2
-     */
-    @Parameter(defaultValue = '${project.reporting.outputEncoding}', property = 'outputEncoding')
-    String outputEncoding
-
     /** Threshold of minimum bug severity to report. Valid values are High, Default, Low, Ignore, and Exp (for experimental). */
     @Parameter(defaultValue = 'Default', property = 'spotbugs.threshold')
     String threshold

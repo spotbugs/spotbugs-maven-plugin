@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    SPDX-License-Identifier: Apache-2.0
+    See LICENSE file for details.
+
+    Copyright 2005-2026 the original author or authors.
+
+-->
+<site name="${project.name}" xmlns="http://maven.apache.org/SITE/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd">
+
+  <bannerLeft name="SpotBugs Maven Plugin" />
+
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>2.1.0</version>
+  </skin>
+
+  <custom>
+    <fluidoSkin>
+      <topBarEnabled>false</topBarEnabled>
+      <sideBarEnabled>false</sideBarEnabled>
+      <breadcrumbDivider>»</breadcrumbDivider>
+      <gitHub>
+        <projectId>spotbugs/spotbugs-maven-plugin</projectId>
+        <ribbonOrientation>right</ribbonOrientation>
+        <ribbonColor>red</ribbonColor>
+      </gitHub>
+      <ohloh>
+        <projectId>spotbugs-maven-plugin</projectId>
+        <widget>thin-badge</widget>
+      </ohloh>
+    </fluidoSkin>
+  </custom>
+
+  <publishDate format="yyyy-MM-dd" position="right"/>
+  <version position="right"/>
+
+</site>

@@ -371,7 +371,6 @@ class SpotBugsAggregateMojoTest extends Specification {
         mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
         mojo.threshold = 'High'
         mojo.effort = 'Max'
-        mojo.outputEncoding = 'UTF-8'
 
         then:
         mojo.skip

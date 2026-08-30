@@ -8,7 +8,8 @@
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
 
   <!-- Parent is disabled on purpose
@@ -21,17 +22,15 @@
   -->
 
   <groupId>spotbugs-maven-plugin.it</groupId>
-  <artifactId>skipEmpty</artifactId>
+  <artifactId>encoding-default</artifactId>
   <version>1.0</version>
 
-  <name>skipEmpty</name>
+  <name>encoding-default</name>
 
   <url>https://spotbugs.github.io/spotbugs-maven-plugin/</url>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <!-- Do not set encoding to force default encoding behaviour -->
 
     <!-- These two are used due to old compiler default on maven 3.8.9 GHA build -->
     <maven.compiler.source>11</maven.compiler.source>
@@ -42,13 +41,33 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs</artifactId>
+      <version>@spotbugs.version@</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>@junitVersion@</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>@slf4jVersion@</version>
     </dependency>
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>@servletApiVersion@</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <build>
+    <sourceDirectory>@project.build.directory@/spotbugs-@spotbugs-scm.version@/spotbugsTestCases/src/java</sourceDirectory>
+    <testSourceDirectory>@project.basedir@/src/it-src/test/java</testSourceDirectory>
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -58,6 +77,22 @@
           <force>true</force>
         </configuration>
       </plugin>
+        <plugin>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>@pom.version@</version>
+          <configuration>
+            <failOnError>false</failOnError>
+          </configuration>
+          <!-- Keep 'check' here so the integration test exercises AbstractMavenReport's encoding logic. -->
+          <executions>
+            <execution>
+              <goals>
+                <goal>check</goal>
+              </goals>
+          </execution>
+        </executions>
+        </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -72,6 +107,7 @@
   </build>
 
   <reporting>
+    <excludeDefaults>true</excludeDefaults>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -81,9 +117,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>@pom.version@</version>
         <configuration>
-          <skipEmptyReport>true</skipEmptyReport>
           <xmlOutput>true</xmlOutput>
         </configuration>
       </plugin>
