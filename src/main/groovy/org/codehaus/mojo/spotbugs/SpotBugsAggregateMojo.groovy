@@ -215,8 +215,8 @@ class SpotBugsAggregateMojo extends AbstractMavenReport {
 
         generator.setIsJXRReportEnabled(false)
         generator.setLog(log)
-        generator.threshold = threshold
-        generator.effort = effort
+        generator.setThreshold(threshold)
+        generator.setEffort(effort)
         generator.setSpotbugsResults(aggregatedResults)
         generator.setOutputDirectory(outputDirectory)
         generator.generateReport()
