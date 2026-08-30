@@ -10,28 +10,28 @@
 
 Maven Mojo Plug-In to generate reports based on the [SpotBugs](https://github.com/spotbugs/spotbugs) Analyzer.
 
-## Building spotbugs-maven-plugin Requirements ##
+## Building spotbugs-maven-plugin Requirements
 
 * Java 21+ is required to build the spotbugs maven plugin.
 * Usage allowed to currently supported jdks (ie 11, 17, 21, 25, 26, 27-ea).
 * Maven 3.9.16 is required to build the spotbugs maven plugin.
 
-## Running spotbugs-maven-plugin Requirements ##
+## Running spotbugs-maven-plugin Requirements
 
 * Java 11 or better is required for spotbugs analysis.
 * Maven 3.8.9 or better is required for spotbugs analysis.
 
-## Usage ##
+## Usage
 
 The [SpotBugs documentation](https://spotbugs.readthedocs.io/en/latest/maven.html) describes the pom.xml modifications and Maven goals.
 
 The [SpotBugs Maven documentation](https://spotbugs.github.io/spotbugs-maven-plugin/) directly describes the pom.xml modifications and Maven goals along with project documentation.
 
-### Latest Snapshot ###
+### Latest Snapshot
 
 Please download latest [snapshot](https://oss.sonatype.org/content/repositories/snapshots/com/github/spotbugs/spotbugs-maven-plugin/).
 
-### Override Spotbugs Version ###
+### Override Spotbugs Version
 
 Spotbugs aligns with spotbugs releases but normally does not have a hard requirement on this, therefore you can override the spotbugs version as follows replacing
 the spotbugs plugin and spotbugs versions as you need.
@@ -51,11 +51,11 @@ the spotbugs plugin and spotbugs versions as you need.
     </plugin>
 ```
 
-### Special notice ###
+### Special notice
 
 Continue to use `FindBugsFilter` when needed as the spotbugs project has not yet renamed that to reflect project.
 
-## Running Tests ##
+## Running Tests
 
 Run all tests [preferred]
 ```
@@ -90,12 +90,12 @@ Run gui with a specific version
 mvn com.github.spotbugs:spotbugs-maven-plugin:${spotbugs.plugin}:gui
 ```
 
-## Testing Upstream Spotbugs Updates ##
+## Testing Upstream Spotbugs Updates
 
 - In the pom.xml, switch `<spotbugs.version>x.x.x</spotbugs.version>` to spotbugs snapshot Version so that it pulls from sonatype snapshots.
 - In the pom.xml, switch `<spotbugs-scm.version>${spotbugs.version}</spotbugs-scm.version>` to 'master'.
 
-## Creating new site examples ##
+## Creating new site examples
 
 This product `site` contains a copy of an integration test result using spotbugs to show how it works.  To update that, use the following instructions.
 
@@ -103,14 +103,14 @@ This product `site` contains a copy of an integration test result using spotbugs
 * Then replace current `src/site/resources/examples` entirely with any working example 'site' folder (Currently uses `target/it/basic-1/target/site` and includes `spotbugs.xml` and `spotbugsXml.xml` from `target/it/basic-1/target`).
 * Commit results and submit a pull request to apply.
 
-## Contributing ##
+## Contributing
 
 Run integration tests
 ```
 mvn clean install -P run-its -DtestSrc=remote
 ```
 
-## Groovy ##
+## Groovy
 
 This plugin is written entirely in Groovy.  It does have limitations when it comes to Groovy in relation to java releases.  Every attempt is made to ensure fast releases to pick up Groovy changes related to java.
 
@@ -125,13 +125,13 @@ an error may occur if not on same version. To alleviate that, make sure Groovy a
 to ensure the correct version is loaded.
 
 
-## Eclipse m2e Integration ##
+## Eclipse m2e Integration
 
 The plugin cycles controlled by Eclipse require compilation phase for m2e without further help.  This plugin runs verify only during site generation.
 Therefore Eclipse m2e will show up but not do anything with this plugin alone.  In order to have proper execution within Eclipse m2e,
 use [m2e-code-quality](https://github.com/m2e-code-quality/m2e-code-quality) plugin for spotbugs.
 
-## Analysis Properties ##
+## Analysis Properties
 
 Is there some way to set the [Analysis Properties](https://spotbugs.readthedocs.io/en/stable/analysisprops.html) when using the maven plugin?
 
@@ -149,7 +149,7 @@ E.g. to set the findbugs.assertionmethods analyzer property:
 </plugin>
 ```
 
-## Reproducible Builds ##
+## Reproducible Builds
 
 To run reproducibility checks against an official release, execute the following command. It is best to check out the specific release tag first and ensure your Maven and JDK versions match what was used for that release:
 
