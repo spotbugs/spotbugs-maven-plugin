@@ -28,7 +28,6 @@
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <configuration>
-          <fork>true</fork>
           <xmlOutput>true</xmlOutput>
           <failOnError>false</failOnError>
           <debug>@spotbugsTestDebug@</debug>

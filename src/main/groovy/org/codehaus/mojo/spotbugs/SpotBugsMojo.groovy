@@ -415,16 +415,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
     boolean failOnError
 
     /**
-     * Fork a VM for Spotbugs analysis.  This will allow you to set timeouts and heap size.
-     *
-     * @deprecated Parameter 'fork' is deprecated and ignored. SpotBugs is always executed in a separate process.
-     * @since 2.3.2
-     */
-    @Deprecated(forRemoval = true, since = '4.10.3.0')
-    @Parameter(defaultValue = 'true', property = 'spotbugs.fork')
-    boolean fork
-
-    /**
      * Maximum Java heap size in megabytes  (default=512).
      *
      * @since 2.2
