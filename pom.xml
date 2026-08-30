@@ -113,7 +113,7 @@
         <!-- Reproducible Builds: override timestamp value from parent -->
         <project.build.outputTimestamp>1787198139</project.build.outputTimestamp>
 
-        <jacoco.minimum.coverage>0.54</jacoco.minimum.coverage>
+        <jacoco.minimum.coverage>0.63</jacoco.minimum.coverage>
 
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.10.4</spotbugs.version>
