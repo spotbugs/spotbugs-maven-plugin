@@ -58,34 +58,43 @@ Continue to use `FindBugsFilter` when needed as the spotbugs project has not yet
 ## Running Tests
 
 Run all tests [preferred]
+
 ```
 mvn -DtestSrc=remote -Prun-its clean install -D"invoker.parallelThreads=8"
 ```
+
 Skip tests
+
 ```
 mvn -DskipTests=true clean install
 ```
+
 Run tests on spotbugs test source code that is local instead of from SpotBugs github repository
+
 ```
 mvn -DtestSrc=local -DlocalTestSrc=/opt/spotBugs -Prun-its clean install -D"invoker.parallelThreads=8"
 ```
 
 Run selected tests
+
 ```
 mvn -DtestSrc=remote -Prun-its -Dinvoker.test=build-*,basic-1,check-nofail clean install -D"invoker.parallelThreads=8"
 ```
 
 Run tests in debugger
+
 ```
 mvn -Dmaven.surefire.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 -Xnoagent -Djava.compiler=NONE" -Prun-its clean install
 ```
 
 Run selected tests in debugger
+
 ```
 mvn -Dmaven.surefire.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 -Xnoagent -Djava.compiler=NONE" -Prun-its -Dinvoker.test=build-*,basic-1,check clean install
 ```
 
 Run gui with a specific version 
+
 ```
 mvn com.github.spotbugs:spotbugs-maven-plugin:${spotbugs.plugin}:gui
 ```
@@ -160,6 +169,6 @@ mvn clean verify artifact:compare -D"reference.repo=https://repo.maven.apache.or
 To validate reproducibility locally on your current branch before a release, execute this two-step loop. This uses your local .m2 cache as a reference baseline without overwriting it on the second pass:
 
 ```
- mvn clean install
- mvn clean verify artifact:compare -D"reference.repo=file:///${user.home}/.m2/repository/"
+mvn clean install
+mvn clean verify artifact:compare -D"reference.repo=file:///${user.home}/.m2/repository/"
 ```
