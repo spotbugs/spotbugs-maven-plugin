@@ -14,7 +14,7 @@
     <parent>
         <groupId>com.github.hazendaz</groupId>
         <artifactId>base-parent</artifactId>
-        <version>60</version>
+        <version>61</version>
         <relativePath />
     </parent>
 
@@ -83,7 +83,7 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</developerConnection>
-        <tag>spotbugs-maven-plugin-4.10.4.0</tag>
+        <tag>HEAD</tag>
         <url>https://github.com/spotbugs/spotbugs-maven-plugin</url>
     </scm>
     <issueManagement>
@@ -113,11 +113,11 @@
         <!-- Reproducible Builds: override timestamp value from parent -->
         <project.build.outputTimestamp>1787198139</project.build.outputTimestamp>
 
-        <jacoco.minimum.coverage>0.54</jacoco.minimum.coverage>
+        <jacoco.minimum.coverage>0.63</jacoco.minimum.coverage>
 
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.10.4</spotbugs.version>
-        <spotbugs.plugin>4.10.3.0</spotbugs.plugin>
+        <spotbugs.plugin>4.10.4.0</spotbugs.plugin>
 
         <!-- Use 'master' branch or '${spotbugs.version}' tag for integration test source pull from spotbugs. -->
         <spotbugs-scm.version>${spotbugs.version}</spotbugs-scm.version>
@@ -1225,7 +1225,7 @@
             <activation>
                 <property>
                     <name>maven.version</name>
-                    <value>4.0.0-rc-5</value>
+                    <value>4.0.0-rc-6</value>
                 </property>
             </activation>
             <build>
