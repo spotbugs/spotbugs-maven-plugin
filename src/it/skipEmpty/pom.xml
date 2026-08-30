@@ -33,7 +33,7 @@
     <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <!-- These two are used due to old compiler on maven 3.6.3 GHA build -->
+    <!-- These two are used due to old compiler default on maven 3.8.9 GHA build -->
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
 
