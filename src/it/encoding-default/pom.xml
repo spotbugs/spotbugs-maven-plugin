@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    SPDX-License-Identifier: Apache-2.0
+    See LICENSE file for details.
+
+    Copyright 2005-2026 the original author or authors.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Parent is disabled on purpose
+  <parent>
+    <groupId>spotbugs-maven-plugin.it</groupId>
+    <artifactId>common</artifactId>
+    <version>1.0</version>
+    <relativePath>../common.xml</relativePath>
+  </parent>
+  -->
+
+  <groupId>spotbugs-maven-plugin.it</groupId>
+  <artifactId>encoding-default</artifactId>
+  <version>1.0</version>
+
+  <name>encoding-default</name>
+
+  <url>https://spotbugs.github.io/spotbugs-maven-plugin/</url>
+
+  <properties>
+    <!-- Do not set encoding to force default encoding behaviour -->
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs</artifactId>
+      <version>@spotbugs.version@</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>@junitVersion@</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>@slf4jVersion@</version>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>@servletApiVersion@</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <sourceDirectory>@project.build.directory@/spotbugs-@spotbugs-scm.version@/spotbugsTestCases/src/java</sourceDirectory>
+    <testSourceDirectory>@project.basedir@/src/it-src/test/java</testSourceDirectory>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>@clean.plugin@</version>
+        <configuration>
+          <force>true</force>
+        </configuration>
+      </plugin>
+        <plugin>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>@pom.version@</version>
+          <configuration>
+            <failOnError>false</failOnError>
+          </configuration>
+          <!-- Keep 'check' here so the integration test exercises AbstractMavenReport's encoding logic. -->
+          <executions>
+            <execution>
+              <goals>
+                <goal>check</goal>
+              </goals>
+          </execution>
+        </executions>
+        </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>@site.plugin@</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>@project-info.plugin@</version>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <excludeDefaults>true</excludeDefaults>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>@jxr.plugin@</version>
+      </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <configuration>
+          <xmlOutput>true</xmlOutput>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+
+  <profiles>
+    <profile>
+      <!-- Override parameters not valid in maven-clean-plugin 4.x -->
+      <id>maven4</id>
+      <activation>
+        <property>
+          <name>maven.version</name>
+          <value>4.0.0-rc-6</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-clean-plugin</artifactId>
+            <!-- force parameter is not yet available in maven-clean-plugin 4.x -->
+            <configuration combine.self="override"/>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>
