@@ -123,7 +123,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
     int fileCount
 
     /** The Set of missing classes names reported. */
-    Set missingClassSet = new HashSet()
+    Set<String> missingClassSet = new HashSet<>()
 
     /** The running total of errors reported. */
     int errorCount
@@ -188,7 +188,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             log.debug('sink is ' + sink)
         }
 
-        bugClasses.each() { String bugClass ->
+        bugClasses.each { String bugClass ->
             if (log.isDebugEnabled()) {
                 log.debug("finish bugClass is ${bugClass}")
             }
@@ -266,7 +266,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
             log.debug("printBug spotbugsResults is ${spotbugsResults}")
         }
 
-        spotbugsResults.BugInstance.each() { GPathResult bugInstance ->
+        spotbugsResults.BugInstance.each { GPathResult bugInstance ->
 
             if (log.isDebugEnabled()) {
                 log.debug("bugInstance --->  ${bugInstance}")
@@ -339,8 +339,11 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
      * @return the documentation URL for the bug type
      */
     protected String getBugDetailsUrl(String type) {
-        String url = bugTypeUrlMap?.get(type)
-        return url ?: (bundle.getString(DETAILSLINK_KEY) + '#' + type)
+        String url = bugTypeUrlMap == null ? null : bugTypeUrlMap.get(type)
+        if (url == null) {
+            url = bundle.getString(DETAILSLINK_KEY) + '#' + type
+        }
+        return url
     }
 
     /**
@@ -568,7 +571,7 @@ class SpotbugsReportGenerator implements SpotBugsInfo {
 
         sink.tableRow_()
 
-        spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() { NodeChild classStats ->
+        spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each { NodeChild classStats ->
 
             String classStatsValue = classStats.'@class'.text()
             String classStatsBugCount = classStats.'@bugs'.text()
