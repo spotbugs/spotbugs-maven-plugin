@@ -55,9 +55,9 @@ trait SpotBugsPluginsTrait {
     String getSpotbugsPlugins() {
         ResourceHelper resourceHelper = new ResourceHelper(log, new File(spotbugsXmlOutputDirectory, "spotbugs"), resourceManager)
 
-        List<String> urlPlugins = []
+        List<String> urlPlugins = new ArrayList<>()
 
-        if (pluginList) {
+        if (pluginList != null && !pluginList.isEmpty()) {
             log.debug('  Adding Plugins ')
 
             pluginList.split(SpotBugsInfo.COMMA).each { String pluginJar ->
@@ -72,14 +72,14 @@ trait SpotBugsPluginsTrait {
                         log.debug("  Processing Plugin: ${pluginFileName}")
                     }
 
-                    urlPlugins << resourceHelper.getResourceFile(pluginFileName).absolutePath
+                    urlPlugins.add(resourceHelper.getResourceFile(pluginFileName).absolutePath)
                 } catch (MalformedURLException e) {
                     throw new MojoExecutionException('The addin plugin has an invalid URL', e)
                 }
             }
         }
 
-        if (plugins) {
+        if (plugins != null && !plugins.isEmpty()) {
             if (log.isDebugEnabled()) {
                 log.debug('  Adding Plugins from a repository')
                 log.debug("  Session is: ${session}")
@@ -114,19 +114,23 @@ trait SpotBugsPluginsTrait {
                     request
                 )
 
-                urlPlugins << resourceHelper.getResourceFile(result.artifact.file.absolutePath).absolutePath
+                urlPlugins.add(resourceHelper.getResourceFile(result.artifact.file.absolutePath).absolutePath)
             }
         }
 
         // Auto-detect SpotBugs extension plugins added as standard Maven <dependencies> to the plugin.
         // Any artifact on the plugin classpath (pluginArtifacts) that contains findbugs.xml
         // and is not part of the SpotBugs core (com.github.spotbugs group) is treated as a plugin extension.
-        if (pluginArtifacts) {
+        if (pluginArtifacts != null && !pluginArtifacts.isEmpty()) {
             log.debug('  Scanning plugin artifacts for SpotBugs extension plugins (added via <dependencies>)')
 
             // Collect file names already in the plugin list to avoid adding the same JAR twice
             // (e.g. when a plugin is declared both via <plugins> config and as a <dependency>).
-            Set<String> addedFileNames = urlPlugins.collect { new File(it).name } as Set
+            Set<String> addedFileNames = new HashSet<>()
+
+            urlPlugins.each { String plugin ->
+                addedFileNames.add(new File(plugin).name)
+            }
 
             pluginArtifacts.each { org.apache.maven.artifact.Artifact artifact ->
                 if ('com.github.spotbugs' != artifact.groupId && artifact.file != null && isSpotBugsPlugin(artifact.file)) {
@@ -135,8 +139,8 @@ trait SpotBugsPluginsTrait {
                         if (log.isDebugEnabled()) {
                             log.debug("  Auto-detected SpotBugs extension plugin from dependency: ${artifact}")
                         }
-                        addedFileNames << jarFileName
-                        urlPlugins << resourceHelper.getResourceFile(artifact.file.absolutePath).absolutePath
+                        addedFileNames.add(jarFileName)
+                        urlPlugins.add(resourceHelper.getResourceFile(artifact.file.absolutePath).absolutePath)
                     }
                 }
             }
@@ -163,7 +167,7 @@ trait SpotBugsPluginsTrait {
             return false
         }
         try {
-            new JarFile(file).withCloseable { jar ->
+            new JarFile(file).withCloseable { JarFile jar ->
                 return jar.getEntry('findbugs.xml') != null
             }
         } catch (IOException ignored) {
@@ -199,27 +203,33 @@ trait SpotBugsPluginsTrait {
             'com.h3xstream.findsecbugs'   : 'https://find-sec-bugs.github.io/bugs.htm#{type}',
         ]
 
-        Map<String, String> effectiveUrls = defaults + (userPluginDocUrls ?: [:])
-        Map<String, String> bugTypeUrlMap = [:]
+        Map<String, String> effectiveUrls = new HashMap<>(defaults)
+        if (userPluginDocUrls != null) {
+            effectiveUrls.putAll(userPluginDocUrls)
+        }
+
+        Map<String, String> bugTypeUrlMap = new HashMap<>()
 
         // Collect all candidate JAR files from pluginList and pluginArtifacts.
         // We read the JARs directly (without copying) since we only need their metadata.
-        Set<File> pluginJars = []
+        Set<File> pluginJars = new HashSet<>()
 
-        if (pluginList) {
+        if (pluginList != null && !pluginList.isEmpty()) {
             pluginList.split(SpotBugsInfo.COMMA).each { String path ->
-                String trimmed = path?.trim()
-                if (trimmed) {
+                String trimmed = path.trim()
+                if (!trimmed.isEmpty()) {
                     File jar = new File(trimmed)
-                    if (jar.exists()) pluginJars << jar
+                    if (jar.exists()) {
+                        pluginJars.add(jar)
+                    }
                 }
             }
         }
 
-        if (pluginArtifacts) {
+        if (pluginArtifacts != null && !pluginArtifacts.isEmpty()) {
             pluginArtifacts.each { org.apache.maven.artifact.Artifact artifact ->
                 if ('com.github.spotbugs' != artifact.groupId && artifact.file != null && artifact.file.exists() && artifact.file.name.endsWith('.jar')) {
-                    pluginJars << artifact.file
+                    pluginJars.add(artifact.file)
                 }
             }
         }
@@ -228,17 +238,21 @@ trait SpotBugsPluginsTrait {
             try {
                 new JarFile(pluginJar).withCloseable { JarFile jar ->
                     JarEntry entry = jar.getEntry('findbugs.xml')
-                    if (!entry) return
+                    if (entry == null) {
+                        return
+                    }
 
                     GPathResult xml = new XmlSlurper().parse(jar.getInputStream(entry))
                     String pluginId = xml.@pluginid.text()
-                    String urlTemplate = effectiveUrls[pluginId]
-                    if (!urlTemplate) return
+                    String urlTemplate = effectiveUrls.get(pluginId)
+                    if (urlTemplate == null) {
+                        return
+                    }
 
-                    xml.BugPattern.each { bugPattern ->
+                    xml.BugPattern.each { GPathResult bugPattern ->
                         String type = bugPattern.@type.text()
-                        if (type) {
-                            bugTypeUrlMap[type] = urlTemplate.replace('{type}', type)
+                        if (!type.isEmpty()) {
+                            bugTypeUrlMap.put(type, urlTemplate.replace('{type}', type))
                         }
                     }
                 }
@@ -257,7 +271,14 @@ trait SpotBugsPluginsTrait {
      *
      */
     String getEffortParameter() {
-        String effortParameter = (effort == 'Max') ? 'max' : (effort == 'Min') ? 'min' : 'default'
+        String effortParameter
+        if (effort == 'Max') {
+            effortParameter = 'max'
+        } else if (effort == 'Min') {
+            effortParameter = 'min'
+        } else {
+            effortParameter = 'default'
+        }
 
         if (log.isDebugEnabled()) {
             log.debug("effort is ${effort}")
