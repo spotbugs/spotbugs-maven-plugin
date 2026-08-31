@@ -35,9 +35,6 @@ class XDocsReporter {
     /** The used effort for searching bugs. */
     String effort
 
-    /** The output Writer stream. */
-    Writer outputWriter
-
     /** Spotbugs Results. */
     GPathResult spotbugsResults
 
@@ -105,7 +102,7 @@ class XDocsReporter {
     /**
      * Generate report.
      */
-    void generateReport() {
+    void generateReport(final Writer outputWriter) {
         StreamingMarkupBuilder xmlBuilder = new StreamingMarkupBuilder()
         xmlBuilder.encoding = outputEncoding.name()
 
@@ -201,7 +198,5 @@ class XDocsReporter {
                 }
             }
         }
-
-        outputWriter.close()
     }
 }
