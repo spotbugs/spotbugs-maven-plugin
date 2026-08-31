@@ -36,10 +36,6 @@ import org.apache.maven.reporting.MavenReport
         requiresProject = true, threadSafe = true)
 class SpotBugsAggregateMojo extends AbstractMavenReport {
 
-    /** Location where the generated HTML aggregate report will be created. */
-    @Parameter(defaultValue = '${project.reporting.outputDirectory}', required = true)
-    File outputDirectory
-
     /** Threshold of minimum bug severity to report. Valid values are High, Default, Low, Ignore, and Exp (for experimental). */
     @Parameter(defaultValue = 'Default', property = 'spotbugs.threshold')
     String threshold
@@ -176,7 +172,7 @@ class SpotBugsAggregateMojo extends AbstractMavenReport {
             return
         }
 
-        if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
+        if (!super.outputDirectory.exists() && !super.outputDirectory.mkdirs()) {
             throw new MojoExecutionException('Cannot create html output directory')
         }
 
@@ -218,7 +214,7 @@ class SpotBugsAggregateMojo extends AbstractMavenReport {
         generator.setThreshold(threshold)
         generator.setEffort(effort)
         generator.setSpotbugsResults(aggregatedResults)
-        generator.setOutputDirectory(outputDirectory)
+        generator.setOutputDirectory(super.outputDirectory)
         generator.generateReport()
 
         if (log.isDebugEnabled()) {
@@ -342,28 +338,6 @@ class SpotBugsAggregateMojo extends AbstractMavenReport {
         writer.close()
 
         return aggregatedXmlFile
-    }
-
-    /**
-     * Returns the report output directory.
-     *
-     * @return full path to the directory where the files in the site get copied to
-     * @see AbstractMavenReport#getOutputDirectory()
-     */
-    @Override
-    protected String getOutputDirectory() {
-        return outputDirectory.absolutePath
-    }
-
-    /**
-     * Sets the report output directory.
-     *
-     * @see AbstractMavenReport#setReportOutputDirectory(File)
-     */
-    @Override
-    void setReportOutputDirectory(File reportOutputDirectory) {
-        super.setReportOutputDirectory(reportOutputDirectory)
-        this.outputDirectory = reportOutputDirectory
     }
 
     /**
