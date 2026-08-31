@@ -47,10 +47,6 @@ import org.eclipse.aether.RepositorySystem
 @Mojo(name = 'spotbugs', requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true, threadSafe = true)
 class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
-    /** Location where generated html will be created allowed to be not read only as defined in AbstractMavenParent. */
-    @Parameter(defaultValue = '${project.reporting.outputDirectory}', required = true)
-    File outputDirectory
-
     /**
      * Turn on and off xml output of the Spotbugs report.
      *
@@ -686,7 +682,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
         generateXDoc(locale)
 
-        if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
+        if (!super.outputDirectory.exists() && !super.outputDirectory.mkdirs()) {
             throw new MojoExecutionException('Cannot create html output directory')
         }
 
@@ -721,7 +717,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
 
                 generator.setSpotbugsResults(xmlSlurper.parse(outputSpotbugsFile))
-                generator.setOutputDirectory(new File(outputDirectory.getAbsolutePath()))
+                generator.setOutputDirectory(super.outputDirectory)
                 generator.generateReport()
 
                 if (log.isDebugEnabled()) {
@@ -784,19 +780,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
 
             xDocsReporter.generateReport()
         }
-    }
-
-    /**
-     * Returns the report output directory allowed to be not read only as defined in AbstractMavenParent.
-     *
-     * Called by AbstractMavenReport.execute() for creating the sink.
-     *
-     * @return full path to the directory where the files in the site get copied to
-     * @see AbstractMavenReport#getOutputDirectory()
-     */
-    @Override
-    protected String getOutputDirectory() {
-        return outputDirectory.getAbsolutePath()
     }
 
     /**
@@ -1479,17 +1462,6 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
         }
 
         return thresholdParameter
-    }
-
-    /**
-     *  Set report output directory, allowed to be not read only as defined in AbstractMavenParent.
-     *
-     * @see AbstractMavenReport#setReportOutputDirectory(File)
-     */
-    @Override
-    void setReportOutputDirectory(File reportOutputDirectory) {
-        super.setReportOutputDirectory(reportOutputDirectory)
-        this.outputDirectory = reportOutputDirectory
     }
 
 }
