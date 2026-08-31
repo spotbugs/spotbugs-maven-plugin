@@ -771,7 +771,7 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
                 Charset.forName(outputEncoding) : StandardCharsets.UTF_8
 
             XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, effectiveEncoding)
-            xDocsReporter.setOutputWriter(Files.newBufferedWriter(Path.of("${xmlOutputDirectory}/spotbugs.xml"),
+            xDocsReporter.setOutputWriter(Files.newBufferedWriter(Path.of("${xmlOutputDirectory}").resolve("spotbugs.xml"),
                 effectiveEncoding))
 
             XmlSlurper xmlSlurper = new XmlSlurper()
