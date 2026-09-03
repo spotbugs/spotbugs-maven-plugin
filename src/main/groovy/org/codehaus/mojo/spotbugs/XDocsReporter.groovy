@@ -119,7 +119,7 @@ class XDocsReporter {
                     log.debug("spotbugsResults.FindBugsSummary total_bugs is ${spotbugsResults.FindBugsSummary.@total_bugs.text()}")
                 }
 
-                spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each() { NodeChild classStats ->
+                spotbugsResults.FindBugsSummary.PackageStats.ClassStats.each { NodeChild classStats ->
 
                     String classStatsValue = classStats.'@class'.text()
                     String classStatsBugCount = classStats.'@bugs'.text()
@@ -135,12 +135,12 @@ class XDocsReporter {
                     }
                 }
 
-                bugClasses.each() { String bugClass ->
+                bugClasses.each { String bugClass ->
                     if (log.isDebugEnabled()) {
                         log.debug("finish bugClass is ${bugClass}")
                     }
                     file(classname: bugClass) {
-                        spotbugsResults.BugInstance.each() { NodeChild bugInstance ->
+                        spotbugsResults.BugInstance.each { NodeChild bugInstance ->
 
                             if (bugInstance.Class.find { NodeChild classNode -> classNode.@primary == "true" }.@classname.text() != bugClass) {
                                 return
@@ -164,13 +164,13 @@ class XDocsReporter {
                 log.debug("Printing Errors")
 
                 Error() {
-                    spotbugsResults.Error.analysisError.each() { NodeChild analysisError ->
+                    spotbugsResults.Error.analysisError.each { NodeChild analysisError ->
                         AnalysisError(analysisError.message.text())
                     }
 
                     log.debug("Printing Missing classes")
 
-                    spotbugsResults.Error.MissingClass.each() { NodeChild missingClass ->
+                    spotbugsResults.Error.MissingClass.each { NodeChild missingClass ->
                         MissingClass(missingClass.text)
                     }
                 }
@@ -178,22 +178,18 @@ class XDocsReporter {
                 Project() {
                     log.debug("Printing Source Roots")
 
-                    if (!compileSourceRoots.isEmpty()) {
-                        compileSourceRoots.each() { String srcDir ->
-                            if (log.isDebugEnabled()) {
-                                log.debug("SrcDir is ${srcDir}")
-                            }
-                            SrcDir(srcDir)
+                    compileSourceRoots.each { String srcDir ->
+                        if (log.isDebugEnabled()) {
+                            log.debug("SrcDir is ${srcDir}")
                         }
+                        SrcDir(srcDir)
                     }
 
-                    if (!testSourceRoots.isEmpty()) {
-                        testSourceRoots.each() { String srcDir ->
-                            if (log.isDebugEnabled()) {
-                                log.debug("SrcDir is ${srcDir}")
-                            }
-                            SrcDir(srcDir)
+                    testSourceRoots.each { String srcDir ->
+                        if (log.isDebugEnabled()) {
+                            log.debug("SrcDir is ${srcDir}")
                         }
+                        SrcDir(srcDir)
                     }
                 }
             }
