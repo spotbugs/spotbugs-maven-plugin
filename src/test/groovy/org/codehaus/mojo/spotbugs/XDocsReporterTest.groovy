@@ -43,7 +43,6 @@ class XDocsReporterTest extends Specification {
         Log log = Mock(Log)
         StringWriter writer = new StringWriter()
         XDocsReporter reporter = new XDocsReporter(bundle, log, '1', 'max', StandardCharsets.UTF_8)
-        reporter.outputWriter = writer
         reporter.compileSourceRoots = ['src/main/java']
         reporter.testSourceRoots = ['src/test/java']
         reporter.bugClasses = []
@@ -71,7 +70,7 @@ class XDocsReporterTest extends Specification {
         reporter.spotbugsResults = xmlSlurper.parseText(xml)
 
         when:
-        reporter.generateReport()
+        reporter.generateReport(writer)
         String output = writer.toString()
 
         then:
@@ -95,7 +94,6 @@ class XDocsReporterTest extends Specification {
         Log log = Mock(Log) { isDebugEnabled() >> false }
         StringWriter writer = new StringWriter()
         XDocsReporter reporter = new XDocsReporter(bundle, log, '1', 'max', StandardCharsets.UTF_8)
-        reporter.outputWriter = writer
         reporter.compileSourceRoots = ['src/main/java']
         reporter.testSourceRoots = []
         reporter.bugClasses = []
@@ -124,7 +122,7 @@ class XDocsReporterTest extends Specification {
         reporter.spotbugsResults = xmlSlurper.parseText(xml)
 
         when:
-        reporter.generateReport()
+        reporter.generateReport(writer)
         String output = writer.toString()
 
         then:
@@ -145,7 +143,6 @@ class XDocsReporterTest extends Specification {
         Log log = Mock(Log) { isDebugEnabled() >> true }
         StringWriter writer = new StringWriter()
         XDocsReporter reporter = new XDocsReporter(bundle, log, '1', 'max', StandardCharsets.UTF_8)
-        reporter.outputWriter = writer
         reporter.compileSourceRoots = ['src/main/java']
         reporter.testSourceRoots = ['src/test/java']
         reporter.bugClasses = []
@@ -174,7 +171,7 @@ class XDocsReporterTest extends Specification {
         reporter.spotbugsResults = xmlSlurper.parseText(xml)
 
         when:
-        reporter.generateReport()
+        reporter.generateReport(writer)
         String output = writer.toString()
 
         then:
@@ -188,7 +185,6 @@ class XDocsReporterTest extends Specification {
         Log log = Mock(Log) { isDebugEnabled() >> false }
         StringWriter writer = new StringWriter()
         XDocsReporter reporter = new XDocsReporter(bundle, log, '1', 'max', StandardCharsets.UTF_8)
-        reporter.outputWriter = writer
         reporter.compileSourceRoots = ['src/main/java']
         reporter.testSourceRoots = ['src/test/java']
         reporter.bugClasses = []
@@ -210,7 +206,7 @@ class XDocsReporterTest extends Specification {
         reporter.spotbugsResults = xmlSlurper.parseText(xml)
 
         when:
-        reporter.generateReport()
+        reporter.generateReport(writer)
         String output = writer.toString()
 
         then:

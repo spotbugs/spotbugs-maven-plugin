@@ -766,19 +766,21 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             Charset effectiveEncoding = outputEncoding != null ?
                 Charset.forName(outputEncoding) : StandardCharsets.UTF_8
 
-            XDocsReporter xDocsReporter = new XDocsReporter(getBundle(locale), log, threshold, effort, effectiveEncoding)
-            xDocsReporter.setOutputWriter(Files.newBufferedWriter(Path.of("${xmlOutputDirectory}").resolve("spotbugs.xml"),
-                effectiveEncoding))
+            try (Writer outputWriter = Files.newBufferedWriter(
+                    Path.of("${xmlOutputDirectory}").resolve("spotbugs.xml"), effectiveEncoding)) {
+                XDocsReporter xDocsReporter =
+                    new XDocsReporter(getBundle(locale), log, threshold, effort, effectiveEncoding)
 
-            XmlSlurper xmlSlurper = new XmlSlurper()
-            xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
-            xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
+                XmlSlurper xmlSlurper = new XmlSlurper()
+                xmlSlurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', true)
+                xmlSlurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
 
-            xDocsReporter.setSpotbugsResults(xmlSlurper.parse(outputSpotbugsFile))
-            xDocsReporter.setCompileSourceRoots(session.getCurrentProject().compileSourceRoots)
-            xDocsReporter.setTestSourceRoots(session.getCurrentProject().testCompileSourceRoots)
+                xDocsReporter.setSpotbugsResults(xmlSlurper.parse(outputSpotbugsFile))
+                xDocsReporter.setCompileSourceRoots(session.getCurrentProject().compileSourceRoots)
+                xDocsReporter.setTestSourceRoots(session.getCurrentProject().testCompileSourceRoots)
 
-            xDocsReporter.generateReport()
+                xDocsReporter.generateReport(outputWriter)
+            }
         }
     }
 
