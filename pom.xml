@@ -123,7 +123,7 @@
         <spotbugs-scm.version>${spotbugs.version}</spotbugs-scm.version>
         <spotbugs-scm.type>tags</spotbugs-scm.type>
 
-        <byte-buddy.version>1.18.12</byte-buddy.version>
+        <byte-buddy.version>1.18.13</byte-buddy.version>
         <javabean-tester.version>2.12.2</javabean-tester.version>
         <junitVersion>6.1.3</junitVersion>
         <log4j2.version>2.26.1</log4j2.version>
