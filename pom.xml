@@ -175,7 +175,7 @@
 
         <!-- Targeted patches -->
         <asm.version>9.10.1</asm.version>
-        <bcel.version>6.12.0</bcel.version>
+        <bcel.version>6.13.0</bcel.version>
         <beanutils.version>1.11.0</beanutils.version>
         <codec.version>1.22.1</codec.version>
         <codenarc.version>4.0.0</codenarc.version>
