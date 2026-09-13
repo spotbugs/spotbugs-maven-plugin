@@ -152,7 +152,7 @@
         <plexusXmlVersion>3.1.0</plexusXmlVersion>
 
         <download-plugin.version>2.1.0</download-plugin.version>
-        <execPluginVersion>3.6.3</execPluginVersion>
+        <execPluginVersion>3.6.4</execPluginVersion>
         <find-and-replace-plugin.version>1.0.5</find-and-replace-plugin.version>
         <pluginPluginVersion>3.15.2</pluginPluginVersion>
         <l10nPluginVersion>1.2.1</l10nPluginVersion>
