@@ -1,4 +1,4 @@
-name: Java Integration Tests Maven 4.0.0-rc-6
+name: Java Integration Tests Maven 4.0.0-rc-7
 
 on: [push, pull_request]
 
@@ -9,13 +9,13 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  maven-version: 4.0.0-rc-6
+  maven-version: 4.0.0-rc-7
 
 jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    name: Integration Tests Maven 4.0.0-rc-6 with java 25
+    name: Integration Tests Maven 4.0.0-rc-7 with java 25
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
