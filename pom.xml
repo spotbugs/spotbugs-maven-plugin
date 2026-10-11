@@ -83,7 +83,7 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/spotbugs/spotbugs-maven-plugin.git</developerConnection>
-        <tag>spotbugs-maven-plugin-4.10.4.1</tag>
+        <tag>HEAD</tag>
         <url>https://github.com/spotbugs/spotbugs-maven-plugin</url>
     </scm>
     <issueManagement>
@@ -117,7 +117,7 @@
 
         <!-- Override spotbugs to this version from base-parent -->
         <spotbugs.version>4.10.4</spotbugs.version>
-        <spotbugs.plugin>4.10.4.0</spotbugs.plugin>
+        <spotbugs.plugin>4.10.4.1</spotbugs.plugin>
 
         <!-- Use 'master' branch or '${spotbugs.version}' tag for integration test source pull from spotbugs. -->
         <spotbugs-scm.version>${spotbugs.version}</spotbugs-scm.version>
