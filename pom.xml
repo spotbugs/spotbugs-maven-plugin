@@ -1231,7 +1231,7 @@
             <activation>
                 <property>
                     <name>maven.version</name>
-                    <value>4.0.0-rc-6</value>
+                    <value>4.0.0-rc-7</value>
                 </property>
             </activation>
             <build>
