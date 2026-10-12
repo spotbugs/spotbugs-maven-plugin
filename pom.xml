@@ -174,7 +174,7 @@
         <sb-contrib.version>7.6.10</sb-contrib.version>
 
         <!-- Targeted patches -->
-        <asm.version>9.10.1</asm.version>
+        <asm.version>9.11</asm.version>
         <bcel.version>6.13.0</bcel.version>
         <beanutils.version>1.11.0</beanutils.version>
         <codec.version>1.22.1</codec.version>
