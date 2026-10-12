@@ -138,7 +138,7 @@
         <mavenSharedUtilsVersion>3.5.0</mavenSharedUtilsVersion>
         <mavenReportingApiVersion>4.0.0</mavenReportingApiVersion>
         <mavenReportingVersion>4.0.0</mavenReportingVersion>
-        <mavenVersion>3.9.16</mavenVersion>
+        <mavenVersion>3.10.0</mavenVersion>
 
         <!-- Maven minimum version -->
         <maven.min-version>${mavenVersion}</maven.min-version>
