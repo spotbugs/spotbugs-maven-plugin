@@ -141,7 +141,7 @@
         <mavenVersion>3.10.0</mavenVersion>
 
         <!-- Maven minimum version -->
-        <maven.min-version>${mavenVersion}</maven.min-version>
+        <maven.min-version>3.9.16</maven.min-version>
 
         <resolver.version>1.9.27</resolver.version>
 
