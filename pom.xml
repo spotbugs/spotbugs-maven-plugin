@@ -132,7 +132,7 @@
         <groovyVersion>6.0.0</groovyVersion>
         <javaparserVersion>3.28.2</javaparserVersion>
 
-        <doxiaVersion>2.1.0</doxiaVersion>
+        <doxiaVersion>2.2.0</doxiaVersion>
         <doxiaSiteToolsVersion>2.1.0</doxiaSiteToolsVersion>
 
         <mavenSharedUtilsVersion>3.5.0</mavenSharedUtilsVersion>
