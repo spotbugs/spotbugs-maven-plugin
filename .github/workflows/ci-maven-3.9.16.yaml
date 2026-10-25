@@ -1,0 +1,35 @@
+name: Java Tests Maven 3.9.16 with java 25
+
+on: [push, pull_request]
+
+permissions: read-all
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  maven-sha256: 5af3b743dd8b876b5c45da33b676251e5f1687712644abb4ee519ca56e1d89ce
+  maven-version: 3.9.16
+
+jobs:
+  test:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    name: Tests Maven 3.9.16 with java 25
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Setup Java
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          cache: maven
+          distribution: zulu
+          java-version: 25
+      - name: Set Maven Wrapper version ${{ env.maven-version }}
+        run: |
+          sed -i "s|org/apache/maven/apache-maven/[^/]*/|org/apache/maven/apache-maven/${{ env.maven-version }}/|" .mvn/wrapper/maven-wrapper.properties
+          sed -i "s|apache-maven-[^/]*-bin.zip|apache-maven-${{ env.maven-version }}-bin.zip|" .mvn/wrapper/maven-wrapper.properties
+          sed -i "s|^distributionSha256Sum=.*|distributionSha256Sum=${{ env.maven-sha256 }}|" .mvn/wrapper/maven-wrapper.properties
+      - name: Test with Maven ${{ env.maven-version }}
+        run: ./mvnw test --batch-mode --no-transfer-progress --show-version -D"license.skip=true" -D"maven=${{ env.maven-version }}" -D"maven.min-version=${{ env.maven-version }}"
