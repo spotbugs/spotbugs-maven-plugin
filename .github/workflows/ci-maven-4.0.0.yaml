@@ -1,4 +1,4 @@
-name: Java Tests Maven 4.0.0-rc-7
+name: Java Tests Maven 4.0.0-rc-7 with java 25
 
 on: [push, pull_request]
 
@@ -9,6 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  maven-sha256: 6ef648cbd5d06c4669fb43256b2fd03954019d97ab4f42fdfaa0a2d46ede9f2e
   maven-version: 4.0.0-rc-7
 
 jobs:
@@ -26,8 +27,9 @@ jobs:
           distribution: zulu
           java-version: 25
       - name: Set Maven Wrapper version ${{ env.maven-version }}
-        run: sed -i "s|^distributionUrl=.*|distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/${{ env.maven-version }}/apache-maven-${{ env.maven-version }}-bin.zip|" .mvn/wrapper/maven-wrapper.properties
-      - name: Disable Maven Wrapper checksum validation
-        run: sed -i '/distributionSha256Sum/d' .mvn/wrapper/maven-wrapper.properties
+        run: |
+          sed -i "s|org/apache/maven/apache-maven/[^/]*/|org/apache/maven/apache-maven/${{ env.maven-version }}/|" .mvn/wrapper/maven-wrapper.properties
+          sed -i "s|apache-maven-[^/]*-bin.zip|apache-maven-${{ env.maven-version }}-bin.zip|" .mvn/wrapper/maven-wrapper.properties
+          sed -i "s|^distributionSha256Sum=.*|distributionSha256Sum=${{ env.maven-sha256 }}|" .mvn/wrapper/maven-wrapper.properties
       - name: Test with Maven ${{ env.maven-version }}
         run: ./mvnw test --batch-mode --no-transfer-progress --show-version -Dlicense.skip=true -Dmaven=${{ env.maven-version }} -Dmaven.min-version=${{ env.maven-version }}
