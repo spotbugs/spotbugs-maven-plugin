@@ -146,7 +146,7 @@
         <resolver.version>2.0.24</resolver.version>
 
         <plexusComponentAnnotationsVersion>2.2.0</plexusComponentAnnotationsVersion>
-        <plexusResourcesVersion>1.4.0</plexusResourcesVersion>
+        <plexusResourcesVersion>1.4.1</plexusResourcesVersion>
         <plexusUtilsVersion>4.1.0</plexusUtilsVersion>
         <plexusVelocityVersion>2.4.0</plexusVelocityVersion>
         <plexusXmlVersion>3.1.0</plexusXmlVersion>
