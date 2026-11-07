@@ -40,6 +40,9 @@
     <server>
       <id>nvd</id>
       <password>${env.NVD_API_KEY}</password>
+      <repositoryOrigins>
+        <repositoryOrigin>https://services.nvd.nist.gov</repositoryOrigin>
+      </repositoryOrigins>
     </server>
   </servers>
 
