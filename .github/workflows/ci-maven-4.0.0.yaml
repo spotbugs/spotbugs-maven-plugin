@@ -1,6 +1,6 @@
 name: Java Tests Maven 4.0.0-rc-7 with java 25
 
-on: [push, pull_request]
+on: [workflow_dispatch, push, pull_request]
 
 permissions: read-all
 
