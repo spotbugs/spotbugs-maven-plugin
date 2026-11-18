@@ -151,7 +151,7 @@
         <plexusVelocityVersion>2.4.0</plexusVelocityVersion>
         <plexusXmlVersion>3.1.1</plexusXmlVersion>
 
-        <download-plugin.version>2.1.1</download-plugin.version>
+        <download-plugin.version>2.2.0</download-plugin.version>
         <execPluginVersion>3.7.0</execPluginVersion>
         <find-and-replace-plugin.version>1.0.5</find-and-replace-plugin.version>
         <pluginPluginVersion>3.16.0</pluginPluginVersion>
