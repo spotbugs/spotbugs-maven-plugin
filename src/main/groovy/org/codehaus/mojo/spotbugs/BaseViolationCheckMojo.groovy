@@ -64,6 +64,8 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
     @Parameter(defaultValue = 'false', property = 'spotbugs.skip')
     boolean skip
 
+    @Parameter(defaultValue = '${project.packaging}', readonly = true, required = true)
+    private String packaging
     /**
      * Fail the build on an error.
      *
@@ -99,6 +101,12 @@ abstract class BaseViolationCheckMojo extends AbstractMojo {
 
         if (skip) {
             log.info('Spotbugs plugin skipped')
+            return
+        }
+
+        // If plugin is configured in parent project, skip execution for all downstream modules with type POM.
+        if (packaging == 'pom') {
+            log.info('Skipping execution for packaging "pom"')
             return
         }
 

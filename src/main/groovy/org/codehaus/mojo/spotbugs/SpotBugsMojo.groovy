@@ -520,6 +520,12 @@ class SpotBugsMojo extends AbstractMavenReport implements SpotBugsPluginsTrait {
             return false
         }
 
+        // If plugin is configured in parent project, skip execution for all downstream modules with type POM.
+        if (project != null && project.packaging == 'pom') {
+            log.info('Skipping execution for packaging "pom"')
+            return false
+        }
+
         executeCheck()
 
         boolean canGenerate = false

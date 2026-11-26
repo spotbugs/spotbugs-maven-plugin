@@ -150,6 +150,34 @@ class SpotBugsMojoTest extends Specification {
         1 * log.info('Spotbugs plugin skipped')
     }
 
+    void 'canGenerateReport returns false and does not log a warning when packaging is pom'() {
+        given:
+        MavenProject project = Mock(MavenProject) {
+            getPackaging() >> 'pom'
+        }
+        MavenSession session = Mock(MavenSession) {
+            getCurrentProject() >> project
+        }
+
+        SpotBugsMojo mojo = new SpotBugsMojo()
+        Log log = Mock(Log)
+        mojo.log = log
+        mojo.classFilesDirectory = new File(tempDir, 'classes')
+        mojo.testClassFilesDirectory = new File(tempDir, 'test-classes')
+        mojo.spotbugsXmlOutputDirectory = tempDir
+        mojo.spotbugsXmlOutputFilename = 'spotbugsXml.xml'
+        mojo.session = session
+        setField(mojo, 'project', project)
+
+        when:
+        boolean result = mojo.canGenerateReport()
+
+        then:
+        !result
+        1 * log.info('Skipping execution for packaging "pom"')
+        0 * log.warn(_)
+    }
+
     void 'canGenerateReport returns false when class directory does not exist'() {
         given:
         Log log = Mock(Log)
